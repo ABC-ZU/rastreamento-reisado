@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rastreamento - Boi Estrela</title>
 </head>
+
 <body>
 
   <h1>🐂 Boi Estrela</h1>
@@ -19,7 +20,26 @@
 
   <p id="localizacao"></p>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
   <script>
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+      authDomain: "rastreamento-reisado.firebaseapp.com",
+      databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+      projectId: "rastreamento-reisado",
+      storageBucket: "rastreamento-reisado.firebasestorage.app",
+      messagingSenderId: "796420970266",
+      appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const database = firebase.database();
+
     function iniciarRastreamento() {
 
       document.getElementById("status").innerText =
@@ -28,34 +48,59 @@
       if (navigator.geolocation) {
 
         navigator.geolocation.watchPosition(
+
           function(posicao) {
 
-            let latitude = posicao.coords.latitude;
-            let longitude = posicao.coords.longitude;
+            const latitude = posicao.coords.latitude;
+            const longitude = posicao.coords.longitude;
 
             document.getElementById("localizacao").innerHTML =
               "Latitude: " + latitude +
               "<br>Longitude: " + longitude;
 
+            database.ref("bois/boi-estrela").set({
+
+              nome: "Boi Estrela",
+
+              latitude: latitude,
+
+              longitude: longitude,
+
+              online: true,
+
+              atualizadoEm: Date.now()
+
+            });
+
           },
 
-          function() {
+          function(erro) {
+
+            document.getElementById("status").innerText =
+              "🔴 Erro no rastreamento";
+
             document.getElementById("localizacao").innerText =
               "Não foi possível acessar a localização.";
+
           },
 
           {
-            enableHighAccuracy: true
+            enableHighAccuracy: true,
+            maximumAge: 0,
+            timeout: 10000
           }
+
         );
 
       } else {
 
         document.getElementById("localizacao").innerText =
-          "Seu navegador não suporta GPS.";
+          "Seu navegador não suporta localização.";
 
       }
+
     }
+
   </script>
 
 </body>
