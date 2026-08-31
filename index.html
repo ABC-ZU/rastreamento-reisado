@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rastreamento - Boi Estrela</title>
+</head>
+<body>
+
+  <h1>🐂 Boi Estrela</h1>
+
+  <p>📍 Rastreamento do cortejo</p>
+
+  <p id="status">🔴 Rastreamento desligado</p>
+
+  <button onclick="iniciarRastreamento()">
+    📍 Iniciar rastreamento
+  </button>
+
+  <p id="localizacao"></p>
+
+  <script>
+    function iniciarRastreamento() {
+
+      document.getElementById("status").innerText =
+        "🟢 Rastreamento iniciado";
+
+      if (navigator.geolocation) {
+
+        navigator.geolocation.watchPosition(
+          function(posicao) {
+
+            let latitude = posicao.coords.latitude;
+            let longitude = posicao.coords.longitude;
+
+            document.getElementById("localizacao").innerHTML =
+              "Latitude: " + latitude +
+              "<br>Longitude: " + longitude;
+
+          },
+
+          function() {
+            document.getElementById("localizacao").innerText =
+              "Não foi possível acessar a localização.";
+          },
+
+          {
+            enableHighAccuracy: true
+          }
+        );
+
+      } else {
+
+        document.getElementById("localizacao").innerText =
+          "Seu navegador não suporta GPS.";
+
+      }
+    }
+  </script>
+
+</body>
+</html>
