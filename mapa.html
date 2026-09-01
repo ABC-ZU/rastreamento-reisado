@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,29 +17,47 @@
       margin: 20px;
     }
 
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    #status {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #informacoes {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
     #mapa {
       width: 100%;
       height: 500px;
       border-radius: 10px;
-    }
-
-    #status {
-      margin-bottom: 15px;
-      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
 
-  <h1> Boi Estrela</h1>
+  <h1>🐂 Boi Estrela</h1>
 
-  <p id="status">🟡 Aguardando localização...</p>
+  <p id="status">
+    🟡 Aguardando localização...
+  </p>
+
+  <div id="informacoes">
+    📍 Precisão: aguardando...<br>
+    🕐 Última atualização: aguardando...
+  </div>
 
   <div id="mapa"></div>
 
+  <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
@@ -69,40 +88,82 @@
 
     let marcador = null;
 
-    database.ref("bois/boi-estrela").on("value", function(snapshot) {
+    database.ref("bois/boi-estrela").on(
+      "value",
+      function(snapshot) {
 
-      const dados = snapshot.val();
+        const dados = snapshot.val();
 
-      if (!dados) {
-        document.getElementById("status").innerText =
-          "🔴 Boi sem localização disponível";
-        return;
-      }
+        if (!dados) {
 
-      const latitude = dados.latitude;
-      const longitude = dados.longitude;
+          document.getElementById("status").innerText =
+            "🔴 Boi sem localização disponível";
 
-      document.getElementById("status").innerText =
-        "🟢 Boi Estrela sendo rastreado em tempo real";
+          return;
+        }
 
-      if (marcador) {
+        const latitude = dados.latitude;
+        const longitude = dados.longitude;
+        const precisao = dados.precisao || 0;
+        const atualizadoEm = dados.atualizadoEm;
 
-        marcador.setLatLng([latitude, longitude]);
+        // Calcula quantos segundos se passaram
+        const agora = Date.now();
+        const diferenca = agora - atualizadoEm;
+        const segundos = Math.floor(diferenca / 1000);
 
-      } else {
+        // Considera online se atualizou nos últimos 60 segundos
+        if (segundos <= 60) {
 
-        marcador = L.marker([latitude, longitude])
+          document.getElementById("status").innerText =
+            "🟢 Boi Estrela ONLINE";
+
+        } else {
+
+          document.getElementById("status").innerText =
+            "🔴 Boi Estrela OFFLINE";
+
+        }
+
+        document.getElementById("informacoes").innerHTML =
+          "📍 Precisão: " +
+          Math.round(precisao) +
+          " metros" +
+          "<br>" +
+          "🕐 Última atualização: há " +
+          segundos +
+          " segundos";
+
+
+        if (marcador) {
+
+          marcador.setLatLng([
+            latitude,
+            longitude
+          ]);
+
+        } else {
+
+          marcador = L.marker([
+            latitude,
+            longitude
+          ])
           .addTo(mapa)
-          .bindPopup(" Boi Estrela")
+          .bindPopup("🐂 Boi Estrela")
           .openPopup();
 
+        }
+
+        mapa.setView([
+          latitude,
+          longitude
+        ], 16);
+
       }
-
-      mapa.setView([latitude, longitude], 16);
-
-    });
+    );
 
   </script>
 
 </body>
+
 </html>
