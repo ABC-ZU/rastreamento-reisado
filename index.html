@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,7 @@
 
 <body>
 
-  <h1>🐂 Boi Estrela</h1>
+  <h1> Boi Estrela</h1>
 
   <p>📍 Rastreamento do cortejo</p>
 
@@ -26,6 +27,7 @@
 
   <script>
 
+    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
       authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -36,9 +38,11 @@
       appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
     };
 
+    // Inicia o Firebase
     firebase.initializeApp(firebaseConfig);
 
     const database = firebase.database();
+
 
     function iniciarRastreamento() {
 
@@ -51,13 +55,20 @@
 
           function(posicao) {
 
+            // Dados recebidos do GPS
             const latitude = posicao.coords.latitude;
             const longitude = posicao.coords.longitude;
+            const precisao = posicao.coords.accuracy;
 
+
+            // Mostra os dados na tela
             document.getElementById("localizacao").innerHTML =
               "Latitude: " + latitude +
-              "<br>Longitude: " + longitude;
+              "<br>Longitude: " + longitude +
+              "<br>Precisão: " + Math.round(precisao) + " metros";
 
+
+            // Envia os dados para o Firebase
             database.ref("bois/boi-estrela").set({
 
               nome: "Boi Estrela",
@@ -66,6 +77,8 @@
 
               longitude: longitude,
 
+              precisao: precisao,
+
               online: true,
 
               atualizadoEm: Date.now()
@@ -73,6 +86,7 @@
             });
 
           },
+
 
           function(erro) {
 
@@ -83,6 +97,7 @@
               "Não foi possível acessar a localização.";
 
           },
+
 
           {
             enableHighAccuracy: true,
@@ -102,6 +117,7 @@
     }
 
   </script>
-   const precisao = posicao.coords.accuracy;
+
 </body>
+
 </html>
