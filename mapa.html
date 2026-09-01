@@ -4,136 +4,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Mapa - Boi Estrela</title>
 
+  <!-- Leaflet -->
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
 
   <style>
+
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
     }
 
     h1 {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
 
     #status {
+      font-size: 18px;
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
     #informacoes {
-      margin-bottom: 15px;
+      font-size: 17px;
       line-height: 1.6;
+      margin-bottom: 15px;
     }
 
     #mapa {
       width: 100%;
       height: 500px;
-      border-radius: 10px;
+      border-radius: 12px;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
   <h1>🐂 Boi Estrela</h1>
 
+
   <p id="status">
     🟡 Aguardando localização...
   </p>
 
+
   <div id="informacoes">
-    📍 Precisão: aguardando...<br>
+
+    📍 Precisão: aguardando...
+
+    <br>
+
     🕐 Última atualização: aguardando...
+
   </div>
+
 
   <div id="mapa"></div>
 
-  <!-- Leaflet -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+  <!-- Leaflet JavaScript -->
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  </script>
+
+
 
   <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+  <script
+    src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js">
+  </script>
+
+  <script
+    src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js">
+  </script>
+
+
 
   <script>
 
+
+    // ================================
+    // CONFIGURAÇÃO DO FIREBASE
+    // ================================
+
     const firebaseConfig = {
-      apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-      authDomain: "rastreamento-reisado.firebaseapp.com",
-      databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
-      projectId: "rastreamento-reisado",
-      storageBucket: "rastreamento-reisado.firebasestorage.app",
-      messagingSenderId: "796420970266",
-      appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
+      apiKey:
+        "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+      authDomain:
+        "rastreamento-reisado.firebaseapp.com",
+
+      databaseURL:
+        "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
+      projectId:
+        "rastreamento-reisado",
+
+      storageBucket:
+        "rastreamento-reisado.firebasestorage.app",
+
+      messagingSenderId:
+        "796420970266",
+
+      appId:
+        "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
     };
+
 
     firebase.initializeApp(firebaseConfig);
 
+
     const database = firebase.database();
 
-    const mapa = L.map("mapa").setView([-5.0, -42.0], 13);
+
+
+    // ================================
+    // CRIAÇÃO DO MAPA
+    // ================================
+
+    const mapa = L.map("mapa").setView(
+      [-5.0, -42.0],
+      13
+    );
+
 
     L.tileLayer(
+
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
       {
-        attribution: "&copy; OpenStreetMap"
+
+        attribution:
+          "&copy; OpenStreetMap"
+
       }
+
     ).addTo(mapa);
+
+
+
+    // ================================
+    // VARIÁVEIS
+    // ================================
 
     let marcador = null;
 
-    database.ref("bois/boi-estrela").on(
-      "value",
-      function(snapshot) {
+    let ultimaAtualizacao = null;
+
+    let precisaoAtual = 0;
+
+
+
+    // ================================
+    // RECEBE LOCALIZAÇÃO DO FIREBASE
+    // ================================
+
+    database
+      .ref("bois/boi-estrela")
+      .on("value", function(snapshot) {
+
 
         const dados = snapshot.val();
 
+
         if (!dados) {
 
-          document.getElementById("status").innerText =
+          document
+            .getElementById("status")
+            .innerText =
             "🔴 Boi sem localização disponível";
 
           return;
-        }
-
-        const latitude = dados.latitude;
-        const longitude = dados.longitude;
-        const precisao = dados.precisao || 0;
-        const atualizadoEm = dados.atualizadoEm;
-
-        // Calcula quantos segundos se passaram
-        const agora = Date.now();
-        const diferenca = agora - atualizadoEm;
-        const segundos = Math.floor(diferenca / 1000);
-
-        // Considera online se atualizou nos últimos 60 segundos
-        if (segundos <= 60) {
-
-          document.getElementById("status").innerText =
-            "🟢 Boi Estrela ONLINE";
-
-        } else {
-
-          document.getElementById("status").innerText =
-            "🔴 Boi Estrela OFFLINE";
 
         }
 
-        document.getElementById("informacoes").innerHTML =
-          "📍 Precisão: " +
-          Math.round(precisao) +
-          " metros" +
-          "<br>" +
-          "🕐 Última atualização: há " +
-          segundos +
-          " segundos";
 
+
+        const latitude =
+          dados.latitude;
+
+
+        const longitude =
+          dados.longitude;
+
+
+        precisaoAtual =
+          dados.precisao || 0;
+
+
+        ultimaAtualizacao =
+          dados.atualizadoEm;
+
+
+
+        // ================================
+        // MOVIMENTA O MARCADOR
+        // ================================
 
         if (marcador) {
 
@@ -142,27 +222,210 @@
             longitude
           ]);
 
-        } else {
+        }
+
+        else {
 
           marcador = L.marker([
+
             latitude,
             longitude
+
           ])
+
           .addTo(mapa)
-          .bindPopup("🐂 Boi Estrela")
+
+          .bindPopup(
+            "🐂 Boi Estrela"
+          )
+
           .openPopup();
 
         }
 
-        mapa.setView([
-          latitude,
-          longitude
-        ], 16);
+
+
+        // Centraliza o mapa
+        // na localização atual
+
+        mapa.setView(
+
+          [
+            latitude,
+            longitude
+          ],
+
+          16
+
+        );
+
+
+        atualizarStatus();
+
+
+      });
+
+
+
+    // ================================
+    // ATUALIZA ONLINE / OFFLINE
+    // ================================
+
+    function atualizarStatus() {
+
+
+      if (!ultimaAtualizacao) {
+
+        return;
 
       }
+
+
+      const agora =
+        Date.now();
+
+
+      const diferenca =
+        agora - ultimaAtualizacao;
+
+
+      const segundos =
+        Math.floor(
+          diferenca / 1000
+        );
+
+
+
+      // ================================
+      // STATUS ONLINE
+      // ================================
+
+      if (segundos <= 60) {
+
+        document
+          .getElementById("status")
+          .innerText =
+          "🟢 Boi Estrela ONLINE";
+
+      }
+
+
+      // ================================
+      // STATUS OFFLINE
+      // ================================
+
+      else {
+
+        document
+          .getElementById("status")
+          .innerText =
+          "🔴 Boi Estrela OFFLINE";
+
+      }
+
+
+
+      // ================================
+      // TEMPO DA ÚLTIMA ATUALIZAÇÃO
+      // ================================
+
+      let tempoTexto = "";
+
+
+      if (segundos < 60) {
+
+        tempoTexto =
+          segundos +
+          " segundos";
+
+      }
+
+
+      else if (segundos < 3600) {
+
+        const minutos =
+          Math.floor(
+            segundos / 60
+          );
+
+        tempoTexto =
+          minutos +
+          " minutos";
+
+      }
+
+
+      else if (segundos < 86400) {
+
+        const horas =
+          Math.floor(
+            segundos / 3600
+          );
+
+        tempoTexto =
+          horas +
+          " horas";
+
+      }
+
+
+      else {
+
+        const dias =
+          Math.floor(
+            segundos / 86400
+          );
+
+        tempoTexto =
+          dias +
+          " dias";
+
+      }
+
+
+
+      // ================================
+      // MOSTRA AS INFORMAÇÕES
+      // ================================
+
+      document
+        .getElementById("informacoes")
+        .innerHTML =
+
+        "📍 Precisão: " +
+
+        Math.round(
+          precisaoAtual
+        ) +
+
+        " metros" +
+
+        "<br>" +
+
+        "🕐 Última atualização: há " +
+
+        tempoTexto;
+
+    }
+
+
+
+    // ================================
+    // ATUALIZA O TEMPO
+    // A CADA 1 SEGUNDO
+    // ================================
+
+    setInterval(
+
+      atualizarStatus,
+
+      1000
+
     );
 
+
   </script>
+
 
 </body>
 
