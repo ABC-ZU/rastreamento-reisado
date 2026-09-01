@@ -14,7 +14,6 @@
   />
 
   <style>
-
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
@@ -41,47 +40,33 @@
       height: 500px;
       border-radius: 12px;
     }
-
   </style>
 
 </head>
-
 
 <body>
 
   <h1>🐂 Boi Estrela</h1>
 
-
   <p id="status">
     🟡 Aguardando localização...
   </p>
 
-
   <div id="informacoes">
-
     📍 Precisão: aguardando...
-
     <br>
-
     🕐 Última atualização: aguardando...
-
   </div>
-
 
   <div id="mapa"></div>
 
 
-
-  <!-- Leaflet JavaScript -->
-
+  <!-- Leaflet -->
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
   </script>
 
-
-
   <!-- Firebase -->
-
   <script
     src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js">
   </script>
@@ -91,13 +76,11 @@
   </script>
 
 
-
   <script>
 
-
-    // ================================
-    // CONFIGURAÇÃO DO FIREBASE
-    // ================================
+    // ===================================
+    // FIREBASE
+    // ===================================
 
     const firebaseConfig = {
 
@@ -127,14 +110,12 @@
 
     firebase.initializeApp(firebaseConfig);
 
-
     const database = firebase.database();
 
 
-
-    // ================================
-    // CRIAÇÃO DO MAPA
-    // ================================
+    // ===================================
+    // MAPA
+    // ===================================
 
     const mapa = L.map("mapa").setView(
       [-5.0, -42.0],
@@ -143,40 +124,33 @@
 
 
     L.tileLayer(
-
       "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
       {
-
-        attribution:
-          "&copy; OpenStreetMap"
-
+        attribution: "&copy; OpenStreetMap"
       }
-
     ).addTo(mapa);
 
 
-
-    // ================================
+    // ===================================
     // VARIÁVEIS
-    // ================================
+    // ===================================
 
     let marcador = null;
+
+    let circuloPrecisao = null;
 
     let ultimaAtualizacao = null;
 
     let precisaoAtual = 0;
 
 
-
-    // ================================
-    // RECEBE LOCALIZAÇÃO DO FIREBASE
-    // ================================
+    // ===================================
+    // RECEBE DADOS DO FIREBASE
+    // ===================================
 
     database
       .ref("bois/boi-estrela")
       .on("value", function(snapshot) {
-
 
         const dados = snapshot.val();
 
@@ -189,31 +163,25 @@
             "🔴 Boi sem localização disponível";
 
           return;
-
         }
-
 
 
         const latitude =
           dados.latitude;
 
-
         const longitude =
           dados.longitude;
 
-
         precisaoAtual =
           dados.precisao || 0;
-
 
         ultimaAtualizacao =
           dados.atualizadoEm;
 
 
-
-        // ================================
-        // MOVIMENTA O MARCADOR
-        // ================================
+        // ===================================
+        // MARCADOR DO BOI
+        // ===================================
 
         if (marcador) {
 
@@ -222,83 +190,79 @@
             longitude
           ]);
 
-        }
-
-        else {
+        } else {
 
           marcador = L.marker([
-
             latitude,
             longitude
-
           ])
-
           .addTo(mapa)
-
-          .bindPopup(
-            "🐂 Boi Estrela"
-          )
-
+          .bindPopup("🐂 Boi Estrela")
           .openPopup();
 
         }
 
 
+        // ===================================
+        // CÍRCULO DE PRECISÃO
+        // ===================================
 
-        // Centraliza o mapa
-        // na localização atual
+        if (circuloPrecisao) {
 
-        mapa.setView(
-
-          [
+          circuloPrecisao.setLatLng([
             latitude,
             longitude
-          ],
+          ]);
 
+          circuloPrecisao.setRadius(
+            precisaoAtual
+          );
+
+        } else {
+
+          circuloPrecisao = L.circle(
+            [latitude, longitude],
+            {
+              radius: precisaoAtual
+            }
+          ).addTo(mapa);
+
+        }
+
+
+        // Centraliza o mapa
+        mapa.setView(
+          [latitude, longitude],
           16
-
         );
 
 
         atualizarStatus();
 
-
       });
 
 
-
-    // ================================
-    // ATUALIZA ONLINE / OFFLINE
-    // ================================
+    // ===================================
+    // STATUS E ÚLTIMA ATUALIZAÇÃO
+    // ===================================
 
     function atualizarStatus() {
 
-
       if (!ultimaAtualizacao) {
-
         return;
-
       }
 
 
-      const agora =
-        Date.now();
-
+      const agora = Date.now();
 
       const diferenca =
         agora - ultimaAtualizacao;
 
-
       const segundos =
-        Math.floor(
-          diferenca / 1000
-        );
+        Math.floor(diferenca / 1000);
 
 
-
-      // ================================
-      // STATUS ONLINE
-      // ================================
+      // ONLINE / OFFLINE
 
       if (segundos <= 60) {
 
@@ -307,14 +271,7 @@
           .innerText =
           "🟢 Boi Estrela ONLINE";
 
-      }
-
-
-      // ================================
-      // STATUS OFFLINE
-      // ================================
-
-      else {
+      } else {
 
         document
           .getElementById("status")
@@ -324,10 +281,9 @@
       }
 
 
-
-      // ================================
-      // TEMPO DA ÚLTIMA ATUALIZAÇÃO
-      // ================================
+      // ===================================
+      // FORMATA O TEMPO
+      // ===================================
 
       let tempoTexto = "";
 
@@ -335,97 +291,70 @@
       if (segundos < 60) {
 
         tempoTexto =
-          segundos +
-          " segundos";
+          segundos + " segundos";
 
       }
-
 
       else if (segundos < 3600) {
 
         const minutos =
-          Math.floor(
-            segundos / 60
-          );
+          Math.floor(segundos / 60);
 
         tempoTexto =
-          minutos +
-          " minutos";
+          minutos + " minutos";
 
       }
-
 
       else if (segundos < 86400) {
 
         const horas =
-          Math.floor(
-            segundos / 3600
-          );
+          Math.floor(segundos / 3600);
 
         tempoTexto =
-          horas +
-          " horas";
+          horas + " horas";
 
       }
-
 
       else {
 
         const dias =
-          Math.floor(
-            segundos / 86400
-          );
+          Math.floor(segundos / 86400);
 
         tempoTexto =
-          dias +
-          " dias";
+          dias + " dias";
 
       }
 
 
-
-      // ================================
-      // MOSTRA AS INFORMAÇÕES
-      // ================================
+      // ===================================
+      // INFORMAÇÕES NA TELA
+      // ===================================
 
       document
         .getElementById("informacoes")
         .innerHTML =
 
         "📍 Precisão: " +
-
-        Math.round(
-          precisaoAtual
-        ) +
-
+        Math.round(precisaoAtual) +
         " metros" +
 
         "<br>" +
 
         "🕐 Última atualização: há " +
-
         tempoTexto;
 
     }
 
 
-
-    // ================================
-    // ATUALIZA O TEMPO
-    // A CADA 1 SEGUNDO
-    // ================================
+    // Atualiza o contador
+    // a cada segundo
 
     setInterval(
-
       atualizarStatus,
-
       1000
-
     );
 
-
   </script>
-
 
 </body>
 
