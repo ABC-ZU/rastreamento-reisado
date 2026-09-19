@@ -1,259 +1,488 @@
 /* =========================================
-   LISTAR PERCURSOS
+   CARREGAR PONTOS DE UM PERCURSO
 ========================================= */
 
-function carregarListaPercursos() {
+function carregarPontosPercurso(
+  idPercurso,
+  aoVivo
+) {
 
-  todosPercursosRef
-    .once("value")
-    .then(function(snapshot) {
+  /*
+  Remover listener anterior
+  */
 
-      const select =
-        document.getElementById("listaPercursos");
+  if (percursoRef) {
 
-      select.innerHTML = "";
+    percursoRef.off();
+
+  }
+
+
+  /*
+  Limpar linha anterior
+  */
+
+  linhaPercurso
+    .setLatLngs([]);
+
+
+  document
+    .getElementById("pontos")
+    .innerText = "0";
+
+
+  /*
+  Referência aos pontos
+  */
+
+  percursoRef =
+    database.ref(
+
+      "percursos/" +
+      "boi-estrela/" +
+      idPercurso +
+      "/pontos"
+
+    );
+
+
+  percursoRef.on(
+    "value",
+    function(snapshot) {
+
+      const percurso = [];
+
+      let distanciaHistorica = 0;
+
+      let primeiroTimestamp = null;
+
+      let ultimoTimestamp = null;
+
 
       /*
       =====================================
-      LER TODOS OS PERCURSOS
+      LER PONTOS
       =====================================
       */
 
-      const lista = [];
+      snapshot.forEach(
+        function(child) {
 
-      snapshot.forEach(function(child) {
+          const ponto =
+            child.val();
 
-        const dados = child.val() || {};
 
-        let primeiroTimestamp = null;
-        let ultimoTimestamp = null;
-        let quantidadePontos = 0;
+          if (!ponto) {
 
-        /*
-        Procurar data dentro dos pontos.
-        */
+            return;
 
-        if (dados.pontos) {
+          }
 
-          Object.values(dados.pontos)
-            .forEach(function(ponto) {
 
-              if (!ponto) {
-                return;
+          const lat =
+            Number(
+              ponto.latitude
+            );
+
+
+          const lng =
+            Number(
+              ponto.longitude
+            );
+
+
+          const timestamp =
+            Number(
+              ponto.timestamp || 0
+            );
+
+
+          if (
+            Number.isFinite(lat) &&
+            Number.isFinite(lng)
+          ) {
+
+            percurso.push(
+              [lat, lng]
+            );
+
+
+            /*
+            =====================================
+            CALCULAR DISTÂNCIA
+            =====================================
+            */
+
+            if (
+              percurso.length > 1
+            ) {
+
+              const anterior =
+                percurso[
+                  percurso.length - 2
+                ];
+
+
+              distanciaHistorica +=
+                calcularDistancia(
+
+                  anterior[0],
+                  anterior[1],
+
+                  lat,
+                  lng
+
+                );
+
+            }
+
+
+            /*
+            =====================================
+            PRIMEIRO E ÚLTIMO HORÁRIO
+            =====================================
+            */
+
+            if (timestamp > 0) {
+
+              if (
+                primeiroTimestamp === null ||
+                timestamp <
+                primeiroTimestamp
+              ) {
+
+                primeiroTimestamp =
+                  timestamp;
+
               }
 
-              const timestamp =
-                Number(ponto.timestamp || 0);
 
-              if (timestamp > 0) {
+              if (
+                ultimoTimestamp === null ||
+                timestamp >
+                ultimoTimestamp
+              ) {
 
-                quantidadePontos++;
+                ultimoTimestamp =
+                  timestamp;
 
-                if (
-                  primeiroTimestamp === null ||
-                  timestamp < primeiroTimestamp
-                ) {
-
-                  primeiroTimestamp =
-                    timestamp;
-                }
-
-                if (
-                  ultimoTimestamp === null ||
-                  timestamp > ultimoTimestamp
-                ) {
-
-                  ultimoTimestamp =
-                    timestamp;
-                }
               }
 
-            });
+            }
+
+          }
 
         }
-
-
-        lista.push({
-
-          id: child.key,
-
-          dados: dados,
-
-          primeiroTimestamp:
-            primeiroTimestamp,
-
-          ultimoTimestamp:
-            ultimoTimestamp,
-
-          quantidadePontos:
-            quantidadePontos
-
-        });
-
-      });
-
-
-      /*
-      =====================================
-      ORDENAR DO MAIS ANTIGO
-      PARA O MAIS NOVO
-      =====================================
-      */
-
-      lista.sort(function(a, b) {
-
-        const tempoA =
-          a.primeiroTimestamp || 0;
-
-        const tempoB =
-          b.primeiroTimestamp || 0;
-
-        return tempoA - tempoB;
-
-      });
-
-
-      /*
-      =====================================
-      DESCOBRIR NÚMERO DO PERCURSO
-      =====================================
-      */
-
-      lista.forEach(function(item, indice) {
-
-        item.numero =
-          indice + 1;
-
-      });
-
-
-      /*
-      =====================================
-      OPÇÃO AO VIVO
-      =====================================
-      */
-
-      const opcaoAoVivo =
-        document.createElement("option");
-
-      opcaoAoVivo.value = "";
-
-      opcaoAoVivo.textContent =
-        "🟢 Percurso atual — AO VIVO";
-
-      select.appendChild(
-        opcaoAoVivo
       );
 
 
       /*
       =====================================
-      MOSTRAR MAIS RECENTES PRIMEIRO
+      QUANTIDADE DE PONTOS
       =====================================
       */
 
-      const listaVisual =
-        [...lista].reverse();
+      document
+        .getElementById("pontos")
+        .innerText =
+        percurso.length;
 
 
-      listaVisual.forEach(function(item) {
+      /*
+      =====================================
+      DESENHAR LINHA
+      =====================================
+      */
+
+      linhaPercurso
+        .setLatLngs(
+          percurso
+        );
+
+
+      /*
+      =====================================
+      HISTÓRICO
+      =====================================
+      */
+
+      if (!aoVivo) {
+
+        const select =
+          document.getElementById(
+            "listaPercursos"
+          );
+
 
         const option =
-          document.createElement("option");
+          select.options[
+            select.selectedIndex
+          ];
 
-        option.value =
-          item.id;
+
+        const numero =
+          option &&
+          option.dataset.numero
+          ?
+          option.dataset.numero
+          :
+          "";
+
+
+        let texto = "";
 
 
         /*
-        FORMATAR DATA
+        TÍTULO
         */
 
-        let dataTexto =
-          "data não disponível";
+        if (numero) {
 
+          texto +=
 
-        if (item.primeiroTimestamp) {
-
-          const data =
-            new Date(
-              item.primeiroTimestamp
-            );
-
-
-          dataTexto =
-            data.toLocaleString(
-              "pt-BR",
-              {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-              }
-            );
+            "📚 <strong>PERcurso " +
+            numero +
+            "</strong>";
 
         }
-
-
-        /*
-        PERCURSO ATUAL
-        */
-
-        if (
-          item.id ===
-          percursoAtualId
-        ) {
-
-          option.textContent =
-
-            "🟢 Percurso " +
-            item.numero +
-            " — ATUAL — " +
-            dataTexto;
-
-        }
-
-        /*
-        PERCURSOS ANTIGOS
-        */
 
         else {
 
-          option.textContent =
+          texto +=
 
-            "📍 Percurso " +
-            item.numero +
-            " — " +
-            dataTexto;
+            "📚 <strong>PERCURSO SELECIONADO</strong>";
 
         }
 
 
         /*
-        Guardamos o número
-        dentro da opção.
+        =====================================
+        DATA
+        =====================================
         */
 
-        option.dataset.numero =
-          item.numero;
+        if (primeiroTimestamp) {
+
+          const inicio =
+            new Date(
+              primeiroTimestamp
+            );
 
 
-        select.appendChild(
-          option
-        );
+          texto +=
 
-      });
+            "<br><br>📅 Data: <strong>" +
 
-    })
+            inicio.toLocaleDateString(
+              "pt-BR"
+            ) +
 
-    .catch(function(erro) {
+            "</strong>";
 
-      console.error(
-        "Erro ao carregar percursos:",
-        erro
-      );
 
-    });
+          texto +=
+
+            "<br>🕐 Início: <strong>" +
+
+            inicio.toLocaleTimeString(
+              "pt-BR"
+            ) +
+
+            "</strong>";
+
+        }
+
+
+        /*
+        =====================================
+        FIM
+        =====================================
+        */
+
+        if (ultimoTimestamp) {
+
+          const fim =
+            new Date(
+              ultimoTimestamp
+            );
+
+
+          texto +=
+
+            "<br>🏁 Fim: <strong>" +
+
+            fim.toLocaleTimeString(
+              "pt-BR"
+            ) +
+
+            "</strong>";
+
+        }
+
+
+        /*
+        =====================================
+        DURAÇÃO
+        =====================================
+        */
+
+        if (
+          primeiroTimestamp &&
+          ultimoTimestamp
+        ) {
+
+          const duracaoSegundos =
+            Math.max(
+              0,
+              Math.floor(
+                (
+                  ultimoTimestamp -
+                  primeiroTimestamp
+                ) / 1000
+              )
+            );
+
+
+          const horas =
+            Math.floor(
+              duracaoSegundos /
+              3600
+            );
+
+
+          const minutos =
+            Math.floor(
+              (
+                duracaoSegundos %
+                3600
+              ) / 60
+            );
+
+
+          const segundos =
+            duracaoSegundos % 60;
+
+
+          let duracaoTexto = "";
+
+
+          if (horas > 0) {
+
+            duracaoTexto +=
+              horas + " h ";
+
+          }
+
+
+          if (
+            minutos > 0 ||
+            horas > 0
+          ) {
+
+            duracaoTexto +=
+              minutos + " min ";
+
+          }
+
+
+          duracaoTexto +=
+            segundos + " s";
+
+
+          texto +=
+
+            "<br>⏱️ Duração: <strong>" +
+
+            duracaoTexto +
+
+            "</strong>";
+
+        }
+
+
+        /*
+        =====================================
+        DISTÂNCIA
+        =====================================
+        */
+
+        texto +=
+
+          "<br>📏 Distância: <strong>" +
+
+          distanciaHistorica
+            .toFixed(1) +
+
+          " metros</strong>";
+
+
+        /*
+        =====================================
+        PONTOS
+        =====================================
+        */
+
+        texto +=
+
+          "<br>🗺️ Pontos registrados: <strong>" +
+
+          percurso.length +
+
+          "</strong>";
+
+
+        document
+          .getElementById(
+            "infoHistorico"
+          )
+          .innerHTML =
+          texto;
+
+
+        /*
+        =====================================
+        ENQUADRAR PERCURSO NO MAPA
+        =====================================
+        */
+
+        if (
+          percurso.length > 1
+        ) {
+
+          map.fitBounds(
+
+            linhaPercurso
+              .getBounds(),
+
+            {
+
+              padding:
+                [40, 40]
+
+            }
+
+          );
+
+        }
+
+        else if (
+          percurso.length === 1
+        ) {
+
+          map.setView(
+
+            percurso[0],
+
+            18
+
+          );
+
+        }
+
+      }
+
+    }
+
+  );
 
 }
