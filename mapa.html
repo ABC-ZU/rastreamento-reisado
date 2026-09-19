@@ -76,6 +76,22 @@ h1 {
 }
 
 
+#percursoAtualBox {
+
+  margin-top: 15px;
+
+  padding: 12px;
+
+  background: #eef8ff;
+
+  border-radius: 10px;
+
+  font-size: 17px;
+
+  word-break: break-all;
+}
+
+
 #map {
 
   width: 100%;
@@ -190,6 +206,14 @@ h1 {
 </div>
 
 
+<div id="percursoAtualBox">
+
+🆕 Percurso atual:
+<strong id="percursoAtual">Aguardando...</strong>
+
+</div>
+
+
 <div id="map"></div>
 
 </div>
@@ -198,9 +222,9 @@ h1 {
 
 <script>
 
-/* ================================
+/* =========================================
    FIREBASE
-================================ */
+========================================= */
 
 const firebaseConfig = {
 
@@ -233,9 +257,10 @@ const database =
   firebase.database();
 
 
-/* ================================
-   REFERÊNCIAS
-================================ */
+
+/* =========================================
+   REFERÊNCIA DO BOI
+========================================= */
 
 const boiRef =
   database.ref(
@@ -243,15 +268,10 @@ const boiRef =
   );
 
 
-const historicoRef =
-  database.ref(
-    "historico/boi-estrela"
-  );
 
-
-/* ================================
+/* =========================================
    MAPA
-================================ */
+========================================= */
 
 const map =
   L.map("map").setView(
@@ -276,9 +296,10 @@ L.tileLayer(
 ).addTo(map);
 
 
-/* ================================
+
+/* =========================================
    ELEMENTOS DO MAPA
-================================ */
+========================================= */
 
 let marcador = null;
 
@@ -297,6 +318,11 @@ const linhaPercurso =
   .addTo(map);
 
 
+
+/* =========================================
+   VARIÁVEIS
+========================================= */
+
 let contador = 0;
 
 let primeiraLocalizacao = true;
@@ -304,12 +330,29 @@ let primeiraLocalizacao = true;
 let ultimoAtualizadoEm = 0;
 
 
-/* ================================
-   POSIÇÃO ATUAL
-================================ */
+/*
+ID do percurso atualmente
+selecionado pelo celular
+*/
+
+let percursoAtualId = null;
+
+
+/*
+Referência Firebase do percurso atual.
+*/
+
+let percursoRef = null;
+
+
+
+/* =========================================
+   POSIÇÃO ATUAL DO BOI
+========================================= */
 
 boiRef.on(
   "value",
+
   function(snapshot) {
 
     const dados =
@@ -318,13 +361,15 @@ boiRef.on(
 
     if (!dados) {
 
-      document.getElementById("status")
+      document
+        .getElementById("status")
         .innerHTML =
 
         "🔴 Nenhuma localização recebida";
 
       return;
     }
+
 
 
     const latitude =
@@ -346,6 +391,36 @@ boiRef.on(
       Number(dados.atualizadoEm || 0);
 
 
+
+    /*
+    =====================================
+    VERIFICAR PERCURSO ATUAL
+    =====================================
+    */
+
+    const novoPercursoId =
+      dados.percursoAtual || null;
+
+
+    if (
+      novoPercursoId &&
+      novoPercursoId !== percursoAtualId
+    ) {
+
+      carregarPercurso(
+        novoPercursoId
+      );
+
+    }
+
+
+
+    /*
+    =====================================
+    VALIDAR COORDENADAS
+    =====================================
+    */
+
     if (
       !Number.isFinite(latitude) ||
       !Number.isFinite(longitude)
@@ -355,6 +430,7 @@ boiRef.on(
     }
 
 
+
     ultimoAtualizadoEm =
       atualizadoEm;
 
@@ -362,39 +438,56 @@ boiRef.on(
     contador++;
 
 
-    document.getElementById("contador")
+
+    document
+      .getElementById("contador")
       .innerText =
       contador;
 
 
-    document.getElementById("precisao")
+
+    document
+      .getElementById("precisao")
       .innerText =
 
       Math.round(precisao) +
       " metros";
 
 
-    document.getElementById("velocidade")
+
+    document
+      .getElementById("velocidade")
       .innerText =
 
       velocidade.toFixed(1) +
       " km/h";
 
 
-    document.getElementById("distancia")
+
+    document
+      .getElementById("distancia")
       .innerText =
 
       distancia.toFixed(1) +
       " metros";
 
 
+
     const novaPosicao = [
+
       latitude,
+
       longitude
+
     ];
 
 
-    /* MARCADOR */
+
+    /*
+    =====================================
+    MARCADOR
+    =====================================
+    */
 
     if (!marcador) {
 
@@ -415,13 +508,20 @@ boiRef.on(
 
     else {
 
-      marcador.setLatLng(
-        novaPosicao
-      );
+      marcador
+        .setLatLng(
+          novaPosicao
+        );
+
     }
 
 
-    /* PRECISÃO */
+
+    /*
+    =====================================
+    CÍRCULO DE PRECISÃO
+    =====================================
+    */
 
     if (!circuloPrecisao) {
 
@@ -431,8 +531,10 @@ boiRef.on(
           novaPosicao,
 
           {
+
             radius:
               precisao
+
           }
 
         )
@@ -452,19 +554,27 @@ boiRef.on(
         .setRadius(
           precisao
         );
+
     }
 
 
+
     /*
-    Acompanhar o boi.
+    =====================================
+    ACOMPANHAR O BOI
+    =====================================
     */
 
     if (primeiraLocalizacao) {
 
       map.setView(
+
         novaPosicao,
+
         18
+
       );
+
 
       primeiraLocalizacao =
         false;
@@ -474,125 +584,280 @@ boiRef.on(
     else {
 
       map.panTo(
+
         novaPosicao,
+
         {
+
           animate: true,
+
           duration: 0.8
+
         }
+
       );
+
     }
+
 
 
     verificarStatus();
 
   }
+
 );
 
 
-/* ================================
-   HISTÓRICO
-================================ */
 
-historicoRef.on(
-  "value",
-  function(snapshot) {
+/* =========================================
+   CARREGAR SOMENTE O PERCURSO ATUAL
+========================================= */
 
-    const percurso = [];
-
-
-    snapshot.forEach(
-      function(child) {
-
-        const ponto =
-          child.val();
+function carregarPercurso(
+  idPercurso
+) {
 
 
-        const lat =
-          Number(
-            ponto.latitude
-          );
+  /*
+  Remove listener do percurso anterior.
+  */
+
+  if (percursoRef) {
+
+    percursoRef.off();
+
+  }
 
 
-        const lng =
-          Number(
-            ponto.longitude
-          );
+
+  /*
+  Guardar novo ID.
+  */
+
+  percursoAtualId =
+    idPercurso;
 
 
-        if (
-          Number.isFinite(lat) &&
-          Number.isFinite(lng)
-        ) {
 
-          percurso.push(
-            [lat, lng]
-          );
-        }
+  /*
+  Mostrar ID na tela.
+  */
 
-      }
+  document
+    .getElementById("percursoAtual")
+    .innerText =
+    percursoAtualId;
+
+
+
+  /*
+  Limpar linha antiga imediatamente.
+  */
+
+  linhaPercurso
+    .setLatLngs([]);
+
+
+
+  /*
+  Zerar contador visual.
+  */
+
+  document
+    .getElementById("pontos")
+    .innerText =
+    "0";
+
+
+
+  /*
+  =====================================
+  CAMINHO DO NOVO SISTEMA
+  =====================================
+
+  percursos
+      boi-estrela
+          ID-DO-PERCURSO
+              pontos
+  */
+
+  percursoRef =
+    database.ref(
+
+      "percursos/" +
+      "boi-estrela/" +
+      idPercurso +
+      "/pontos"
+
     );
 
 
-    /*
-    Atualizar contador.
-    */
 
-    document.getElementById("pontos")
-      .innerText =
+  /*
+  Escutar somente os pontos
+  do percurso atual.
+  */
 
-      percurso.length;
+  percursoRef.on(
+
+    "value",
+
+    function(snapshot) {
 
 
-    /*
-    Desenhar percurso.
-    */
+      const percurso = [];
 
-    linhaPercurso
-      .setLatLngs(
-        percurso
+
+
+      snapshot.forEach(
+
+        function(child) {
+
+
+          const ponto =
+            child.val();
+
+
+
+          if (!ponto) {
+
+            return;
+
+          }
+
+
+
+          const lat =
+            Number(
+              ponto.latitude
+            );
+
+
+          const lng =
+            Number(
+              ponto.longitude
+            );
+
+
+
+          if (
+
+            Number.isFinite(lat) &&
+
+            Number.isFinite(lng)
+
+          ) {
+
+
+            percurso.push(
+              [
+                lat,
+                lng
+              ]
+            );
+
+
+          }
+
+        }
+
       );
 
-  }
-);
 
 
-/* ================================
+      /*
+      =====================================
+      QUANTIDADE DE PONTOS
+      =====================================
+      */
+
+      document
+        .getElementById("pontos")
+        .innerText =
+        percurso.length;
+
+
+
+      /*
+      =====================================
+      DESENHAR LINHA
+      =====================================
+      */
+
+      linhaPercurso
+        .setLatLngs(
+          percurso
+        );
+
+
+      /*
+      Não usamos fitBounds aqui,
+      pois o mapa deve continuar
+      acompanhando o boi.
+      */
+
+    }
+
+  );
+
+}
+
+
+
+/* =========================================
    ONLINE / OFFLINE
-================================ */
+========================================= */
 
 function verificarStatus() {
+
 
   if (!ultimoAtualizadoEm) {
 
     return;
+
   }
 
 
+
   const diferenca =
+
     Date.now() -
     ultimoAtualizadoEm;
 
 
+
   const segundos =
-    Math.floor(
-      diferenca / 1000
+
+    Math.max(
+
+      0,
+
+      Math.floor(
+        diferenca / 1000
+      )
+
     );
+
 
 
   const status =
-    document.getElementById(
-      "status"
-    );
+
+    document
+      .getElementById(
+        "status"
+      );
+
 
 
   /*
-  Consideramos online se houve
-  atualização nos últimos 60 segundos.
+  Online se recebeu atualização
+  nos últimos 60 segundos.
   */
 
   if (segundos <= 60) {
 
     status.innerHTML =
+
       "🟢 Boi Estrela ONLINE";
 
   }
@@ -600,81 +865,111 @@ function verificarStatus() {
   else {
 
     status.innerHTML =
+
       "🔴 Boi Estrela OFFLINE";
+
   }
+
 
 
   atualizarTempo(
     segundos
   );
+
 }
 
 
-/* ================================
-   TEMPO
-================================ */
 
-function atualizarTempo(segundos) {
+/* =========================================
+   TEMPO DA ÚLTIMA ATUALIZAÇÃO
+========================================= */
+
+function atualizarTempo(
+  segundos
+) {
+
 
   let texto;
 
 
+
   if (segundos < 60) {
 
+
     texto =
+
       "há " +
       segundos +
       " segundos";
 
+
   }
+
 
   else if (segundos < 3600) {
 
+
     const minutos =
+
       Math.floor(
         segundos / 60
       );
 
 
     texto =
+
       "há " +
       minutos +
       " minuto(s)";
 
+
   }
+
 
   else {
 
+
     const horas =
+
       Math.floor(
         segundos / 3600
       );
 
 
     texto =
+
       "há " +
       horas +
       " hora(s)";
+
+
   }
 
 
-  document.getElementById("tempo")
+
+  document
+    .getElementById("tempo")
     .innerText =
     texto;
+
 }
 
 
-/* ================================
+
+/* =========================================
    RELÓGIO
-================================ */
+========================================= */
 
 setInterval(
+
   function() {
 
     verificarStatus();
 
   },
+
   1000
+
 );
 
 </script>
