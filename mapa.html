@@ -10,7 +10,6 @@
 
 <title>Mapa - Boi Estrela</title>
 
-
 <!-- LEAFLET -->
 
 <link
@@ -22,7 +21,6 @@
   src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
-
 <!-- FIREBASE -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -33,108 +31,115 @@
 <style>
 
 body {
-
   font-family: Arial, sans-serif;
-
   margin: 0;
-
   padding: 20px;
-
   background: white;
 }
 
-
 .container {
-
   max-width: 1100px;
-
   margin: auto;
 }
 
-
 h1 {
-
   font-size: 36px;
 }
 
+h2 {
+  margin-top: 30px;
+}
 
 #status {
-
   font-size: 24px;
-
   font-weight: bold;
-
   margin-bottom: 15px;
 }
 
-
 .info {
-
   font-size: 20px;
-
   margin: 10px 0;
 }
 
-
 #percursoAtualBox {
-
   margin-top: 15px;
-
   padding: 12px;
-
   background: #eef8ff;
-
   border-radius: 10px;
-
   font-size: 17px;
-
   word-break: break-all;
 }
 
+/* HISTÓRICO */
 
-#map {
-
-  width: 100%;
-
-  height: 600px;
-
+.historicoBox {
   margin-top: 25px;
-
-  border-radius: 20px;
-
-  overflow: hidden;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 15px;
 }
 
+.historicoBox select {
+  width: 100%;
+  padding: 14px;
+  font-size: 17px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.historicoBox button {
+  width: 100%;
+  padding: 14px;
+  font-size: 17px;
+  margin-top: 12px;
+  cursor: pointer;
+  border: 1px solid #aaa;
+  background: white;
+  border-radius: 8px;
+}
+
+#infoHistorico {
+  margin-top: 15px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+#modoVisualizacao {
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* MAPA */
+
+#map {
+  width: 100%;
+  height: 600px;
+  margin-top: 25px;
+  border-radius: 20px;
+  overflow: hidden;
+}
 
 @media(max-width:600px) {
 
   body {
-
     padding: 15px;
   }
 
-
   h1 {
-
     font-size: 32px;
   }
 
-
   #status {
-
     font-size: 22px;
   }
 
-
   .info {
-
     font-size: 19px;
   }
 
-
   #map {
-
-    height: 600px;
+    height: 550px;
   }
 
 }
@@ -152,64 +157,102 @@ h1 {
 
 
 <div id="status">
-
 🟡 Aguardando localização...
-
 </div>
 
 
 <div class="info">
-
 📍 Precisão:
 <strong id="precisao">--</strong>
-
 </div>
 
 
 <div class="info">
-
 🚶 Velocidade:
 <strong id="velocidade">--</strong>
-
 </div>
 
 
 <div class="info">
-
 📏 Distância percorrida:
 <strong id="distancia">--</strong>
-
 </div>
 
 
 <div class="info">
-
 ⏱️ Última atualização:
 <strong id="tempo">--</strong>
-
 </div>
 
 
 <div class="info">
-
 🛰️ Atualizações recebidas:
 <strong id="contador">0</strong>
-
 </div>
 
 
 <div class="info">
-
 🗺️ Pontos do percurso:
 <strong id="pontos">0</strong>
-
 </div>
 
 
 <div id="percursoAtualBox">
 
 🆕 Percurso atual:
-<strong id="percursoAtual">Aguardando...</strong>
+
+<strong id="percursoAtual">
+Aguardando...
+</strong>
+
+</div>
+
+
+<!-- ================================
+     HISTÓRICO
+================================ -->
+
+<div class="historicoBox">
+
+<h2>📚 Histórico de percursos</h2>
+
+<label for="listaPercursos">
+Selecione um percurso:
+</label>
+
+<select
+  id="listaPercursos"
+  onchange="selecionarPercursoHistorico()"
+>
+
+<option value="">
+Carregando percursos...
+</option>
+
+</select>
+
+
+<button
+  onclick="voltarAoVivo()"
+>
+
+🔴 Voltar ao percurso ao vivo
+
+</button>
+
+
+<div id="modoVisualizacao">
+
+🟢 Modo: AO VIVO
+
+</div>
+
+
+<div id="infoHistorico">
+
+Selecione um percurso antigo para visualizar.
+
+</div>
 
 </div>
 
@@ -248,6 +291,7 @@ const firebaseConfig = {
 
   appId:
     "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
 };
 
 
@@ -259,12 +303,18 @@ const database =
 
 
 /* =========================================
-   REFERÊNCIA DO BOI
+   REFERÊNCIAS
 ========================================= */
 
 const boiRef =
   database.ref(
     "bois/boi-estrela"
+  );
+
+
+const todosPercursosRef =
+  database.ref(
+    "percursos/boi-estrela"
   );
 
 
@@ -329,28 +379,36 @@ let primeiraLocalizacao = true;
 
 let ultimoAtualizadoEm = 0;
 
-
-/*
-ID do percurso atualmente
-selecionado pelo celular
-*/
-
 let percursoAtualId = null;
-
-
-/*
-Referência Firebase do percurso atual.
-*/
 
 let percursoRef = null;
 
 
+/*
+true = acompanha o boi.
+
+false = usuário está vendo
+um percurso antigo.
+*/
+
+let modoAoVivo = true;
+
+
+/*
+Guarda a posição atual
+do boi.
+*/
+
+let ultimaPosicaoBoi = null;
+
+
 
 /* =========================================
-   POSIÇÃO ATUAL DO BOI
+   POSIÇÃO ATUAL
 ========================================= */
 
 boiRef.on(
+
   "value",
 
   function(snapshot) {
@@ -391,35 +449,51 @@ boiRef.on(
       Number(dados.atualizadoEm || 0);
 
 
-
-    /*
-    =====================================
-    VERIFICAR PERCURSO ATUAL
-    =====================================
-    */
-
     const novoPercursoId =
       dados.percursoAtual || null;
 
+
+
+    /*
+    Detectar novo percurso
+    criado pelo celular.
+    */
 
     if (
       novoPercursoId &&
       novoPercursoId !== percursoAtualId
     ) {
 
-      carregarPercurso(
-        novoPercursoId
-      );
+      percursoAtualId =
+        novoPercursoId;
+
+
+      document
+        .getElementById(
+          "percursoAtual"
+        )
+        .innerText =
+        percursoAtualId;
+
+
+      /*
+      Se estivermos ao vivo,
+      automaticamente carregar
+      o novo percurso.
+      */
+
+      if (modoAoVivo) {
+
+        carregarPercursoAtual();
+
+      }
+
+
+      carregarListaPercursos();
 
     }
 
 
-
-    /*
-    =====================================
-    VALIDAR COORDENADAS
-    =====================================
-    */
 
     if (
       !Number.isFinite(latitude) ||
@@ -435,15 +509,22 @@ boiRef.on(
       atualizadoEm;
 
 
-    contador++;
+    ultimaPosicaoBoi = [
 
+      latitude,
+
+      longitude
+
+    ];
+
+
+    contador++;
 
 
     document
       .getElementById("contador")
       .innerText =
       contador;
-
 
 
     document
@@ -454,14 +535,12 @@ boiRef.on(
       " metros";
 
 
-
     document
       .getElementById("velocidade")
       .innerText =
 
       velocidade.toFixed(1) +
       " km/h";
-
 
 
     document
@@ -473,19 +552,9 @@ boiRef.on(
 
 
 
-    const novaPosicao = [
-
-      latitude,
-
-      longitude
-
-    ];
-
-
-
     /*
     =====================================
-    MARCADOR
+    MARCADOR DO BOI
     =====================================
     */
 
@@ -493,7 +562,7 @@ boiRef.on(
 
       marcador =
         L.marker(
-          novaPosicao
+          ultimaPosicaoBoi
         )
         .addTo(map);
 
@@ -501,8 +570,7 @@ boiRef.on(
       marcador
         .bindPopup(
           "🐂 Boi Estrela"
-        )
-        .openPopup();
+        );
 
     }
 
@@ -510,7 +578,7 @@ boiRef.on(
 
       marcador
         .setLatLng(
-          novaPosicao
+          ultimaPosicaoBoi
         );
 
     }
@@ -528,7 +596,7 @@ boiRef.on(
       circuloPrecisao =
         L.circle(
 
-          novaPosicao,
+          ultimaPosicaoBoi,
 
           {
 
@@ -546,7 +614,7 @@ boiRef.on(
 
       circuloPrecisao
         .setLatLng(
-          novaPosicao
+          ultimaPosicaoBoi
         );
 
 
@@ -560,42 +628,49 @@ boiRef.on(
 
 
     /*
-    =====================================
-    ACOMPANHAR O BOI
-    =====================================
+    Só acompanha automaticamente
+    se estiver AO VIVO.
     */
 
-    if (primeiraLocalizacao) {
-
-      map.setView(
-
-        novaPosicao,
-
-        18
-
-      );
+    if (modoAoVivo) {
 
 
-      primeiraLocalizacao =
-        false;
+      if (primeiraLocalizacao) {
 
-    }
+        map.setView(
 
-    else {
+          ultimaPosicaoBoi,
 
-      map.panTo(
+          18
 
-        novaPosicao,
+        );
 
-        {
 
-          animate: true,
+        marcador.openPopup();
 
-          duration: 0.8
 
-        }
+        primeiraLocalizacao =
+          false;
 
-      );
+      }
+
+      else {
+
+        map.panTo(
+
+          ultimaPosicaoBoi,
+
+          {
+
+            animate: true,
+
+            duration: 0.8
+
+          }
+
+        );
+
+      }
 
     }
 
@@ -610,16 +685,67 @@ boiRef.on(
 
 
 /* =========================================
-   CARREGAR SOMENTE O PERCURSO ATUAL
+   CARREGAR PERCURSO ATUAL
 ========================================= */
 
-function carregarPercurso(
-  idPercurso
+function carregarPercursoAtual() {
+
+
+  if (!percursoAtualId) {
+
+    return;
+
+  }
+
+
+  modoAoVivo = true;
+
+
+  document
+    .getElementById(
+      "modoVisualizacao"
+    )
+    .innerHTML =
+
+    "🟢 Modo: AO VIVO";
+
+
+  document
+    .getElementById(
+      "infoHistorico"
+    )
+    .innerHTML =
+
+    "Acompanhando o percurso atual do Boi Estrela.";
+
+
+  carregarPontosPercurso(
+
+    percursoAtualId,
+
+    true
+
+  );
+
+}
+
+
+
+/* =========================================
+   CARREGAR PONTOS DE UM PERCURSO
+========================================= */
+
+function carregarPontosPercurso(
+
+  idPercurso,
+
+  aoVivo
+
 ) {
 
 
   /*
-  Remove listener do percurso anterior.
+  Remover listener anterior.
   */
 
   if (percursoRef) {
@@ -630,38 +756,9 @@ function carregarPercurso(
 
 
 
-  /*
-  Guardar novo ID.
-  */
-
-  percursoAtualId =
-    idPercurso;
-
-
-
-  /*
-  Mostrar ID na tela.
-  */
-
-  document
-    .getElementById("percursoAtual")
-    .innerText =
-    percursoAtualId;
-
-
-
-  /*
-  Limpar linha antiga imediatamente.
-  */
-
   linhaPercurso
     .setLatLngs([]);
 
-
-
-  /*
-  Zerar contador visual.
-  */
 
   document
     .getElementById("pontos")
@@ -669,17 +766,6 @@ function carregarPercurso(
     "0";
 
 
-
-  /*
-  =====================================
-  CAMINHO DO NOVO SISTEMA
-  =====================================
-
-  percursos
-      boi-estrela
-          ID-DO-PERCURSO
-              pontos
-  */
 
   percursoRef =
     database.ref(
@@ -693,11 +779,6 @@ function carregarPercurso(
 
 
 
-  /*
-  Escutar somente os pontos
-  do percurso atual.
-  */
-
   percursoRef.on(
 
     "value",
@@ -706,6 +787,13 @@ function carregarPercurso(
 
 
       const percurso = [];
+
+
+      let distanciaHistorica = 0;
+
+      let primeiroTimestamp = null;
+
+      let ultimoTimestamp = null;
 
 
 
@@ -718,13 +806,11 @@ function carregarPercurso(
             child.val();
 
 
-
           if (!ponto) {
 
             return;
 
           }
-
 
 
           const lat =
@@ -739,23 +825,67 @@ function carregarPercurso(
             );
 
 
+          const timestamp =
+            Number(
+              ponto.timestamp || 0
+            );
+
 
           if (
-
             Number.isFinite(lat) &&
-
             Number.isFinite(lng)
-
           ) {
 
 
             percurso.push(
-              [
-                lat,
-                lng
-              ]
+              [lat, lng]
             );
 
+
+            /*
+            Calcular distância usando
+            os próprios pontos.
+            */
+
+            if (percurso.length > 1) {
+
+
+              const anterior =
+                percurso[
+                  percurso.length - 2
+                ];
+
+
+              distanciaHistorica +=
+                calcularDistancia(
+
+                  anterior[0],
+                  anterior[1],
+
+                  lat,
+                  lng
+
+                );
+
+            }
+
+
+            if (timestamp) {
+
+              if (
+                primeiroTimestamp === null
+              ) {
+
+                primeiroTimestamp =
+                  timestamp;
+
+              }
+
+
+              ultimoTimestamp =
+                timestamp;
+
+            }
 
           }
 
@@ -766,9 +896,7 @@ function carregarPercurso(
 
 
       /*
-      =====================================
-      QUANTIDADE DE PONTOS
-      =====================================
+      Mostrar quantidade.
       */
 
       document
@@ -779,9 +907,7 @@ function carregarPercurso(
 
 
       /*
-      =====================================
-      DESENHAR LINHA
-      =====================================
+      Desenhar linha.
       */
 
       linhaPercurso
@@ -790,15 +916,499 @@ function carregarPercurso(
         );
 
 
+
       /*
-      Não usamos fitBounds aqui,
-      pois o mapa deve continuar
-      acompanhando o boi.
+      =====================================
+      SE FOR HISTÓRICO
+      =====================================
       */
+
+      if (!aoVivo) {
+
+
+        let texto =
+
+          "🗺️ Pontos: <strong>" +
+          percurso.length +
+          "</strong>";
+
+
+        texto +=
+
+          "<br>📏 Distância aproximada: <strong>" +
+
+          distanciaHistorica
+            .toFixed(1) +
+
+          " metros</strong>";
+
+
+
+        if (primeiroTimestamp) {
+
+
+          const inicio =
+            new Date(
+              primeiroTimestamp
+            );
+
+
+          texto +=
+
+            "<br>🕐 Início: <strong>" +
+
+            inicio
+              .toLocaleString(
+                "pt-BR"
+              ) +
+
+            "</strong>";
+
+        }
+
+
+
+        if (ultimoTimestamp) {
+
+
+          const fim =
+            new Date(
+              ultimoTimestamp
+            );
+
+
+          texto +=
+
+            "<br>🏁 Último ponto: <strong>" +
+
+            fim
+              .toLocaleString(
+                "pt-BR"
+              ) +
+
+            "</strong>";
+
+        }
+
+
+
+        document
+          .getElementById(
+            "infoHistorico"
+          )
+          .innerHTML =
+          texto;
+
+
+
+        /*
+        Mostrar percurso inteiro
+        na tela.
+        */
+
+        if (percurso.length > 1) {
+
+
+          map.fitBounds(
+
+            linhaPercurso
+              .getBounds(),
+
+            {
+
+              padding:
+                [40, 40]
+
+            }
+
+          );
+
+        }
+
+
+        else if (
+          percurso.length === 1
+        ) {
+
+
+          map.setView(
+
+            percurso[0],
+
+            18
+
+          );
+
+        }
+
+      }
 
     }
 
   );
+
+}
+
+
+
+/* =========================================
+   LISTAR PERCURSOS
+========================================= */
+
+function carregarListaPercursos() {
+
+
+  todosPercursosRef
+    .once("value")
+
+    .then(
+
+      function(snapshot) {
+
+
+        const select =
+          document.getElementById(
+            "listaPercursos"
+          );
+
+
+        select.innerHTML =
+          "";
+
+
+        /*
+        Opção inicial.
+        */
+
+        const opcaoAtual =
+          document.createElement(
+            "option"
+          );
+
+
+        opcaoAtual.value =
+          "";
+
+
+        opcaoAtual.textContent =
+          "🟢 Percurso atual";
+
+
+        select.appendChild(
+          opcaoAtual
+        );
+
+
+
+        /*
+        Criar lista.
+        */
+
+        const lista = [];
+
+
+        snapshot.forEach(
+
+          function(child) {
+
+
+            lista.push({
+
+              id:
+                child.key,
+
+              dados:
+                child.val()
+
+            });
+
+          }
+
+        );
+
+
+
+        /*
+        Mostrar mais recentes primeiro.
+        */
+
+        lista.reverse();
+
+
+
+        lista.forEach(
+
+          function(item) {
+
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+
+            option.value =
+              item.id;
+
+
+
+            if (
+              item.id ===
+              percursoAtualId
+            ) {
+
+
+              option.textContent =
+
+                "🟢 Atual - " +
+                item.id;
+
+            }
+
+            else {
+
+
+              option.textContent =
+
+                "📍 " +
+                item.id;
+
+            }
+
+
+            select.appendChild(
+              option
+            );
+
+          }
+
+        );
+
+      }
+
+    );
+
+}
+
+
+
+/* =========================================
+   SELECIONAR HISTÓRICO
+========================================= */
+
+function selecionarPercursoHistorico() {
+
+
+  const select =
+    document.getElementById(
+      "listaPercursos"
+    );
+
+
+  const id =
+    select.value;
+
+
+
+  /*
+  Opção "Percurso atual".
+  */
+
+  if (!id) {
+
+    voltarAoVivo();
+
+    return;
+
+  }
+
+
+
+  /*
+  Se selecionou exatamente
+  o percurso atual, também
+  podemos voltar ao vivo.
+  */
+
+  if (
+    id === percursoAtualId
+  ) {
+
+    voltarAoVivo();
+
+    return;
+
+  }
+
+
+
+  modoAoVivo =
+    false;
+
+
+
+  document
+    .getElementById(
+      "modoVisualizacao"
+    )
+    .innerHTML =
+
+    "📚 Modo: HISTÓRICO";
+
+
+
+  document
+    .getElementById(
+      "infoHistorico"
+    )
+    .innerHTML =
+
+    "Carregando percurso...";
+
+
+
+  carregarPontosPercurso(
+
+    id,
+
+    false
+
+  );
+
+}
+
+
+
+/* =========================================
+   VOLTAR AO VIVO
+========================================= */
+
+function voltarAoVivo() {
+
+
+  modoAoVivo =
+    true;
+
+
+  document
+    .getElementById(
+      "listaPercursos"
+    )
+    .value =
+    "";
+
+
+  document
+    .getElementById(
+      "modoVisualizacao"
+    )
+    .innerHTML =
+
+    "🟢 Modo: AO VIVO";
+
+
+  document
+    .getElementById(
+      "infoHistorico"
+    )
+    .innerHTML =
+
+    "Acompanhando o percurso atual do Boi Estrela.";
+
+
+
+  carregarPercursoAtual();
+
+
+
+  /*
+  Voltar mapa para o boi.
+  */
+
+  if (ultimaPosicaoBoi) {
+
+
+    map.setView(
+
+      ultimaPosicaoBoi,
+
+      18
+
+    );
+
+
+    if (marcador) {
+
+      marcador.openPopup();
+
+    }
+
+  }
+
+}
+
+
+
+/* =========================================
+   DISTÂNCIA ENTRE COORDENADAS
+========================================= */
+
+function calcularDistancia(
+
+  lat1,
+  lon1,
+  lat2,
+  lon2
+
+) {
+
+
+  const R =
+    6371000;
+
+
+  const rad =
+    Math.PI / 180;
+
+
+  const dLat =
+    (lat2 - lat1) *
+    rad;
+
+
+  const dLon =
+    (lon2 - lon1) *
+    rad;
+
+
+  const a =
+
+    Math.sin(dLat / 2) *
+    Math.sin(dLat / 2)
+
+    +
+
+    Math.cos(lat1 * rad) *
+    Math.cos(lat2 * rad) *
+
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+
+  const c =
+
+    2 *
+
+    Math.atan2(
+
+      Math.sqrt(a),
+
+      Math.sqrt(1 - a)
+
+    );
+
+
+  return R * c;
 
 }
 
@@ -818,12 +1428,10 @@ function verificarStatus() {
   }
 
 
-
   const diferenca =
 
     Date.now() -
     ultimoAtualizadoEm;
-
 
 
   const segundos =
@@ -839,37 +1447,33 @@ function verificarStatus() {
     );
 
 
-
   const status =
 
-    document
-      .getElementById(
-        "status"
-      );
+    document.getElementById(
+      "status"
+    );
 
 
-
-  /*
-  Online se recebeu atualização
-  nos últimos 60 segundos.
-  */
 
   if (segundos <= 60) {
+
 
     status.innerHTML =
 
       "🟢 Boi Estrela ONLINE";
 
+
   }
 
   else {
+
 
     status.innerHTML =
 
       "🔴 Boi Estrela OFFLINE";
 
-  }
 
+  }
 
 
   atualizarTempo(
@@ -881,7 +1485,7 @@ function verificarStatus() {
 
 
 /* =========================================
-   TEMPO DA ÚLTIMA ATUALIZAÇÃO
+   TEMPO
 ========================================= */
 
 function atualizarTempo(
@@ -906,7 +1510,9 @@ function atualizarTempo(
   }
 
 
-  else if (segundos < 3600) {
+  else if (
+    segundos < 3600
+  ) {
 
 
     const minutos =
@@ -946,7 +1552,6 @@ function atualizarTempo(
   }
 
 
-
   document
     .getElementById("tempo")
     .innerText =
@@ -971,6 +1576,14 @@ setInterval(
   1000
 
 );
+
+
+
+/* =========================================
+   CARREGAR LISTA AO ABRIR
+========================================= */
+
+carregarListaPercursos();
 
 </script>
 
