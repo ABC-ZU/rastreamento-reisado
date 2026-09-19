@@ -3,8 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Rastreamento do Reisado</title>
 
@@ -58,9 +57,7 @@
 <p>Escolha o boi que será rastreado:</p>
 
 <select id="boi">
-  <option value="boi-estrela">
-    🐂 Boi Estrela
-  </option>
+  <option value="boi-estrela">🐂 Boi Estrela</option>
 </select>
 
 <button id="botao" onclick="iniciarRastreamento()">
@@ -108,7 +105,6 @@ const firebaseConfig = {
 
   appId:
   "1:796420970266:web:a0f082d40cd1b9410e3ea3"
-
 };
 
 
@@ -123,7 +119,8 @@ let contador = 0;
 
 let ultimaLatitude = null;
 let ultimaLongitude = null;
-let ultimoTempo = null;
+
+let ultimoTempoMovimento = null;
 
 let distanciaTotal = 0;
 
@@ -131,9 +128,9 @@ let velocidadeCalculada = 0;
 
 
 /*
-========================================
+====================================
 INICIAR RASTREAMENTO
-========================================
+====================================
 */
 
 function iniciarRastreamento() {
@@ -166,6 +163,8 @@ function iniciarRastreamento() {
   botao.innerHTML =
     "📡 Rastreamento ativo";
 
+  botao.disabled = true;
+
 
   if (watchId !== null) {
 
@@ -174,198 +173,271 @@ function iniciarRastreamento() {
   }
 
 
-  watchId =
-  navigator.geolocation.watchPosition(
+  watchId = navigator.geolocation.watchPosition(
 
-    async function(posicao) {
+    receberPosicao,
+
+    erroGPS,
+
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 30000
+    }
+
+  );
+
+}
 
 
-      const latitude =
-        posicao.coords.latitude;
+/*
+====================================
+RECEBER GPS
+====================================
+*/
 
-      const longitude =
-        posicao.coords.longitude;
+async function receberPosicao(posicao) {
 
-      const precisao =
-        posicao.coords.accuracy;
+  const latitude =
+    posicao.coords.latitude;
 
-      const agora =
-        Date.now();
+  const longitude =
+    posicao.coords.longitude;
+
+  const precisao =
+    posicao.coords.accuracy;
+
+  const agora =
+    Date.now();
+
+
+  /*
+  IGNORAR GPS MUITO RUIM
+  */
+
+  if (precisao > 50) {
+
+    document.getElementById("status")
+      .innerHTML =
+      "🟡 Aguardando melhor precisão do GPS";
+
+    return;
+
+  }
+
+
+  /*
+  ====================================
+  FILTRO DE MOVIMENTO
+  ====================================
+  */
+
+  let distanciaMovimento = 0;
+
+  let movimentoReal = false;
+
+
+  if (
+    ultimaLatitude !== null &&
+    ultimaLongitude !== null
+  ) {
+
+    distanciaMovimento =
+      calcularDistancia(
+
+        ultimaLatitude,
+        ultimaLongitude,
+
+        latitude,
+        longitude
+      );
+
+
+    /*
+    Quanto pior a precisão,
+    maior será o deslocamento necessário.
+
+    mínimo = 5 metros
+    */
+
+    const limiteMovimento =
+      Math.max(
+        5,
+        precisao * 2
+      );
+
+
+    if (
+      distanciaMovimento >=
+      limiteMovimento
+    ) {
+
+      movimentoReal = true;
+
+    }
+
+  }
+
+
+  /*
+  ====================================
+  VELOCIDADE CALCULADA
+  ====================================
+  */
+
+  if (
+    movimentoReal &&
+    ultimoTempoMovimento !== null
+  ) {
+
+    const segundos =
+      (agora - ultimoTempoMovimento) / 1000;
+
+
+    if (segundos > 0) {
+
+      velocidadeCalculada =
+        (distanciaMovimento / segundos)
+        * 3.6;
 
 
       /*
-      ========================================
-      IGNORAR GPS MUITO IMPRECISO
-      ========================================
+      rejeitar salto impossível
       */
 
-      if (precisao > 100) {
-
-        status.innerHTML =
-          "🟡 GPS com baixa precisão";
-
-        localizacao.innerHTML =
-
-          "Latitude: " +
-          latitude.toFixed(7) +
-
-          "<br>Longitude: " +
-          longitude.toFixed(7) +
-
-          "<br>Precisão: " +
-          Math.round(precisao) +
-          " metros";
-
-
-        informacoes.innerHTML =
-
-          "⚠️ Aguardando uma leitura melhor do GPS.";
-
-        return;
-
-      }
-
-
-      /*
-      ========================================
-      CALCULAR MOVIMENTO
-      ========================================
-      */
-
-      let distanciaMovimento = 0;
-
-      let movimentoReal = false;
-
-
-      if (
-        ultimaLatitude !== null &&
-        ultimaLongitude !== null
-      ) {
-
-        distanciaMovimento =
-          calcularDistancia(
-
-            ultimaLatitude,
-            ultimaLongitude,
-
-            latitude,
-            longitude
-
-          );
-
-
-        /*
-        Filtro contra pequenas oscilações GPS.
-
-        Só considera deslocamento quando
-        for superior a 3 metros.
-        */
-
-        if (distanciaMovimento >= 3) {
-
-          movimentoReal = true;
-
-        }
-
-      }
-
-
-      /*
-      ========================================
-      CALCULAR VELOCIDADE
-      ========================================
-      */
-
-      if (
-        movimentoReal &&
-        ultimoTempo !== null
-      ) {
-
-        const tempoSegundos =
-          (agora - ultimoTempo) / 1000;
-
-
-        if (tempoSegundos > 0) {
-
-          const metrosPorSegundo =
-            distanciaMovimento /
-            tempoSegundos;
-
-
-          velocidadeCalculada =
-            metrosPorSegundo * 3.6;
-
-
-          /*
-          Evita valores absurdos causados
-          por erro momentâneo do GPS.
-          */
-
-          if (velocidadeCalculada > 80) {
-
-            velocidadeCalculada = 0;
-
-          }
-
-        }
-
-
-        distanciaTotal +=
-          distanciaMovimento;
-
-      }
-
-      else {
+      if (velocidadeCalculada > 60) {
 
         velocidadeCalculada = 0;
+        movimentoReal = false;
 
       }
 
+    }
 
-      /*
-      ========================================
-      MOSTRAR NO CELULAR
-      ========================================
-      */
+  }
 
-      localizacao.innerHTML =
+  else {
 
-        "Latitude: " +
-        latitude.toFixed(7) +
+    velocidadeCalculada = 0;
 
-        "<br>Longitude: " +
-        longitude.toFixed(7) +
-
-        "<br>Precisão: " +
-        Math.round(precisao) +
-        " metros" +
-
-        "<br>Velocidade: " +
-        velocidadeCalculada.toFixed(1) +
-        " km/h" +
-
-        "<br>Distância percorrida: " +
-        distanciaTotal.toFixed(1) +
-        " metros";
+  }
 
 
-      /*
-      ========================================
-      ENVIAR AO FIREBASE
-      ========================================
-      */
+  /*
+  ====================================
+  DISTÂNCIA TOTAL
+  ====================================
+  */
 
-      const boi =
-        document.getElementById("boi").value;
+  if (movimentoReal) {
+
+    distanciaTotal +=
+      distanciaMovimento;
+
+  }
 
 
-      const dados = {
+  /*
+  ====================================
+  MOSTRAR NO CELULAR
+  ====================================
+  */
 
-        nome: "Boi Estrela",
+  document.getElementById("localizacao")
+    .innerHTML =
 
-        latitude: latitude,
+    "Latitude: " +
+    latitude.toFixed(7) +
 
-        longitude: longitude,
+    "<br>Longitude: " +
+    longitude.toFixed(7) +
+
+    "<br>Precisão: " +
+    Math.round(precisao) +
+    " metros" +
+
+    "<br>Velocidade: " +
+    velocidadeCalculada.toFixed(1) +
+    " km/h" +
+
+    "<br>Distância percorrida: " +
+    distanciaTotal.toFixed(1) +
+    " metros";
+
+
+  /*
+  ====================================
+  POSIÇÃO ATUAL
+  ====================================
+  */
+
+  const boi =
+    document.getElementById("boi").value;
+
+
+  const dados = {
+
+    nome:
+      "Boi Estrela",
+
+    latitude:
+      latitude,
+
+    longitude:
+      longitude,
+
+    precisao:
+      Math.round(precisao),
+
+    velocidade:
+      velocidadeCalculada,
+
+    distancia:
+      distanciaTotal,
+
+    online:
+      true,
+
+    atualizadoEm:
+      firebase.database
+      .ServerValue
+      .TIMESTAMP
+
+  };
+
+
+  try {
+
+    /*
+    Atualiza posição atual
+    */
+
+    await database
+      .ref("bois/" + boi)
+      .update(dados);
+
+
+    contador++;
+
+
+    /*
+    ====================================
+    SALVAR HISTÓRICO
+    ====================================
+    */
+
+    if (
+      movimentoReal ||
+      ultimaLatitude === null
+    ) {
+
+      const pontoHistorico = {
+
+        latitude:
+          latitude,
+
+        longitude:
+          longitude,
 
         precisao:
           Math.round(precisao),
@@ -376,9 +448,7 @@ function iniciarRastreamento() {
         distancia:
           distanciaTotal,
 
-        online: true,
-
-        atualizadoEm:
+        timestamp:
           firebase.database
           .ServerValue
           .TIMESTAMP
@@ -386,130 +456,115 @@ function iniciarRastreamento() {
       };
 
 
-      try {
+      await database
+        .ref(
+          "historico/" +
+          boi
+        )
+        .push(
+          pontoHistorico
+        );
 
 
-        await database
-          .ref("bois/" + boi)
-          .set(dados);
+      /*
+      nova referência
+      */
 
+      ultimaLatitude =
+        latitude;
 
-        contador++;
+      ultimaLongitude =
+        longitude;
 
-
-        status.innerHTML =
-          "🟢 Boi Estrela sendo rastreado";
-
-
-        informacoes.innerHTML =
-
-          "🛰️ Atualizações enviadas: " +
-          contador +
-
-          "<br>🕐 Último envio: " +
-          new Date().toLocaleTimeString() +
-
-          "<br>" +
-
-          (
-            movimentoReal
-            ?
-            "🚶 Movimento detectado"
-            :
-            "📍 Posição estável"
-          );
-
-
-        /*
-        Atualiza referência da posição
-        */
-
-        if (
-          movimentoReal ||
-          ultimaLatitude === null
-        ) {
-
-          ultimaLatitude =
-            latitude;
-
-          ultimaLongitude =
-            longitude;
-
-        }
-
-
-        ultimoTempo = agora;
-
-
-      }
-
-      catch(erro) {
-
-
-        console.error(erro);
-
-
-        status.innerHTML =
-          "🔴 Erro ao enviar para Firebase";
-
-      }
-
-    },
-
-
-    function(erro) {
-
-
-      console.error(erro);
-
-
-      status.innerHTML =
-        "🔴 Erro ao acessar GPS";
-
-
-      if (erro.code === 1) {
-
-        localizacao.innerHTML =
-          "Permissão de localização negada.";
-
-      }
-
-      else if (erro.code === 2) {
-
-        localizacao.innerHTML =
-          "Localização indisponível.";
-
-      }
-
-      else if (erro.code === 3) {
-
-        localizacao.innerHTML =
-          "GPS demorou para responder.";
-
-      }
-
-    },
-
-
-    {
-
-      enableHighAccuracy: true,
-
-      maximumAge: 0,
-
-      timeout: 30000
+      ultimoTempoMovimento =
+        agora;
 
     }
 
-  );
+
+    document.getElementById("status")
+      .innerHTML =
+      "🟢 Boi Estrela sendo rastreado";
+
+
+    document.getElementById("informacoes")
+      .innerHTML =
+
+      "🛰️ Atualizações enviadas: " +
+      contador +
+
+      "<br>🕐 Último envio: " +
+      new Date()
+      .toLocaleTimeString() +
+
+      "<br>" +
+
+      (
+        movimentoReal
+        ?
+        "🚶 Movimento detectado"
+        :
+        "📍 Posição estável"
+      );
+
+
+  }
+
+  catch (erro) {
+
+    console.error(erro);
+
+    document.getElementById("status")
+      .innerHTML =
+      "🔴 Erro ao enviar para Firebase";
+
+  }
 
 }
 
 
 /*
-========================================
-CALCULAR DISTÂNCIA ENTRE COORDENADAS
-========================================
+====================================
+ERRO GPS
+====================================
+*/
+
+function erroGPS(erro) {
+
+  console.error(erro);
+
+  const status =
+    document.getElementById("status");
+
+
+  if (erro.code === 1) {
+
+    status.innerHTML =
+      "🔴 Permissão de localização negada";
+
+  }
+
+  else if (erro.code === 2) {
+
+    status.innerHTML =
+      "🔴 Localização indisponível";
+
+  }
+
+  else if (erro.code === 3) {
+
+    status.innerHTML =
+      "🟡 GPS demorou para responder";
+
+  }
+
+}
+
+
+/*
+====================================
+DISTÂNCIA ENTRE COORDENADAS
+====================================
 */
 
 function calcularDistancia(
@@ -527,7 +582,6 @@ function calcularDistancia(
 
   const dLat =
     (lat2 - lat1) * rad;
-
 
   const dLon =
     (lon2 - lon1) * rad;
