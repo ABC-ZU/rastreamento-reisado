@@ -3,11 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
   <title>Rastreamento do Reisado</title>
 
   <style>
+
     body {
       font-family: Arial, sans-serif;
       max-width: 600px;
@@ -47,8 +50,11 @@
       font-size: 17px;
       line-height: 1.7;
     }
+
   </style>
+
 </head>
+
 
 <body>
 
@@ -56,77 +62,112 @@
 
 <p>Escolha o boi que será rastreado:</p>
 
+
 <select id="boi">
-  <option value="boi-estrela">🐂 Boi Estrela</option>
+
+  <option value="boi-estrela">
+    🐂 Boi Estrela
+  </option>
+
 </select>
 
-<button id="botao" onclick="iniciarRastreamento()">
+
+<button id="botao"
+        onclick="iniciarRastreamento()">
+
   📍 Iniciar rastreamento
+
 </button>
 
+
 <div id="status">
+
   🔴 Rastreamento desligado
+
 </div>
+
 
 <div id="localizacao"></div>
 
+
 <div id="informacoes">
+
   🛰️ Atualizações enviadas: 0
   <br>
-  🛣️ Pontos gravados: 0
+  🗺️ Pontos salvos no histórico: 0
+
 </div>
 
 
+
+<!-- ===================================== -->
 <!-- FIREBASE -->
+<!-- ===================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
 
 <script>
 
-/* =========================================
-   CONFIGURAÇÃO FIREBASE
-========================================= */
+
+/*
+==========================================
+CONFIGURAÇÃO FIREBASE
+==========================================
+*/
 
 const firebaseConfig = {
 
   apiKey:
-    "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
 
   authDomain:
-    "rastreamento-reisado.firebaseapp.com",
+  "rastreamento-reisado.firebaseapp.com",
 
   databaseURL:
-    "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  "https://rastreamento-reisado-default-rtdb.firebaseio.com",
 
   projectId:
-    "rastreamento-reisado",
+  "rastreamento-reisado",
 
   storageBucket:
-    "rastreamento-reisado.firebasestorage.app",
+  "rastreamento-reisado.firebasestorage.app",
 
   messagingSenderId:
-    "796420970266",
+  "796420970266",
 
   appId:
-    "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+  "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
 };
 
 
+/*
+==========================================
+INICIAR FIREBASE
+==========================================
+*/
+
 firebase.initializeApp(firebaseConfig);
 
-const database = firebase.database();
+const database =
+  firebase.database();
 
 
-/* =========================================
-   VARIÁVEIS
-========================================= */
+
+/*
+==========================================
+VARIÁVEIS
+==========================================
+*/
 
 let watchId = null;
 
 let contador = 0;
 
-let pontosGravados = 0;
+let contadorHistorico = 0;
 
 let ultimaLatitude = null;
 
@@ -138,16 +179,16 @@ let distanciaTotal = 0;
 
 let velocidadeCalculada = 0;
 
-let primeiroPonto = true;
-
-let enviando = false;
 
 
-/* =========================================
-   INICIAR RASTREAMENTO
-========================================= */
+/*
+==========================================
+INICIAR RASTREAMENTO
+==========================================
+*/
 
 function iniciarRastreamento() {
+
 
   const status =
     document.getElementById("status");
@@ -156,52 +197,48 @@ function iniciarRastreamento() {
     document.getElementById("botao");
 
 
+  /*
+  Verificar suporte ao GPS
+  */
+
   if (!navigator.geolocation) {
 
     status.innerHTML =
-      "🔴 GPS não disponível";
+      "🔴 GPS não disponível neste aparelho";
 
     return;
+
   }
 
 
   status.innerHTML =
     "🟡 Procurando sinal GPS...";
 
+
   botao.innerHTML =
     "📡 Rastreamento ativo";
 
-  botao.disabled = true;
+
+  botao.disabled =
+    true;
 
 
   /*
-  Reinicia os dados desta sessão.
+  Evita criar dois watchPosition
   */
-
-  contador = 0;
-
-  pontosGravados = 0;
-
-  distanciaTotal = 0;
-
-  velocidadeCalculada = 0;
-
-  ultimaLatitude = null;
-
-  ultimaLongitude = null;
-
-  ultimoTempo = null;
-
-  primeiroPonto = true;
-
 
   if (watchId !== null) {
 
     navigator.geolocation.clearWatch(
       watchId
     );
+
   }
 
+
+  /*
+  Inicia acompanhamento contínuo
+  */
 
   watchId =
     navigator.geolocation.watchPosition(
@@ -211,521 +248,536 @@ function iniciarRastreamento() {
       erroGPS,
 
       {
+
         enableHighAccuracy: true,
+
         maximumAge: 0,
+
         timeout: 30000
+
       }
 
     );
+
 }
 
 
-/* =========================================
-   RECEBER POSIÇÃO GPS
-========================================= */
+
+/*
+==========================================
+RECEBER POSIÇÃO DO GPS
+==========================================
+*/
 
 async function receberPosicao(posicao) {
 
-  /*
-  Evita duas gravações simultâneas.
-  */
-
-  if (enviando) {
-    return;
-  }
-
 
   const latitude =
-    Number(posicao.coords.latitude);
+    posicao.coords.latitude;
+
 
   const longitude =
-    Number(posicao.coords.longitude);
+    posicao.coords.longitude;
+
 
   const precisao =
-    Number(posicao.coords.accuracy);
+    posicao.coords.accuracy;
+
 
   const agora =
     Date.now();
 
 
-  /*
-  Confere coordenadas.
-  */
-
-  if (
-    !Number.isFinite(latitude) ||
-    !Number.isFinite(longitude) ||
-    !Number.isFinite(precisao)
-  ) {
-
-    return;
-  }
-
 
   /*
-  =========================================
-  FILTRO DE PRECISÃO
-  =========================================
+  ========================================
+  IGNORAR GPS MUITO IMPRECISO
+  ========================================
   */
+
 
   if (precisao > 50) {
 
+
     document.getElementById("status")
       .innerHTML =
-      "🟡 Aguardando melhor precisão do GPS";
 
-    document.getElementById("localizacao")
-      .innerHTML =
+      "🟡 GPS com baixa precisão (" +
 
-      "Latitude: " +
-      latitude.toFixed(7) +
-
-      "<br>Longitude: " +
-      longitude.toFixed(7) +
-
-      "<br>Precisão: " +
       Math.round(precisao) +
-      " metros";
+
+      " metros)";
+
 
     return;
+
   }
+
+
+
+  /*
+  ========================================
+  CALCULAR DISTÂNCIA
+  ========================================
+  */
 
 
   let distanciaMovimento = 0;
 
-  let movimentoReal = false;
 
-  let gravarHistorico = false;
+  if (
 
-
-  /*
-  =========================================
-  PRIMEIRO PONTO
-  =========================================
-  */
-
-  if (primeiroPonto) {
-
-    gravarHistorico = true;
-
-    velocidadeCalculada = 0;
-
-  }
-
-
-  /*
-  =========================================
-  DEMAIS PONTOS
-  =========================================
-  */
-
-  else if (
     ultimaLatitude !== null &&
+
     ultimaLongitude !== null
+
   ) {
+
 
     distanciaMovimento =
       calcularDistancia(
 
         ultimaLatitude,
+
         ultimaLongitude,
 
         latitude,
+
         longitude
 
       );
 
-
-    /*
-    Filtro contra oscilação do GPS.
-
-    Com precisão de 2 m:
-    limite = 5 m.
-
-    Com precisão de 4 m:
-    limite = 8 m.
-    */
-
-    const limiteMovimento =
-      Math.max(
-        5,
-        precisao * 2
-      );
+  }
 
 
-    if (
-      distanciaMovimento >= limiteMovimento
-    ) {
 
-      movimentoReal = true;
-
-    }
-
-
-    /*
-    =========================================
-    VELOCIDADE
-    =========================================
-    */
-
-    if (
-      movimentoReal &&
-      ultimoTempo !== null
-    ) {
-
-      const segundos =
-        (agora - ultimoTempo) / 1000;
+  /*
+  ========================================
+  DETECTAR MOVIMENTO
+  ========================================
+  */
 
 
-      if (segundos > 0) {
-
-        velocidadeCalculada =
-          (distanciaMovimento / segundos)
-          * 3.6;
-
-      }
-
-    }
+  let movimentoReal = false;
 
 
-    /*
-    =========================================
-    REJEITAR SALTOS DE GPS
-    =========================================
-
-    Para o teste do Reisado,
-    valores acima de 25 km/h são
-    considerados suspeitos.
-    */
-
-    if (
-      velocidadeCalculada > 25
-    ) {
-
-      movimentoReal = false;
-
-      velocidadeCalculada = 0;
-
-      distanciaMovimento = 0;
-
-    }
+  /*
+  Movimento mínimo considerado:
+  3 metros
+  */
 
 
-    /*
-    Movimento aceito.
-    */
+  if (distanciaMovimento >= 3) {
 
-    if (movimentoReal) {
-
-      gravarHistorico = true;
-
-    }
+    movimentoReal = true;
 
   }
 
 
-  /*
-  Se não houve movimento,
-  velocidade exibida fica zero.
-  */
-
-  if (!movimentoReal) {
-
-    velocidadeCalculada = 0;
-
-  }
-
 
   /*
-  =========================================
-  DISTÂNCIA TOTAL
-  =========================================
+  ========================================
+  CALCULAR VELOCIDADE
+  ========================================
   */
 
-  let novaDistanciaTotal =
-    distanciaTotal;
+
+  velocidadeCalculada = 0;
 
 
   if (
-    movimentoReal &&
-    gravarHistorico
+
+    ultimaLatitude !== null &&
+
+    ultimoTempo !== null
+
   ) {
 
-    novaDistanciaTotal +=
+
+    const segundos =
+
+      (agora - ultimoTempo) / 1000;
+
+
+    if (segundos > 0) {
+
+
+      velocidadeCalculada =
+
+        (distanciaMovimento / segundos)
+
+        * 3.6;
+
+    }
+
+  }
+
+
+
+  /*
+  ========================================
+  FILTRO CONTRA SALTO DO GPS
+  ========================================
+  */
+
+
+  if (velocidadeCalculada > 80) {
+
+
+    console.log(
+      "Leitura ignorada: possível salto do GPS"
+    );
+
+
+    velocidadeCalculada = 0;
+
+
+  }
+
+
+
+  /*
+  ========================================
+  DISTÂNCIA TOTAL
+  ========================================
+  */
+
+
+  if (
+
+    movimentoReal &&
+
+    velocidadeCalculada <= 80
+
+  ) {
+
+
+    distanciaTotal +=
       distanciaMovimento;
 
   }
 
 
+
   /*
-  =========================================
-  MOSTRAR GPS NO CELULAR
-  =========================================
+  ========================================
+  MOSTRAR INFORMAÇÕES NA TELA
+  ========================================
   */
+
 
   document.getElementById("localizacao")
     .innerHTML =
 
+
     "Latitude: " +
+
     latitude.toFixed(7) +
 
+
     "<br>Longitude: " +
+
     longitude.toFixed(7) +
 
+
     "<br>Precisão: " +
+
     Math.round(precisao) +
+
     " metros" +
 
+
     "<br>Velocidade: " +
+
     velocidadeCalculada.toFixed(1) +
+
     " km/h" +
 
+
     "<br>Distância percorrida: " +
-    novaDistanciaTotal.toFixed(1) +
+
+    distanciaTotal.toFixed(1) +
+
     " metros";
+
+
+
+  /*
+  ========================================
+  BOI SELECIONADO
+  ========================================
+  */
 
 
   const boi =
     document.getElementById("boi").value;
 
 
+
   /*
-  =========================================
-  PREPARAR DADOS DA POSIÇÃO ATUAL
-  =========================================
+  ========================================
+  DADOS DA POSIÇÃO ATUAL
+  ========================================
   */
 
-  const dadosAtuais = {
+
+  const dados = {
+
 
     nome:
       "Boi Estrela",
 
+
     latitude:
       latitude,
+
 
     longitude:
       longitude,
 
+
     precisao:
       Math.round(precisao),
+
 
     velocidade:
       velocidadeCalculada,
 
+
     distancia:
-      novaDistanciaTotal,
+      distanciaTotal,
+
 
     online:
       true,
+
 
     atualizadoEm:
       firebase.database
       .ServerValue
       .TIMESTAMP
 
+
   };
+
 
 
   try {
 
-    enviando = true;
-
 
     /*
-    =========================================
-    ATUALIZAÇÃO ATÔMICA DO FIREBASE
-    =========================================
-
-    Atualizamos a posição atual e,
-    quando necessário, o histórico
-    na mesma operação.
+    ========================================
+    ATUALIZAR POSIÇÃO ATUAL DO BOI
+    ========================================
     */
 
-    const atualizacoes = {};
-
-
-    atualizacoes[
-      "bois/" + boi
-    ] = dadosAtuais;
-
-
-    /*
-    =========================================
-    CRIAR PONTO DO HISTÓRICO
-    =========================================
-    */
-
-    if (gravarHistorico) {
-
-      const novaChave =
-        database
-          .ref(
-            "historico/" + boi
-          )
-          .push()
-          .key;
-
-
-      const pontoHistorico = {
-
-        latitude:
-          latitude,
-
-        longitude:
-          longitude,
-
-        precisao:
-          Math.round(precisao),
-
-        velocidade:
-          velocidadeCalculada,
-
-        distancia:
-          novaDistanciaTotal,
-
-        timestamp:
-          firebase.database
-          .ServerValue
-          .TIMESTAMP
-
-      };
-
-
-      atualizacoes[
-        "historico/" +
-        boi +
-        "/" +
-        novaChave
-      ] = pontoHistorico;
-
-    }
-
-
-    /*
-    Uma única gravação.
-    */
 
     await database
-      .ref()
-      .update(atualizacoes);
+
+      .ref(
+        "bois/" + boi
+      )
+
+      .update(
+        dados
+      );
+
 
 
     contador++;
 
 
+
     /*
-    =========================================
-    CONFIRMAR PONTO GRAVADO
-    =========================================
+    ========================================
+    SALVAR HISTÓRICO
+    ========================================
+
+    IMPORTANTE:
+
+    Agora cada leitura válida do GPS
+    será gravada no histórico.
+
+    Não depende mais de movimentoReal.
+
+    Isso permite testar se o mapa
+    consegue receber o percurso.
+    ========================================
     */
 
-    if (gravarHistorico) {
 
-      pontosGravados++;
-
-      distanciaTotal =
-        novaDistanciaTotal;
+    const pontoHistorico = {
 
 
-      /*
-      A referência somente muda
-      depois que o ponto foi aceito.
-      */
+      latitude:
+        latitude,
 
-      ultimaLatitude =
-        latitude;
 
-      ultimaLongitude =
-        longitude;
+      longitude:
+        longitude,
 
-      ultimoTempo =
-        agora;
 
-      primeiroPonto =
-        false;
+      precisao:
+        Math.round(precisao),
 
-    }
+
+      velocidade:
+        velocidadeCalculada,
+
+
+      distancia:
+        distanciaTotal,
+
+
+      timestamp:
+        firebase.database
+        .ServerValue
+        .TIMESTAMP
+
+
+    };
+
+
+
+    await database
+
+      .ref(
+        "historico/" + boi
+      )
+
+      .push(
+        pontoHistorico
+      );
+
+
+
+    contadorHistorico++;
+
+
+
+    /*
+    ========================================
+    ATUALIZAR REFERÊNCIA
+    ========================================
+    */
+
+
+    ultimaLatitude =
+      latitude;
+
+
+    ultimaLongitude =
+      longitude;
+
+
+    ultimoTempo =
+      agora;
+
+
+
+    /*
+    ========================================
+    STATUS
+    ========================================
+    */
 
 
     document.getElementById("status")
       .innerHTML =
+
       "🟢 Boi Estrela sendo rastreado";
+
+
+
+    /*
+    ========================================
+    INFORMAÇÕES
+    ========================================
+    */
 
 
     document.getElementById("informacoes")
       .innerHTML =
 
+
       "🛰️ Atualizações enviadas: " +
+
       contador +
 
-      "<br>🛣️ Pontos gravados: " +
-      pontosGravados +
+
+      "<br>🗺️ Pontos salvos no histórico: " +
+
+      contadorHistorico +
+
 
       "<br>🕐 Último envio: " +
+
       new Date()
-        .toLocaleTimeString() +
+      .toLocaleTimeString() +
+
 
       "<br>" +
 
+
       (
-        primeiroPonto
-        ?
-        "🛰️ Obtendo primeiro ponto..."
-        :
+
         movimentoReal
+
         ?
+
         "🚶 Movimento detectado"
+
         :
+
         "📍 Posição estável"
+
       );
 
 
   }
 
+
   catch (erro) {
 
+
     console.error(
-      "ERRO FIREBASE:",
+      "Erro Firebase:",
       erro
     );
 
 
     document.getElementById("status")
       .innerHTML =
+
       "🔴 Erro ao enviar para Firebase";
 
 
     document.getElementById("informacoes")
       .innerHTML =
 
-      "❌ Erro na gravação.<br>" +
+      "Erro: " +
 
-      "Mensagem: " +
+      erro.message;
 
-      (
-        erro.message ||
-        "erro desconhecido"
-      );
-
-  }
-
-  finally {
-
-    enviando = false;
 
   }
 
 }
 
 
-/* =========================================
-   ERRO DO GPS
-========================================= */
+
+/*
+==========================================
+ERRO GPS
+==========================================
+*/
+
 
 function erroGPS(erro) {
 
+
   console.error(
-    "ERRO GPS:",
+    "Erro GPS:",
     erro
   );
 
@@ -736,48 +788,74 @@ function erroGPS(erro) {
 
   if (erro.code === 1) {
 
+
     status.innerHTML =
+
       "🔴 Permissão de localização negada";
 
+
   }
+
 
   else if (erro.code === 2) {
 
+
     status.innerHTML =
+
       "🔴 Localização indisponível";
 
+
   }
+
 
   else if (erro.code === 3) {
 
+
     status.innerHTML =
+
       "🟡 GPS demorou para responder";
+
 
   }
 
+
   else {
 
+
     status.innerHTML =
-      "🔴 Erro desconhecido do GPS";
+
+      "🔴 Erro desconhecido no GPS";
+
 
   }
 
 }
 
 
-/* =========================================
-   CALCULAR DISTÂNCIA
-========================================= */
+
+/*
+==========================================
+CALCULAR DISTÂNCIA ENTRE COORDENADAS
+==========================================
+*/
+
 
 function calcularDistancia(
+
   lat1,
+
   lon1,
+
   lat2,
+
   lon2
+
 ) {
+
 
   const R =
     6371000;
+
 
   const rad =
     Math.PI / 180;
@@ -786,29 +864,44 @@ function calcularDistancia(
   const dLat =
     (lat2 - lat1) * rad;
 
+
   const dLon =
     (lon2 - lon1) * rad;
 
 
+
   const a =
 
+
     Math.sin(dLat / 2) *
+
     Math.sin(dLat / 2)
+
 
     +
 
+
     Math.cos(lat1 * rad) *
+
     Math.cos(lat2 * rad) *
 
+
     Math.sin(dLon / 2) *
+
     Math.sin(dLon / 2);
 
 
+
   const c =
+
     2 *
+
     Math.atan2(
+
       Math.sqrt(a),
+
       Math.sqrt(1 - a)
+
     );
 
 
@@ -816,7 +909,10 @@ function calcularDistancia(
 
 }
 
+
 </script>
 
+
 </body>
+
 </html>
