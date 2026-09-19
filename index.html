@@ -15,7 +15,6 @@
       max-width: 600px;
       margin: auto;
       padding: 20px;
-      background: #ffffff;
     }
 
     h1 {
@@ -26,7 +25,7 @@
     button {
       width: 100%;
       padding: 16px;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 18px;
     }
 
@@ -37,18 +36,22 @@
     }
 
     #localizacao {
+      margin-top: 20px;
       font-size: 19px;
       line-height: 1.6;
     }
 
-    .aviso {
-      background: #f2f2f2;
-      padding: 12px;
+    #informacoes {
       margin-top: 20px;
-      border-radius: 8px;
+      padding: 15px;
+      background: #f2f2f2;
+      border-radius: 10px;
+      font-size: 17px;
+      line-height: 1.6;
     }
   </style>
 </head>
+
 
 <body>
 
@@ -64,19 +67,31 @@
 
   </select>
 
-  <button id="botao" onclick="iniciarRastreamento()">
+
+  <button id="botao"
+          onclick="iniciarRastreamento()">
+
     📍 Iniciar rastreamento
+
   </button>
 
+
   <div id="status">
+
     🔴 Rastreamento desligado
+
   </div>
+
 
   <div id="localizacao"></div>
 
-  <div class="aviso" id="aviso">
-    Aguardando início do rastreamento.
+
+  <div id="informacoes">
+
+    📡 Atualizações enviadas: 0
+
   </div>
+
 
 
   <!-- FIREBASE -->
@@ -86,254 +101,422 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 
-  <script>
-
-    // CONFIGURAÇÃO FIREBASE
-
-    const firebaseConfig = {
-
-      apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-
-      authDomain:
-        "rastreamento-reisado.firebaseapp.com",
-
-      databaseURL:
-        "https://rastreamento-reisado-default-rtdb.firebaseio.com",
-
-      projectId:
-        "rastreamento-reisado",
-
-      storageBucket:
-        "rastreamento-reisado.firebasestorage.app",
-
-      messagingSenderId:
-        "796420970266",
-
-      appId:
-        "1:796420970266:web:a0f082d40cd1b9410e3ea3"
-
-    };
+<script>
 
 
-    firebase.initializeApp(firebaseConfig);
+const firebaseConfig = {
 
-    const database = firebase.database();
+  apiKey:
+  "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+  authDomain:
+  "rastreamento-reisado.firebaseapp.com",
+
+  databaseURL:
+  "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
+  projectId:
+  "rastreamento-reisado",
+
+  storageBucket:
+  "rastreamento-reisado.firebasestorage.app",
+
+  messagingSenderId:
+  "796420970266",
+
+  appId:
+  "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
+};
 
 
-    let watchId = null;
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database();
 
 
-    function iniciarRastreamento() {
+let watchId = null;
 
-      const status =
-        document.getElementById("status");
+let contador = 0;
 
-      const localizacao =
-        document.getElementById("localizacao");
+let ultimaLatitude = null;
 
-      const aviso =
-        document.getElementById("aviso");
-
-      const botao =
-        document.getElementById("botao");
+let ultimaLongitude = null;
 
 
-      if (!navigator.geolocation) {
+
+function iniciarRastreamento() {
+
+
+  const status =
+    document.getElementById("status");
+
+  const localizacao =
+    document.getElementById("localizacao");
+
+  const informacoes =
+    document.getElementById("informacoes");
+
+  const botao =
+    document.getElementById("botao");
+
+
+  if (!navigator.geolocation) {
+
+    status.innerHTML =
+      "🔴 GPS não disponível";
+
+    return;
+
+  }
+
+
+  status.innerHTML =
+    "🟡 Procurando sinal GPS...";
+
+
+  botao.innerHTML =
+    "📡 Rastreamento ativo";
+
+
+  /*
+  Evita abrir dois rastreamentos
+  simultaneamente.
+  */
+
+  if (watchId !== null) {
+
+    navigator.geolocation.clearWatch(
+      watchId
+    );
+
+  }
+
+
+  watchId =
+  navigator.geolocation.watchPosition(
+
+
+    async function(posicao) {
+
+
+      const latitude =
+        posicao.coords.latitude;
+
+      const longitude =
+        posicao.coords.longitude;
+
+      const precisao =
+        posicao.coords.accuracy;
+
+      const velocidade =
+        posicao.coords.speed;
+
+
+      /*
+      MOSTRA IMEDIATAMENTE
+      A LEITURA DO GPS
+      */
+
+
+      localizacao.innerHTML =
+
+        "Latitude: " +
+        latitude.toFixed(7) +
+
+        "<br>Longitude: " +
+        longitude.toFixed(7) +
+
+        "<br>Precisão: " +
+        Math.round(precisao) +
+        " metros" +
+
+        "<br>Velocidade: " +
+        (
+          velocidade !== null
+          ?
+          (velocidade * 3.6).toFixed(1)
+          :
+          "0"
+        ) +
+        " km/h";
+
+
+      /*
+      NÃO ACEITA GPS MUITO RUIM
+      */
+
+      if (precisao > 100) {
 
         status.innerHTML =
-          "🔴 GPS não disponível";
+          "🟡 GPS com baixa precisão";
 
-        aviso.innerHTML =
-          "Este navegador não suporta geolocalização.";
+        informacoes.innerHTML =
+
+          "⚠️ Precisão atual: " +
+          Math.round(precisao) +
+          " metros.<br>" +
+
+          "Aguardando uma leitura melhor.";
 
         return;
+
       }
+
+
+
+      /*
+      VERIFICA SE A POSIÇÃO
+      REALMENTE MUDOU
+      */
+
+
+      let mudou = true;
+
+
+      if (
+        ultimaLatitude !== null &&
+        ultimaLongitude !== null
+      ) {
+
+
+        const distancia =
+          calcularDistancia(
+
+            ultimaLatitude,
+            ultimaLongitude,
+
+            latitude,
+            longitude
+
+          );
+
+
+        /*
+        Só considera movimento
+        superior a 2 metros.
+        */
+
+        if (distancia < 2) {
+
+          mudou = false;
+
+        }
+
+      }
+
+
+
+      /*
+      MESMO PARADO, ENVIA A POSIÇÃO.
+
+      Isso mantém o status ONLINE.
+      */
+
+
+      const boi =
+        document.getElementById("boi").value;
+
+
+      const dados = {
+
+        nome: "Boi Estrela",
+
+        latitude: latitude,
+
+        longitude: longitude,
+
+        precisao:
+          Math.round(precisao),
+
+        velocidade:
+          velocidade !== null
+          ? velocidade
+          : 0,
+
+        online: true,
+
+        atualizadoEm:
+          firebase.database
+          .ServerValue
+          .TIMESTAMP
+
+      };
+
+
+      try {
+
+
+        await database
+          .ref("bois/" + boi)
+          .set(dados);
+
+
+        contador++;
+
+
+        status.innerHTML =
+          "🟢 Boi Estrela sendo rastreado";
+
+
+        informacoes.innerHTML =
+
+          "📡 Atualizações enviadas: " +
+          contador +
+
+          "<br>🕐 Último envio: " +
+          new Date().toLocaleTimeString() +
+
+          "<br>" +
+
+          (
+            mudou
+            ?
+            "🚶 Movimento detectado"
+            :
+            "📍 Posição estável"
+          );
+
+
+        ultimaLatitude =
+          latitude;
+
+        ultimaLongitude =
+          longitude;
+
+
+      }
+
+      catch(erro) {
+
+
+        console.error(erro);
+
+
+        status.innerHTML =
+          "🔴 Erro ao enviar para Firebase";
+
+
+      }
+
+
+    },
+
+
+
+    function(erro) {
+
+
+      console.error(erro);
 
 
       status.innerHTML =
-        "🟡 Procurando GPS...";
-
-      aviso.innerHTML =
-        "Aguarde. Procurando uma localização com boa precisão...";
+        "🔴 Erro ao acessar GPS";
 
 
-      // Evita iniciar dois rastreamentos
+      if (erro.code === 1) {
 
-      if (watchId !== null) {
+        localizacao.innerHTML =
+          "Permissão de localização negada.";
 
-        navigator.geolocation.clearWatch(watchId);
+      }
+
+      else if (erro.code === 2) {
+
+        localizacao.innerHTML =
+          "Localização indisponível.";
+
+      }
+
+      else if (erro.code === 3) {
+
+        localizacao.innerHTML =
+          "GPS demorou para responder.";
 
       }
 
 
-      watchId =
-        navigator.geolocation.watchPosition(
+    },
 
-          function(posicao) {
 
-            const latitude =
-              posicao.coords.latitude;
 
-            const longitude =
-              posicao.coords.longitude;
+    {
 
-            const precisao =
-              posicao.coords.accuracy;
+      enableHighAccuracy: true,
 
+      maximumAge: 0,
 
-            localizacao.innerHTML =
-
-              "Latitude: " +
-              latitude.toFixed(7) +
-
-              "<br>Longitude: " +
-              longitude.toFixed(7) +
-
-              "<br>Precisão: " +
-              Math.round(precisao) +
-              " metros";
-
-
-            /*
-              IMPORTANTE
-
-              Se a precisão for pior que
-              100 metros, NÃO envia
-              para o Firebase.
-            */
-
-            if (precisao > 100) {
-
-              status.innerHTML =
-                "🟡 Aguardando GPS melhorar";
-
-              aviso.innerHTML =
-                "Precisão atual: " +
-                Math.round(precisao) +
-                " metros.<br>" +
-                "Aguardando precisão menor que 100 metros.";
-
-              return;
-
-            }
-
-
-            // BOI SELECIONADO
-
-            const boi =
-              document.getElementById("boi").value;
-
-
-            // NOME DO BOI
-
-            const nome =
-              boi === "boi-estrela"
-                ? "Boi Estrela"
-                : boi;
-
-
-            /*
-              ENVIA PARA FIREBASE
-            */
-
-            database
-              .ref("bois/" + boi)
-              .set({
-
-                nome: nome,
-
-                latitude: latitude,
-
-                longitude: longitude,
-
-                precisao: Math.round(precisao),
-
-                online: true,
-
-                atualizadoEm:
-                  firebase.database.ServerValue.TIMESTAMP
-
-              })
-
-              .then(function() {
-
-                status.innerHTML =
-                  "🟢 " +
-                  nome +
-                  " sendo rastreado";
-
-                aviso.innerHTML =
-                  "✅ Localização enviada ao mapa.";
-
-                botao.innerHTML =
-                  "📡 Rastreamento ativo";
-
-              })
-
-              .catch(function(erro) {
-
-                console.error(erro);
-
-                status.innerHTML =
-                  "🔴 Erro ao enviar localização";
-
-                aviso.innerHTML =
-                  "Não foi possível enviar os dados ao Firebase.";
-
-              });
-
-          },
-
-
-          function(erro) {
-
-            console.error(erro);
-
-
-            status.innerHTML =
-              "🔴 Erro ao acessar GPS";
-
-
-            if (erro.code === 1) {
-
-              aviso.innerHTML =
-                "Permissão de localização negada. " +
-                "Libere a localização para este site.";
-
-            }
-
-            else if (erro.code === 2) {
-
-              aviso.innerHTML =
-                "O celular não conseguiu determinar sua localização.";
-
-            }
-
-            else if (erro.code === 3) {
-
-              aviso.innerHTML =
-                "O GPS demorou para responder. Aguarde e tente novamente.";
-
-            }
-
-          },
-
-
-          {
-
-            enableHighAccuracy: true,
-
-            maximumAge: 0,
-
-            timeout: 20000
-
-          }
-
-        );
+      timeout: 30000
 
     }
 
-  </script>
+
+  );
+
+
+}
+
+
+
+/*
+================================
+CALCULAR DISTÂNCIA
+ENTRE DUAS COORDENADAS
+================================
+*/
+
+
+function calcularDistancia(
+  lat1,
+  lon1,
+  lat2,
+  lon2
+) {
+
+
+  const R = 6371000;
+
+
+  const rad = Math.PI / 180;
+
+
+  const dLat =
+    (lat2 - lat1) * rad;
+
+
+  const dLon =
+    (lon2 - lon1) * rad;
+
+
+  const a =
+
+    Math.sin(dLat / 2) *
+    Math.sin(dLat / 2)
+
+    +
+
+    Math.cos(lat1 * rad) *
+    Math.cos(lat2 * rad) *
+
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+
+  const c =
+    2 *
+    Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+
+  return R * c;
+
+
+}
+
+
+</script>
 
 </body>
 
