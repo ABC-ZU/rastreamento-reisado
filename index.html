@@ -1,123 +1,183 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rastreamento - Boi Estrela</title>
+
+  <title>Rastreamento do Reisado</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    select, button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+    #status {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #localizacao {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 
 <body>
 
-  <h1> Boi Estrela</h1>
+<h1>🐂 Rastreamento do Reisado</h1>
 
-  <p>📍 Rastreamento do cortejo</p>
+<p>Escolha o boi que será rastreado:</p>
 
-  <p id="status">🔴 Rastreamento desligado</p>
+<select id="boi">
+  <option value="boi-estrela">🐂 Boi Estrela</option>
+  <option value="boi-ramalhete">🐂 Boi Ramalhete</option>
+</select>
 
-  <button onclick="iniciarRastreamento()">
-    📍 Iniciar rastreamento
-  </button>
+<button onclick="iniciarRastreamento()">
+  📍 Iniciar rastreamento
+</button>
 
-  <p id="localizacao"></p>
+<p id="status">🔴 Rastreamento desligado</p>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<p id="localizacao"></p>
 
-  <script>
+<!-- Firebase -->
 
-    // Configuração do Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-      authDomain: "rastreamento-reisado.firebaseapp.com",
-      databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
-      projectId: "rastreamento-reisado",
-      storageBucket: "rastreamento-reisado.firebasestorage.app",
-      messagingSenderId: "796420970266",
-      appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
-    };
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 
-    // Inicia o Firebase
-    firebase.initializeApp(firebaseConfig);
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-    const database = firebase.database();
+<script>
 
+const firebaseConfig = {
 
-    function iniciarRastreamento() {
+  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+  authDomain: "rastreamento-reisado.firebaseapp.com",
+
+  databaseURL:
+  "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
+  projectId: "rastreamento-reisado",
+
+  storageBucket:
+  "rastreamento-reisado.firebasestorage.app",
+
+  messagingSenderId: "796420970266",
+
+  appId:
+  "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const database = firebase.database();
+
+let rastreamento = null;
+
+function iniciarRastreamento() {
+
+  const selecao =
+    document.getElementById("boi");
+
+  const idBoi = selecao.value;
+
+  const nomeBoi =
+    selecao.options[selecao.selectedIndex].text
+    .replace("🐂 ", "");
+
+  document.getElementById("status").innerText =
+    "🟢 " + nomeBoi + " sendo rastreado";
+
+  if (!navigator.geolocation) {
+
+    document.getElementById("status").innerText =
+      "🔴 GPS não disponível";
+
+    return;
+  }
+
+  if (rastreamento !== null) {
+    navigator.geolocation.clearWatch(rastreamento);
+  }
+
+  rastreamento =
+  navigator.geolocation.watchPosition(
+
+    function(posicao) {
+
+      const latitude =
+        posicao.coords.latitude;
+
+      const longitude =
+        posicao.coords.longitude;
+
+      const precisao =
+        posicao.coords.accuracy;
+
+      document.getElementById("localizacao").innerHTML =
+
+        "Latitude: " + latitude +
+
+        "<br>Longitude: " + longitude +
+
+        "<br>Precisão: " +
+        Math.round(precisao) +
+        " metros";
+
+      database
+        .ref("bois/" + idBoi)
+        .set({
+
+          nome: nomeBoi,
+
+          latitude: latitude,
+
+          longitude: longitude,
+
+          precisao: precisao,
+
+          online: true,
+
+          atualizadoEm: Date.now()
+
+        });
+
+    },
+
+    function(erro) {
 
       document.getElementById("status").innerText =
-        "🟢 Rastreamento iniciado";
+        "🔴 Erro ao acessar GPS";
 
-      if (navigator.geolocation) {
+      document.getElementById("localizacao").innerText =
+        "Verifique se a localização do celular está ativada.";
 
-        navigator.geolocation.watchPosition(
+    },
 
-          function(posicao) {
-
-            // Dados recebidos do GPS
-            const latitude = posicao.coords.latitude;
-            const longitude = posicao.coords.longitude;
-            const precisao = posicao.coords.accuracy;
-
-
-            // Mostra os dados na tela
-            document.getElementById("localizacao").innerHTML =
-              "Latitude: " + latitude +
-              "<br>Longitude: " + longitude +
-              "<br>Precisão: " + Math.round(precisao) + " metros";
-
-
-            // Envia os dados para o Firebase
-            database.ref("bois/boi-estrela").set({
-
-              nome: "Boi Estrela",
-
-              latitude: latitude,
-
-              longitude: longitude,
-
-              precisao: precisao,
-
-              online: true,
-
-              atualizadoEm: Date.now()
-
-            });
-
-          },
-
-
-          function(erro) {
-
-            document.getElementById("status").innerText =
-              "🔴 Erro no rastreamento";
-
-            document.getElementById("localizacao").innerText =
-              "Não foi possível acessar a localização.";
-
-          },
-
-
-          {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 10000
-          }
-
-        );
-
-      } else {
-
-        document.getElementById("localizacao").innerText =
-          "Seu navegador não suporta localização.";
-
-      }
-
+    {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 15000
     }
 
-  </script>
+  );
+
+}
+
+</script>
 
 </body>
-
 </html>
