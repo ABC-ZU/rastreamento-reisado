@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
@@ -38,7 +37,7 @@
     #localizacao {
       margin-top: 20px;
       font-size: 19px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     #informacoes {
@@ -47,62 +46,45 @@
       background: #f2f2f2;
       border-radius: 10px;
       font-size: 17px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
   </style>
 </head>
 
-
 <body>
 
-  <h1>🐂 Rastreamento do Reisado</h1>
+<h1>🐂 Rastreamento do Reisado</h1>
 
-  <p>Escolha o boi que será rastreado:</p>
+<p>Escolha o boi que será rastreado:</p>
 
-  <select id="boi">
+<select id="boi">
+  <option value="boi-estrela">
+    🐂 Boi Estrela
+  </option>
+</select>
 
-    <option value="boi-estrela">
-      🐂 Boi Estrela
-    </option>
+<button id="botao" onclick="iniciarRastreamento()">
+  📍 Iniciar rastreamento
+</button>
 
-  </select>
+<div id="status">
+  🔴 Rastreamento desligado
+</div>
 
+<div id="localizacao"></div>
 
-  <button id="botao"
-          onclick="iniciarRastreamento()">
-
-    📍 Iniciar rastreamento
-
-  </button>
-
-
-  <div id="status">
-
-    🔴 Rastreamento desligado
-
-  </div>
+<div id="informacoes">
+  🛰️ Atualizações enviadas: 0
+</div>
 
 
-  <div id="localizacao"></div>
+<!-- FIREBASE -->
 
-
-  <div id="informacoes">
-
-    📡 Atualizações enviadas: 0
-
-  </div>
-
-
-
-  <!-- FIREBASE -->
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 
 <script>
-
 
 const firebaseConfig = {
 
@@ -140,13 +122,21 @@ let watchId = null;
 let contador = 0;
 
 let ultimaLatitude = null;
-
 let ultimaLongitude = null;
+let ultimoTempo = null;
+
+let distanciaTotal = 0;
+
+let velocidadeCalculada = 0;
 
 
+/*
+========================================
+INICIAR RASTREAMENTO
+========================================
+*/
 
 function iniciarRastreamento() {
-
 
   const status =
     document.getElementById("status");
@@ -167,35 +157,25 @@ function iniciarRastreamento() {
       "🔴 GPS não disponível";
 
     return;
-
   }
 
 
   status.innerHTML =
     "🟡 Procurando sinal GPS...";
 
-
   botao.innerHTML =
     "📡 Rastreamento ativo";
 
 
-  /*
-  Evita abrir dois rastreamentos
-  simultaneamente.
-  */
-
   if (watchId !== null) {
 
-    navigator.geolocation.clearWatch(
-      watchId
-    );
+    navigator.geolocation.clearWatch(watchId);
 
   }
 
 
   watchId =
   navigator.geolocation.watchPosition(
-
 
     async function(posicao) {
 
@@ -209,15 +189,144 @@ function iniciarRastreamento() {
       const precisao =
         posicao.coords.accuracy;
 
-      const velocidade =
-        posicao.coords.speed;
+      const agora =
+        Date.now();
 
 
       /*
-      MOSTRA IMEDIATAMENTE
-      A LEITURA DO GPS
+      ========================================
+      IGNORAR GPS MUITO IMPRECISO
+      ========================================
       */
 
+      if (precisao > 100) {
+
+        status.innerHTML =
+          "🟡 GPS com baixa precisão";
+
+        localizacao.innerHTML =
+
+          "Latitude: " +
+          latitude.toFixed(7) +
+
+          "<br>Longitude: " +
+          longitude.toFixed(7) +
+
+          "<br>Precisão: " +
+          Math.round(precisao) +
+          " metros";
+
+
+        informacoes.innerHTML =
+
+          "⚠️ Aguardando uma leitura melhor do GPS.";
+
+        return;
+
+      }
+
+
+      /*
+      ========================================
+      CALCULAR MOVIMENTO
+      ========================================
+      */
+
+      let distanciaMovimento = 0;
+
+      let movimentoReal = false;
+
+
+      if (
+        ultimaLatitude !== null &&
+        ultimaLongitude !== null
+      ) {
+
+        distanciaMovimento =
+          calcularDistancia(
+
+            ultimaLatitude,
+            ultimaLongitude,
+
+            latitude,
+            longitude
+
+          );
+
+
+        /*
+        Filtro contra pequenas oscilações GPS.
+
+        Só considera deslocamento quando
+        for superior a 3 metros.
+        */
+
+        if (distanciaMovimento >= 3) {
+
+          movimentoReal = true;
+
+        }
+
+      }
+
+
+      /*
+      ========================================
+      CALCULAR VELOCIDADE
+      ========================================
+      */
+
+      if (
+        movimentoReal &&
+        ultimoTempo !== null
+      ) {
+
+        const tempoSegundos =
+          (agora - ultimoTempo) / 1000;
+
+
+        if (tempoSegundos > 0) {
+
+          const metrosPorSegundo =
+            distanciaMovimento /
+            tempoSegundos;
+
+
+          velocidadeCalculada =
+            metrosPorSegundo * 3.6;
+
+
+          /*
+          Evita valores absurdos causados
+          por erro momentâneo do GPS.
+          */
+
+          if (velocidadeCalculada > 80) {
+
+            velocidadeCalculada = 0;
+
+          }
+
+        }
+
+
+        distanciaTotal +=
+          distanciaMovimento;
+
+      }
+
+      else {
+
+        velocidadeCalculada = 0;
+
+      }
+
+
+      /*
+      ========================================
+      MOSTRAR NO CELULAR
+      ========================================
+      */
 
       localizacao.innerHTML =
 
@@ -232,87 +341,19 @@ function iniciarRastreamento() {
         " metros" +
 
         "<br>Velocidade: " +
-        (
-          velocidade !== null
-          ?
-          (velocidade * 3.6).toFixed(1)
-          :
-          "0"
-        ) +
-        " km/h";
+        velocidadeCalculada.toFixed(1) +
+        " km/h" +
+
+        "<br>Distância percorrida: " +
+        distanciaTotal.toFixed(1) +
+        " metros";
 
 
       /*
-      NÃO ACEITA GPS MUITO RUIM
+      ========================================
+      ENVIAR AO FIREBASE
+      ========================================
       */
-
-      if (precisao > 100) {
-
-        status.innerHTML =
-          "🟡 GPS com baixa precisão";
-
-        informacoes.innerHTML =
-
-          "⚠️ Precisão atual: " +
-          Math.round(precisao) +
-          " metros.<br>" +
-
-          "Aguardando uma leitura melhor.";
-
-        return;
-
-      }
-
-
-
-      /*
-      VERIFICA SE A POSIÇÃO
-      REALMENTE MUDOU
-      */
-
-
-      let mudou = true;
-
-
-      if (
-        ultimaLatitude !== null &&
-        ultimaLongitude !== null
-      ) {
-
-
-        const distancia =
-          calcularDistancia(
-
-            ultimaLatitude,
-            ultimaLongitude,
-
-            latitude,
-            longitude
-
-          );
-
-
-        /*
-        Só considera movimento
-        superior a 2 metros.
-        */
-
-        if (distancia < 2) {
-
-          mudou = false;
-
-        }
-
-      }
-
-
-
-      /*
-      MESMO PARADO, ENVIA A POSIÇÃO.
-
-      Isso mantém o status ONLINE.
-      */
-
 
       const boi =
         document.getElementById("boi").value;
@@ -330,9 +371,10 @@ function iniciarRastreamento() {
           Math.round(precisao),
 
         velocidade:
-          velocidade !== null
-          ? velocidade
-          : 0,
+          velocidadeCalculada,
+
+        distancia:
+          distanciaTotal,
 
         online: true,
 
@@ -361,7 +403,7 @@ function iniciarRastreamento() {
 
         informacoes.innerHTML =
 
-          "📡 Atualizações enviadas: " +
+          "🛰️ Atualizações enviadas: " +
           contador +
 
           "<br>🕐 Último envio: " +
@@ -370,7 +412,7 @@ function iniciarRastreamento() {
           "<br>" +
 
           (
-            mudou
+            movimentoReal
             ?
             "🚶 Movimento detectado"
             :
@@ -378,11 +420,25 @@ function iniciarRastreamento() {
           );
 
 
-        ultimaLatitude =
-          latitude;
+        /*
+        Atualiza referência da posição
+        */
 
-        ultimaLongitude =
-          longitude;
+        if (
+          movimentoReal ||
+          ultimaLatitude === null
+        ) {
+
+          ultimaLatitude =
+            latitude;
+
+          ultimaLongitude =
+            longitude;
+
+        }
+
+
+        ultimoTempo = agora;
 
 
       }
@@ -396,12 +452,9 @@ function iniciarRastreamento() {
         status.innerHTML =
           "🔴 Erro ao enviar para Firebase";
 
-
       }
 
-
     },
-
 
 
     function(erro) {
@@ -435,9 +488,7 @@ function iniciarRastreamento() {
 
       }
 
-
     },
-
 
 
     {
@@ -450,21 +501,16 @@ function iniciarRastreamento() {
 
     }
 
-
   );
-
 
 }
 
 
-
 /*
-================================
-CALCULAR DISTÂNCIA
-ENTRE DUAS COORDENADAS
-================================
+========================================
+CALCULAR DISTÂNCIA ENTRE COORDENADAS
+========================================
 */
-
 
 function calcularDistancia(
   lat1,
@@ -473,11 +519,10 @@ function calcularDistancia(
   lon2
 ) {
 
-
   const R = 6371000;
 
-
-  const rad = Math.PI / 180;
+  const rad =
+    Math.PI / 180;
 
 
   const dLat =
@@ -512,12 +557,9 @@ function calcularDistancia(
 
   return R * c;
 
-
 }
-
 
 </script>
 
 </body>
-
 </html>
