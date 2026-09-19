@@ -2,97 +2,123 @@
 <html lang="pt-BR">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Mapa - Boi Estrela</title>
+<meta charset="UTF-8">
 
-  <!-- LEAFLET -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  >
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  </script>
-
-  <!-- FIREBASE -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<title>Mapa - Boi Estrela</title>
 
 
-  <style>
+<!-- LEAFLET -->
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #ffffff;
-    }
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-    }
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
 
-    #status {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
+<!-- FIREBASE -->
 
-    .info {
-      font-size: 20px;
-      margin: 8px 0;
-    }
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 
-    #map {
-      width: 100%;
-      height: 600px;
-      margin-top: 25px;
-      border-radius: 15px;
-      overflow: hidden;
-    }
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-    .legenda {
-      margin-top: 15px;
-      padding: 12px;
-      background: #f2f2f2;
-      border-radius: 10px;
-      font-size: 16px;
-    }
 
-    @media (max-width: 600px) {
+<style>
 
-      body {
-        padding: 15px;
-      }
+body {
 
-      h1 {
-        font-size: 30px;
-      }
+  font-family: Arial, sans-serif;
 
-      #status {
-        font-size: 21px;
-      }
+  margin: 0;
 
-      .info {
-        font-size: 18px;
-      }
+  padding: 20px;
 
-      #map {
-        height: 60vh;
-      }
+  background: white;
 
-    }
+}
 
-  </style>
+
+.container {
+
+  max-width: 1000px;
+
+  margin: auto;
+
+}
+
+
+h1 {
+
+  font-size: 36px;
+
+}
+
+
+.info {
+
+  font-size: 20px;
+
+  margin: 10px 0;
+
+}
+
+
+#status {
+
+  font-size: 24px;
+
+  font-weight: bold;
+
+  margin-bottom: 15px;
+
+}
+
+
+#map {
+
+  width: 100%;
+
+  height: 600px;
+
+  margin-top: 25px;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+}
+
+
+@media(max-width:600px) {
+
+  body {
+
+    padding: 15px;
+
+  }
+
+  h1 {
+
+    font-size: 32px;
+
+  }
+
+  #map {
+
+    height: 600px;
+
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -103,156 +129,146 @@
 <div class="container">
 
 
-  <h1>🐂 Boi Estrela</h1>
+<h1>🐂 Boi Estrela</h1>
 
 
-  <div id="status">
-    🟡 Aguardando localização...
-  </div>
+<div id="status">
+
+🟡 Aguardando localização...
+
+</div>
 
 
-  <div class="info">
+<div class="info">
 
-    📍 Precisão:
+📍 Precisão:
+<strong id="precisao">--</strong>
 
-    <strong id="precisao">
-      aguardando...
-    </strong>
-
-  </div>
+</div>
 
 
-  <div class="info">
+<div class="info">
 
-    🚶 Velocidade:
+🚶 Velocidade:
+<strong id="velocidade">--</strong>
 
-    <strong id="velocidade">
-      aguardando...
-    </strong>
-
-  </div>
+</div>
 
 
-  <div class="info">
+<div class="info">
 
-    ⏱️ Última atualização:
+📏 Distância percorrida:
+<strong id="distancia">--</strong>
 
-    <strong id="tempo">
-      aguardando...
-    </strong>
-
-  </div>
+</div>
 
 
-  <div class="info">
+<div class="info">
 
-    🛰️ Atualizações recebidas:
+⏱️ Última atualização:
+<strong id="tempo">--</strong>
 
-    <strong id="contador">
-      0
-    </strong>
-
-  </div>
+</div>
 
 
-  <div id="map"></div>
+<div class="info">
+
+🛰️ Atualizações recebidas:
+<strong id="contador">0</strong>
+
+</div>
 
 
-  <div class="legenda">
-
-    📍 Marcador = posição atual do Boi Estrela
-
-    <br><br>
-
-    ⭕ Círculo = margem de precisão do GPS
-
-    <br><br>
-
-    🔵 Linha = percurso realizado
-
-  </div>
+<div id="map"></div>
 
 
 </div>
 
 
-
 <script>
 
 
-// =======================================
-// FIREBASE
-// =======================================
+/*
+========================================
+FIREBASE
+========================================
+*/
 
 
 const firebaseConfig = {
 
-  apiKey:
-    "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+apiKey:
+"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
 
-  authDomain:
-    "rastreamento-reisado.firebaseapp.com",
+authDomain:
+"rastreamento-reisado.firebaseapp.com",
 
-  databaseURL:
-    "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+databaseURL:
+"https://rastreamento-reisado-default-rtdb.firebaseio.com",
 
-  projectId:
-    "rastreamento-reisado",
+projectId:
+"rastreamento-reisado",
 
-  storageBucket:
-    "rastreamento-reisado.firebasestorage.app",
+storageBucket:
+"rastreamento-reisado.firebasestorage.app",
 
-  messagingSenderId:
-    "796420970266",
+messagingSenderId:
+"796420970266",
 
-  appId:
-    "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+appId:
+"1:796420970266:web:a0f082d40cd1b9410e3ea3"
 
 };
 
 
-firebase.initializeApp(
-  firebaseConfig
-);
+firebase.initializeApp(firebaseConfig);
 
 
 const database =
-  firebase.database();
+firebase.database();
 
 
 
-// =======================================
-// MAPA
-// =======================================
+/*
+========================================
+MAPA
+========================================
+*/
 
 
 const map =
-  L.map("map").setView(
-    [-4.3, -42.0],
-    14
-  );
+L.map("map").setView(
+
+[-4.3074,-42.0363],
+
+16
+
+);
+
 
 
 L.tileLayer(
 
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
 
-  {
+{
 
-    maxZoom: 19,
+maxZoom:19,
 
-    attribution:
-      "&copy; OpenStreetMap"
+attribution:
+"&copy; OpenStreetMap"
 
-  }
+}
 
 ).addTo(map);
 
 
 
-// =======================================
-// VARIÁVEIS
-// =======================================
+/*
+========================================
+ELEMENTOS DO MAPA
+========================================
+*/
 
 
 let marcador = null;
@@ -261,797 +277,697 @@ let marcador = null;
 let circuloPrecisao = null;
 
 
-let linhaPercurso =
-  L.polyline(
-    [],
-    {
-      color: "blue",
-      weight: 5,
-      opacity: 0.8
-    }
-  ).addTo(map);
-
-
 let percurso = [];
 
 
 let contador = 0;
 
 
-let primeiraPosicao = true;
-
-
-let ultimoAtualizadoEm = 0;
-
-
-let ultimaPosicaoPercurso = null;
+let primeiraLocalizacao = true;
 
 
 
-// =======================================
-// REFERÊNCIA DO BOI NO FIREBASE
-// =======================================
+/*
+LINHA DO CAMINHO
+*/
+
+
+const linhaPercurso =
+
+L.polyline(
+
+[],
+
+{
+
+color:"blue",
+
+weight:5,
+
+opacity:0.8
+
+}
+
+).addTo(map);
+
+
+
+/*
+========================================
+FIREBASE
+========================================
+*/
 
 
 const boiRef =
-  database.ref(
-    "bois/boi-estrela"
-  );
+
+database.ref(
+"bois/boi-estrela"
+);
 
 
 
-// =======================================
-// CALCULAR DISTÂNCIA
-// =======================================
+/*
+========================================
+RECEBER LOCALIZAÇÃO
+========================================
+*/
 
 
-function calcularDistancia(
-  lat1,
-  lon1,
-  lat2,
-  lon2
-) {
+boiRef.on(
+
+"value",
+
+function(snapshot) {
 
 
-  const R =
-    6371000;
+const dados =
+snapshot.val();
 
 
-  const rad =
-    Math.PI / 180;
+if(!dados) {
 
+document.getElementById("status")
+.innerHTML =
 
-  const dLat =
-    (lat2 - lat1) * rad;
+"🔴 Nenhuma localização recebida";
 
-
-  const dLon =
-    (lon2 - lon1) * rad;
-
-
-  const a =
-
-    Math.sin(dLat / 2) *
-    Math.sin(dLat / 2)
-
-    +
-
-    Math.cos(lat1 * rad) *
-    Math.cos(lat2 * rad) *
-
-    Math.sin(dLon / 2) *
-    Math.sin(dLon / 2);
-
-
-  const c =
-
-    2 *
-
-    Math.atan2(
-
-      Math.sqrt(a),
-
-      Math.sqrt(1 - a)
-
-    );
-
-
-  return R * c;
+return;
 
 }
 
 
 
-// =======================================
-// RECEBER FIREBASE EM TEMPO REAL
-// =======================================
+const latitude =
+Number(dados.latitude);
 
 
-boiRef.on(
+const longitude =
+Number(dados.longitude);
 
-  "value",
 
-  function(snapshot) {
+const precisao =
+Number(dados.precisao || 0);
 
 
-    const dados =
-      snapshot.val();
+const velocidade =
+Number(dados.velocidade || 0);
 
 
-    if (!dados) {
+const distancia =
+Number(dados.distancia || 0);
 
 
-      document
-        .getElementById("status")
-        .innerHTML =
+const atualizadoEm =
+Number(dados.atualizadoEm || 0);
 
-        "🔴 Nenhuma localização disponível";
 
 
-      return;
+if(
 
-    }
+!Number.isFinite(latitude) ||
 
+!Number.isFinite(longitude)
 
+) {
 
-    const latitude =
-      Number(
-        dados.latitude
-      );
+return;
 
+}
 
-    const longitude =
-      Number(
-        dados.longitude
-      );
 
 
-    const precisao =
-      Number(
-        dados.precisao || 0
-      );
+const novaPosicao = [
 
+latitude,
 
-    /*
-    O CELULAR ENVIA VELOCIDADE
-    EM METROS POR SEGUNDO.
+longitude
 
-    Multiplicamos por 3.6
-    para mostrar km/h.
-    */
+];
 
 
-    const velocidadeMS =
-      Number(
-        dados.velocidade || 0
-      );
 
+contador++;
 
-    const velocidadeKMH =
-      velocidadeMS * 3.6;
 
+document.getElementById(
+"contador"
+).innerText = contador;
 
-    const atualizadoEm =
-      Number(
-        dados.atualizadoEm || 0
-      );
 
 
+/*
+PRECISÃO
+*/
 
-    // Segurança
 
+document.getElementById(
+"precisao"
+).innerText =
 
-    if (
+Math.round(precisao) +
+" metros";
 
-      !Number.isFinite(latitude)
 
-      ||
 
-      !Number.isFinite(longitude)
+/*
+VELOCIDADE
+*/
 
-    ) {
 
+document.getElementById(
+"velocidade"
+).innerText =
 
-      return;
+velocidade.toFixed(1) +
+" km/h";
 
-    }
 
 
+/*
+DISTÂNCIA
+*/
 
-    ultimoAtualizadoEm =
-      atualizadoEm;
 
+document.getElementById(
+"distancia"
+).innerText =
 
+distancia.toFixed(1) +
+" metros";
 
-    const novaPosicao = [
 
-      latitude,
 
-      longitude
+/*
+========================================
+MARCADOR
+========================================
+*/
 
-    ];
 
+if(!marcador) {
 
 
-    // =======================================
-    // CONTADOR
-    // =======================================
+marcador =
 
+L.marker(
+novaPosicao
+).addTo(map);
 
-    contador++;
 
+marcador
+.bindPopup(
+"🐂 Boi Estrela"
+)
+.openPopup();
 
-    document
-      .getElementById("contador")
-      .innerText =
 
-      contador;
+}
 
+else {
 
 
-    // =======================================
-    // PRECISÃO
-    // =======================================
+marcador.setLatLng(
+novaPosicao
+);
 
 
-    document
-      .getElementById("precisao")
-      .innerText =
+}
 
-      Math.round(
-        precisao
-      ) +
 
-      " metros";
 
+/*
+========================================
+CÍRCULO DA PRECISÃO
+========================================
+*/
 
 
-    // =======================================
-    // VELOCIDADE
-    // =======================================
+if(!circuloPrecisao) {
 
 
-    document
-      .getElementById("velocidade")
-      .innerText =
+circuloPrecisao =
 
-      velocidadeKMH
-        .toFixed(1) +
+L.circle(
 
-      " km/h";
+novaPosicao,
 
+{
 
+radius:
+Math.max(precisao,2)
 
-    // =======================================
-    // MARCADOR
-    // =======================================
+}
 
+).addTo(map);
 
-    if (!marcador) {
 
+}
 
-      marcador =
-        L.marker(
-          novaPosicao
-        )
-        .addTo(map);
+else {
 
 
-      marcador
-        .bindPopup(
-          "🐂 Boi Estrela"
-        )
-        .openPopup();
+circuloPrecisao
+.setLatLng(
+novaPosicao
+);
 
 
-    }
+circuloPrecisao
+.setRadius(
+Math.max(precisao,2)
+);
 
-    else {
 
+}
 
-      marcador
-        .setLatLng(
-          novaPosicao
-        );
 
 
-    }
+/*
+========================================
+DESENHAR PERCURSO
+========================================
+*/
 
 
+let adicionar = true;
 
-    // =======================================
-    // CÍRCULO DA PRECISÃO
-    // =======================================
 
 
-    if (!circuloPrecisao) {
+if(percurso.length > 0) {
 
 
-      circuloPrecisao =
-        L.circle(
+const ultima =
+percurso[
+percurso.length - 1
+];
 
-          novaPosicao,
 
-          {
+const distanciaPonto =
 
-            radius:
-              precisao
+calcularDistancia(
 
-          }
+ultima[0],
 
-        )
-        .addTo(map);
+ultima[1],
 
+latitude,
 
-    }
-
-    else {
-
-
-      circuloPrecisao
-        .setLatLng(
-          novaPosicao
-        );
-
-
-      circuloPrecisao
-        .setRadius(
-          precisao
-        );
-
-
-    }
-
-
-
-    // =======================================
-    // LINHA DO PERCURSO
-    // =======================================
-
-
-    let adicionarPercurso =
-      false;
-
-
-
-    if (
-      ultimaPosicaoPercurso === null
-    ) {
-
-
-      adicionarPercurso =
-        true;
-
-
-    }
-
-    else {
-
-
-      const distancia =
-
-        calcularDistancia(
-
-          ultimaPosicaoPercurso[0],
-
-          ultimaPosicaoPercurso[1],
-
-          latitude,
-
-          longitude
-
-        );
-
-
-
-      /*
-      Evita desenhar pequenas
-      oscilações do GPS.
-
-      Só adiciona um novo ponto
-      quando andar pelo menos
-      3 metros.
-      */
-
-
-      if (
-        distancia >= 3
-      ) {
-
-
-        adicionarPercurso =
-          true;
-
-
-      }
-
-
-    }
-
-
-
-    if (
-      adicionarPercurso
-    ) {
-
-
-      percurso.push(
-        novaPosicao
-      );
-
-
-      ultimaPosicaoPercurso =
-        novaPosicao;
-
-
-
-      /*
-      Limite para não deixar
-      o navegador pesado.
-      */
-
-
-      if (
-        percurso.length > 500
-      ) {
-
-
-        percurso.shift();
-
-
-      }
-
-
-
-      linhaPercurso
-        .setLatLngs(
-          percurso
-        );
-
-
-    }
-
-
-
-    // =======================================
-    // ACOMPANHAR O BOI NO MAPA
-    // =======================================
-
-
-    if (
-      primeiraPosicao
-    ) {
-
-
-      map.setView(
-
-        novaPosicao,
-
-        18
-
-      );
-
-
-      primeiraPosicao =
-        false;
-
-
-    }
-
-    else {
-
-
-      map.panTo(
-
-        novaPosicao,
-
-        {
-
-          animate: true,
-
-          duration: 0.8
-
-        }
-
-      );
-
-
-    }
-
-
-
-    // =======================================
-    // STATUS
-    // =======================================
-
-
-    atualizarStatus();
-
-
-  },
-
-
-
-  function(erro) {
-
-
-    console.error(
-      "Erro Firebase:",
-      erro
-    );
-
-
-    document
-      .getElementById("status")
-      .innerHTML =
-
-      "🔴 Erro de conexão com Firebase";
-
-
-  }
+longitude
 
 );
 
 
 
-// =======================================
-// ONLINE / OFFLINE
-// =======================================
+/*
+Evita desenhar tremores
+do GPS.
+*/
 
 
-function atualizarStatus() {
+if(distanciaPonto < 3) {
 
+adicionar = false;
 
-  if (
-    !ultimoAtualizadoEm
-  ) {
-
-
-    return;
-
-
-  }
-
-
-
-  const agora =
-    Date.now();
-
-
-
-  const diferenca =
-    agora -
-    ultimoAtualizadoEm;
-
-
-
-  const segundos =
-
-    Math.max(
-
-      0,
-
-      Math.floor(
-        diferenca / 1000
-      )
-
-    );
-
-
-
-  const status =
-    document
-      .getElementById(
-        "status"
-      );
-
-
-
-  /*
-  ONLINE:
-  recebeu localização
-  nos últimos 60 segundos
-  */
-
-
-  if (
-    segundos <= 60
-  ) {
-
-
-    status.innerHTML =
-
-      "🟢 Boi Estrela ONLINE";
-
-
-  }
-
-
-  /*
-  SINAL FRACO:
-  entre 1 e 3 minutos
-  */
-
-
-  else if (
-    segundos <= 180
-  ) {
-
-
-    status.innerHTML =
-
-      "🟡 Boi Estrela - SINAL FRACO";
-
-
-  }
-
-
-  /*
-  OFFLINE:
-  mais de 3 minutos
-  */
-
-
-  else {
-
-
-    status.innerHTML =
-
-      "🔴 Boi Estrela OFFLINE";
-
-
-  }
-
-
-
-  mostrarTempo(
-    segundos
-  );
+}
 
 
 }
 
 
 
-// =======================================
-// ÚLTIMA ATUALIZAÇÃO
-// =======================================
+if(adicionar) {
 
 
-function mostrarTempo(
-  segundos
+percurso.push(
+novaPosicao
+);
+
+
+if(percurso.length > 1000) {
+
+percurso.shift();
+
+}
+
+
+linhaPercurso
+.setLatLngs(
+percurso
+);
+
+
+}
+
+
+
+/*
+========================================
+ACOMPANHAR O BOI
+========================================
+*/
+
+
+if(primeiraLocalizacao) {
+
+
+map.setView(
+
+novaPosicao,
+
+18
+
+);
+
+
+primeiraLocalizacao =
+false;
+
+
+}
+
+else {
+
+
+map.panTo(
+
+novaPosicao,
+
+{
+
+animate:true,
+
+duration:0.8
+
+}
+
+);
+
+
+}
+
+
+
+/*
+STATUS
+*/
+
+
+verificarStatus(
+atualizadoEm
+);
+
+
+}
+
+);
+
+
+
+/*
+========================================
+ONLINE / OFFLINE
+========================================
+*/
+
+
+function verificarStatus(
+atualizadoEm
 ) {
 
 
-  let texto = "";
+if(!atualizadoEm) {
+
+return;
+
+}
 
 
-  if (
-    segundos < 60
-  ) {
+const segundos =
 
+Math.floor(
 
-    texto =
+(Date.now() -
+atualizadoEm)
 
-      "há " +
+/ 1000
 
-      segundos +
-
-      (
-        segundos === 1
-        ? " segundo"
-        : " segundos"
-      );
-
-
-  }
-
-
-  else if (
-    segundos < 3600
-  ) {
-
-
-    const minutos =
-
-      Math.floor(
-        segundos / 60
-      );
-
-
-    texto =
-
-      "há " +
-
-      minutos +
-
-      (
-        minutos === 1
-        ? " minuto"
-        : " minutos"
-      );
-
-
-  }
-
-
-  else if (
-    segundos < 86400
-  ) {
-
-
-    const horas =
-
-      Math.floor(
-        segundos / 3600
-      );
-
-
-    texto =
-
-      "há " +
-
-      horas +
-
-      (
-        horas === 1
-        ? " hora"
-        : " horas"
-      );
-
-
-  }
-
-
-  else {
-
-
-    const dias =
-
-      Math.floor(
-        segundos / 86400
-      );
-
-
-    texto =
-
-      "há " +
-
-      dias +
-
-      (
-        dias === 1
-        ? " dia"
-        : " dias"
-      );
-
-
-  }
+);
 
 
 
-  document
-    .getElementById("tempo")
-    .innerText =
+const status =
 
-    texto;
+document.getElementById(
+"status"
+);
+
+
+
+if(segundos <= 30) {
+
+
+status.innerHTML =
+
+"🟢 Boi Estrela ONLINE";
+
+
+}
+
+else {
+
+
+status.innerHTML =
+
+"🔴 Boi Estrela OFFLINE";
+
+
+}
+
+
+atualizarTempo(
+atualizadoEm
+);
 
 
 }
 
 
 
-// =======================================
-// ATUALIZA O RELÓGIO
-// SEM CONSULTAR FIREBASE NOVAMENTE
-// =======================================
+/*
+========================================
+TEMPO
+========================================
+*/
+
+
+function atualizarTempo(
+atualizadoEm
+) {
+
+
+const segundos =
+
+Math.floor(
+
+(Date.now() -
+atualizadoEm)
+
+/1000
+
+);
+
+
+let texto;
+
+
+if(segundos < 60) {
+
+
+texto =
+
+"há " +
+segundos +
+" segundos";
+
+
+}
+
+else if(segundos < 3600) {
+
+
+const minutos =
+
+Math.floor(
+segundos / 60
+);
+
+
+texto =
+
+"há " +
+minutos +
+" minuto(s)";
+
+
+}
+
+else {
+
+
+const horas =
+
+Math.floor(
+segundos / 3600
+);
+
+
+texto =
+
+"há " +
+horas +
+" hora(s)";
+
+
+}
+
+
+
+document.getElementById(
+"tempo"
+).innerText = texto;
+
+
+}
+
+
+
+/*
+========================================
+DISTÂNCIA ENTRE DOIS PONTOS
+========================================
+*/
+
+
+function calcularDistancia(
+
+lat1,
+
+lon1,
+
+lat2,
+
+lon2
+
+) {
+
+
+const R =
+6371000;
+
+
+const rad =
+Math.PI / 180;
+
+
+const dLat =
+(lat2-lat1) *
+rad;
+
+
+const dLon =
+(lon2-lon1) *
+rad;
+
+
+const a =
+
+Math.sin(dLat/2) *
+Math.sin(dLat/2)
+
++
+
+Math.cos(lat1*rad) *
+
+Math.cos(lat2*rad) *
+
+Math.sin(dLon/2) *
+
+Math.sin(dLon/2);
+
+
+
+const c =
+
+2 *
+
+Math.atan2(
+
+Math.sqrt(a),
+
+Math.sqrt(1-a)
+
+);
+
+
+return R*c;
+
+
+}
+
+
+
+/*
+ATUALIZA ONLINE/OFFLINE
+MESMO SEM NOVA LOCALIZAÇÃO
+*/
 
 
 setInterval(
 
-  atualizarStatus,
+function() {
 
-  1000
+
+boiRef.once("value")
+
+.then(
+
+function(snapshot) {
+
+
+const dados =
+snapshot.val();
+
+
+if(
+
+dados &&
+
+dados.atualizadoEm
+
+) {
+
+
+verificarStatus(
+
+Number(
+dados.atualizadoEm
+)
+
+);
+
+
+}
+
+
+}
+
+);
+
+
+},
+
+5000
 
 );
 
