@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Reisado - Boa Hora PI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #1d1d1d;
+    }
+
+    .pagina {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: auto;
+      background: white;
+    }
+
+    /* CABEÇALHO */
+
+    .cabecalho {
+      background: linear-gradient(135deg, #063b7a, #0d5db8);
+      color: white;
+      text-align: center;
+      padding: 45px 20px 38px;
+    }
+
+    .cabecalho h1 {
+      margin: 0;
+      font-size: 42px;
+      letter-spacing: 2px;
+    }
+
+    .cabecalho h2 {
+      margin: 8px 0 0;
+      font-size: 24px;
+      font-weight: normal;
+    }
+
+    .cabecalho p {
+      margin: 14px 0 0;
+      font-size: 17px;
+      opacity: 0.9;
+    }
+
+    /* CONTEÚDO */
+
+    .conteudo {
+      padding: 32px 22px;
+    }
+
+    .pergunta {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 28px;
+    }
+
+    /* CARTÕES */
+
+    .opcao {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      width: 100%;
+      min-height: 145px;
+
+      margin-bottom: 24px;
+      padding: 24px;
+
+      border-radius: 20px;
+
+      text-decoration: none;
+      color: white;
+
+      box-shadow: 0 5px 14px rgba(0,0,0,0.16);
+
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .opcao:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 7px rgba(0,0,0,0.15);
+    }
+
+    .localizar {
+      background: linear-gradient(
+        135deg,
+        #063b7a,
+        #0b5db5
+      );
+    }
+
+    .agenda {
+      background: linear-gradient(
+        135deg,
+        #a91318,
+        #d62a30
+      );
+    }
+
+    /* ÍCONES */
+
+    .icone {
+      width: 72px;
+      min-width: 72px;
+      height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(255,255,255,0.16);
+      border-radius: 50%;
+
+      font-size: 42px;
+    }
+
+    /* TEXTO */
+
+    .texto h3 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
+
+    .texto p {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    /* IDENTIDADE */
+
+    .identidade {
+      text-align: center;
+      margin-top: 38px;
+      padding-top: 25px;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    .identidade strong {
+      display: block;
+      font-size: 19px;
+      margin-bottom: 7px;
+    }
+
+    .identidade span {
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* RODAPÉ */
+
+    footer {
+      text-align: center;
+      padding: 10px 20px 30px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* CELULAR */
+
+    @media (max-width: 480px) {
+
+      .cabecalho {
+        padding-top: 38px;
+      }
+
+      .cabecalho h1 {
+        font-size: 36px;
+      }
+
+      .cabecalho h2 {
+        font-size: 21px;
+      }
+
+      .conteudo {
+        padding: 27px 18px;
+      }
+
+      .pergunta {
+        font-size: 20px;
+      }
+
+      .opcao {
+        padding: 20px;
+        min-height: 135px;
+      }
+
+      .icone {
+        width: 62px;
+        min-width: 62px;
+        height: 62px;
+        font-size: 35px;
+      }
+
+      .texto h3 {
+        font-size: 23px;
+      }
+
+      .texto p {
+        font-size: 16px;
+      }
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+<div class="pagina">
+
+  <!-- CABEÇALHO -->
+
+  <header class="cabecalho">
+
+    <h1>REISADO</h1>
+
+    <h2>Boa Hora - Piauí</h2>
+
+    <p>
+      Cultura • Fé • Tradição
+    </p>
+
+  </header>
+
+
+  <!-- CONTEÚDO -->
+
+  <main class="conteudo">
+
+    <div class="pergunta">
+      O que você deseja acessar?
+    </div>
+
+
+    <!-- LOCALIZAR -->
+
+    <a
+      href="localizar.html"
+      class="opcao localizar"
+    >
+
+      <div class="icone">
+        📍
+      </div>
+
+      <div class="texto">
+
+        <h3>
+          Localizar Reisado
+        </h3>
+
+        <p>
+          Veja onde o Reisado
+          está agora.
+        </p>
+
+      </div>
+
+    </a>
+
+
+    <!-- AGENDA -->
+
+    <a
+      href="agenda.html"
+      class="opcao agenda"
+    >
+
+      <div class="icone">
+        📅
+      </div>
+
+      <div class="texto">
+
+        <h3>
+          Agenda do Reisado
+        </h3>
+
+        <p>
+          Veja datas, locais e horários
+          das apresentações.
+        </p>
+
+      </div>
+
+    </a>
+
+
+    <!-- IDENTIDADE -->
+
+    <div class="identidade">
+
+      <strong>
+        Reisado de Boa Hora
+      </strong>
+
+      <span>
+        Boa Hora - PI
+      </span>
+
+    </div>
+
+  </main>
+
+
+  <footer>
+    Preservando nossa cultura e tradição.
+  </footer>
+
+</div>
+
+</body>
+
+</html>
