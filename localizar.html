@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Localizar Reisado - Boa Hora PI</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7f6;
+      color: #222;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 25px 20px 40px;
+    }
+
+    .cabecalho {
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 35px;
+    }
+
+    .simbolo {
+      font-size: 60px;
+      margin-bottom: 5px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      color: #176b3a;
+    }
+
+    .subtitulo {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .titulo-escolha {
+      font-size: 23px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
+    }
+
+    .nome-boi {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .responsavel {
+      font-size: 19px;
+      color: #555;
+      margin-bottom: 22px;
+    }
+
+    .botao {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      background: #198754;
+      color: white;
+      padding: 17px;
+      border-radius: 12px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .botao:active {
+      transform: scale(0.98);
+    }
+
+    .rodape {
+      text-align: center;
+      margin-top: 35px;
+      color: #777;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    @media(max-width:600px) {
+
+      .container {
+        padding: 20px 16px 35px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      .nome-boi {
+        font-size: 24px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="cabecalho">
+
+    <div class="simbolo">
+      🎭
+    </div>
+
+    <h1>
+      Reisado de Boa Hora
+    </h1>
+
+    <div class="subtitulo">
+      Acompanhe a localização dos bois do Reisado
+      em tempo real.
+    </div>
+
+  </div>
+
+
+  <div class="titulo-escolha">
+    📍 Escolha o Reisado
+  </div>
+
+
+  <!-- BOI ESTRELA -->
+
+  <div class="card">
+
+    <div class="nome-boi">
+      Boi Estrela
+    </div>
+
+    <div class="responsavel">
+      👤 Responsável: <strong>Fábio Silva</strong>
+    </div>
+
+    <a class="botao"
+       href="mapa.html">
+
+       📍 Ver localização agora
+
+    </a>
+
+  </div>
+
+
+  <!--
+  ============================================
+  FUTUROS REISADOS
+
+  Quando cadastrarmos outro boi,
+  colocaremos outro CARD aqui.
+  ============================================
+  -->
+
+
+  <div class="rodape">
+
+    📍 Boa Hora - Piauí
+
+    <br>
+
+    Tradição, cultura e tecnologia no Reisado.
+
+  </div>
+
+</div>
+
+</body>
+
+</html>
