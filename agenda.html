@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-  <title>Agenda do Reisado - Boa Hora PI</title>
+  <title>Agenda dos Bois - Reisado de Boa Hora</title>
 
   <style>
     * {
@@ -15,170 +16,372 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f7f6;
+      background: #f2f4f7;
       color: #222;
     }
 
     .container {
       max-width: 650px;
+      min-height: 100vh;
       margin: auto;
-      padding: 30px 20px;
+      background: #fff;
     }
 
-    .cabecalho {
-      text-align: center;
-      margin-bottom: 35px;
-    }
-
-    .icone {
-      font-size: 55px;
-    }
-
-    h1 {
-      margin: 8px 0;
-      font-size: 34px;
-      color: #176b3a;
-    }
-
-    .subtitulo {
-      font-size: 18px;
-      color: #555;
-      line-height: 1.5;
-    }
-
-    .evento {
-      background: white;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 15px rgba(0,0,0,0.10);
-    }
-
-    .nome {
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: 15px;
-    }
-
-    .informacao {
-      font-size: 18px;
-      margin: 10px 0;
-      line-height: 1.5;
-    }
-
-    .aviso {
-      margin-top: 30px;
-      padding: 18px;
-      background: #eaf5ff;
-      border-radius: 14px;
-      text-align: center;
-      font-size: 17px;
-      line-height: 1.5;
-    }
-
-    .voltar {
-      display: block;
-      margin-top: 25px;
-      padding: 16px;
-      background: #198754;
+    header {
+      background: linear-gradient(
+        135deg,
+        #0b3974,
+        #1262b8
+      );
       color: white;
       text-align: center;
-      text-decoration: none;
-      border-radius: 12px;
-      font-size: 19px;
-      font-weight: bold;
+      padding: 32px 20px;
     }
 
-    .rodape {
-      text-align: center;
-      color: #777;
-      margin-top: 35px;
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 29px;
+    }
+
+    header p {
+      margin: 0;
       font-size: 15px;
     }
 
-    @media(max-width:600px) {
-      .container {
-        padding: 22px 16px;
+    main {
+      padding: 22px 18px;
+    }
+
+    .introducao {
+      text-align: center;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #555;
+      margin: 0 0 24px;
+    }
+
+    .boi-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: white;
+      border: 1px solid #e1e5eb;
+      border-left: 5px solid #104b91;
+      border-radius: 14px;
+      padding: 17px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px #0000000d;
+    }
+
+    .boi-card.demo {
+      border-left-color: #d49b00;
+    }
+
+    .boi-imagem {
+      width: 75px;
+      height: 75px;
+      min-width: 75px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #c52228;
+    }
+
+    .demo .boi-imagem {
+      border-color: #d49b00;
+    }
+
+    .boi-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .boi-info h2 {
+      margin: 0 0 9px;
+      color: #104b91;
+      font-size: 20px;
+    }
+
+    .boi-info p {
+      margin: 5px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      background: #fff2c7;
+      color: #765000;
+      padding: 4px 8px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .acoes {
+      text-align: center;
+      padding: 10px 18px 28px;
+    }
+
+    .botao {
+      display: inline-block;
+      text-decoration: none;
+      background: #104b91;
+      color: white;
+      font-weight: bold;
+      padding: 14px 20px;
+      border-radius: 12px;
+      margin: 5px;
+    }
+
+    .botao.mapa {
+      background: #c52228;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      padding: 15px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 420px) {
+      .boi-card {
+        gap: 12px;
+        padding: 13px;
       }
 
-      h1 {
-        font-size: 30px;
+      .boi-imagem {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
       }
 
-      .nome {
-        font-size: 23px;
+      .boi-info h2 {
+        font-size: 18px;
+      }
+
+      .boi-info p {
+        font-size: 13px;
       }
     }
   </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="cabecalho">
+  <header>
+    <h1>📅 Agenda dos Bois</h1>
+    <p>Reisado de Boa Hora - Piauí</p>
+  </header>
 
-    <div class="icone">
-      📅
-    </div>
+  <main>
 
-    <h1>Agenda do Reisado</h1>
+    <p class="introducao">
+      Consulte as datas, horários e comunidades
+      das apresentações dos bois de Reisado.
+    </p>
 
-    <div class="subtitulo">
-      Confira as próximas apresentações
-      do Reisado de Boa Hora - Piauí.
-    </div>
+    <div id="lista-bois"></div>
 
+  </main>
+
+  <div class="acoes">
+    <a class="botao" href="./inicio.html">
+      ⬅ Voltar ao início
+    </a>
+
+    <a class="botao mapa" href="./mapa.html">
+      📍 Ver monitoramento
+    </a>
   </div>
 
-
-  <!-- EVENTO 1 -->
-
-  <div class="evento">
-
-    <div class="nome">
-      🎭 Boi Estrela
-    </div>
-
-    <div class="informacao">
-      👤 <strong>Responsável:</strong> Fábio Silva
-    </div>
-
-    <div class="informacao">
-      📅 <strong>Data:</strong> A definir
-    </div>
-
-    <div class="informacao">
-      🕐 <strong>Horário:</strong> A definir
-    </div>
-
-    <div class="informacao">
-      📍 <strong>Local:</strong> Boa Hora - PI
-    </div>
-
-  </div>
-
-
-  <div class="aviso">
-    📢 A agenda será atualizada com as datas,
-    horários e locais das próximas apresentações.
-  </div>
-
-
-  <a href="inicio.html" class="voltar">
-    ← Voltar ao início
-  </a>
-
-
-  <div class="rodape">
-    Boa Hora - Piauí
-    <br>
-    Tradição, cultura e tecnologia no Reisado.
-  </div>
+  <footer>
+    Reisado de Boa Hora - PI<br>
+    Cultura • Fé • Tradição
+  </footer>
 
 </div>
 
-</body>
+<script>
 
+  // IMAGEM PERSONALIZADA DO BOI
+  const imagemBoi = "./icone-boi-reisado.png";
+
+  // CADASTRO DAS AGENDAS
+  // Altere os campos quando tiver as datas reais.
+
+  const bois = [
+    {
+      nome: "Boi Estrela",
+      responsavel: "Fábio Silva",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: false
+    },
+    {
+      nome: "Boi Caridade",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Ramalhete",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Soberano",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Mimoso",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Luar",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Bugarim",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Encantado",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Flor do Sertão",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Diamante",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    },
+    {
+      nome: "Boi Esperança",
+      responsavel: "A definir",
+      data: "A definir",
+      horario: "A definir",
+      comunidade: "A definir",
+      demonstracao: true
+    }
+  ];
+
+  // EVITA INSERIR TEXOS COMO HTML
+  function escaparHTML(texto) {
+    return String(texto).replace(
+      /[&<>"']/g,
+      function(c) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[c];
+      }
+    );
+  }
+
+  // MOSTRA OS CARDS NA TELA
+  function carregarAgenda() {
+
+    const lista = document.getElementById("lista-bois");
+
+    lista.innerHTML = "";
+
+    bois.forEach(function(boi) {
+
+      const card = document.createElement("div");
+
+      card.className = "boi-card" +
+        (boi.demonstracao ? " demo" : "");
+
+      const etiqueta = boi.demonstracao
+        ? '<span class="etiqueta">BOI FICTÍCIO - TESTE</span>'
+        : "";
+
+      card.innerHTML = `
+        <img
+          class="boi-imagem"
+          src="${imagemBoi}"
+          alt="Boi de Reisado"
+        >
+
+        <div class="boi-info">
+
+          ${etiqueta}
+
+          <h2>${escaparHTML(boi.nome)}</h2>
+
+          <p>
+            <b>Responsável:</b>
+            ${escaparHTML(boi.responsavel)}
+          </p>
+
+          <p>
+            <b>📅 Data:</b>
+            ${escaparHTML(boi.data)}
+          </p>
+
+          <p>
+            <b>🕒 Horário:</b>
+            ${escaparHTML(boi.horario)}
+          </p>
+
+          <p>
+            <b>📍 Comunidade:</b>
+            ${escaparHTML(boi.comunidade)}
+          </p>
+
+        </div>
+      `;
+
+      lista.appendChild(card);
+
+    });
+  }
+
+  carregarAgenda();
+
+</script>
+
+</body>
 </html>
