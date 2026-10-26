@@ -7,7 +7,10 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>Reisado de Boa Hora - PI</title>
+  <meta name="description"
+        content="Reisado Digital de Boa Hora, Piauí. Acompanhe a localização dos bois e consulte a agenda de apresentações.">
+
+  <title>Reisado Digital - Boa Hora PI</title>
 
   <style>
     * {
@@ -18,7 +21,7 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f2f4f7;
-      color: #111;
+      color: #263348;
     }
 
     .container {
@@ -26,6 +29,9 @@
       min-height: 100vh;
       margin: auto;
       background: white;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.05);
     }
 
     .topo {
@@ -36,7 +42,8 @@
       );
       color: white;
       text-align: center;
-      padding: 45px 20px;
+      padding: 42px 20px 38px;
+      border-bottom: 5px solid #c52931;
     }
 
     .topo h1 {
@@ -56,31 +63,67 @@
       font-size: 16px;
     }
 
+    .selo {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 8px 15px;
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
     main {
-      padding: 30px 22px;
+      padding: 28px 22px;
+      flex: 1;
+    }
+
+    .apresentacao {
+      text-align: center;
+      margin-bottom: 27px;
+    }
+
+    .apresentacao h2 {
+      color: #104b91;
+      font-size: 23px;
+      margin: 0 0 12px;
+    }
+
+    .apresentacao p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #596579;
+      margin: 0;
     }
 
     .pergunta {
       text-align: center;
-      font-size: 23px;
-      margin: 0 0 30px;
+      font-size: 20px;
+      margin: 0 0 22px;
     }
 
     .card {
       display: flex;
       align-items: center;
-      gap: 20px;
-      padding: 30px 22px;
-      margin-bottom: 24px;
+      gap: 18px;
+      padding: 27px 20px;
+      margin-bottom: 22px;
       border-radius: 20px;
       color: white;
       text-decoration: none;
       box-shadow: 0 8px 18px rgba(0,0,0,0.17);
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .card:hover {
       transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.20);
+    }
+
+    .card:focus-visible {
+      outline: 4px solid #d4a73b;
+      outline-offset: 4px;
     }
 
     .monitoramento {
@@ -112,21 +155,47 @@
     }
 
     .card h2 {
-      font-size: 25px;
+      font-size: 24px;
       margin: 0 0 8px;
     }
 
     .card p {
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.5;
+      margin: 0;
+    }
+
+    .informacao {
+      background: #f1f6fd;
+      border-left: 4px solid #104b91;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 5px;
+    }
+
+    .informacao h3 {
+      color: #104b91;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    .informacao p {
+      color: #526176;
+      font-size: 13px;
+      line-height: 1.6;
       margin: 0;
     }
 
     footer {
       text-align: center;
-      color: #777;
+      color: #657080;
       padding: 20px;
-      font-size: 14px;
+      font-size: 13px;
+      border-top: 1px solid #e5e9f0;
+    }
+
+    footer p {
+      margin: 6px 0;
     }
 
     @media (max-width: 600px) {
@@ -135,11 +204,16 @@
       }
 
       .card {
-        padding: 25px 18px;
+        padding: 24px 16px;
+        gap: 13px;
       }
 
       .card h2 {
-        font-size: 23px;
+        font-size: 21px;
+      }
+
+      .card p {
+        font-size: 14px;
       }
 
       .icone {
@@ -147,6 +221,12 @@
         height: 60px;
         min-width: 60px;
         font-size: 32px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card {
+        transition: none;
       }
     }
   </style>
@@ -157,53 +237,109 @@
   <div class="container">
 
     <header class="topo">
+
       <h1>REISADO</h1>
+
       <h2>Boa Hora - Piauí</h2>
+
       <p>Cultura • Fé • Tradição</p>
+
+      <span class="selo">
+        🐂 Reisado Digital
+      </span>
+
     </header>
 
     <main>
+
+      <section class="apresentacao">
+
+        <h2>Bem-vindo ao Reisado Digital!</h2>
+
+        <p>
+          Um espaço dedicado à valorização
+          da cultura e das tradições do
+          Reisado de Boa Hora, no Piauí.
+        </p>
+
+      </section>
 
       <h2 class="pergunta">
         O que você deseja acessar?
       </h2>
 
-      <!-- CARD MONITORAMENTO -->
+      <!-- MONITORAMENTO DOS BOIS -->
+
       <a href="./mapa.html"
          class="card monitoramento">
 
-        <div class="icone">📍</div>
+        <div class="icone" aria-hidden="true">
+          📍
+        </div>
 
         <div>
+
           <h2>Monitoramento dos Bois</h2>
+
           <p>
-            Acompanhe a localização dos bois
-            em tempo real no mapa.
+            Acompanhe no mapa a localização
+            registrada pelo GPS do Boi Estrela
+            e conheça os demais bois cadastrados.
           </p>
+
         </div>
 
       </a>
 
-      <!-- CARD AGENDA -->
+      <!-- AGENDA DOS BOIS -->
+
       <a href="./agenda.html"
          class="card agenda">
 
-        <div class="icone">📅</div>
+        <div class="icone" aria-hidden="true">
+          📅
+        </div>
 
         <div>
+
           <h2>Agenda dos Bois</h2>
+
           <p>
-            Consulte as datas, horários e locais
-            das apresentações de cada boi.
+            Consulte as datas, horários
+            e comunidades das próximas
+            apresentações cadastradas.
           </p>
+
         </div>
 
       </a>
+
+      <!-- INFORMAÇÃO IMPORTANTE -->
+
+      <section class="informacao">
+
+        <h3>ℹ️ Sobre o monitoramento</h3>
+
+        <p>
+          O Boi Estrela possui acompanhamento
+          por GPS. Os marcadores amarelos
+          representam posições fictícias
+          utilizadas para demonstração
+          do sistema.
+        </p>
+
+      </section>
 
     </main>
 
     <footer>
-      Reisado de Boa Hora - Piauí
+
+      <p><strong>Reisado de Boa Hora - Piauí</strong></p>
+
+      <p>Preservando nossa cultura e tradição.</p>
+
+      <p>🐂 Cultura • Tecnologia • Tradição</p>
+
     </footer>
 
   </div>
