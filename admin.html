@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Administração - Reisado de Boa Hora</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #f2f4f7;
+    color: #222;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    max-width: 650px;
+    margin: auto;
+    min-height: 100vh;
+    background: white;
+  }
+
+  header {
+    background: #104b91;
+    color: white;
+    text-align: center;
+    padding: 26px 15px;
+  }
+
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 25px;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  main {
+    padding: 22px;
+  }
+
+  .caixa {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+
+  h2 {
+    margin-top: 0;
+    color: #104b91;
+    font-size: 21px;
+  }
+
+  label {
+    display: block;
+    margin: 13px 0 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #bbb;
+    border-radius: 9px;
+    font-size: 16px;
+    background: white;
+  }
+
+  button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    background: #104b91;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .vermelho {
+    background: #c52228;
+  }
+
+  .cinza {
+    background: #666;
+  }
+
+  .pequeno {
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  .apresentacao {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-top: 12px;
+    background: #fafafa;
+  }
+
+  .apresentacao h3 {
+    margin: 0 0 9px;
+    color: #104b91;
+  }
+
+  .apresentacao p {
+    margin: 6px 0;
+    font-size: 14px;
+  }
+
+  .mensagem {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  .oculto {
+    display: none;
+  }
+
+  .links {
+    text-align: center;
+    padding: 0 20px 25px;
+  }
+
+  .links a {
+    color: #104b91;
+    font-weight: bold;
+    text-decoration: none;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>🔐 Administração do Reisado</h1>
+  <p>Boa Hora - Piauí</p>
+</header>
+
+<main>
+
+  <!-- LOGIN -->
+  <section id="telaLogin" class="caixa">
+
+    <h2>Entrar no painel</h2>
+
+    <form id="formLogin">
+
+      <label for="email">E-mail</label>
+      <input
+        type="email"
+        id="email"
+        required
+        autocomplete="username"
+      >
+
+      <label for="senha">Senha</label>
+      <input
+        type="password"
+        id="senha"
+        required
+        autocomplete="current-password"
+      >
+
+      <button type="submit" id="botaoLogin">
+        Entrar
+      </button>
+
+    </form>
+
+    <p id="mensagemLogin" class="mensagem"></p>
+
+  </section>
+
+  <!-- PAINEL -->
+  <section id="telaPainel" class="oculto">
+
+    <div class="caixa">
+
+      <h2>Painel Administrativo</h2>
+
+      <p id="usuarioLogado"></p>
+
+      <button
+        type="button"
+        class="cinza"
+        id="botaoSair">
+        Sair da conta
+      </button>
+
+    </div>
+
+    <div class="caixa">
+
+      <h2 id="tituloFormulario">
+        Cadastrar apresentação
+      </h2>
+
+      <form id="formAgenda">
+
+        <label for="boi">Selecione o boi</label>
+
+        <select id="boi" required>
+          <option value="">Escolha um boi</option>
+          <option>Boi Estrela</option>
+          <option>Boi Caridade</option>
+          <option>Boi Ramalhete</option>
+          <option>Boi Soberano</option>
+          <option>Boi Mimoso</option>
+          <option>Boi Luar</option>
+          <option>Boi Bugarim</option>
+          <option>Boi Encantado</option>
+          <option>Boi Flor do Sertão</option>
+          <option>Boi Diamante</option>
+          <option>Boi Esperança</option>
+        </select>
+
+        <label for="data">Data da apresentação</label>
+        <input type="date" id="data" required>
+
+        <label for="horario">Horário</label>
+        <input type="time" id="horario" required>
+
+        <label for="comunidade">
+          Comunidade ou local
+        </label>
+
+        <input
+          type="text"
+          id="comunidade"
+          placeholder="Ex.: Centro de Boa Hora"
+          maxlength="150"
+          required
+        >
+
+        <button type="submit" id="botaoSalvar">
+          Salvar apresentação
+        </button>
+
+        <button
+          type="button"
+          class="cinza oculto"
+          id="botaoCancelar">
+          Cancelar edição
+        </button>
+
+      </form>
+
+      <p id="mensagemAgenda" class="mensagem"></p>
+
+    </div>
+
+    <div class="caixa">
+
+      <h2>Apresentações cadastradas</h2>
+
+      <div id="listaApresentacoes">
+        Carregando...
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+<div class="links">
+  <a href="./agenda.html">
+    📅 Ver agenda pública
+  </a>
+</div>
+
+</div>
+
+<script>
+  // FIREBASE DO REISADO
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+    authDomain: "rastreamento-reisado.firebaseapp.com",
+    databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+    projectId: "rastreamento-reisado",
+    storageBucket: "rastreamento-reisado.firebasestorage.app",
+    messagingSenderId: "796420970266",
+    appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  const auth = firebase.auth();
+  const database = firebase.database();
+
+  const agendaRef = database.ref("agendas");
+
+  const telaLogin = document.getElementById("telaLogin");
+  const telaPainel = document.getElementById("telaPainel");
+
+  const formLogin = document.getElementById("formLogin");
+  const formAgenda = document.getElementById("formAgenda");
+
+  const mensagemLogin =
+    document.getElementById("mensagemLogin");
+
+  const mensagemAgenda =
+    document.getElementById("mensagemAgenda");
+
+  const lista =
+    document.getElementById("listaApresentacoes");
+
+  let idEmEdicao = null;
+  let usuarioAtual = null;
+  let ouvindoAgenda = false;
+
+  // EVITA HTML INSEGURO
+  function escaparHTML(texto) {
+    return String(texto).replace(
+      /[&<>"']/g,
+      function(c) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[c];
+      }
+    );
+  }
+
+  // LOGIN
+  formLogin.addEventListener(
+    "submit",
+    async function(evento) {
+      evento.preventDefault();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const senha =
+        document.getElementById("senha").value;
+
+      const botao =
+        document.getElementById("botaoLogin");
+
+      botao.disabled = true;
+      mensagemLogin.textContent = "Entrando...";
+
+      try {
+        await auth.signInWithEmailAndPassword(
+          email,
+          senha
+        );
+
+        document.getElementById("senha").value = "";
+
+      } catch (erro) {
+        mensagemLogin.textContent =
+          "Não foi possível entrar. Confira seu e-mail e senha.";
+
+        console.error(erro);
+      } finally {
+        botao.disabled = false;
+      }
+    }
+  );
+
+  // MONITORA AUTENTICAÇÃO
+  auth.onAuthStateChanged(function(usuario) {
+
+    usuarioAtual = usuario;
+
+    if (usuario) {
+
+      telaLogin.classList.add("oculto");
+      telaPainel.classList.remove("oculto");
+
+      document.getElementById(
+        "usuarioLogado"
+      ).textContent = "Conta: " + usuario.email;
+
+      if (!ouvindoAgenda) {
+        agendaRef.on(
+          "value",
+          mostrarApresentacoes,
+          function(erro) {
+            lista.textContent =
+              "Erro ao consultar apresentações.";
+            console.error(erro);
+          }
+        );
+
+        ouvindoAgenda = true;
+      }
+
+    } else {
+
+      telaLogin.classList.remove("oculto");
+      telaPainel.classList.add("oculto");
+
+      if (ouvindoAgenda) {
+        agendaRef.off("value", mostrarApresentacoes);
+        ouvindoAgenda = false;
+      }
+
+      limparFormulario();
+    }
+  });
+
+  // SAIR
+  document.getElementById(
+    "botaoSair"
+  ).addEventListener("click", async function() {
+    await auth.signOut();
+  });
+
+  // CADASTRAR OU EDITAR
+  formAgenda.addEventListener(
+    "submit",
+    async function(evento) {
+      evento.preventDefault();
+
+      if (!usuarioAtual) {
+        mensagemAgenda.textContent =
+          "Faça login para continuar.";
+        return;
+      }
+
+      const dados = {
+        boi: document.getElementById("boi").value,
+        data: document.getElementById("data").value,
+        horario: document.getElementById("horario").value,
+        comunidade:
+          document.getElementById("comunidade")
+            .value.trim()
+      };
+
+      if (
+        !dados.boi ||
+        !dados.data ||
+        !dados.horario ||
+        !dados.comunidade
+      ) {
+        mensagemAgenda.textContent =
+          "Preencha todos os campos.";
+        return;
+      }
+
+      const botao =
+        document.getElementById("botaoSalvar");
+
+      botao.disabled = true;
+      mensagemAgenda.textContent = "Salvando...";
+
+      try {
+
+        if (idEmEdicao) {
+          await agendaRef.child(idEmEdicao).update(dados);
+          mensagemAgenda.textContent =
+            "Apresentação atualizada com sucesso!";
+        } else {
+          await agendaRef.push(dados);
+          mensagemAgenda.textContent =
+            "Apresentação cadastrada com sucesso!";
+        }
+
+        limparFormulario(false);
+
+      } catch (erro) {
+        mensagemAgenda.textContent =
+          "Não foi possível salvar. Verifique as permissões do Firebase.";
+
+        console.error(erro);
+      } finally {
+        botao.disabled = false;
+      }
+    }
+  );
+
+  // LIMPAR FORMULÁRIO
+  function limparFormulario(limparMensagem = true) {
+
+    formAgenda.reset();
+    idEmEdicao = null;
+
+    document.getElementById(
+      "tituloFormulario"
+    ).textContent = "Cadastrar apresentação";
+
+    document.getElementById(
+      "botaoSalvar"
+    ).textContent = "Salvar apresentação";
+
+    document.getElementById(
+      "botaoCancelar"
+    ).classList.add("oculto");
+
+    if (limparMensagem) {
+      mensagemAgenda.textContent = "";
+    }
+  }
+
+  document.getElementById(
+    "botaoCancelar"
+  ).addEventListener("click", function() {
+    limparFormulario();
+  });
+
+  // LISTAR APRESENTAÇÕES
+  function mostrarApresentacoes(snapshot) {
+
+    lista.innerHTML = "";
+
+    if (!snapshot.exists()) {
+      lista.textContent =
+        "Nenhuma apresentação cadastrada.";
+      return;
+    }
+
+    const apresentacoes = [];
+
+    snapshot.forEach(function(item) {
+      apresentacoes.push({
+        id: item.key,
+        ...item.val()
+      });
+    });
+
+    apresentacoes.sort(function(a, b) {
+      return (
+        (a.data + " " + a.horario)
+          .localeCompare(b.data + " " + b.horario)
+      );
+    });
+
+    apresentacoes.forEach(function(item) {
+
+      const card = document.createElement("div");
+      card.className = "apresentacao";
+
+      const dataFormatada =
+        formatarData(item.data);
+
+      card.innerHTML = `
+        <h3>${escaparHTML(item.boi)}</h3>
+
+        <p>
+          <b>📅 Data:</b>
+          ${escaparHTML(dataFormatada)}
+        </p>
+
+        <p>
+          <b>🕒 Horário:</b>
+          ${escaparHTML(item.horario)}
+        </p>
+
+        <p>
+          <b>📍 Comunidade:</b>
+          ${escaparHTML(item.comunidade)}
+        </p>
+      `;
+
+      const editar = document.createElement("button");
+      editar.textContent = "✏️ Editar";
+      editar.className = "pequeno";
+
+      editar.addEventListener("click", function() {
+        editarApresentacao(item);
+      });
+
+      const excluir = document.createElement("button");
+      excluir.textContent = "🗑️ Excluir";
+      excluir.className = "pequeno vermelho";
+
+      excluir.addEventListener("click", function() {
+        excluirApresentacao(item);
+      });
+
+      card.appendChild(editar);
+      card.appendChild(excluir);
+
+      lista.appendChild(card);
+    });
+  }
+
+  // FORMATA DATA
+  function formatarData(data) {
+    if (!data || !data.includes("-")) {
+      return data || "A definir";
+    }
+
+    const partes = data.split("-");
+
+    if (partes.length !== 3) return data;
+
+    return (
+      partes[2] + "/" +
+      partes[1] + "/" +
+      partes[0]
+    );
+  }
+
+  // EDITAR
+  function editarApresentacao(item) {
+
+    idEmEdicao = item.id;
+
+    document.getElementById("boi").value =
+      item.boi || "";
+
+    document.getElementById("data").value =
+      item.data || "";
+
+    document.getElementById("horario").value =
+      item.horario || "";
+
+    document.getElementById("comunidade").value =
+      item.comunidade || "";
+
+    document.getElementById(
+      "tituloFormulario"
+    ).textContent = "Editar apresentação";
+
+    document.getElementById(
+      "botaoSalvar"
+    ).textContent = "Salvar alterações";
+
+    document.getElementById(
+      "botaoCancelar"
+    ).classList.remove("oculto");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+
+  // EXCLUIR
+  async function excluirApresentacao(item) {
+
+    const confirmar = confirm(
+      "Deseja excluir a apresentação de " +
+      item.boi + "?"
+    );
+
+    if (!confirmar) return;
+
+    try {
+      await agendaRef.child(item.id).remove();
+
+      mensagemAgenda.textContent =
+        "Apresentação excluída com sucesso!";
+
+      if (idEmEdicao === item.id) {
+        limparFormulario(false);
+      }
+
+    } catch (erro) {
+      mensagemAgenda.textContent =
+        "Não foi possível excluir a apresentação.";
+
+      console.error(erro);
+    }
+  }
+</script>
+
+</body>
+</html>
