@@ -16,9 +16,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -34,56 +32,76 @@
     }
 
     header h1 {
-      font-size: 23px;
       margin: 0 0 6px;
+      font-size: 23px;
     }
 
     header p {
-      font-size: 14px;
       margin: 0;
+      font-size: 14px;
     }
 
     #map {
       width: 100%;
-      height: calc(100dvh - 200px);
+      height: calc(100dvh - 210px);
       min-height: 350px;
     }
 
     .boi-icon {
-      width: 54px;
-      height: 54px;
-      background: white;
-      border: 3px solid #c52228;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 30px;
-      box-shadow: 0 3px 10px #0005;
+      font-size: 27px;
+      background: white;
+      border: 3px solid #c52228;
+      box-shadow: 0 3px 9px #0005;
+    }
+
+    .boi-demo {
+      background: #fff3b0;
+      border-color: #d49b00;
+    }
+
+    .nome-mapa {
+      background: white;
+      border: 1px solid #bbb;
+      border-radius: 7px;
+      padding: 3px 7px;
+      font-weight: bold;
+      font-size: 12px;
+      white-space: nowrap;
+      box-shadow: 0 2px 5px #0002;
     }
 
     .popup {
-      min-width: 215px;
-      max-width: 260px;
-      line-height: 1.5;
+      min-width: 200px;
+      line-height: 1.6;
       font-size: 14px;
     }
 
     .popup strong {
+      font-size: 17px;
       color: #104b91;
-      font-size: 18px;
     }
 
     .local {
-      margin-top: 8px;
+      background: #f0f4f9;
       padding: 8px;
       border-radius: 8px;
-      background: #f0f4f9;
+      margin-top: 8px;
+    }
+
+    .aviso-demo {
+      color: #8a5900;
+      font-weight: bold;
     }
 
     .acoes {
-      text-align: center;
       background: white;
+      text-align: center;
       padding: 12px;
     }
 
@@ -98,8 +116,8 @@
     }
 
     #mensagem {
-      color: #555;
       font-size: 13px;
+      color: #555;
       margin: 10px 0 0;
     }
   </style>
@@ -120,12 +138,12 @@
   </a>
 
   <p id="mensagem">
-    Buscando localização dos bois...
+    🟡 Marcadores amarelos são demonstrações.
   </p>
 </div>
 
 <script>
-  // CONFIGURAÇÃO DO FIREBASE
+  // FIREBASE DO PROJETO
   const firebaseConfig = {
     apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
     authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -152,60 +170,138 @@
     }
   ).addTo(map);
 
-  // ÍCONE DO BOI
-  const iconeBoi = L.divIcon({
-    className: "",
-    html: '<div class="boi-icon">🐂</div>',
-    iconSize: [54, 54],
-    iconAnchor: [27, 27],
-    popupAnchor: [0, -28]
+  // ÍCONES
+  function criarIcone(demo) {
+    return L.divIcon({
+      className: "",
+      html: '<div class="boi-icon ' +
+            (demo ? 'boi-demo' : '') +
+            '">🐂</div>',
+      iconSize: [48, 48],
+      iconAnchor: [24, 24],
+      popupAnchor: [0, -24]
+    });
+  }
+
+  const iconeReal = criarIcone(false);
+  const iconeDemo = criarIcone(true);
+
+  // POSIÇÕES FICTÍCIAS, APENAS PARA TESTE
+  // Não representam a localização verdadeira dos bois.
+  const boisDemo = [
+    { nome: "Boi Caridade", lat: -4.3035, lng: -42.0340 },
+    { nome: "Boi Ramalhete", lat: -4.3050, lng: -42.0390 },
+    { nome: "Boi Soberano", lat: -4.3080, lng: -42.0320 },
+    { nome: "Boi Mimoso", lat: -4.3105, lng: -42.0370 },
+    { nome: "Boi Luar", lat: -4.3065, lng: -42.0430 },
+    { nome: "Boi Bugarim", lat: -4.3120, lng: -42.0410 },
+    { nome: "Boi Encantado", lat: -4.3010, lng: -42.0370 },
+    { nome: "Boi Flor do Sertão", lat: -4.3140, lng: -42.0340 },
+    { nome: "Boi Diamante", lat: -4.3090, lng: -42.0460 },
+    { nome: "Boi Esperança", lat: -4.3000, lng: -42.0430 }
+  ];
+
+  // MOSTRA OS 10 BOIS DE DEMONSTRAÇÃO
+  boisDemo.forEach(function(boi) {
+    const marcador = L.marker(
+      [boi.lat, boi.lng],
+      { icon: iconeDemo }
+    ).addTo(map);
+
+    marcador.bindTooltip(
+      boi.nome + " (teste)",
+      {
+        permanent: true,
+        direction: "bottom",
+        offset: [0, 22],
+        className: "nome-mapa"
+      }
+    );
+
+    marcador.bindPopup(`
+      <div class="popup">
+        <strong>🐂 ${boi.nome}</strong>
+        <div class="aviso-demo">
+          DEMONSTRAÇÃO
+        </div>
+        <div>
+          Localização fictícia para teste.
+        </div>
+        <div>
+          GPS ainda não cadastrado.
+        </div>
+      </div>
+    `);
+
+    marcador.on("click", function() {
+      map.flyTo(marcador.getLatLng(), 17, {
+        animate: true,
+        duration: 1
+      });
+    });
   });
 
-  // BOIS CADASTRADOS
-  const bois = {
-    "boi-estrela": {
-      nome: "Boi Estrela",
-      responsavel: "Fábio Silva"
-    }
-  };
-
-  const marcadores = {};
-  const circulos = {};
-  const enderecos = {};
-  const consultas = {};
-
+  // BOI ESTRELA - LOCALIZAÇÃO REAL
+  let marcadorEstrela = null;
+  let circuloPrecisao = null;
   let primeiraLocalizacao = true;
+  let enderecoEstrela = "Consultando localidade...";
+  let chaveConsulta = "";
+  let statusGPS = "Última localização registrada";
 
   const mensagem = document.getElementById("mensagem");
 
-  // EVITA INSERIR TEXTO EXTERNO COMO HTML
   function escaparHTML(texto) {
     return String(texto).replace(
       /[&<>"']/g,
-      function(caractere) {
+      function(c) {
         return {
           "&": "&amp;",
           "<": "&lt;",
           ">": "&gt;",
           '"': "&quot;",
           "'": "&#39;"
-        }[caractere];
+        }[c];
       }
     );
   }
 
-  // EXTRAI RUA OU LOCALIDADE
-  function nomeLocal(dados) {
+  function atualizarPopupEstrela() {
+    if (!marcadorEstrela) return;
+
+    const precisao = circuloPrecisao
+      ? Math.round(circuloPrecisao.getRadius()) + " metros"
+      : "Não informada";
+
+    marcadorEstrela.setPopupContent(`
+      <div class="popup">
+        <strong>🐂 Boi Estrela</strong>
+        <div>Responsável: Fábio Silva</div>
+
+        <div class="local">
+          <b>📍 Rua ou localidade:</b><br>
+          ${escaparHTML(enderecoEstrela)}
+        </div>
+
+        <div>
+          <b>Precisão:</b> ${precisao}
+        </div>
+
+        <div>${statusGPS}</div>
+      </div>
+    `);
+  }
+
+  function identificarLocalidade(dados) {
     const a = dados.address || {};
 
     const rua =
       a.road ||
       a.pedestrian ||
       a.residential ||
-      a.path ||
-      a.footway;
+      a.path;
 
-    const localidade =
+    const local =
       a.suburb ||
       a.neighbourhood ||
       a.village ||
@@ -214,82 +310,37 @@
       a.city ||
       a.municipality;
 
-    if (rua && localidade) {
-      return rua + " - " + localidade;
+    if (rua && local) {
+      return rua + " - " + local;
     }
 
     return rua ||
-           localidade ||
+           local ||
            dados.name ||
-           "Rua ou localidade não identificada";
+           "Localidade não identificada";
   }
 
-  // MONTA A JANELA DO BOI
-  function atualizarPopup(id) {
-    const cadastro = bois[id];
-    const marcador = marcadores[id];
+  async function consultarLocalidade(lat, lng) {
+    const chave =
+      lat.toFixed(5) + "," + lng.toFixed(5);
 
-    if (!marcador) return;
+    if (chaveConsulta === chave) return;
 
-    const local = enderecos[id] ||
-      "Consultando rua ou localidade...";
-
-    const precisao = circulos[id]
-      ? Math.round(circulos[id].getRadius()) + " metros"
-      : "Não informada pelo GPS";
-
-    const status = marcador.statusGPS ||
-      "Última localização registrada";
-
-    marcador.setPopupContent(`
-      <div class="popup">
-        <strong>🐂 ${escaparHTML(cadastro.nome)}</strong>
-        <div>
-          Responsável:
-          ${escaparHTML(cadastro.responsavel)}
-        </div>
-
-        <div class="local">
-          <b>📍 Localização:</b><br>
-          ${escaparHTML(local)}
-        </div>
-
-        <div style="margin-top:8px">
-          <b>Precisão do GPS:</b> ${precisao}
-        </div>
-
-        <div style="margin-top:6px">
-          ${status}
-        </div>
-      </div>
-    `);
-  }
-
-  // CONSULTA A RUA PELO OPENSTREETMAP
-  async function consultarEndereco(id, latitude, longitude) {
-    const chave = latitude.toFixed(5) + "," +
-                  longitude.toFixed(5);
-
-    // Evita consultas repetidas para a mesma posição
-    if (consultas[id] === chave) return;
-
-    consultas[id] = chave;
-    enderecos[id] = "Consultando rua ou localidade...";
-    atualizarPopup(id);
+    chaveConsulta = chave;
+    enderecoEstrela = "Consultando localidade...";
+    atualizarPopupEstrela();
 
     const url =
       "https://nominatim.openstreetmap.org/reverse" +
       "?format=jsonv2" +
-      "&lat=" + encodeURIComponent(latitude) +
-      "&lon=" + encodeURIComponent(longitude) +
+      "&lat=" + encodeURIComponent(lat) +
+      "&lon=" + encodeURIComponent(lng) +
       "&zoom=18&addressdetails=1" +
       "&accept-language=pt-BR";
 
     try {
       const resposta = await fetch(url, {
-        headers: {
-          "Accept": "application/json"
-        }
+        headers: { "Accept": "application/json" }
       });
 
       if (!resposta.ok) {
@@ -298,54 +349,41 @@
 
       const dados = await resposta.json();
 
-      // Descarta resultado antigo se o boi se moveu
-      if (consultas[id] !== chave) return;
+      if (chaveConsulta !== chave) return;
 
-      enderecos[id] = nomeLocal(dados);
-      atualizarPopup(id);
+      enderecoEstrela = identificarLocalidade(dados);
+      atualizarPopupEstrela();
 
     } catch (erro) {
-      if (consultas[id] !== chave) return;
+      if (chaveConsulta !== chave) return;
 
-      enderecos[id] =
-        "Rua não identificada. Consulte a posição no mapa.";
-
-      atualizarPopup(id);
-      console.warn("Endereço indisponível:", erro);
+      enderecoEstrela =
+        "Localidade não identificada";
+      atualizarPopupEstrela();
+      console.warn(erro);
     }
   }
 
-  // CENTRALIZA E APROXIMA O BOI
-  function mostrarLocalizacao(marcador) {
-    map.flyTo(marcador.getLatLng(), 19, {
-      animate: true,
-      duration: 1.2
-    });
-
-    marcador.openPopup();
-  }
-
-  // ATUALIZA POSIÇÃO E PRECISÃO
-  function atualizarBoi(id, dados) {
+  function atualizarEstrela(dados) {
     if (
       dados.latitude == null ||
       dados.longitude == null
     ) return;
 
-    const latitude = Number(dados.latitude);
-    const longitude = Number(dados.longitude);
+    const lat = Number(dados.latitude);
+    const lng = Number(dados.longitude);
 
     if (
-      !Number.isFinite(latitude) ||
-      !Number.isFinite(longitude) ||
-      Math.abs(latitude) > 90 ||
-      Math.abs(longitude) > 180
+      !Number.isFinite(lat) ||
+      !Number.isFinite(lng) ||
+      Math.abs(lat) > 90 ||
+      Math.abs(lng) > 180
     ) return;
 
-    const posicao = [latitude, longitude];
+    const posicao = [lat, lng];
 
     const atualizadoEm = Number(dados.atualizadoEm);
-    let status = "🟠 Última localização registrada";
+    statusGPS = "🟠 Última localização registrada";
 
     if (
       Number.isFinite(atualizadoEm) &&
@@ -358,43 +396,54 @@
       const idade = Date.now() - horarioMs;
 
       if (idade >= 0 && idade <= 120000) {
-        status = "🟢 Localização recente";
+        statusGPS = "🟢 Localização recente";
       }
     }
 
-    if (!marcadores[id]) {
-      const marcador = L.marker(posicao, {
-        icon: iconeBoi
+    if (!marcadorEstrela) {
+      marcadorEstrela = L.marker(posicao, {
+        icon: iconeReal
       }).addTo(map);
 
-      marcador.bindPopup("");
+      marcadorEstrela.bindTooltip(
+        "Boi Estrela (GPS)",
+        {
+          permanent: true,
+          direction: "bottom",
+          offset: [0, 22],
+          className: "nome-mapa"
+        }
+      );
 
-      marcador.on("click", function() {
-        mostrarLocalizacao(marcador);
-        consultarEndereco(id, latitudeAtual(id), longitudeAtual(id));
+      marcadorEstrela.bindPopup("");
+
+      marcadorEstrela.on("click", function() {
+        map.flyTo(
+          marcadorEstrela.getLatLng(),
+          19,
+          { animate: true, duration: 1.2 }
+        );
+
+        const p = marcadorEstrela.getLatLng();
+        consultarLocalidade(p.lat, p.lng);
       });
 
-      marcadores[id] = marcador;
-
     } else {
-      marcadores[id].setLatLng(posicao);
+      marcadorEstrela.setLatLng(posicao);
     }
 
-    marcadores[id].statusGPS = status;
-
-    // LÊ A PRECISÃO INFORMADA PELO GPS
-    const precisaoBruta =
+    const valorPrecisao =
       dados.precisao ?? dados.accuracy;
 
-    const precisao = Number(precisaoBruta);
+    const precisao = Number(valorPrecisao);
 
     if (
-      precisaoBruta != null &&
+      valorPrecisao != null &&
       Number.isFinite(precisao) &&
       precisao > 0
     ) {
-      if (!circulos[id]) {
-        circulos[id] = L.circle(posicao, {
+      if (!circuloPrecisao) {
+        circuloPrecisao = L.circle(posicao, {
           radius: precisao,
           color: "#1767bf",
           fillColor: "#1767bf",
@@ -403,54 +452,55 @@
           interactive: false
         }).addTo(map);
       } else {
-        circulos[id].setLatLng(posicao);
-        circulos[id].setRadius(precisao);
+        circuloPrecisao.setLatLng(posicao);
+        circuloPrecisao.setRadius(precisao);
       }
-    } else if (circulos[id]) {
-      map.removeLayer(circulos[id]);
-      delete circulos[id];
+    } else if (circuloPrecisao) {
+      map.removeLayer(circuloPrecisao);
+      circuloPrecisao = null;
     }
 
-    atualizarPopup(id);
-
-    mensagem.textContent =
-      "Toque no boi para ver a rua e a localização.";
+    atualizarPopupEstrela();
 
     if (primeiraLocalizacao) {
-      map.setView(posicao, 16);
       primeiraLocalizacao = false;
+
+      // Enquadra o boi real e os bois fictícios
+      const pontos = boisDemo.map(function(b) {
+        return [b.lat, b.lng];
+      });
+
+      pontos.push(posicao);
+
+      map.fitBounds(pontos, {
+        padding: [45, 45],
+        maxZoom: 15
+      });
     }
   }
 
-  function latitudeAtual(id) {
-    return marcadores[id].getLatLng().lat;
-  }
+  // LEITURA DO GPS REAL NO FIREBASE
+  database.ref("bois/boi-estrela").on(
+    "value",
+    function(snapshot) {
+      const dados = snapshot.val();
 
-  function longitudeAtual(id) {
-    return marcadores[id].getLatLng().lng;
-  }
-
-  // RECEBE OS DADOS DO FIREBASE
-  Object.keys(bois).forEach(function(id) {
-    database.ref("bois/" + id).on(
-      "value",
-      function(snapshot) {
-        const dados = snapshot.val();
-
-        if (dados) {
-          atualizarBoi(id, dados);
-        } else if (!Object.keys(marcadores).length) {
-          mensagem.textContent =
-            "Aguardando localização do boi.";
-        }
-      },
-      function(erro) {
+      if (dados) {
+        atualizarEstrela(dados);
+      } else {
         mensagem.textContent =
-          "Não foi possível consultar a localização.";
-        console.error(erro);
+          "Boi Estrela aguardando GPS. " +
+          "Os demais bois são demonstrações.";
       }
-    );
-  });
+    },
+    function(erro) {
+      mensagem.textContent =
+        "GPS do Boi Estrela indisponível. " +
+        "Os demais bois são demonstrações.";
+
+      console.error(erro);
+    }
+  );
 </script>
 
 </body>
