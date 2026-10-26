@@ -3,8 +3,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reisado de Boa Hora - Mapa</title>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Monitoramento dos Bois - Boa Hora PI</title>
 
   <link rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -14,7 +16,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -26,11 +30,11 @@
       background: #104b91;
       color: white;
       text-align: center;
-      padding: 18px 12px;
+      padding: 17px 12px;
     }
 
     header h1 {
-      font-size: 24px;
+      font-size: 23px;
       margin: 0 0 6px;
     }
 
@@ -41,27 +45,39 @@
 
     #map {
       width: 100%;
-      height: calc(100dvh - 175px);
+      height: calc(100dvh - 185px);
       min-height: 350px;
     }
 
     .boi-icon {
-      background: #fff;
+      width: 54px;
+      height: 54px;
+      background: white;
       border: 3px solid #c52228;
       border-radius: 50%;
-      width: 52px;
-      height: 52px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      font-size: 29px;
+      justify-content: center;
+      font-size: 30px;
       box-shadow: 0 3px 10px #0005;
     }
 
-    .acoes {
-      background: white;
+    .popup {
       text-align: center;
-      padding: 14px;
+      min-width: 170px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .popup strong {
+      font-size: 18px;
+      color: #104b91;
+    }
+
+    .acoes {
+      text-align: center;
+      background: white;
+      padding: 12px;
     }
 
     .agenda {
@@ -69,25 +85,15 @@
       background: #c52228;
       color: white;
       text-decoration: none;
-      padding: 13px 24px;
-      border-radius: 12px;
       font-weight: bold;
+      padding: 12px 22px;
+      border-radius: 12px;
     }
 
     #mensagem {
-      margin: 10px 0 0;
-      font-size: 13px;
       color: #555;
-    }
-
-    .popup-titulo {
-      font-weight: bold;
-      font-size: 17px;
-    }
-
-    .popup-texto {
-      line-height: 1.6;
-      font-size: 14px;
+      font-size: 13px;
+      margin: 10px 0 0;
     }
   </style>
 </head>
@@ -95,20 +101,24 @@
 <body>
 
 <header>
-  <h1>🐂 Reisado de Boa Hora - PI</h1>
-  <p>Toque no boi para acompanhar sua localização</p>
+  <h1>🐂 Monitoramento dos Bois</h1>
+  <p>Reisado de Boa Hora - Piauí</p>
 </header>
 
 <div id="map"></div>
 
 <div class="acoes">
   <a class="agenda" href="./agenda.html">
-    📅 Agenda das apresentações
+    📅 Agenda dos Bois
   </a>
-  <p id="mensagem">Buscando localização dos bois...</p>
+
+  <p id="mensagem">
+    Buscando localização dos bois...
+  </p>
 </div>
 
 <script>
+  // CONFIGURAÇÃO DO FIREBASE
   const firebaseConfig = {
     apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
     authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -123,6 +133,7 @@
 
   const database = firebase.database();
 
+  // MAPA INICIAL
   const map = L.map("map").setView(
     [-4.3074, -42.0363], 14
   );
@@ -135,15 +146,16 @@
     }
   ).addTo(map);
 
+  // ÍCONE DO BOI
   const iconeBoi = L.divIcon({
     className: "",
     html: '<div class="boi-icon">🐂</div>',
-    iconSize: [52, 52],
-    iconAnchor: [26, 26],
-    popupAnchor: [0, -25]
+    iconSize: [54, 54],
+    iconAnchor: [27, 27],
+    popupAnchor: [0, -28]
   });
 
-  // Bois cadastrados para acompanhamento
+  // BOIS CADASTRADOS
   const bois = {
     "boi-estrela": {
       nome: "Boi Estrela",
@@ -152,11 +164,24 @@
   };
 
   const marcadores = {};
-  let primeiroBoi = true;
+  let primeiraLocalizacao = true;
 
   const mensagem = document.getElementById("mensagem");
 
-  function acompanharBoi(id, dados) {
+  // CENTRALIZA E APROXIMA O BOI
+  function mostrarLocalizacao(marcador) {
+    const posicao = marcador.getLatLng();
+
+    map.flyTo(posicao, 18, {
+      animate: true,
+      duration: 1.2
+    });
+
+    marcador.openPopup();
+  }
+
+  // ATUALIZA A POSIÇÃO DO BOI
+  function atualizarBoi(id, dados) {
     const latitude = Number(dados.latitude);
     const longitude = Number(dados.longitude);
 
@@ -174,10 +199,14 @@
     const posicao = [latitude, longitude];
     const cadastro = bois[id];
 
-    const atualizadoEm = Number(dados.atualizadoEm);
-    let situacao = "Horário não informado";
+    let status = "Última localização registrada";
 
-    if (Number.isFinite(atualizadoEm) && atualizadoEm > 0) {
+    const atualizadoEm = Number(dados.atualizadoEm);
+
+    if (
+      Number.isFinite(atualizadoEm) &&
+      atualizadoEm > 0
+    ) {
       const horarioMs = atualizadoEm < 1e11
         ? atualizadoEm * 1000
         : atualizadoEm;
@@ -185,44 +214,48 @@
       const idade = Date.now() - horarioMs;
 
       if (idade >= 0 && idade <= 120000) {
-        situacao = "🟢 Localização recente";
+        status = "🟢 Localização recente";
       } else {
-        situacao = "🟠 Última localização registrada";
+        status = "🟠 Última localização registrada";
       }
-
-      situacao += "<br>Atualizado: " +
-        new Date(horarioMs).toLocaleString("pt-BR");
     }
 
     const conteudo = `
-      <div class="popup-texto">
-        <div class="popup-titulo">🐂 ${cadastro.nome}</div>
-        Responsável: ${cadastro.responsavel}<br>
-        ${situacao}
+      <div class="popup">
+        <strong>🐂 ${cadastro.nome}</strong>
+        <div>Responsável: ${cadastro.responsavel}</div>
+        <div>${status}</div>
       </div>
     `;
 
     if (!marcadores[id]) {
-      marcadores[id] = L.marker(posicao, {
+      const marcador = L.marker(posicao, {
         icon: iconeBoi
       }).addTo(map);
 
-      marcadores[id].bindPopup(conteudo);
+      marcador.bindPopup(conteudo);
+
+      marcador.on("click", function() {
+        mostrarLocalizacao(marcador);
+      });
+
+      marcadores[id] = marcador;
     } else {
       marcadores[id].setLatLng(posicao);
       marcadores[id].setPopupContent(conteudo);
     }
 
     mensagem.textContent =
-      "Toque no ícone do boi para ver as informações.";
+      "Toque no boi para aproximar sua localização.";
 
-    if (primeiroBoi) {
-      map.setView(posicao, 17);
-      primeiroBoi = false;
+    // MOSTRA A PRIMEIRA LOCALIZAÇÃO RECEBIDA
+    if (primeiraLocalizacao) {
+      map.setView(posicao, 16);
+      primeiraLocalizacao = false;
     }
   }
 
-  // Recebe as posições sem modificar o GPS
+  // CONEXÃO COM O FIREBASE
   Object.keys(bois).forEach(function(id) {
     database.ref("bois/" + id).on(
       "value",
@@ -230,15 +263,15 @@
         const dados = snapshot.val();
 
         if (dados) {
-          acompanharBoi(id, dados);
+          atualizarBoi(id, dados);
         } else if (!Object.keys(marcadores).length) {
           mensagem.textContent =
-            "Aguardando a primeira localização.";
+            "Aguardando localização do boi.";
         }
       },
       function(erro) {
         mensagem.textContent =
-          "Não foi possível consultar as localizações.";
+          "Não foi possível consultar a localização.";
         console.error(erro);
       }
     );
