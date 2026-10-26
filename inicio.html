@@ -1,34 +1,178 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reisado de Boa Hora - PI</title>
 
-  <meta http-equiv="refresh"
-        content="0; url=inicio.html">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  <script>
-    window.location.replace("inicio.html");
-  </script>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f4f7;
+      color: #111;
+    }
+
+    .container {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: auto;
+      background: white;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0b3974, #1262b8);
+      color: white;
+      text-align: center;
+      padding: 45px 20px;
+    }
+
+    header h1 {
+      font-size: 43px;
+      margin: 0;
+      letter-spacing: 2px;
+    }
+
+    header h2 {
+      font-size: 24px;
+      font-weight: normal;
+      margin: 10px 0;
+    }
+
+    header p {
+      margin: 12px 0 0;
+      font-size: 16px;
+    }
+
+    main {
+      padding: 30px 22px;
+    }
+
+    .pergunta {
+      text-align: center;
+      font-size: 23px;
+      margin: 0 0 30px;
+    }
+
+    .card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 30px 22px;
+      margin-bottom: 24px;
+      border-radius: 20px;
+      color: white;
+      text-decoration: none;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.17);
+    }
+
+    .localizar {
+      background: linear-gradient(135deg, #0b3974, #1262b8);
+    }
+
+    .agenda {
+      background: linear-gradient(135deg, #b40d18, #dc2932);
+    }
+
+    .icone {
+      width: 70px;
+      height: 70px;
+      min-width: 70px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.17);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 37px;
+    }
+
+    .card h2 {
+      font-size: 26px;
+      margin: 0 0 8px;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    footer {
+      text-align: center;
+      color: #777;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 36px;
+      }
+
+      .card {
+        padding: 25px 18px;
+      }
+
+      .card h2 {
+        font-size: 23px;
+      }
+
+      .icone {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        font-size: 32px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <p>
-    Abrindo o Reisado de Boa Hora...
-  </p>
+  <div class="container">
 
-  <p>
-    <a href="inicio.html">
-      Clique aqui caso a página não abra automaticamente.
-    </a>
-  </p>
+    <header>
+      <h1>REISADO</h1>
+      <h2>Boa Hora - Piauí</h2>
+      <p>Cultura • Fé • Tradição</p>
+    </header>
+
+    <main>
+
+      <h2 class="pergunta">
+        O que você deseja acessar?
+      </h2>
+
+      <a href="./localizar.html" class="card localizar">
+        <div class="icone">📍</div>
+
+        <div>
+          <h2>Localizar Reisado</h2>
+          <p>Veja onde o Reisado está agora.</p>
+        </div>
+      </a>
+
+      <a href="./agenda.html" class="card agenda">
+        <div class="icone">📅</div>
+
+        <div>
+          <h2>Agenda do Reisado</h2>
+          <p>Veja datas, locais e horários das apresentações.</p>
+        </div>
+      </a>
+
+    </main>
+
+    <footer>
+      Reisado de Boa Hora - Piauí
+    </footer>
+
+  </div>
 
 </body>
-
 </html>
