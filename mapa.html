@@ -168,7 +168,6 @@ header p { margin: 0; font-size: 14px; }
 
 <body>
 
-
 <header>
   <img
     src="./ícone-boi-reisado-logo.png"
@@ -186,6 +185,7 @@ header p { margin: 0; font-size: 14px; }
   <p>Reisado de Boa Hora - Piauí</p>
 </header>
 
+<div id="map"></div>
 
 <div class="acoes">
   <a class="agenda" href="./agenda.html">
@@ -309,7 +309,6 @@ let statusGPS = "Última localização registrada";
 const mensagem = document.getElementById("mensagem");
 
 // ENCONTRA O CADASTRO PELA IDENTIDADE ORIGINAL DO BOI.
-// O nomeOriginal permanece igual mesmo depois de renomear no painel.
 function cadastroDoBoi(nomeOriginal) {
   return cadastroBois.find(function(boi) {
     return normalizar(boi.nomeOriginal) === normalizar(nomeOriginal);
@@ -385,7 +384,7 @@ boisDemo.forEach(function(boi) {
 
 atualizarMarcadoresDemo();
 
-// EXIBE OS 11 BOIS ORIGINAIS E OS NOVOS CADASTROS, SEM DUPLICAR.
+// EXIBE OS 11 BOIS ORIGINAIS E OS NOVOS CADASTROS.
 function mostrarBoisCadastrados() {
   const lista = document.getElementById("listaBois");
   lista.replaceChildren();
