@@ -16,7 +16,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -47,22 +49,28 @@
       min-height: 350px;
     }
 
+    /* ÍCONE COM A IMAGEM DO BOI */
     .boi-icon {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 27px;
       background: white;
       border: 3px solid #c52228;
-      box-shadow: 0 3px 9px #0005;
+      box-shadow: 0 3px 10px #0005;
+      overflow: hidden;
+    }
+
+    .boi-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
     }
 
     .boi-demo {
-      background: #fff3b0;
       border-color: #d49b00;
+      background: #fff3b0;
     }
 
     .nome-mapa {
@@ -70,14 +78,15 @@
       border: 1px solid #bbb;
       border-radius: 7px;
       padding: 3px 7px;
-      font-weight: bold;
       font-size: 12px;
+      font-weight: bold;
       white-space: nowrap;
       box-shadow: 0 2px 5px #0002;
     }
 
     .popup {
       min-width: 200px;
+      max-width: 260px;
       line-height: 1.6;
       font-size: 14px;
     }
@@ -126,7 +135,7 @@
 <body>
 
 <header>
-  <h1>🐂 Monitoramento dos Bois</h1>
+  <h1>Monitoramento dos Bois</h1>
   <p>Reisado de Boa Hora - Piauí</p>
 </header>
 
@@ -138,12 +147,13 @@
   </a>
 
   <p id="mensagem">
-    🟡 Marcadores amarelos são demonstrações.
+    🟡 Borda amarela: demonstração.
+    🔴 Borda vermelha: GPS real.
   </p>
 </div>
 
 <script>
-  // FIREBASE DO PROJETO
+  // CONFIGURAÇÃO DO FIREBASE
   const firebaseConfig = {
     apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
     authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -155,6 +165,7 @@
   };
 
   firebase.initializeApp(firebaseConfig);
+
   const database = firebase.database();
 
   // MAPA
@@ -170,24 +181,30 @@
     }
   ).addTo(map);
 
-  // ÍCONES
-  function criarIcone(demo) {
+  // IMAGEM ENVIADA PARA O GITHUB
+  const imagemBoi = "./icone-boi-reisado.png";
+
+  // CRIA ÍCONE PERSONALIZADO
+  function criarIcone(demonstracao) {
     return L.divIcon({
       className: "",
-      html: '<div class="boi-icon ' +
-            (demo ? 'boi-demo' : '') +
-            '">🐂</div>',
-      iconSize: [48, 48],
-      iconAnchor: [24, 24],
-      popupAnchor: [0, -24]
+      html:
+        '<div class="boi-icon ' +
+        (demonstracao ? 'boi-demo' : '') +
+        '">' +
+        '<img src="' + imagemBoi + '" alt="Boi de Reisado">' +
+        '</div>',
+      iconSize: [56, 56],
+      iconAnchor: [28, 28],
+      popupAnchor: [0, -28]
     });
   }
 
   const iconeReal = criarIcone(false);
   const iconeDemo = criarIcone(true);
 
-  // POSIÇÕES FICTÍCIAS, APENAS PARA TESTE
-  // Não representam a localização verdadeira dos bois.
+  // DEZ BOIS FICTÍCIOS
+  // POSIÇÕES SOMENTE PARA TESTE
   const boisDemo = [
     { nome: "Boi Caridade", lat: -4.3035, lng: -42.0340 },
     { nome: "Boi Ramalhete", lat: -4.3050, lng: -42.0390 },
@@ -201,7 +218,7 @@
     { nome: "Boi Esperança", lat: -4.3000, lng: -42.0430 }
   ];
 
-  // MOSTRA OS 10 BOIS DE DEMONSTRAÇÃO
+  // MARCADORES DOS BOIS FICTÍCIOS
   boisDemo.forEach(function(boi) {
     const marcador = L.marker(
       [boi.lat, boi.lng],
@@ -213,23 +230,19 @@
       {
         permanent: true,
         direction: "bottom",
-        offset: [0, 22],
+        offset: [0, 25],
         className: "nome-mapa"
       }
     );
 
     marcador.bindPopup(`
       <div class="popup">
-        <strong>🐂 ${boi.nome}</strong>
+        <strong>${boi.nome}</strong>
         <div class="aviso-demo">
           DEMONSTRAÇÃO
         </div>
-        <div>
-          Localização fictícia para teste.
-        </div>
-        <div>
-          GPS ainda não cadastrado.
-        </div>
+        <div>Localização fictícia para teste.</div>
+        <div>GPS ainda não cadastrado.</div>
       </div>
     `);
 
@@ -241,10 +254,11 @@
     });
   });
 
-  // BOI ESTRELA - LOCALIZAÇÃO REAL
+  // BOI ESTRELA - GPS REAL
   let marcadorEstrela = null;
   let circuloPrecisao = null;
   let primeiraLocalizacao = true;
+
   let enderecoEstrela = "Consultando localidade...";
   let chaveConsulta = "";
   let statusGPS = "Última localização registrada";
@@ -266,6 +280,7 @@
     );
   }
 
+  // ATUALIZA JANELA DO BOI ESTRELA
   function atualizarPopupEstrela() {
     if (!marcadorEstrela) return;
 
@@ -275,7 +290,7 @@
 
     marcadorEstrela.setPopupContent(`
       <div class="popup">
-        <strong>🐂 Boi Estrela</strong>
+        <strong>Boi Estrela</strong>
         <div>Responsável: Fábio Silva</div>
 
         <div class="local">
@@ -284,7 +299,7 @@
         </div>
 
         <div>
-          <b>Precisão:</b> ${precisao}
+          <b>Precisão do GPS:</b> ${precisao}
         </div>
 
         <div>${statusGPS}</div>
@@ -292,6 +307,7 @@
     `);
   }
 
+  // IDENTIFICA RUA OU COMUNIDADE
   function identificarLocalidade(dados) {
     const a = dados.address || {};
 
@@ -320,6 +336,7 @@
            "Localidade não identificada";
   }
 
+  // CONSULTA ENDEREÇO NO OPENSTREETMAP
   async function consultarLocalidade(lat, lng) {
     const chave =
       lat.toFixed(5) + "," + lng.toFixed(5);
@@ -340,7 +357,9 @@
 
     try {
       const resposta = await fetch(url, {
-        headers: { "Accept": "application/json" }
+        headers: {
+          "Accept": "application/json"
+        }
       });
 
       if (!resposta.ok) {
@@ -357,13 +376,13 @@
     } catch (erro) {
       if (chaveConsulta !== chave) return;
 
-      enderecoEstrela =
-        "Localidade não identificada";
+      enderecoEstrela = "Localidade não identificada";
       atualizarPopupEstrela();
       console.warn(erro);
     }
   }
 
+  // ATUALIZA LOCALIZAÇÃO REAL
   function atualizarEstrela(dados) {
     if (
       dados.latitude == null ||
@@ -410,7 +429,7 @@
         {
           permanent: true,
           direction: "bottom",
-          offset: [0, 22],
+          offset: [0, 25],
           className: "nome-mapa"
         }
       );
@@ -421,7 +440,10 @@
         map.flyTo(
           marcadorEstrela.getLatLng(),
           19,
-          { animate: true, duration: 1.2 }
+          {
+            animate: true,
+            duration: 1.2
+          }
         );
 
         const p = marcadorEstrela.getLatLng();
@@ -432,6 +454,7 @@
       marcadorEstrela.setLatLng(posicao);
     }
 
+    // CÍRCULO DE PRECISÃO DO GPS
     const valorPrecisao =
       dados.precisao ?? dados.accuracy;
 
@@ -462,10 +485,10 @@
 
     atualizarPopupEstrela();
 
+    // ENQUADRA TODOS OS BOIS NA PRIMEIRA LEITURA
     if (primeiraLocalizacao) {
       primeiraLocalizacao = false;
 
-      // Enquadra o boi real e os bois fictícios
       const pontos = boisDemo.map(function(b) {
         return [b.lat, b.lng];
       });
@@ -479,7 +502,7 @@
     }
   }
 
-  // LEITURA DO GPS REAL NO FIREBASE
+  // LEITURA DO GPS REAL PELO FIREBASE
   database.ref("bois/boi-estrela").on(
     "value",
     function(snapshot) {
