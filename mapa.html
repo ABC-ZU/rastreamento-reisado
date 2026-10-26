@@ -296,21 +296,24 @@ let statusGPS = "Última localização registrada";
 
 const mensagem = document.getElementById("mensagem");
 
-// BUSCA DADOS DO BOI CADASTRADO
-function dadosDoBoi(nome) {
-  const cadastro = cadastroBois.find(
-    function(boi) {
-      return normalizar(boi.nome) === normalizar(nome);
-    }
-  );
+// ENCONTRA O CADASTRO PELA IDENTIDADE ORIGINAL DO BOI.
+// O nomeOriginal permanece igual mesmo depois de renomear no painel.
+function cadastroDoBoi(nomeOriginal) {
+  return cadastroBois.find(function(boi) {
+    return normalizar(boi.nomeOriginal) === normalizar(nomeOriginal);
+  }) || cadastroBois.find(function(boi) {
+    return !boi.nomeOriginal &&
+      normalizar(boi.nome) === normalizar(nomeOriginal);
+  });
+}
 
+function dadosDoBoi(nomeOriginal) {
+  const cadastro = cadastroDoBoi(nomeOriginal);
   return {
-    nome: cadastro ? cadastro.nome : nome,
-    dono: cadastro
-      ? cadastro.dono
-      : normalizar(nome) === "boi estrela"
-        ? "Fábio Silva"
-        : "A definir"
+    nome: cadastro ? cadastro.nome : nomeOriginal,
+    dono: cadastro ? cadastro.dono :
+      normalizar(nomeOriginal) === "boi estrela" ?
+        "Fábio Silva" : "A definir"
   };
 }
 
@@ -370,27 +373,43 @@ boisDemo.forEach(function(boi) {
 
 atualizarMarcadoresDemo();
 
-// LISTA AUTOMÁTICA DOS BOIS
+// EXIBE OS 11 BOIS ORIGINAIS E OS NOVOS CADASTROS, SEM DUPLICAR.
 function mostrarBoisCadastrados() {
-
   const lista = document.getElementById("listaBois");
-
   lista.replaceChildren();
 
-  if (cadastroBois.length === 0) {
-    lista.textContent =
-      "Nenhum boi cadastrado no painel ainda.";
-    return;
-  }
-
-  const ordenados = cadastroBois.slice().sort(
-    function(a, b) {
-      return a.nome.localeCompare(b.nome, "pt-BR");
-    }
+  const originais = ["Boi Estrela"].concat(
+    boisDemo.map(function(boi) { return boi.nome; })
   );
+  const idsUsados = new Set();
+  const exibidos = [];
 
-  ordenados.forEach(function(boi) {
+  originais.forEach(function(nomeOriginal) {
+    const cadastro = cadastroDoBoi(nomeOriginal);
+    if (cadastro) idsUsados.add(cadastro.id);
+    const info = dadosDoBoi(nomeOriginal);
+    exibidos.push({
+      nome: info.nome,
+      dono: info.dono,
+      gps: nomeOriginal === "Boi Estrela" ? "real" : "demo"
+    });
+  });
 
+  cadastroBois.forEach(function(boi) {
+    if (!idsUsados.has(boi.id)) {
+      exibidos.push({
+        nome: boi.nome,
+        dono: boi.dono,
+        gps: "pendente"
+      });
+    }
+  });
+
+  exibidos.sort(function(a, b) {
+    return a.nome.localeCompare(b.nome, "pt-BR");
+  });
+
+  exibidos.forEach(function(boi) {
     const ficha = document.createElement("div");
     ficha.className = "ficha-boi";
 
@@ -401,26 +420,13 @@ function mostrarBoisCadastrados() {
     dono.textContent = "👤 Dono: " + boi.dono;
 
     const gps = document.createElement("small");
+    gps.textContent = boi.gps === "real"
+      ? "📍 GPS: consulte o marcador vermelho."
+      : boi.gps === "demo"
+        ? "🟡 Marcador de demonstração no mapa."
+        : "📍 Aguardando configuração do GPS.";
 
-    if (normalizar(boi.nome) === "boi estrela") {
-      gps.textContent =
-        "📍 GPS: consulte o marcador vermelho.";
-    } else if (
-      boisDemo.some(function(item) {
-        return normalizar(item.nome) === normalizar(boi.nome);
-      })
-    ) {
-      gps.textContent =
-        "🟡 Marcador de demonstração no mapa.";
-    } else {
-      gps.textContent =
-        "📍 Aguardando configuração do GPS.";
-    }
-
-    ficha.appendChild(nome);
-    ficha.appendChild(dono);
-    ficha.appendChild(gps);
-
+    ficha.append(nome, dono, gps);
     lista.appendChild(ficha);
   });
 }
@@ -473,7 +479,8 @@ database.ref("cadastroBois").on(
         cadastroBois.push({
           id: item.key,
           nome: dados.nome.trim(),
-          dono: String(dados.dono || "A definir")
+          dono: String(dados.dono || "A definir"),
+          nomeOriginal: String(dados.nomeOriginal || "").trim()
         });
       }
     });
