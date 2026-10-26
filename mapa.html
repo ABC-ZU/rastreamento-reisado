@@ -45,7 +45,7 @@
 
     #map {
       width: 100%;
-      height: calc(100dvh - 185px);
+      height: calc(100dvh - 200px);
       min-height: 350px;
     }
 
@@ -63,15 +63,22 @@
     }
 
     .popup {
-      text-align: center;
-      min-width: 170px;
-      line-height: 1.6;
+      min-width: 215px;
+      max-width: 260px;
+      line-height: 1.5;
       font-size: 14px;
     }
 
     .popup strong {
-      font-size: 18px;
       color: #104b91;
+      font-size: 18px;
+    }
+
+    .local {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      background: #f0f4f9;
     }
 
     .acoes {
@@ -130,10 +137,9 @@
   };
 
   firebase.initializeApp(firebaseConfig);
-
   const database = firebase.database();
 
-  // MAPA INICIAL
+  // MAPA
   const map = L.map("map").setView(
     [-4.3074, -42.0363], 14
   );
@@ -164,15 +170,154 @@
   };
 
   const marcadores = {};
+  const circulos = {};
+  const enderecos = {};
+  const consultas = {};
+
   let primeiraLocalizacao = true;
 
   const mensagem = document.getElementById("mensagem");
 
+  // EVITA INSERIR TEXTO EXTERNO COMO HTML
+  function escaparHTML(texto) {
+    return String(texto).replace(
+      /[&<>"']/g,
+      function(caractere) {
+        return {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[caractere];
+      }
+    );
+  }
+
+  // EXTRAI RUA OU LOCALIDADE
+  function nomeLocal(dados) {
+    const a = dados.address || {};
+
+    const rua =
+      a.road ||
+      a.pedestrian ||
+      a.residential ||
+      a.path ||
+      a.footway;
+
+    const localidade =
+      a.suburb ||
+      a.neighbourhood ||
+      a.village ||
+      a.hamlet ||
+      a.town ||
+      a.city ||
+      a.municipality;
+
+    if (rua && localidade) {
+      return rua + " - " + localidade;
+    }
+
+    return rua ||
+           localidade ||
+           dados.name ||
+           "Rua ou localidade não identificada";
+  }
+
+  // MONTA A JANELA DO BOI
+  function atualizarPopup(id) {
+    const cadastro = bois[id];
+    const marcador = marcadores[id];
+
+    if (!marcador) return;
+
+    const local = enderecos[id] ||
+      "Consultando rua ou localidade...";
+
+    const precisao = circulos[id]
+      ? Math.round(circulos[id].getRadius()) + " metros"
+      : "Não informada pelo GPS";
+
+    const status = marcador.statusGPS ||
+      "Última localização registrada";
+
+    marcador.setPopupContent(`
+      <div class="popup">
+        <strong>🐂 ${escaparHTML(cadastro.nome)}</strong>
+        <div>
+          Responsável:
+          ${escaparHTML(cadastro.responsavel)}
+        </div>
+
+        <div class="local">
+          <b>📍 Localização:</b><br>
+          ${escaparHTML(local)}
+        </div>
+
+        <div style="margin-top:8px">
+          <b>Precisão do GPS:</b> ${precisao}
+        </div>
+
+        <div style="margin-top:6px">
+          ${status}
+        </div>
+      </div>
+    `);
+  }
+
+  // CONSULTA A RUA PELO OPENSTREETMAP
+  async function consultarEndereco(id, latitude, longitude) {
+    const chave = latitude.toFixed(5) + "," +
+                  longitude.toFixed(5);
+
+    // Evita consultas repetidas para a mesma posição
+    if (consultas[id] === chave) return;
+
+    consultas[id] = chave;
+    enderecos[id] = "Consultando rua ou localidade...";
+    atualizarPopup(id);
+
+    const url =
+      "https://nominatim.openstreetmap.org/reverse" +
+      "?format=jsonv2" +
+      "&lat=" + encodeURIComponent(latitude) +
+      "&lon=" + encodeURIComponent(longitude) +
+      "&zoom=18&addressdetails=1" +
+      "&accept-language=pt-BR";
+
+    try {
+      const resposta = await fetch(url, {
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Consulta indisponível");
+      }
+
+      const dados = await resposta.json();
+
+      // Descarta resultado antigo se o boi se moveu
+      if (consultas[id] !== chave) return;
+
+      enderecos[id] = nomeLocal(dados);
+      atualizarPopup(id);
+
+    } catch (erro) {
+      if (consultas[id] !== chave) return;
+
+      enderecos[id] =
+        "Rua não identificada. Consulte a posição no mapa.";
+
+      atualizarPopup(id);
+      console.warn("Endereço indisponível:", erro);
+    }
+  }
+
   // CENTRALIZA E APROXIMA O BOI
   function mostrarLocalizacao(marcador) {
-    const posicao = marcador.getLatLng();
-
-    map.flyTo(posicao, 18, {
+    map.flyTo(marcador.getLatLng(), 19, {
       animate: true,
       duration: 1.2
     });
@@ -180,28 +325,27 @@
     marcador.openPopup();
   }
 
-  // ATUALIZA A POSIÇÃO DO BOI
+  // ATUALIZA POSIÇÃO E PRECISÃO
   function atualizarBoi(id, dados) {
+    if (
+      dados.latitude == null ||
+      dados.longitude == null
+    ) return;
+
     const latitude = Number(dados.latitude);
     const longitude = Number(dados.longitude);
 
     if (
-      dados.latitude == null ||
-      dados.longitude == null ||
       !Number.isFinite(latitude) ||
       !Number.isFinite(longitude) ||
       Math.abs(latitude) > 90 ||
       Math.abs(longitude) > 180
-    ) {
-      return;
-    }
+    ) return;
 
     const posicao = [latitude, longitude];
-    const cadastro = bois[id];
-
-    let status = "Última localização registrada";
 
     const atualizadoEm = Number(dados.atualizadoEm);
+    let status = "🟠 Última localização registrada";
 
     if (
       Number.isFinite(atualizadoEm) &&
@@ -215,47 +359,78 @@
 
       if (idade >= 0 && idade <= 120000) {
         status = "🟢 Localização recente";
-      } else {
-        status = "🟠 Última localização registrada";
       }
     }
-
-    const conteudo = `
-      <div class="popup">
-        <strong>🐂 ${cadastro.nome}</strong>
-        <div>Responsável: ${cadastro.responsavel}</div>
-        <div>${status}</div>
-      </div>
-    `;
 
     if (!marcadores[id]) {
       const marcador = L.marker(posicao, {
         icon: iconeBoi
       }).addTo(map);
 
-      marcador.bindPopup(conteudo);
+      marcador.bindPopup("");
 
       marcador.on("click", function() {
         mostrarLocalizacao(marcador);
+        consultarEndereco(id, latitudeAtual(id), longitudeAtual(id));
       });
 
       marcadores[id] = marcador;
+
     } else {
       marcadores[id].setLatLng(posicao);
-      marcadores[id].setPopupContent(conteudo);
     }
 
-    mensagem.textContent =
-      "Toque no boi para aproximar sua localização.";
+    marcadores[id].statusGPS = status;
 
-    // MOSTRA A PRIMEIRA LOCALIZAÇÃO RECEBIDA
+    // LÊ A PRECISÃO INFORMADA PELO GPS
+    const precisaoBruta =
+      dados.precisao ?? dados.accuracy;
+
+    const precisao = Number(precisaoBruta);
+
+    if (
+      precisaoBruta != null &&
+      Number.isFinite(precisao) &&
+      precisao > 0
+    ) {
+      if (!circulos[id]) {
+        circulos[id] = L.circle(posicao, {
+          radius: precisao,
+          color: "#1767bf",
+          fillColor: "#1767bf",
+          fillOpacity: 0.12,
+          weight: 2,
+          interactive: false
+        }).addTo(map);
+      } else {
+        circulos[id].setLatLng(posicao);
+        circulos[id].setRadius(precisao);
+      }
+    } else if (circulos[id]) {
+      map.removeLayer(circulos[id]);
+      delete circulos[id];
+    }
+
+    atualizarPopup(id);
+
+    mensagem.textContent =
+      "Toque no boi para ver a rua e a localização.";
+
     if (primeiraLocalizacao) {
       map.setView(posicao, 16);
       primeiraLocalizacao = false;
     }
   }
 
-  // CONEXÃO COM O FIREBASE
+  function latitudeAtual(id) {
+    return marcadores[id].getLatLng().lat;
+  }
+
+  function longitudeAtual(id) {
+    return marcadores[id].getLatLng().lng;
+  }
+
+  // RECEBE OS DADOS DO FIREBASE
   Object.keys(bois).forEach(function(id) {
     database.ref("bois/" + id).on(
       "value",
