@@ -1,9 +1,12 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
   <title>Reisado de Boa Hora - PI</title>
 
   <style>
@@ -25,26 +28,30 @@
       background: white;
     }
 
-    header {
-      background: linear-gradient(135deg, #0b3974, #1262b8);
+    .topo {
+      background: linear-gradient(
+        135deg,
+        #0b3974,
+        #1262b8
+      );
       color: white;
       text-align: center;
       padding: 45px 20px;
     }
 
-    header h1 {
+    .topo h1 {
       font-size: 43px;
       margin: 0;
       letter-spacing: 2px;
     }
 
-    header h2 {
+    .topo h2 {
       font-size: 24px;
       font-weight: normal;
       margin: 10px 0;
     }
 
-    header p {
+    .topo p {
       margin: 12px 0 0;
       font-size: 16px;
     }
@@ -69,14 +76,27 @@
       color: white;
       text-decoration: none;
       box-shadow: 0 8px 18px rgba(0,0,0,0.17);
+      transition: transform 0.2s;
     }
 
-    .localizar {
-      background: linear-gradient(135deg, #0b3974, #1262b8);
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .monitoramento {
+      background: linear-gradient(
+        135deg,
+        #0b3974,
+        #1262b8
+      );
     }
 
     .agenda {
-      background: linear-gradient(135deg, #b40d18, #dc2932);
+      background: linear-gradient(
+        135deg,
+        #b40d18,
+        #dc2932
+      );
     }
 
     .icone {
@@ -92,7 +112,7 @@
     }
 
     .card h2 {
-      font-size: 26px;
+      font-size: 25px;
       margin: 0 0 8px;
     }
 
@@ -110,7 +130,7 @@
     }
 
     @media (max-width: 600px) {
-      header h1 {
+      .topo h1 {
         font-size: 36px;
       }
 
@@ -136,7 +156,7 @@
 
   <div class="container">
 
-    <header>
+    <header class="topo">
       <h1>REISADO</h1>
       <h2>Boa Hora - Piauí</h2>
       <p>Cultura • Fé • Tradição</p>
@@ -148,22 +168,36 @@
         O que você deseja acessar?
       </h2>
 
-      <a href="./localizar.html" class="card localizar">
+      <!-- CARD MONITORAMENTO -->
+      <a href="./mapa.html"
+         class="card monitoramento">
+
         <div class="icone">📍</div>
 
         <div>
-          <h2>Localizar Reisado</h2>
-          <p>Veja onde o Reisado está agora.</p>
+          <h2>Monitoramento dos Bois</h2>
+          <p>
+            Acompanhe a localização dos bois
+            em tempo real no mapa.
+          </p>
         </div>
+
       </a>
 
-      <a href="./agenda.html" class="card agenda">
+      <!-- CARD AGENDA -->
+      <a href="./agenda.html"
+         class="card agenda">
+
         <div class="icone">📅</div>
 
         <div>
-          <h2>Agenda do Reisado</h2>
-          <p>Veja datas, locais e horários das apresentações.</p>
+          <h2>Agenda dos Bois</h2>
+          <p>
+            Consulte as datas, horários e locais
+            das apresentações de cada boi.
+          </p>
         </div>
+
       </a>
 
     </main>
