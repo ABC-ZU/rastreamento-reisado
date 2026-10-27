@@ -4,286 +4,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mapa dos Bois - Reisado de Boa Hora</title>
+
+<title>Mapa do Reisado - Boa Hora PI</title>
 
 <link rel="stylesheet"
- href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-body {
+html, body {
   margin: 0;
-  background: #f2f5fa;
+  padding: 0;
+  width: 100%;
+  height: 100%;
   font-family: Arial, sans-serif;
-  color: #253348;
 }
 
-header {
-  background: #104b91;
-  color: white;
-  text-align: center;
-  padding: 20px 12px;
-  border-bottom: 5px solid #c52228;
+#mapa {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
 }
 
-header img {
-  width: 105px;
-  height: 105px;
+.marcador-boi {
+  background: transparent;
+  border: none;
+}
+
+.icone-boi {
+  width: 52px;
+  height: 52px;
+  background: #fff;
+  border: 4px solid #d4a000;
+  border-radius: 50%;
+  box-shadow: 0 3px 10px #0005;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.icone-boi img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
-header h1 {
-  margin: 8px 0;
-  font-size: 25px;
+.icone-boi.real {
+  border-color: #d62828;
 }
 
-header p { margin: 0; }
-
-.container {
-  max-width: 950px;
-  margin: auto;
-  padding: 15px;
-}
-
-.painel {
+.nome-boi {
   background: white;
-  border-radius: 14px;
-  padding: 17px;
-  margin-bottom: 15px;
-  box-shadow: 0 3px 12px #0001;
-}
-
-h2 {
-  color: #104b91;
-  margin-top: 0;
-}
-
-select {
-  width: 100%;
-  padding: 14px;
-  font-size: 17px;
-  border-radius: 10px;
-  border: 1px solid #bac6d5;
-}
-
-button, .botao {
-  display: inline-block;
-  padding: 12px 15px;
-  background: #104b91;
-  color: white;
-  border: none;
-  border-radius: 9px;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-}
-
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-}
-
-.vermelho { background: #c52228; }
-.verde { background: #198754; }
-
-.botoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 13px;
-}
-
-#map {
-  height: 62vh;
-  min-height: 390px;
-  width: 100%;
-  border-radius: 12px;
-  z-index: 1;
-}
-
-.aviso {
-  background: #fff6df;
-  border-radius: 9px;
-  padding: 12px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-#detalhes {
-  line-height: 1.7;
-  font-size: 15px;
-}
-
-#detalhes h3 {
-  color: #104b91;
-  margin-bottom: 7px;
-}
-
-.lista {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit, minmax(230px, 1fr)
-  );
-  gap: 12px;
-}
-
-.ficha {
-  background: #f5f8fc;
-  border: 1px solid #dce4ef;
-  border-left: 4px solid #104b91;
-  border-radius: 10px;
-  padding: 14px;
-}
-
-.ficha h3 {
-  margin: 0 0 8px;
-  color: #104b91;
-}
-
-.ficha p {
-  margin: 7px 0;
-  font-size: 14px;
-}
-
-.ficha button {
-  width: 100%;
-  margin-top: 8px;
-}
-
-.boi-icon {
-  width: 56px;
-  height: 56px;
-  background: white;
-  border: 3px solid #c52228;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 3px 10px #0005;
-}
-
-.boi-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.boi-demo {
-  border-color: #d49b00;
-  background: #fff3b0;
-}
-
-.nome-mapa {
-  background: white;
+  color: #173b66;
   border: 1px solid #aaa;
   border-radius: 7px;
-  padding: 3px 7px;
-  font-weight: bold;
+  padding: 4px 7px;
   font-size: 12px;
+  font-weight: bold;
   white-space: nowrap;
 }
 
-.popup {
-  line-height: 1.6;
-  min-width: 190px;
+.leaflet-popup-content {
+  font-family: Arial, sans-serif;
+  min-width: 205px;
+  line-height: 1.5;
 }
 
-.popup strong {
+.popup-titulo {
+  font-size: 19px;
   color: #104b91;
-  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-.rodape {
-  text-align: center;
-  color: #666;
-  padding: 15px;
+.popup-info {
+  font-size: 14px;
+  margin: 7px 0;
+}
+
+.popup-status {
+  padding: 9px;
+  border-radius: 7px;
+  background: #f1f4f8;
+  margin: 10px 0;
   font-size: 13px;
 }
 
-@media(max-width:600px) {
-  header h1 { font-size: 22px; }
-  #map { height: 55vh; }
+.popup-rota {
+  display: block;
+  text-align: center;
+  background: #198754;
+  color: white !important;
+  text-decoration: none;
+  padding: 11px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.aviso-mapa {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+  background: #fff;
+  padding: 9px 12px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px #0003;
+  font-size: 12px;
+  text-align: center;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .icone-boi {
+    width: 46px;
+    height: 46px;
+  }
+
+  .aviso-mapa {
+    bottom: 10px;
+    font-size: 11px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <img src="./ícone-boi-reisado-logo.png"
-       alt="Logo do Reisado">
+<div id="mapa"></div>
 
-  <h1>🐂 Reisado Digital</h1>
-  <p>Localize seu boi favorito - Boa Hora, PI</p>
-</header>
-
-<div class="container">
-
-  <section class="painel">
-    <h2>📍 Qual boi você deseja encontrar?</h2>
-
-    <select id="escolherBoi">
-      <option value="">Escolha seu boi</option>
-    </select>
-
-    <div class="botoes">
-      <button id="verTodos">
-        🗺️ Ver todos os bois
-      </button>
-    </div>
-
-    <p class="aviso">
-      🔴 Vermelho: posição recebida pelo GPS.
-      🟡 Amarelo: posição fictícia de demonstração.
-      Um GPS antigo não representa a localização atual.
-    </p>
-  </section>
-
-  <section class="painel">
-    <div id="map"></div>
-  </section>
-
-  <section class="painel">
-    <h2>🐂 Boi selecionado</h2>
-    <div id="detalhes">
-      Escolha um boi na lista acima ou abaixo.
-    </div>
-  </section>
-
-  <section class="painel">
-    <h2>🐂 Bois do Reisado</h2>
-    <p>
-      Escolha um boi para consultar sua localização.
-    </p>
-    <div id="listaBois" class="lista">
-      Carregando bois...
-    </div>
-  </section>
-
-  <section class="painel">
-    <div class="botoes">
-      <a class="botao verde" href="./inicio.html">
-        🏠 Início
-      </a>
-      <a class="botao vermelho" href="./agenda.html">
-        📅 Agenda dos Bois
-      </a>
-    </div>
-  </section>
-
-</div>
-
-<div class="rodape">
-  Reisado Digital de Boa Hora - Piauí
+<div class="aviso-mapa" id="aviso">
+  Toque no ícone do boi para ver sua localização.
+  🔴 GPS | 🟡 Demonstração
 </div>
 
 <script>
+// ====================================
 // FIREBASE
+// ====================================
+
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
   authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -295,13 +165,16 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
 
-const $ = id => document.getElementById(id);
+const database = firebase.database();
 
+// ====================================
 // MAPA
-const mapa = L.map("map").setView(
-  [-4.3074, -42.0363], 14
+// ====================================
+
+const mapa = L.map("mapa").setView(
+  [-4.3074, -42.0363],
+  14
 );
 
 L.tileLayer(
@@ -312,48 +185,30 @@ L.tileLayer(
   }
 ).addTo(mapa);
 
-// ÍCONES
-const imagemBoi = "./icone-boi-reisado.png";
+// ====================================
+// ÍCONES DOS BOIS
+// ====================================
 
-function criarIcone(demo) {
+function iconeBoi(real) {
   return L.divIcon({
-    className: "",
+    className: "marcador-boi",
     html:
-      '<div class="boi-icon ' +
-      (demo ? "boi-demo" : "") +
+      '<div class="icone-boi ' +
+      (real ? "real" : "") +
       '">' +
-      '<img src="' + imagemBoi + '" alt="Boi">' +
+      '<img src="./icone-boi-reisado.png" alt="Boi">' +
       '</div>',
-    iconSize: [56, 56],
-    iconAnchor: [28, 28],
-    popupAnchor: [0, -28]
+    iconSize: [52, 52],
+    iconAnchor: [26, 26],
+    popupAnchor: [0, -25]
   });
 }
 
-const iconeReal = criarIcone(false);
-const iconeDemo = criarIcone(true);
+// ====================================
+// BOIS ORIGINAIS
+// ====================================
 
-function escaparHTML(valor) {
-  return String(valor ?? "").replace(
-    /[&<>"']/g,
-    c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    }[c])
-  );
-}
-
-function normalizar(texto) {
-  return String(texto || "")
-    .trim()
-    .toLocaleLowerCase("pt-BR");
-}
-
-// BOIS ORIGINAIS E SUAS POSIÇÕES DE TESTE
-const originais = [
+const boisOriginais = [
   {
     nome: "Boi Estrela",
     dono: "Fábio Silva",
@@ -411,84 +266,100 @@ const originais = [
   }
 ];
 
-// ESTADO DO SISTEMA
+// ====================================
+// VARIÁVEIS
+// ====================================
+
 let cadastros = [];
 let localizacoes = {};
-let bois = [];
-let selecionado = "";
+let boisAtuais = [];
 
 const marcadores = new Map();
-const circulos = new Map();
 
-let erroCadastros = false;
-let erroGPS = false;
-
-// IDENTIDADE ESTÁVEL DOS BOIS
-function chaveOriginal(nome) {
-  return "original:" + normalizar(nome);
+function normalizar(texto) {
+  return String(texto || "")
+    .trim()
+    .toLocaleLowerCase("pt-BR");
 }
 
-function encontrarCadastro(original) {
-  return cadastros.find(c =>
-    normalizar(c.nomeOriginal) ===
-    normalizar(original.nome)
-  ) || cadastros.find(c =>
-    !c.nomeOriginal &&
-    normalizar(c.nome) ===
-    normalizar(original.nome)
+function escapar(texto) {
+  return String(texto ?? "").replace(
+    /[&<>"']/g,
+    caractere => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[caractere])
   );
 }
 
-// MONTAR TODOS OS BOIS
+// ====================================
+// JUNTAR CADASTROS COM BOIS ORIGINAIS
+// ====================================
+
 function montarBois() {
   const usados = new Set();
   const resultado = [];
 
-  originais.forEach(original => {
-    const cadastro = encontrarCadastro(original);
+  boisOriginais.forEach(original => {
+    const cadastro = cadastros.find(c =>
+      normalizar(c.nomeOriginal) ===
+      normalizar(original.nome)
+    ) || cadastros.find(c =>
+      !c.nomeOriginal &&
+      normalizar(c.nome) ===
+      normalizar(original.nome)
+    );
 
-    if (cadastro) usados.add(cadastro.id);
+    if (cadastro) {
+      usados.add(cadastro.id);
+    }
 
     resultado.push({
-      chave: chaveOriginal(original.nome),
+      chave: "original:" + normalizar(original.nome),
       nome: cadastro?.nome || original.nome,
       dono: cadastro?.dono ||
         original.dono || "A definir",
-      cadastroId: cadastro?.id || null,
       gpsId: original.gpsId ||
         cadastro?.id || null,
-      demoLat: original.lat,
-      demoLng: original.lng
+      cadastroId: cadastro?.id || null,
+      lat: original.lat,
+      lng: original.lng
     });
   });
 
-  // NOVOS BOIS CADASTRADOS NO ADMIN
-  cadastros.forEach(c => {
-    if (usados.has(c.id)) return;
+  // NOVOS BOIS CADASTRADOS
+  cadastros.forEach(cadastro => {
+    if (usados.has(cadastro.id)) {
+      return;
+    }
 
     resultado.push({
-      chave: "cadastro:" + c.id,
-      nome: c.nome,
-      dono: c.dono,
-      cadastroId: c.id,
-      gpsId: c.id,
-      demoLat: null,
-      demoLng: null
+      chave: "cadastro:" + cadastro.id,
+      nome: cadastro.nome,
+      dono: cadastro.dono,
+      gpsId: cadastro.id,
+      cadastroId: cadastro.id,
+      lat: null,
+      lng: null
     });
   });
 
-  resultado.sort((a, b) =>
-    a.nome.localeCompare(b.nome, "pt-BR")
-  );
-
-  bois = resultado;
+  boisAtuais = resultado;
 }
 
-// VALIDAR COORDENADAS
+// ====================================
+// VALIDAR LOCALIZAÇÃO
+// ====================================
+
 function coordenadasValidas(dados) {
-  if (!dados ||
-      dados.latitude == null ||
-      dados.longitude == null) {
+  if (
+    !dados ||
+    dados.latitude == null ||
+    dados.longitude == null
+  ) {
     return false;
   }
 
@@ -501,81 +372,36 @@ function coordenadasValidas(dados) {
     Math.abs(lng) <= 180;
 }
 
-// LOCALIZAÇÃO GPS DE CADA BOI
-function obterGPS(boi) {
-  if (!boi.gpsId) return null;
+function localizarBoi(boi) {
+  // Primeiro verifica o GPS pelo ID
+  // do cadastro e depois pelo ID legado.
+  const ids = [
+    boi.cadastroId,
+    boi.gpsId
+  ].filter(Boolean);
 
-  const dados = localizacoes[boi.gpsId];
+  for (const id of ids) {
+    const dados = localizacoes[id];
 
-  if (!coordenadasValidas(dados)) {
-    return null;
+    if (coordenadasValidas(dados)) {
+      return {
+        latitude: Number(dados.latitude),
+        longitude: Number(dados.longitude),
+        real: true,
+        dados
+      };
+    }
   }
 
-  return dados;
-}
-
-// VERIFICAR IDADE DO GPS
-function situacaoGPS(dados) {
-  if (!dados) return "sem-gps";
-
-  const valor = Number(dados.atualizadoEm);
-
-  if (!Number.isFinite(valor) || valor <= 0) {
-    return "antigo";
-  }
-
-  const horario = valor < 1e11
-    ? valor * 1000
-    : valor;
-
-  const idade = Date.now() - horario;
-
-  if (idade >= 0 && idade <= 120000) {
-    return "recente";
-  }
-
-  return "antigo";
-}
-
-function horarioGPS(dados) {
-  if (!dados) return "Não informado";
-
-  const valor = Number(dados.atualizadoEm);
-
-  if (!Number.isFinite(valor) || valor <= 0) {
-    return "Não informado";
-  }
-
-  const horario = valor < 1e11
-    ? valor * 1000
-    : valor;
-
-  return new Date(horario).toLocaleString(
-    "pt-BR"
-  );
-}
-
-// POSIÇÃO A EXIBIR
-function posicaoDoBoi(boi) {
-  const gps = obterGPS(boi);
-
-  if (gps) {
-    return {
-      lat: Number(gps.latitude),
-      lng: Number(gps.longitude),
-      tipo: "gps",
-      dados: gps
-    };
-  }
-
+  // Posição fictícia dos bois originais
   if (
-    Number.isFinite(boi.demoLat) &&
-    Number.isFinite(boi.demoLng)
+    Number.isFinite(boi.lat) &&
+    Number.isFinite(boi.lng)
   ) {
     return {
-      lat: boi.demoLat,
-      lng: boi.demoLng,
-      tipo: "demo",
+      latitude: boi.lat,
+      longitude: boi.lng,
+      real: false,
       dados: null
     };
   }
@@ -583,408 +409,212 @@ function posicaoDoBoi(boi) {
   return null;
 }
 
-// DESCRIÇÃO DO STATUS
-function textoStatus(posicao) {
-  if (!posicao) {
-    return "⚪ Sem localização disponível";
+// ====================================
+// STATUS DO GPS
+// ====================================
+
+function tempoAtualizacao(dados) {
+  const valor = Number(dados?.atualizadoEm);
+
+  if (!Number.isFinite(valor) || valor <= 0) {
+    return null;
   }
 
-  if (posicao.tipo === "demo") {
-    return "🟡 Localização fictícia de demonstração";
-  }
-
-  if (situacaoGPS(posicao.dados) === "recente") {
-    return "🟢 GPS atualizado recentemente";
-  }
-
-  return "🟠 Última localização conhecida (desatualizada)";
+  return valor < 1e11
+    ? valor * 1000
+    : valor;
 }
 
-// ROTA PELO GOOGLE MAPS
-function urlRota(posicao) {
-  return "https://www.google.com/maps/dir/?api=1" +
-    "&destination=" +
-    encodeURIComponent(
-      posicao.lat + "," + posicao.lng
-    );
+function gpsRecente(dados) {
+  const tempo = tempoAtualizacao(dados);
+
+  if (!tempo) return false;
+
+  const diferenca = Date.now() - tempo;
+
+  return diferenca >= 0 &&
+    diferenca <= 120000;
 }
 
-// CONTEÚDO DO MARCADOR
-function popupBoi(boi, posicao) {
+function formatarHorario(dados) {
+  const tempo = tempoAtualizacao(dados);
+
+  if (!tempo) return "Não informado";
+
+  return new Date(tempo).toLocaleString("pt-BR");
+}
+
+// ====================================
+// POPUP DO BOI
+// ====================================
+
+function conteudoPopup(boi, posicao) {
   let html =
-    '<div class="popup">' +
-    '<strong>' + escaparHTML(boi.nome) +
-    '</strong>' +
-    '<div>👤 Responsável: ' +
-    escaparHTML(boi.dono) + '</div>' +
-    '<div>' +
-    escaparHTML(textoStatus(posicao)) +
-    '</div>';
+    '<div class="popup-titulo">🐂 ' +
+    escapar(boi.nome) +
+    '</div>' +
+    '<div class="popup-info">' +
+    '👤 Responsável: <b>' +
+    escapar(boi.dono) +
+    '</b></div>';
 
-  if (posicao?.tipo === "gps") {
+  if (!posicao) {
     html +=
-      '<div>🕒 Atualizado em: ' +
-      escaparHTML(horarioGPS(posicao.dados)) +
+      '<div class="popup-status">' +
+      '⚪ Sem localização disponível.' +
       '</div>';
 
-    if (situacaoGPS(posicao.dados) === "recente") {
-      html +=
-        '<p><a target="_blank" ' +
-        'rel="noopener noreferrer" href="' +
-        urlRota(posicao) +
-        '">🧭 Como chegar</a></p>';
-    }
+    return html;
   }
 
-  if (posicao?.tipo === "demo") {
+  if (!posicao.real) {
     html +=
-      '<div><b>Esta posição é apenas teste.</b></div>';
+      '<div class="popup-status">' +
+      '🟡 Posição de demonstração.' +
+      '<br>Este boi ainda não está ' +
+      'transmitindo GPS.' +
+      '</div>';
+
+    return html;
   }
 
-  return html + "</div>";
+  if (gpsRecente(posicao.dados)) {
+    html +=
+      '<div class="popup-status">' +
+      '🟢 Localização GPS recente.' +
+      '</div>';
+  } else {
+    html +=
+      '<div class="popup-status">' +
+      '🟠 Última localização conhecida.' +
+      '<br>GPS desatualizado.' +
+      '</div>';
+  }
+
+  html +=
+    '<div class="popup-info">' +
+    '🕒 Atualizado em: ' +
+    escapar(formatarHorario(posicao.dados)) +
+    '</div>';
+
+  const precisao =
+    posicao.dados.precisao ??
+    posicao.dados.accuracy;
+
+  if (
+    precisao != null &&
+    Number.isFinite(Number(precisao)) &&
+    Number(precisao) > 0
+  ) {
+    html +=
+      '<div class="popup-info">' +
+      '🎯 Precisão: ' +
+      Math.round(Number(precisao)) +
+      ' metros</div>';
+  }
+
+  // ROTA SOMENTE PARA GPS RECENTE
+  if (gpsRecente(posicao.dados)) {
+    const destino =
+      posicao.latitude + "," +
+      posicao.longitude;
+
+    const url =
+      "https://www.google.com/maps/dir/?api=1" +
+      "&destination=" +
+      encodeURIComponent(destino);
+
+    html +=
+      '<a class="popup-rota" ' +
+      'href="' + url + '" ' +
+      'target="_blank" ' +
+      'rel="noopener noreferrer">' +
+      '🧭 Como chegar ao boi' +
+      '</a>';
+  }
+
+  return html;
 }
 
-// ATUALIZAR MARCADORES
-function atualizarMarcadores() {
-  const chavesAtuais = new Set(
-    bois.map(b => b.chave)
+// ====================================
+// ATUALIZAR MAPA
+// ====================================
+
+function atualizarMapa() {
+  montarBois();
+
+  const chaves = new Set(
+    boisAtuais.map(boi => boi.chave)
   );
 
-  // RETIRAR MARCADORES DE CADASTROS EXCLUÍDOS
+  // REMOVER BOIS EXCLUÍDOS
   for (const [chave, marcador] of marcadores) {
-    if (!chavesAtuais.has(chave)) {
+    if (!chaves.has(chave)) {
       mapa.removeLayer(marcador);
       marcadores.delete(chave);
-
-      const circulo = circulos.get(chave);
-      if (circulo) {
-        mapa.removeLayer(circulo);
-        circulos.delete(chave);
-      }
     }
   }
 
-  bois.forEach(boi => {
-    const posicao = posicaoDoBoi(boi);
+  boisAtuais.forEach(boi => {
+    const posicao = localizarBoi(boi);
     let marcador = marcadores.get(boi.chave);
-    const circulo = circulos.get(boi.chave);
 
+    // BOI NOVO SEM GPS:
+    // não inventar coordenadas.
     if (!posicao) {
       if (marcador) {
         mapa.removeLayer(marcador);
         marcadores.delete(boi.chave);
       }
 
-      if (circulo) {
-        mapa.removeLayer(circulo);
-        circulos.delete(boi.chave);
-      }
-
       return;
     }
 
-    const coords = [posicao.lat, posicao.lng];
+    const coordenadas = [
+      posicao.latitude,
+      posicao.longitude
+    ];
 
     if (!marcador) {
-      marcador = L.marker(coords, {
-        icon: posicao.tipo === "demo"
-          ? iconeDemo : iconeReal
+      marcador = L.marker(coordenadas, {
+        icon: iconeBoi(posicao.real)
       }).addTo(mapa);
 
-      marcador.bindTooltip("", {
+      marcador.bindPopup("");
+
+      marcador.bindTooltip(boi.nome, {
         permanent: true,
         direction: "bottom",
         offset: [0, 25],
-        className: "nome-mapa"
-      });
-
-      marcador.on("click", () => {
-        escolherBoi(boi.chave);
+        className: "nome-boi"
       });
 
       marcadores.set(boi.chave, marcador);
+
     } else {
-      marcador.setLatLng(coords);
+      marcador.setLatLng(coordenadas);
       marcador.setIcon(
-        posicao.tipo === "demo"
-          ? iconeDemo : iconeReal
+        iconeBoi(posicao.real)
+      );
+
+      marcador.setTooltipContent(
+        boi.nome
       );
     }
-
-    marcador.setTooltipContent(
-      boi.nome +
-      (posicao.tipo === "demo" ? " (teste)" : "")
-    );
 
     marcador.setPopupContent(
-      popupBoi(boi, posicao)
+      conteudoPopup(boi, posicao)
     );
-
-    // CÍRCULO DE PRECISÃO DO GPS
-    const valor = posicao.dados?.precisao ??
-      posicao.dados?.accuracy;
-
-    const precisao = Number(valor);
-
-    if (
-      posicao.tipo === "gps" &&
-      valor != null &&
-      Number.isFinite(precisao) &&
-      precisao > 0 &&
-      precisao <= 10000
-    ) {
-      if (!circulo) {
-        circulos.set(
-          boi.chave,
-          L.circle(coords, {
-            radius: precisao,
-            color: "#1767bf",
-            fillOpacity: .10,
-            weight: 2,
-            interactive: false
-          }).addTo(mapa)
-        );
-      } else {
-        circulo.setLatLng(coords);
-        circulo.setRadius(precisao);
-      }
-    } else if (circulo) {
-      mapa.removeLayer(circulo);
-      circulos.delete(boi.chave);
-    }
   });
 }
 
-// MOSTRAR DETALHES DO BOI ESCOLHIDO
-function mostrarDetalhes() {
-  const caixa = $("detalhes");
-  caixa.replaceChildren();
+// ====================================
+// CADASTROS DO PAINEL ADMIN
+// ====================================
 
-  const boi = bois.find(
-    b => b.chave === selecionado
-  );
-
-  if (!boi) {
-    caixa.textContent =
-      "Escolha um boi para consultar sua localização.";
-    return;
-  }
-
-  const posicao = posicaoDoBoi(boi);
-
-  const titulo = document.createElement("h3");
-  titulo.textContent = "🐂 " + boi.nome;
-
-  const dono = document.createElement("p");
-  dono.textContent =
-    "👤 Responsável: " + boi.dono;
-
-  const status = document.createElement("p");
-  status.textContent = textoStatus(posicao);
-
-  caixa.append(titulo, dono, status);
-
-  if (posicao?.tipo === "gps") {
-    const horario = document.createElement("p");
-    horario.textContent =
-      "🕒 Última atualização: " +
-      horarioGPS(posicao.dados);
-
-    caixa.appendChild(horario);
-
-    const valor = posicao.dados.precisao ??
-      posicao.dados.accuracy;
-
-    if (
-      valor != null &&
-      Number.isFinite(Number(valor)) &&
-      Number(valor) > 0
-    ) {
-      const precisao = document.createElement("p");
-      precisao.textContent =
-        "🎯 Precisão aproximada: " +
-        Math.round(Number(valor)) + " metros";
-
-      caixa.appendChild(precisao);
-    }
-
-    if (situacaoGPS(posicao.dados) === "recente") {
-      const rota = document.createElement("a");
-      rota.className = "botao verde";
-      rota.textContent = "🧭 Como chegar até o boi";
-      rota.href = urlRota(posicao);
-      rota.target = "_blank";
-      rota.rel = "noopener noreferrer";
-
-      caixa.appendChild(rota);
-    } else {
-      const aviso = document.createElement("p");
-      aviso.textContent =
-        "A posição está desatualizada. " +
-        "Aguarde o responsável transmitir novamente.";
-      caixa.appendChild(aviso);
-    }
-  } else if (posicao?.tipo === "demo") {
-    const aviso = document.createElement("p");
-    aviso.textContent =
-      "Este marcador é fictício. " +
-      "Ainda não há GPS real disponível para este boi.";
-    caixa.appendChild(aviso);
-  } else {
-    const aviso = document.createElement("p");
-    aviso.textContent =
-      "Este boi já está cadastrado, mas ainda " +
-      "não possui coordenadas GPS disponíveis.";
-    caixa.appendChild(aviso);
-  }
-}
-
-// SELECIONAR BOI
-function escolherBoi(chave) {
-  selecionado = chave;
-  $("escolherBoi").value = chave;
-
-  mostrarDetalhes();
-
-  const boi = bois.find(b => b.chave === chave);
-  if (!boi) return;
-
-  const posicao = posicaoDoBoi(boi);
-
-  if (posicao) {
-    mapa.flyTo(
-      [posicao.lat, posicao.lng],
-      17,
-      { animate: true, duration: 1.2 }
-    );
-
-    const marcador = marcadores.get(chave);
-    if (marcador) marcador.openPopup();
-  }
-
-  $("detalhes").scrollIntoView({
-    behavior: "smooth",
-    block: "nearest"
-  });
-}
-
-$("escolherBoi").onchange = function() {
-  if (this.value) {
-    escolherBoi(this.value);
-  } else {
-    selecionado = "";
-    mostrarDetalhes();
-  }
-};
-
-// VER TODOS OS BOIS
-$("verTodos").onclick = function() {
-  selecionado = "";
-  $("escolherBoi").value = "";
-  mostrarDetalhes();
-
-  const pontos = Array.from(
-    marcadores.values()
-  ).map(m => m.getLatLng());
-
-  if (pontos.length) {
-    mapa.fitBounds(
-      L.latLngBounds(pontos),
-      { padding: [40, 40], maxZoom: 15 }
-    );
-  } else {
-    mapa.setView([-4.3074, -42.0363], 14);
-  }
-};
-
-// LISTA DOS BOIS
-function renderizarLista() {
-  const lista = $("listaBois");
-  lista.replaceChildren();
-
-  const select = $("escolherBoi");
-  select.replaceChildren();
-
-  select.add(
-    new Option("Escolha seu boi", "")
-  );
-
-  bois.forEach(boi => {
-    select.add(
-      new Option(boi.nome, boi.chave)
-    );
-
-    const posicao = posicaoDoBoi(boi);
-
-    const card = document.createElement("div");
-    card.className = "ficha";
-
-    const titulo = document.createElement("h3");
-    titulo.textContent = "🐂 " + boi.nome;
-
-    const dono = document.createElement("p");
-    dono.textContent =
-      "👤 " + boi.dono;
-
-    const status = document.createElement("p");
-    status.textContent = textoStatus(posicao);
-
-    const botao = document.createElement("button");
-    botao.textContent = posicao
-      ? "📍 Ver no mapa"
-      : "🐂 Consultar boi";
-
-    botao.onclick = () => {
-      escolherBoi(boi.chave);
-    };
-
-    card.append(titulo, dono, status, botao);
-    lista.appendChild(card);
-  });
-
-  select.value = selecionado;
-}
-
-// ATUALIZAR INTERFACE
-function atualizarTudo() {
-  montarBois();
-  atualizarMarcadores();
-  renderizarLista();
-  mostrarDetalhes();
-
-  // ACOMPANHAR BOI SELECIONADO
-  if (selecionado) {
-    const boi = bois.find(
-      b => b.chave === selecionado
-    );
-
-    const posicao = boi && posicaoDoBoi(boi);
-
-    if (posicao?.tipo === "gps") {
-      const centro = mapa.getCenter();
-
-      const distancia = mapa.distance(
-        centro,
-        [posicao.lat, posicao.lng]
-      );
-
-      // RECENTRALIZA SOMENTE SE O BOI
-      // SE AFASTAR DO CENTRO DO MAPA
-      if (distancia > 200) {
-        mapa.panTo([
-          posicao.lat,
-          posicao.lng
-        ]);
-      }
-    }
-  }
-}
-
-// CADASTROS DO ADMINISTRADOR
-db.ref("cadastroBois").on(
+database.ref("cadastroBois").on(
   "value",
   snapshot => {
-    erroCadastros = false;
     cadastros = [];
 
     snapshot.forEach(item => {
@@ -1008,62 +638,48 @@ db.ref("cadastroBois").on(
       }
     });
 
-    atualizarTudo();
+    atualizarMapa();
   },
   erro => {
-    erroCadastros = true;
     console.error(
       "Erro ao carregar cadastros:",
       erro
     );
 
-    $("listaBois").textContent =
-      "Não foi possível carregar os cadastros. " +
-      "Verifique as permissões de leitura do Firebase.";
+    document.getElementById("aviso").textContent =
+      "Não foi possível consultar os cadastros.";
   }
 );
 
-// COORDENADAS GPS EM TEMPO REAL
-db.ref("bois").on(
+// ====================================
+// GPS DOS BOIS EM TEMPO REAL
+// ====================================
+
+database.ref("bois").on(
   "value",
   snapshot => {
-    erroGPS = false;
     localizacoes = snapshot.val() || {};
-
-    atualizarTudo();
+    atualizarMapa();
   },
   erro => {
-    erroGPS = true;
     console.error(
       "Erro ao carregar GPS:",
       erro
     );
 
-    // NÃO INVENTAR POSIÇÕES REAIS
     localizacoes = {};
-    atualizarTudo();
+    atualizarMapa();
 
-    const aviso = document.createElement("p");
-    aviso.className = "aviso";
-    aviso.textContent =
-      "Não foi possível consultar as " +
-      "localizações GPS no Firebase.";
-
-    $("detalhes").appendChild(aviso);
+    document.getElementById("aviso").textContent =
+      "GPS indisponível. Verifique a conexão.";
   }
 );
 
-// ATUALIZAR STATUS DO HORÁRIO PERIODICAMENTE
-setInterval(() => {
-  if (!erroCadastros) {
-    atualizarMarcadores();
-    renderizarLista();
-    mostrarDetalhes();
-  }
-}, 30000);
+// ATUALIZAR INDICAÇÃO DE GPS ANTIGO
+setInterval(atualizarMapa, 30000);
 
-// EXIBIR BOIS ORIGINAIS AO ABRIR
-atualizarTudo();
+// MOSTRAR BOIS INICIAIS
+atualizarMapa();
 
 </script>
 </body>
