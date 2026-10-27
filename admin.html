@@ -74,7 +74,12 @@ button {
 }
 
 button:disabled { opacity: .6; }
-.botao-grande { width: 100%; margin-top: 12px; }
+
+.botao-grande {
+  width: 100%;
+  margin-top: 12px;
+}
+
 .vermelho { background: #c52931; }
 .cinza { background: #687587; }
 .oculto { display: none !important; }
@@ -98,6 +103,7 @@ button:disabled { opacity: .6; }
 
 .item h3 { margin: 0 0 8px; }
 .item p { margin: 7px 0; line-height: 1.5; }
+.botoes { flex-wrap: wrap; }
 .botoes button { flex: 1; margin-top: 10px; }
 
 .aviso {
@@ -129,7 +135,10 @@ button:disabled { opacity: .6; }
 
 @media(max-width: 480px) {
   .caixa { padding: 15px; }
-  .abas button { font-size: 13px; padding: 11px 6px; }
+  .abas button {
+    font-size: 13px;
+    padding: 11px 6px;
+  }
 }
 </style>
 </head>
@@ -141,11 +150,11 @@ button:disabled { opacity: .6; }
     src="./ícone-boi-reisado-logo.png"
     alt="Logo Reisado de Boa Hora"
     style="
-      width: 110px;
-      height: 110px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 12px;
+      width:110px;
+      height:110px;
+      object-fit:contain;
+      display:block;
+      margin:0 auto 12px;
     "
   >
   <h1>Administração do Reisado</h1>
@@ -206,12 +215,36 @@ button:disabled { opacity: .6; }
         <label>Nome do dono ou responsável</label>
         <input id="donoBoi" maxlength="100" required>
 
-        <button id="salvarBoi"
-          class="botao-grande" type="submit">
+        <label>Telefone do responsável (WhatsApp)</label>
+        <input
+          id="telefoneBoi"
+          type="tel"
+          maxlength="20"
+          placeholder="(86) 99999-9999"
+        >
+
+        <label>Comunidade ou localidade</label>
+        <input
+          id="comunidadeBoi"
+          maxlength="150"
+          placeholder="Ex.: Centro, comunidade rural"
+        >
+
+        <div class="aviso" style="margin-top:14px">
+          A autorização do GPS é controlada pelo
+          administrador. O cadastro não inicia
+          o rastreamento automaticamente.
+        </div>
+
+        <button
+          id="salvarBoi"
+          class="botao-grande"
+          type="submit">
           Salvar boi
         </button>
 
-        <button id="cancelarBoi"
+        <button
+          id="cancelarBoi"
           class="cinza botao-grande oculto"
           type="button">
           Cancelar edição
@@ -226,13 +259,20 @@ button:disabled { opacity: .6; }
 
       <div class="aviso">
         Os 11 bois anteriores são reaproveitados.
-        Clique em Editar para informar ou alterar
-        o nome e o dono. As alterações serão
-        salvas no Firebase.
+        Clique em Editar para atualizar o cadastro.
+        Depois de salvar, será possível autorizar
+        ou revogar a autorização administrativa
+        para transmissão de GPS.
       </div>
+
+      <p class="aviso">
+        Os telefones são dados pessoais e não
+        devem aparecer no mapa público.
+      </p>
 
       <div id="listaBois">Carregando...</div>
     </div>
+
   </section>
 
   <!-- AGENDA -->
@@ -244,29 +284,42 @@ button:disabled { opacity: .6; }
       </h2>
 
       <form id="formAgenda">
+
         <label>Selecione o boi</label>
         <select id="boiApresentacao" required>
           <option value="">Escolha um boi</option>
         </select>
 
         <label>Data</label>
-        <input id="dataApresentacao"
-          type="date" required>
+        <input
+          id="dataApresentacao"
+          type="date"
+          required
+        >
 
         <label>Horário</label>
-        <input id="horaApresentacao"
-          type="time" required>
+        <input
+          id="horaApresentacao"
+          type="time"
+          required
+        >
 
         <label>Comunidade ou local</label>
-        <input id="comunidadeApresentacao"
-          maxlength="150" required>
+        <input
+          id="comunidadeApresentacao"
+          maxlength="150"
+          required
+        >
 
-        <button id="salvarAgenda"
-          class="botao-grande" type="submit">
+        <button
+          id="salvarAgenda"
+          class="botao-grande"
+          type="submit">
           Salvar apresentação
         </button>
 
-        <button id="cancelarAgenda"
+        <button
+          id="cancelarAgenda"
           class="cinza botao-grande oculto"
           type="button">
           Cancelar edição
@@ -280,6 +333,7 @@ button:disabled { opacity: .6; }
       <h2>Apresentações cadastradas</h2>
       <div id="listaAgenda">Carregando...</div>
     </div>
+
   </section>
 
 </section>
@@ -294,7 +348,7 @@ button:disabled { opacity: .6; }
 
 <script>
 
-// FIREBASE
+// CONFIGURAÇÃO FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
   authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -313,7 +367,7 @@ const db = firebase.database();
 const boisRef = db.ref("cadastroBois");
 const agendasRef = db.ref("agendas");
 
-// BOIS QUE JÁ EXISTIAM NO MAPA
+// BOIS ORIGINAIS
 const nomesIniciais = [
   "Boi Estrela",
   "Boi Caridade",
@@ -436,7 +490,7 @@ auth.onAuthStateChanged(function(usuario) {
   }
 });
 
-// RECEBE CADASTROS DO FIREBASE
+// RECEBER CADASTROS
 function receberBois(snapshot) {
   cadastros = [];
 
@@ -448,6 +502,9 @@ function receberBois(snapshot) {
         id: item.key,
         nome: String(d.nome),
         dono: String(d.dono || "A definir"),
+        telefone: String(d.telefone || ""),
+        comunidade: String(d.comunidade || ""),
+        gpsAutorizado: d.gpsAutorizado === true,
         nomeOriginal: String(d.nomeOriginal || "")
       });
     }
@@ -458,14 +515,13 @@ function receberBois(snapshot) {
   atualizarSelectBois();
 }
 
-// REAPROVEITA OS 11 BOIS ANTIGOS
+// REAPROVEITAR BOIS ORIGINAIS
 function montarListaBois() {
   boisExibidos = [];
 
   const usados = new Set();
 
   nomesIniciais.forEach(nomeAntigo => {
-
     const cadastro = cadastros.find(c =>
       normalizar(c.nomeOriginal) ===
         normalizar(nomeAntigo) ||
@@ -490,13 +546,15 @@ function montarListaBois() {
         dono: nomeAntigo === "Boi Estrela"
           ? "Fábio Silva"
           : "A definir",
+        telefone: "",
+        comunidade: "",
+        gpsAutorizado: false,
         origem: nomeAntigo,
         antigo: true
       });
     }
   });
 
-  // BOIS NOVOS CADASTRADOS PELO PAINEL
   cadastros.forEach(c => {
     if (!usados.has(c.id)) {
       boisExibidos.push({
@@ -512,13 +570,12 @@ function montarListaBois() {
   );
 }
 
-// MOSTRAR OS BOIS
+// MOSTRAR BOIS
 function renderizarBois() {
   const lista = $("listaBois");
   lista.replaceChildren();
 
   boisExibidos.forEach(boi => {
-
     const card = document.createElement("div");
     card.className = "item";
 
@@ -528,6 +585,20 @@ function renderizarBois() {
     const dono = document.createElement("p");
     dono.textContent =
       "👤 Dono/Responsável: " + boi.dono;
+
+    const telefone = document.createElement("p");
+    telefone.textContent =
+      "📱 Telefone: " + (boi.telefone || "Não informado");
+
+    const comunidade = document.createElement("p");
+    comunidade.textContent =
+      "🏘️ Comunidade: " +
+      (boi.comunidade || "Não informada");
+
+    const autorizacao = document.createElement("p");
+    autorizacao.textContent = boi.gpsAutorizado
+      ? "✅ GPS: cadastro autorizado"
+      : "⏳ GPS: autorização pendente";
 
     const status = document.createElement("p");
     status.textContent = boi.antigo
@@ -543,8 +614,24 @@ function renderizarBois() {
 
     botoes.appendChild(editar);
 
-    // Excluir apenas cadastros novos,
-    // sem apagar os 11 bois originais.
+    if (!boi.antigo) {
+      const autorizar = document.createElement("button");
+
+      autorizar.textContent = boi.gpsAutorizado
+        ? "🔒 Revogar autorização"
+        : "✅ Autorizar GPS";
+
+      if (boi.gpsAutorizado) {
+        autorizar.className = "cinza";
+      }
+
+      autorizar.onclick = () =>
+        alterarAutorizacaoGPS(boi);
+
+      botoes.appendChild(autorizar);
+    }
+
+    // EXCLUIR APENAS BOIS NOVOS
     if (
       !boi.antigo &&
       !nomesIniciais.some(n =>
@@ -555,12 +642,51 @@ function renderizarBois() {
       excluir.className = "vermelho";
       excluir.textContent = "🗑️ Excluir";
       excluir.onclick = () => excluirBoi(boi);
+
       botoes.appendChild(excluir);
     }
 
-    card.append(titulo, dono, status, botoes);
+    card.append(
+      titulo,
+      dono,
+      telefone,
+      comunidade,
+      autorizacao,
+      status,
+      botoes
+    );
+
     lista.appendChild(card);
   });
+}
+
+// AUTORIZAR OU REVOGAR GPS
+async function alterarAutorizacaoGPS(boi) {
+  if (!usuarioAtual || !boi.id) return;
+
+  const proximo = !boi.gpsAutorizado;
+
+  const mensagem = proximo
+    ? "Autorizar GPS para " + boi.nome + "?"
+    : "Revogar autorização de GPS para " +
+      boi.nome + "?";
+
+  if (!confirm(mensagem)) return;
+
+  try {
+    await boisRef.child(boi.id).update({
+      gpsAutorizado: proximo
+    });
+
+    $("mensagemBoi").textContent = proximo
+      ? "Cadastro autorizado. A transmissão ainda depende da autenticação e configuração do GPS."
+      : "Autorização administrativa revogada.";
+
+  } catch (erro) {
+    $("mensagemBoi").textContent =
+      "Erro ao alterar autorização. Verifique as regras do Firebase.";
+    console.error(erro);
+  }
 }
 
 // EDITAR BOI
@@ -568,13 +694,17 @@ function editarBoi(boi) {
   boiEmEdicao = { ...boi };
 
   $("nomeBoi").value = boi.nome;
+
   $("donoBoi").value =
     boi.dono === "A definir" ? "" : boi.dono;
 
+  $("telefoneBoi").value = boi.telefone || "";
+  $("comunidadeBoi").value = boi.comunidade || "";
+
   $("tituloBoi").textContent = "Editar boi";
   $("salvarBoi").textContent = "Salvar alterações";
-  $("cancelarBoi").classList.remove("oculto");
 
+  $("cancelarBoi").classList.remove("oculto");
   $("mensagemBoi").textContent = "";
 
   mostrarAba("bois");
@@ -589,6 +719,8 @@ $("formBoi").onsubmit = async function(e) {
 
   const nome = $("nomeBoi").value.trim();
   const dono = $("donoBoi").value.trim();
+  const telefone = $("telefoneBoi").value.trim();
+  const comunidade = $("comunidadeBoi").value.trim();
 
   if (!nome || !dono) {
     $("mensagemBoi").textContent =
@@ -615,27 +747,32 @@ $("formBoi").onsubmit = async function(e) {
 
   try {
     if (boiEmEdicao) {
-
       const antigo = boiEmEdicao;
 
       const dados = {
         nome,
         dono,
+        telefone,
+        comunidade,
+        gpsAutorizado: antigo.gpsAutorizado === true,
         nomeOriginal: antigo.origem
       };
 
       const alteracoes = {};
 
-      // Reaproveita o ID existente quando houver.
-      const id = antigo.id ||
-        boisRef.push().key;
+      const id = antigo.id || boisRef.push().key;
 
       alteracoes["cadastroBois/" + id] = dados;
 
-      // Mantém a agenda ligada ao novo nome.
+      // MANTER AGENDA LIGADA AO NOME
       apresentacoes.forEach(a => {
-        if (normalizar(a.boi) === normalizar(antigo.nome)) {
-          alteracoes["agendas/" + a.id + "/boi"] = nome;
+        if (
+          normalizar(a.boi) ===
+          normalizar(antigo.nome)
+        ) {
+          alteracoes[
+            "agendas/" + a.id + "/boi"
+          ] = nome;
         }
       });
 
@@ -645,10 +782,12 @@ $("formBoi").onsubmit = async function(e) {
         "Boi atualizado com sucesso!";
 
     } else {
-
       await boisRef.push({
         nome,
         dono,
+        telefone,
+        comunidade,
+        gpsAutorizado: false,
         nomeOriginal: nome
       });
 
@@ -671,8 +810,11 @@ function cancelarEdicaoBoi(limparMensagem = true) {
   boiEmEdicao = null;
   $("formBoi").reset();
 
-  $("tituloBoi").textContent = "Cadastrar novo boi";
+  $("tituloBoi").textContent =
+    "Cadastrar novo boi";
+
   $("salvarBoi").textContent = "Salvar boi";
+
   $("cancelarBoi").classList.add("oculto");
 
   if (limparMensagem) {
@@ -683,7 +825,7 @@ function cancelarEdicaoBoi(limparMensagem = true) {
 $("cancelarBoi").onclick = () =>
   cancelarEdicaoBoi();
 
-// EXCLUIR APENAS BOIS NOVOS
+// EXCLUIR BOI NOVO
 async function excluirBoi(boi) {
   const temAgenda = apresentacoes.some(a =>
     normalizar(a.boi) === normalizar(boi.nome)
@@ -701,8 +843,10 @@ async function excluirBoi(boi) {
 
   try {
     await boisRef.child(boi.id).remove();
+
     $("mensagemBoi").textContent =
       "Cadastro excluído.";
+
   } catch (erro) {
     $("mensagemBoi").textContent =
       "Erro ao excluir.";
@@ -710,27 +854,30 @@ async function excluirBoi(boi) {
   }
 }
 
-// ATUALIZAR BOIS NO FORMULÁRIO DA AGENDA
+// ATUALIZAR SELETOR DA AGENDA
 function atualizarSelectBois() {
   const select = $("boiApresentacao");
   const anterior = select.value;
 
   select.replaceChildren();
 
-  const vazio = new Option("Escolha um boi", "");
-  select.add(vazio);
+  select.add(
+    new Option("Escolha um boi", "")
+  );
 
   const nomes = new Set(
     boisExibidos.map(b => b.nome)
   );
 
-  // Preserva apresentações antigas.
+  // PRESERVAR APRESENTAÇÕES ANTIGAS
   apresentacoes.forEach(a => {
     if (a.boi) nomes.add(a.boi);
   });
 
   Array.from(nomes)
-    .sort((a, b) => a.localeCompare(b, "pt-BR"))
+    .sort((a, b) =>
+      a.localeCompare(b, "pt-BR")
+    )
     .forEach(nome => {
       select.add(new Option(nome, nome));
     });
@@ -772,6 +919,7 @@ function formatarData(data) {
   }
 
   const [ano, mes, dia] = data.split("-");
+
   return dia + "/" + mes + "/" + ano;
 }
 
@@ -840,7 +988,8 @@ $("formAgenda").onsubmit = async function(e) {
 
   try {
     if (agendaEmEdicao) {
-      await agendasRef.child(agendaEmEdicao)
+      await agendasRef
+        .child(agendaEmEdicao)
         .update(dados);
     } else {
       await agendasRef.push(dados);
@@ -860,6 +1009,7 @@ $("formAgenda").onsubmit = async function(e) {
   }
 };
 
+// EDITAR APRESENTAÇÃO
 function editarAgenda(a) {
   agendaEmEdicao = a.id;
 
@@ -877,9 +1027,13 @@ function editarAgenda(a) {
   $("cancelarAgenda").classList.remove("oculto");
 
   mostrarAba("agenda");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
+// EXCLUIR APRESENTAÇÃO
 async function excluirAgenda(a) {
   if (!confirm(
     "Excluir apresentação de " + a.boi + "?"
@@ -887,8 +1041,10 @@ async function excluirAgenda(a) {
 
   try {
     await agendasRef.child(a.id).remove();
+
     $("mensagemAgenda").textContent =
       "Apresentação excluída.";
+
   } catch (erro) {
     $("mensagemAgenda").textContent =
       "Erro ao excluir apresentação.";
@@ -896,7 +1052,10 @@ async function excluirAgenda(a) {
   }
 }
 
-function cancelarEdicaoAgenda(limparMensagem = true) {
+// CANCELAR EDIÇÃO DA AGENDA
+function cancelarEdicaoAgenda(
+  limparMensagem = true
+) {
   agendaEmEdicao = null;
   $("formAgenda").reset();
 
