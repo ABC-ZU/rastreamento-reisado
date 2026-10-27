@@ -5,10 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mapa do Reisado - Boa Hora PI</title>
+<title>Reisado Digital de Boa Hora - Mapa dos Bois</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -27,11 +29,51 @@ html, body {
   font-family: Arial, sans-serif;
 }
 
-#mapa {
-  width: 100%;
-  height: 100%;
-  height: 100dvh;
+body {
+  display: flex;
+  flex-direction: column;
+  background: #f2f5fa;
 }
+
+/* CABEÇALHO */
+
+header {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #073c80, #1765af);
+  color: white;
+  text-align: center;
+  padding: 12px;
+  border-bottom: 5px solid #c52931;
+}
+
+header img {
+  width: 85px;
+  height: 85px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 7px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+  font-size: 25px;
+}
+
+header p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* MAPA */
+
+#mapa {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  z-index: 1;
+}
+
+/* MARCADORES */
 
 .marcador-boi {
   background: transparent;
@@ -41,7 +83,7 @@ html, body {
 .icone-boi {
   width: 52px;
   height: 52px;
-  background: #fff;
+  background: white;
   border: 4px solid #d4a000;
   border-radius: 50%;
   box-shadow: 0 3px 10px #0005;
@@ -71,6 +113,8 @@ html, body {
   font-weight: bold;
   white-space: nowrap;
 }
+
+/* JANELA DO BOI */
 
 .leaflet-popup-content {
   font-family: Arial, sans-serif;
@@ -110,13 +154,15 @@ html, body {
   margin-top: 10px;
 }
 
+/* AVISO NO MAPA */
+
 .aviso-mapa {
   position: absolute;
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 900;
-  background: #fff;
+  background: white;
   padding: 9px 12px;
   border-radius: 10px;
   box-shadow: 0 2px 12px #0003;
@@ -126,7 +172,26 @@ html, body {
   pointer-events: none;
 }
 
+/* CELULAR */
+
 @media (max-width: 600px) {
+  header {
+    padding: 9px;
+  }
+
+  header img {
+    width: 65px;
+    height: 65px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+
+  header p {
+    font-size: 12px;
+  }
+
   .icone-boi {
     width: 46px;
     height: 46px;
@@ -142,17 +207,33 @@ html, body {
 
 <body>
 
+<!-- CABEÇALHO ORIGINAL -->
+
+<header>
+  <img
+    src="./ícone-boi-reisado-logo.png"
+    alt="Logomarca do Reisado de Boa Hora"
+  >
+
+  <h1>🐂 Reisado Digital de Boa Hora</h1>
+
+  <p>📍 Encontre seu boi favorito em tempo real</p>
+</header>
+
+<!-- SOMENTE O MAPA -->
+
 <div id="mapa"></div>
 
 <div class="aviso-mapa" id="aviso">
-  Toque no ícone do boi para ver sua localização.
+  Toque no ícone do boi para consultar sua localização.
   🔴 GPS | 🟡 Demonstração
 </div>
 
 <script>
-// ====================================
-// FIREBASE
-// ====================================
+
+// ========================================
+// 1. CONFIGURAÇÃO FIREBASE
+// ========================================
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -168,9 +249,9 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
-// ====================================
-// MAPA
-// ====================================
+// ========================================
+// 2. INICIALIZAÇÃO DO MAPA
+// ========================================
 
 const mapa = L.map("mapa").setView(
   [-4.3074, -42.0363],
@@ -185,9 +266,9 @@ L.tileLayer(
   }
 ).addTo(mapa);
 
-// ====================================
-// ÍCONES DOS BOIS
-// ====================================
+// ========================================
+// 3. ÍCONES DOS BOIS
+// ========================================
 
 function iconeBoi(real) {
   return L.divIcon({
@@ -204,9 +285,9 @@ function iconeBoi(real) {
   });
 }
 
-// ====================================
-// BOIS ORIGINAIS
-// ====================================
+// ========================================
+// 4. BOIS ORIGINAIS
+// ========================================
 
 const boisOriginais = [
   {
@@ -266,15 +347,19 @@ const boisOriginais = [
   }
 ];
 
-// ====================================
-// VARIÁVEIS
-// ====================================
+// ========================================
+// 5. VARIÁVEIS DO SISTEMA
+// ========================================
 
 let cadastros = [];
 let localizacoes = {};
 let boisAtuais = [];
 
 const marcadores = new Map();
+
+// ========================================
+// 6. FUNÇÕES AUXILIARES
+// ========================================
 
 function normalizar(texto) {
   return String(texto || "")
@@ -295,15 +380,16 @@ function escapar(texto) {
   );
 }
 
-// ====================================
-// JUNTAR CADASTROS COM BOIS ORIGINAIS
-// ====================================
+// ========================================
+// 7. INTEGRAR CADASTROS DO ADMIN
+// ========================================
 
 function montarBois() {
   const usados = new Set();
   const resultado = [];
 
   boisOriginais.forEach(original => {
+
     const cadastro = cadastros.find(c =>
       normalizar(c.nomeOriginal) ===
       normalizar(original.nome)
@@ -330,8 +416,9 @@ function montarBois() {
     });
   });
 
-  // NOVOS BOIS CADASTRADOS
+  // Novos bois cadastrados no painel
   cadastros.forEach(cadastro => {
+
     if (usados.has(cadastro.id)) {
       return;
     }
@@ -350,9 +437,9 @@ function montarBois() {
   boisAtuais = resultado;
 }
 
-// ====================================
-// VALIDAR LOCALIZAÇÃO
-// ====================================
+// ========================================
+// 8. LOCALIZAÇÃO DOS BOIS
+// ========================================
 
 function coordenadasValidas(dados) {
   if (
@@ -373,8 +460,10 @@ function coordenadasValidas(dados) {
 }
 
 function localizarBoi(boi) {
-  // Primeiro verifica o GPS pelo ID
-  // do cadastro e depois pelo ID legado.
+
+  // Procura primeiro o GPS do cadastro.
+  // Depois verifica o ID antigo do boi.
+
   const ids = [
     boi.cadastroId,
     boi.gpsId
@@ -393,7 +482,7 @@ function localizarBoi(boi) {
     }
   }
 
-  // Posição fictícia dos bois originais
+  // Coordenadas de demonstração
   if (
     Number.isFinite(boi.lat) &&
     Number.isFinite(boi.lng)
@@ -409,9 +498,9 @@ function localizarBoi(boi) {
   return null;
 }
 
-// ====================================
-// STATUS DO GPS
-// ====================================
+// ========================================
+// 9. VERIFICAR ATUALIZAÇÃO DO GPS
+// ========================================
 
 function tempoAtualizacao(dados) {
   const valor = Number(dados?.atualizadoEm);
@@ -439,43 +528,43 @@ function gpsRecente(dados) {
 function formatarHorario(dados) {
   const tempo = tempoAtualizacao(dados);
 
-  if (!tempo) return "Não informado";
+  if (!tempo) {
+    return "Não informado";
+  }
 
   return new Date(tempo).toLocaleString("pt-BR");
 }
 
-// ====================================
-// POPUP DO BOI
-// ====================================
+// ========================================
+// 10. JANELA AO CLICAR NO BOI
+// ========================================
 
 function conteudoPopup(boi, posicao) {
+
   let html =
     '<div class="popup-titulo">🐂 ' +
     escapar(boi.nome) +
     '</div>' +
+
     '<div class="popup-info">' +
     '👤 Responsável: <b>' +
     escapar(boi.dono) +
     '</b></div>';
 
   if (!posicao) {
-    html +=
+    return html +
       '<div class="popup-status">' +
       '⚪ Sem localização disponível.' +
       '</div>';
-
-    return html;
   }
 
   if (!posicao.real) {
-    html +=
+    return html +
       '<div class="popup-status">' +
-      '🟡 Posição de demonstração.' +
+      '🟡 Localização de demonstração.' +
       '<br>Este boi ainda não está ' +
       'transmitindo GPS.' +
       '</div>';
-
-    return html;
   }
 
   if (gpsRecente(posicao.dados)) {
@@ -513,8 +602,9 @@ function conteudoPopup(boi, posicao) {
       ' metros</div>';
   }
 
-  // ROTA SOMENTE PARA GPS RECENTE
+  // Mostrar rota somente com GPS recente
   if (gpsRecente(posicao.dados)) {
+
     const destino =
       posicao.latitude + "," +
       posicao.longitude;
@@ -536,18 +626,19 @@ function conteudoPopup(boi, posicao) {
   return html;
 }
 
-// ====================================
-// ATUALIZAR MAPA
-// ====================================
+// ========================================
+// 11. CRIAR E ATUALIZAR MARCADORES
+// ========================================
 
 function atualizarMapa() {
+
   montarBois();
 
   const chaves = new Set(
     boisAtuais.map(boi => boi.chave)
   );
 
-  // REMOVER BOIS EXCLUÍDOS
+  // Remover marcadores excluídos
   for (const [chave, marcador] of marcadores) {
     if (!chaves.has(chave)) {
       mapa.removeLayer(marcador);
@@ -556,12 +647,15 @@ function atualizarMapa() {
   }
 
   boisAtuais.forEach(boi => {
+
     const posicao = localizarBoi(boi);
+
     let marcador = marcadores.get(boi.chave);
 
-    // BOI NOVO SEM GPS:
-    // não inventar coordenadas.
+    // Não inventar localização
+    // para bois novos sem GPS.
     if (!posicao) {
+
       if (marcador) {
         mapa.removeLayer(marcador);
         marcadores.delete(boi.chave);
@@ -576,6 +670,7 @@ function atualizarMapa() {
     ];
 
     if (!marcador) {
+
       marcador = L.marker(coordenadas, {
         icon: iconeBoi(posicao.real)
       }).addTo(mapa);
@@ -592,14 +687,14 @@ function atualizarMapa() {
       marcadores.set(boi.chave, marcador);
 
     } else {
+
       marcador.setLatLng(coordenadas);
+
       marcador.setIcon(
         iconeBoi(posicao.real)
       );
 
-      marcador.setTooltipContent(
-        boi.nome
-      );
+      marcador.setTooltipContent(boi.nome);
     }
 
     marcador.setPopupContent(
@@ -608,16 +703,19 @@ function atualizarMapa() {
   });
 }
 
-// ====================================
-// CADASTROS DO PAINEL ADMIN
-// ====================================
+// ========================================
+// 12. LER CADASTROS DO FIREBASE
+// ========================================
 
 database.ref("cadastroBois").on(
   "value",
+
   snapshot => {
+
     cadastros = [];
 
     snapshot.forEach(item => {
+
       const dados = item.val();
 
       if (
@@ -625,6 +723,7 @@ database.ref("cadastroBois").on(
         typeof dados.nome === "string" &&
         dados.nome.trim()
       ) {
+
         cadastros.push({
           id: item.key,
           nome: dados.nome.trim(),
@@ -640,7 +739,9 @@ database.ref("cadastroBois").on(
 
     atualizarMapa();
   },
+
   erro => {
+
     console.error(
       "Erro ao carregar cadastros:",
       erro
@@ -651,23 +752,29 @@ database.ref("cadastroBois").on(
   }
 );
 
-// ====================================
-// GPS DOS BOIS EM TEMPO REAL
-// ====================================
+// ========================================
+// 13. GPS EM TEMPO REAL
+// ========================================
 
 database.ref("bois").on(
   "value",
+
   snapshot => {
+
     localizacoes = snapshot.val() || {};
+
     atualizarMapa();
   },
+
   erro => {
+
     console.error(
       "Erro ao carregar GPS:",
       erro
     );
 
     localizacoes = {};
+
     atualizarMapa();
 
     document.getElementById("aviso").textContent =
@@ -675,12 +782,21 @@ database.ref("bois").on(
   }
 );
 
-// ATUALIZAR INDICAÇÃO DE GPS ANTIGO
-setInterval(atualizarMapa, 30000);
+// ========================================
+// 14. ATUALIZAR STATUS DO GPS
+// ========================================
 
-// MOSTRAR BOIS INICIAIS
+setInterval(() => {
+  atualizarMapa();
+}, 30000);
+
+// ========================================
+// 15. EXIBIR MAPA INICIAL
+// ========================================
+
 atualizarMapa();
 
 </script>
+
 </body>
 </html>
