@@ -42,7 +42,7 @@ body {
   background: #f2f5fa;
 }
 
-/* CABEÇALHO ORIGINAL */
+/* CABEÇALHO */
 
 header {
   flex-shrink: 0;
@@ -80,7 +80,7 @@ header p {
   z-index: 1;
 }
 
-/* ÍCONES DOS BOIS */
+/* MARCADOR DO BOI */
 
 .marcador-boi {
   background: transparent;
@@ -88,6 +88,7 @@ header p {
 }
 
 .icone-boi {
+  position: relative;
   width: 52px;
   height: 52px;
   background: white;
@@ -97,20 +98,60 @@ header p {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .icone-boi img {
+  position: relative;
+  z-index: 2;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  background: white;
+  border-radius: 50%;
 }
 
 .icone-boi.real {
   border-color: #d62828;
 }
 
-/* AGRUPAMENTO DOS BOIS */
+/* GPS ATIVO - ONDAS VERDES */
+
+.icone-boi.gps-ativo {
+  border-color: #00a651;
+  box-shadow:
+    0 0 0 2px rgba(0,166,81,.2),
+    0 3px 10px #0005;
+}
+
+.icone-boi.gps-ativo::before,
+.icone-boi.gps-ativo::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 3px solid #00c853;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: ondaGPS 2.4s ease-out infinite;
+}
+
+.icone-boi.gps-ativo::after {
+  animation-delay: 1.2s;
+}
+
+@keyframes ondaGPS {
+  0% {
+    transform: scale(1);
+    opacity: .9;
+  }
+
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+/* AGRUPAMENTO */
 
 .grupo-bois {
   background: rgba(16, 75, 145, 0.22);
@@ -146,7 +187,7 @@ header p {
   white-space: nowrap;
 }
 
-/* JANELA DO BOI */
+/* POPUP */
 
 .leaflet-popup-content {
   font-family: Arial, sans-serif;
@@ -224,14 +265,17 @@ header p {
     font-size: 12px;
   }
 
-  .icone-boi {
-    width: 46px;
-    height: 46px;
-  }
-
   .aviso-mapa {
     bottom: 10px;
     font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icone-boi.gps-ativo::before,
+  .icone-boi.gps-ativo::after {
+    animation: none;
+    opacity: .4;
   }
 }
 </style>
@@ -246,15 +290,14 @@ header p {
   >
 
   <h1>🐂 Reisado Digital de Boa Hora</h1>
-
   <p>📍 Encontre seu boi favorito em tempo real</p>
 </header>
 
 <div id="mapa"></div>
 
 <div class="aviso-mapa" id="aviso">
-  Toque no grupo para separar os bois.
-  🔴 GPS | 🟡 Demonstração
+  🟢 GPS recente | 🔴 GPS antigo |
+  🟡 Demonstração
 </div>
 
 <script>
@@ -295,7 +338,7 @@ L.tileLayer(
 ).addTo(mapa);
 
 // =====================================
-// AGRUPAMENTO AUTOMÁTICO
+// AGRUPAMENTO DOS BOIS
 // =====================================
 
 const grupoMarcadores = L.markerClusterGroup({
@@ -324,15 +367,15 @@ const grupoMarcadores = L.markerClusterGroup({
 mapa.addLayer(grupoMarcadores);
 
 // =====================================
-// ÍCONE DO BOI
+// ÍCONE COM EFEITO GPS
 // =====================================
 
-function iconeBoi(real) {
+function iconeBoi(real, ativo = false) {
   return L.divIcon({
     className: "marcador-boi",
     html:
       '<div class="icone-boi ' +
-      (real ? "real" : "") +
+      (ativo ? "gps-ativo" : real ? "real" : "") +
       '">' +
       '<img src="./icone-boi-reisado.png" alt="Boi">' +
       '</div>',
@@ -612,13 +655,13 @@ function conteudoPopup(boi, posicao) {
   if (gpsRecente(posicao.dados)) {
     html +=
       '<div class="popup-status">' +
-      '🟢 Localização GPS recente.' +
+      '🟢 GPS atualizado - localização recente.' +
       '</div>';
   } else {
     html +=
       '<div class="popup-status">' +
-      '🟠 Última localização conhecida.' +
-      '<br>GPS desatualizado.' +
+      '🔴 GPS desatualizado.' +
+      '<br>Última localização conhecida.' +
       '</div>';
   }
 
@@ -687,6 +730,11 @@ function atualizarMapa() {
 
   boisAtuais.forEach(boi => {
     const posicao = localizarBoi(boi);
+
+    const gpsAtivo =
+      posicao?.real === true &&
+      gpsRecente(posicao.dados);
+
     let marcador = marcadores.get(boi.chave);
 
     if (!posicao) {
@@ -704,14 +752,12 @@ function atualizarMapa() {
 
     if (!marcador) {
       marcador = L.marker(coordenadas, {
-        icon: iconeBoi(posicao.real),
+        icon: iconeBoi(posicao.real, gpsAtivo),
         title: boi.nome
       });
 
       marcador.bindPopup("");
 
-      // Nome aparece ao tocar ou passar
-      // o cursor, evitando sobreposição.
       marcador.bindTooltip(boi.nome, {
         permanent: false,
         direction: "top",
@@ -722,7 +768,13 @@ function atualizarMapa() {
       marcadores.set(boi.chave, marcador);
     } else {
       marcador.setLatLng(coordenadas);
-      marcador.setIcon(iconeBoi(posicao.real));
+
+      // Atualiza a cor e as ondas
+      // conforme o horário do GPS.
+      marcador.setIcon(
+        iconeBoi(posicao.real, gpsAtivo)
+      );
+
       marcador.setTooltipContent(boi.nome);
     }
 
@@ -730,6 +782,10 @@ function atualizarMapa() {
       conteudoPopup(boi, posicao)
     );
   });
+
+  // Recalcular os agrupamentos após
+  // receber novas coordenadas.
+  grupoMarcadores.refreshClusters();
 }
 
 // =====================================
@@ -791,10 +847,10 @@ database.ref("bois").on(
   }
 );
 
-// Atualizar status de GPS recente ou antigo.
+// Verifica se o GPS ainda está recente.
 setInterval(atualizarMapa, 30000);
 
-// Mostrar bois ao abrir.
+// Mostrar os bois ao abrir.
 atualizarMapa();
 
 </script>
