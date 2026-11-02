@@ -73,7 +73,10 @@ button {
   cursor: pointer;
 }
 
-button:disabled { opacity: .6; }
+button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
 
 .botao-grande {
   width: 100%;
@@ -82,6 +85,7 @@ button:disabled { opacity: .6; }
 
 .vermelho { background: #c52931; }
 .cinza { background: #687587; }
+.verde { background: #16864a; }
 .oculto { display: none !important; }
 
 .abas, .botoes {
@@ -103,8 +107,12 @@ button:disabled { opacity: .6; }
 
 .item h3 { margin: 0 0 8px; }
 .item p { margin: 7px 0; line-height: 1.5; }
+
 .botoes { flex-wrap: wrap; }
-.botoes button { flex: 1; margin-top: 10px; }
+.botoes button {
+  flex: 1 1 180px;
+  margin-top: 10px;
+}
 
 .aviso {
   background: #fff6e6;
@@ -149,13 +157,7 @@ button:disabled { opacity: .6; }
   <img
     src="./ícone-boi-reisado-logo.png"
     alt="Logo Reisado de Boa Hora"
-    style="
-      width:110px;
-      height:110px;
-      object-fit:contain;
-      display:block;
-      margin:0 auto 12px;
-    "
+    style="width:110px;height:110px;object-fit:contain;display:block;margin:0 auto 12px"
   >
   <h1>Administração do Reisado</h1>
   <p>Boa Hora – Piauí</p>
@@ -231,22 +233,24 @@ button:disabled { opacity: .6; }
         >
 
         <div class="aviso" style="margin-top:14px">
-          A autorização do GPS é controlada pelo
-          administrador. O cadastro não inicia
-          o rastreamento automaticamente.
+          O link GPS será associado ao cadastro do boi.
+          A transmissão dos responsáveis ainda precisará
+          da verificação segura do telefone no Firebase.
         </div>
 
         <button
           id="salvarBoi"
           class="botao-grande"
-          type="submit">
+          type="submit"
+        >
           Salvar boi
         </button>
 
         <button
           id="cancelarBoi"
           class="cinza botao-grande oculto"
-          type="button">
+          type="button"
+        >
           Cancelar edição
         </button>
       </form>
@@ -258,16 +262,17 @@ button:disabled { opacity: .6; }
       <h2>🐂 Bois do Reisado</h2>
 
       <div class="aviso">
-        Os 11 bois anteriores são reaproveitados.
-        Clique em Editar para atualizar o cadastro.
-        Depois de salvar, será possível autorizar
-        ou revogar a autorização administrativa
-        para transmissão de GPS.
+        Os 11 bois anteriores serão reaproveitados.
+        Clique em Editar para atualizar o nome,
+        o responsável, o WhatsApp e a comunidade.
+        Depois de salvar, utilize os botões para
+        copiar ou compartilhar o link GPS.
       </div>
 
       <p class="aviso">
-        Os telefones são dados pessoais e não
-        devem aparecer no mapa público.
+        Atenção: os telefones são dados pessoais.
+        Antes do uso definitivo, precisamos protegê-los
+        nas regras do Firebase.
       </p>
 
       <div id="listaBois">Carregando...</div>
@@ -314,14 +319,16 @@ button:disabled { opacity: .6; }
         <button
           id="salvarAgenda"
           class="botao-grande"
-          type="submit">
+          type="submit"
+        >
           Salvar apresentação
         </button>
 
         <button
           id="cancelarAgenda"
           class="cinza botao-grande oculto"
-          type="button">
+          type="button"
+        >
           Cancelar edição
         </button>
       </form>
@@ -363,6 +370,8 @@ firebase.initializeApp(firebaseConfig);
 
 const auth = firebase.auth();
 const db = firebase.database();
+
+const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
 
 const boisRef = db.ref("cadastroBois");
 const agendasRef = db.ref("agendas");
@@ -427,17 +436,22 @@ $("formLogin").onsubmit = async function(e) {
   $("mensagemLogin").textContent = "Entrando...";
 
   try {
-    await auth.signInWithEmailAndPassword(
+    const credencial = await auth.signInWithEmailAndPassword(
       $("email").value.trim(),
       $("senha").value
     );
+
+    if (credencial.user.uid !== ADMIN_UID) {
+      await auth.signOut();
+      throw new Error("Usuário não autorizado");
+    }
 
     $("senha").value = "";
     $("mensagemLogin").textContent = "";
 
   } catch (erro) {
     $("mensagemLogin").textContent =
-      "Confira seu e-mail e sua senha.";
+      "Acesso não autorizado. Confira seu e-mail e senha.";
     console.error(erro);
   }
 };
@@ -445,17 +459,20 @@ $("formLogin").onsubmit = async function(e) {
 $("sair").onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(function(usuario) {
-  usuarioAtual = usuario;
+  const administrador =
+    usuario && usuario.uid === ADMIN_UID;
+
+  usuarioAtual = administrador ? usuario : null;
 
   $("telaLogin").classList.toggle(
-    "oculto", !!usuario
+    "oculto", !!administrador
   );
 
   $("telaPainel").classList.toggle(
-    "oculto", !usuario
+    "oculto", !administrador
   );
 
-  if (usuario) {
+  if (administrador) {
     $("usuarioLogado").textContent =
       "Conta: " + usuario.email;
 
@@ -487,6 +504,10 @@ auth.onAuthStateChanged(function(usuario) {
 
     cancelarEdicaoBoi();
     cancelarEdicaoAgenda();
+
+    if (usuario) {
+      auth.signOut();
+    }
   }
 });
 
@@ -523,11 +544,13 @@ function montarListaBois() {
 
   nomesIniciais.forEach(nomeAntigo => {
     const cadastro = cadastros.find(c =>
-      normalizar(c.nomeOriginal) ===
-        normalizar(nomeAntigo) ||
+      !usados.has(c.id) &&
       (
-        !c.nomeOriginal &&
-        normalizar(c.nome) === normalizar(nomeAntigo)
+        normalizar(c.nomeOriginal) === normalizar(nomeAntigo) ||
+        (
+          !c.nomeOriginal &&
+          normalizar(c.nome) === normalizar(nomeAntigo)
+        )
       )
     );
 
@@ -570,6 +593,106 @@ function montarListaBois() {
   );
 }
 
+// GERAR LINK INDIVIDUAL DO BOI
+function gerarLinkGPS(boi) {
+  if (!boi.id) return "";
+
+  const url = new URL(
+    "./transmitir.html",
+    window.location.href
+  );
+
+  url.searchParams.set("boi", boi.id);
+
+  return url.toString();
+}
+
+// COPIAR LINK GPS
+async function copiarLinkGPS(boi) {
+  if (!boi.id) {
+    alert("Salve primeiro o cadastro do boi.");
+    return;
+  }
+
+  const link = gerarLinkGPS(boi);
+
+  try {
+    await navigator.clipboard.writeText(link);
+
+    alert(
+      "Link GPS de " + boi.nome +
+      " copiado com sucesso!"
+    );
+  } catch (erro) {
+    prompt("Copie o link GPS:", link);
+  }
+}
+
+// NORMALIZAR TELEFONE BRASILEIRO
+function normalizarTelefone(telefone) {
+  let numero = String(telefone || "")
+    .replace(/\D/g, "");
+
+  if (
+    numero.startsWith("55") &&
+    (numero.length === 12 || numero.length === 13)
+  ) {
+    numero = numero.slice(2);
+  }
+
+  if (
+    numero.length !== 10 &&
+    numero.length !== 11
+  ) {
+    return "";
+  }
+
+  return "55" + numero;
+}
+
+// ENVIAR LINK GPS PELO WHATSAPP
+function enviarGPSWhatsApp(boi) {
+  if (!boi.id) {
+    alert("Salve primeiro o cadastro do boi.");
+    return;
+  }
+
+  const telefone = normalizarTelefone(boi.telefone);
+
+  if (!telefone) {
+    alert(
+      "Cadastre primeiro o WhatsApp do responsável."
+    );
+
+    editarBoi(boi);
+    return;
+  }
+
+  const link = gerarLinkGPS(boi);
+
+  const mensagem =
+    "Olá, " + boi.dono + "!\n\n" +
+    "🐂 REISADO DIGITAL DE BOA HORA - PI\n\n" +
+    "Boi: " + boi.nome + "\n\n" +
+    "Segue o link individual de GPS do seu boi:\n\n" +
+    link + "\n\n" +
+    "📍 Quando a transmissão individual estiver " +
+    "liberada, abra o link no celular e permita " +
+    "o acesso à localização.\n\n" +
+    "O mapa do Reisado será atualizado " +
+    "automaticamente enquanto o GPS estiver ativo.";
+
+  const destino =
+    "https://wa.me/" + telefone +
+    "?text=" + encodeURIComponent(mensagem);
+
+  window.open(
+    destino,
+    "_blank",
+    "noopener,noreferrer"
+  );
+}
+
 // MOSTRAR BOIS
 function renderizarBois() {
   const lista = $("listaBois");
@@ -588,7 +711,8 @@ function renderizarBois() {
 
     const telefone = document.createElement("p");
     telefone.textContent =
-      "📱 Telefone: " + (boi.telefone || "Não informado");
+      "📱 Telefone: " +
+      (boi.telefone || "Não informado");
 
     const comunidade = document.createElement("p");
     comunidade.textContent =
@@ -598,7 +722,7 @@ function renderizarBois() {
     const autorizacao = document.createElement("p");
     autorizacao.textContent = boi.gpsAutorizado
       ? "✅ GPS: cadastro autorizado"
-      : "⏳ GPS: autorização pendente";
+      : "⏳ GPS: autorização administrativa pendente";
 
     const status = document.createElement("p");
     status.textContent = boi.antigo
@@ -608,6 +732,7 @@ function renderizarBois() {
     const botoes = document.createElement("div");
     botoes.className = "botoes";
 
+    // EDITAR
     const editar = document.createElement("button");
     editar.textContent = "✏️ Editar";
     editar.onclick = () => editarBoi(boi);
@@ -615,6 +740,8 @@ function renderizarBois() {
     botoes.appendChild(editar);
 
     if (!boi.antigo) {
+
+      // AUTORIZAÇÃO ADMINISTRATIVA
       const autorizar = document.createElement("button");
 
       autorizar.textContent = boi.gpsAutorizado
@@ -629,6 +756,25 @@ function renderizarBois() {
         alterarAutorizacaoGPS(boi);
 
       botoes.appendChild(autorizar);
+
+      // COPIAR LINK
+      const copiar = document.createElement("button");
+      copiar.className = "cinza";
+      copiar.textContent = "🔗 Copiar link GPS";
+      copiar.onclick = () => copiarLinkGPS(boi);
+
+      botoes.appendChild(copiar);
+
+      // ENVIAR PELO WHATSAPP
+      const whatsapp = document.createElement("button");
+      whatsapp.className = "verde";
+      whatsapp.textContent =
+        "📲 Enviar GPS pelo WhatsApp";
+
+      whatsapp.onclick = () =>
+        enviarGPSWhatsApp(boi);
+
+      botoes.appendChild(whatsapp);
     }
 
     // EXCLUIR APENAS BOIS NOVOS
@@ -667,8 +813,8 @@ async function alterarAutorizacaoGPS(boi) {
   const proximo = !boi.gpsAutorizado;
 
   const mensagem = proximo
-    ? "Autorizar GPS para " + boi.nome + "?"
-    : "Revogar autorização de GPS para " +
+    ? "Autorizar cadastro GPS para " + boi.nome + "?"
+    : "Revogar autorização administrativa de " +
       boi.nome + "?";
 
   if (!confirm(mensagem)) return;
@@ -679,8 +825,8 @@ async function alterarAutorizacaoGPS(boi) {
     });
 
     $("mensagemBoi").textContent = proximo
-      ? "Cadastro autorizado. A transmissão ainda depende da autenticação e configuração do GPS."
-      : "Autorização administrativa revogada.";
+      ? "Cadastro autorizado. A transmissão ainda depende da autenticação e das regras de segurança do Firebase."
+      : "Autorização administrativa revogada. Para bloquear uma transmissão já vinculada, também é necessário revogar sua credencial de GPS.";
 
   } catch (erro) {
     $("mensagemBoi").textContent =
@@ -732,7 +878,10 @@ $("formBoi").onsubmit = async function(e) {
     normalizar(b.nome) === normalizar(nome) &&
     (
       !boiEmEdicao ||
-      b.origem !== boiEmEdicao.origem
+      (
+        b.id !== boiEmEdicao.id ||
+        b.origem !== boiEmEdicao.origem
+      )
     )
   );
 
@@ -1027,6 +1176,7 @@ function editarAgenda(a) {
   $("cancelarAgenda").classList.remove("oculto");
 
   mostrarAba("agenda");
+
   window.scrollTo({
     top: 0,
     behavior: "smooth"
