@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Administração - Reisado de Boa Hora</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -11,351 +11,157 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: #edf2f8;
-  font-family: Arial, sans-serif;
-  color: #263348;
-}
-
-header {
-  background: linear-gradient(135deg, #073c80, #1765af);
-  color: white;
-  text-align: center;
-  padding: 26px 12px;
-  border-bottom: 5px solid #c52931;
-}
-
-header h1 { margin: 0 0 8px; }
-header p { margin: 0; }
-
-.container {
-  max-width: 760px;
-  margin: auto;
-  padding: 18px;
-}
-
-.caixa {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 18px;
-  box-shadow: 0 4px 14px #104b9118;
-}
-
-h2, h3 { color: #104b91; }
-
-label {
-  display: block;
-  margin: 13px 0 6px;
-  font-weight: bold;
-}
-
-input, select {
-  width: 100%;
-  padding: 13px;
-  font-size: 16px;
-  border: 1px solid #bdc7d3;
-  border-radius: 9px;
-  background: white;
-}
-
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 13px;
-  font-size: 15px;
-  font-weight: bold;
-  background: #104b91;
-  color: white;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
-}
-
-.botao-grande {
-  width: 100%;
-  margin-top: 12px;
-}
-
-.vermelho { background: #c52931; }
-.cinza { background: #687587; }
-.verde { background: #16864a; }
-.oculto { display: none !important; }
-
-.abas, .botoes {
-  display: flex;
-  gap: 10px;
-}
-
-.abas { margin-bottom: 18px; }
-.abas button { flex: 1; }
-.abas .ativo { background: #c52931; }
-
-.item {
-  background: #f8fafd;
-  border: 1px solid #dce3ed;
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 12px;
-}
-
-.item h3 { margin: 0 0 8px; }
-.item p { margin: 7px 0; line-height: 1.5; }
-
-.botoes { flex-wrap: wrap; }
-.botoes button {
-  flex: 1 1 180px;
-  margin-top: 10px;
-}
-
-.aviso {
-  background: #fff6e6;
-  padding: 12px;
-  border-radius: 9px;
-  line-height: 1.5;
-  font-size: 14px;
-}
-
-.mensagem {
-  margin-top: 12px;
-  font-weight: bold;
-  line-height: 1.5;
-}
-
-.links {
-  text-align: center;
-  margin: 25px 0;
-}
-
-.links a {
-  display: inline-block;
-  margin: 7px;
-  color: #104b91;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-@media(max-width: 480px) {
-  .caixa { padding: 15px; }
-  .abas button {
-    font-size: 13px;
-    padding: 11px 6px;
-  }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#edf2f8;font-family:Arial,sans-serif;color:#263348}
+header{background:linear-gradient(135deg,#073c80,#1765af);color:white;text-align:center;padding:25px 12px;border-bottom:5px solid #c52931}
+header img{width:105px;height:105px;object-fit:contain}
+header h1{margin:8px 0}
+.container{max-width:760px;margin:auto;padding:18px}
+.caixa{background:white;padding:20px;border-radius:16px;margin-bottom:18px;box-shadow:0 4px 14px #104b9118}
+h2,h3{color:#104b91}
+label{display:block;margin:13px 0 6px;font-weight:bold}
+input,select{width:100%;padding:13px;font-size:16px;border:1px solid #bdc7d3;border-radius:9px;background:white}
+button{border:0;border-radius:10px;padding:13px;font-size:15px;font-weight:bold;background:#104b91;color:white;cursor:pointer}
+button:disabled{opacity:.6}
+.botao-grande{width:100%;margin-top:12px}
+.vermelho{background:#c52931}
+.cinza{background:#687587}
+.verde{background:#16864a}
+.oculto{display:none!important}
+.abas,.botoes{display:flex;gap:10px;flex-wrap:wrap}
+.abas{margin-bottom:18px}
+.abas button{flex:1}
+.abas .ativo{background:#c52931}
+.item{background:#f8fafd;border:1px solid #dce3ed;border-radius:12px;padding:15px;margin-top:12px}
+.item h3{margin:0 0 8px}
+.item p{line-height:1.5}
+.botoes button{flex:1 1 180px;margin-top:8px}
+.aviso{background:#fff6e6;padding:12px;border-radius:9px;line-height:1.5;font-size:14px}
+.mensagem{margin-top:12px;font-weight:bold;line-height:1.5}
+.links{text-align:center;margin:25px}
+.links a{display:inline-block;margin:7px;color:#104b91;font-weight:bold;text-decoration:none}
+@media(max-width:480px){.caixa{padding:15px}.abas button{font-size:13px;padding:11px 6px}}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img
-    src="./ícone-boi-reisado-logo.png"
-    alt="Logo Reisado de Boa Hora"
-    style="width:110px;height:110px;object-fit:contain;display:block;margin:0 auto 12px"
-  >
-  <h1>Administração do Reisado</h1>
-  <p>Boa Hora – Piauí</p>
+<img src="./ícone-boi-reisado-logo.png" alt="Logo Reisado">
+<h1>Administração do Reisado</h1>
+<p>Boa Hora – Piauí</p>
 </header>
 
 <div class="container">
 
 <section id="telaLogin" class="caixa">
-  <h2>🔐 Entrar no painel</h2>
-
-  <form id="formLogin">
-    <label>E-mail</label>
-    <input id="email" type="email" required>
-
-    <label>Senha</label>
-    <input id="senha" type="password" required>
-
-    <button class="botao-grande" type="submit">
-      Entrar
-    </button>
-  </form>
-
-  <p id="mensagemLogin" class="mensagem"></p>
+<h2>🔐 Entrar no painel</h2>
+<form id="formLogin">
+<label>E-mail</label>
+<input id="email" type="email" required>
+<label>Senha</label>
+<input id="senha" type="password" required>
+<button class="botao-grande" type="submit">Entrar</button>
+</form>
+<p id="mensagemLogin" class="mensagem"></p>
 </section>
 
 <section id="telaPainel" class="oculto">
 
-  <div class="caixa">
-    <h2>Painel Administrativo</h2>
-    <p id="usuarioLogado"></p>
+<div class="caixa">
+<h2>Painel Administrativo</h2>
+<p id="usuarioLogado"></p>
+<button id="sair" class="cinza botao-grande">Sair da conta</button>
+</div>
 
-    <button id="sair" class="cinza botao-grande">
-      Sair da conta
-    </button>
-  </div>
+<div class="abas">
+<button id="abaBois" class="ativo">🐂 Cadastro de Bois</button>
+<button id="abaAgenda">📅 Apresentações</button>
+</div>
 
-  <div class="abas">
-    <button id="abaBois" class="ativo">
-      🐂 Cadastro de Bois
-    </button>
+<section id="secaoBois">
 
-    <button id="abaAgenda">
-      📅 Apresentações
-    </button>
-  </div>
+<div class="caixa">
+<h2 id="tituloBoi">Cadastrar novo boi</h2>
 
-  <!-- CADASTRO DE BOIS -->
-  <section id="secaoBois">
+<form id="formBoi">
+<label>Nome do boi</label>
+<input id="nomeBoi" maxlength="100" required>
 
-    <div class="caixa">
-      <h2 id="tituloBoi">Cadastrar novo boi</h2>
+<label>Nome do dono ou responsável</label>
+<input id="donoBoi" maxlength="100" required>
 
-      <form id="formBoi">
-        <label>Nome do boi</label>
-        <input id="nomeBoi" maxlength="100" required>
+<label>Telefone do responsável (WhatsApp)</label>
+<input id="telefoneBoi" type="tel" maxlength="20" placeholder="(86) 99999-9999">
 
-        <label>Nome do dono ou responsável</label>
-        <input id="donoBoi" maxlength="100" required>
+<label>Comunidade ou localidade</label>
+<input id="comunidadeBoi" maxlength="150" placeholder="Ex.: Centro, comunidade rural">
 
-        <label>Telefone do responsável (WhatsApp)</label>
-        <input
-          id="telefoneBoi"
-          type="tel"
-          maxlength="20"
-          placeholder="(86) 99999-9999"
-        >
+<div class="aviso" style="margin-top:14px">
+🔒 O telefone será armazenado separadamente, em uma área privada do Firebase. A transmissão GPS individual dependerá da confirmação do número por SMS.
+</div>
 
-        <label>Comunidade ou localidade</label>
-        <input
-          id="comunidadeBoi"
-          maxlength="150"
-          placeholder="Ex.: Centro, comunidade rural"
-        >
+<button id="salvarBoi" class="botao-grande" type="submit">Salvar boi</button>
+<button id="cancelarBoi" class="cinza botao-grande oculto" type="button">Cancelar edição</button>
+</form>
 
-        <div class="aviso" style="margin-top:14px">
-          O link GPS será associado ao cadastro do boi.
-          A transmissão dos responsáveis ainda precisará
-          da verificação segura do telefone no Firebase.
-        </div>
+<p id="mensagemBoi" class="mensagem"></p>
+</div>
 
-        <button
-          id="salvarBoi"
-          class="botao-grande"
-          type="submit"
-        >
-          Salvar boi
-        </button>
-
-        <button
-          id="cancelarBoi"
-          class="cinza botao-grande oculto"
-          type="button"
-        >
-          Cancelar edição
-        </button>
-      </form>
-
-      <p id="mensagemBoi" class="mensagem"></p>
-    </div>
-
-    <div class="caixa">
-      <h2>🐂 Bois do Reisado</h2>
-
-      <div class="aviso">
-        Os 11 bois anteriores serão reaproveitados.
-        Clique em Editar para atualizar o nome,
-        o responsável, o WhatsApp e a comunidade.
-        Depois de salvar, utilize os botões para
-        copiar ou compartilhar o link GPS.
-      </div>
-
-      <p class="aviso">
-        Atenção: os telefones são dados pessoais.
-        Antes do uso definitivo, precisamos protegê-los
-        nas regras do Firebase.
-      </p>
-
-      <div id="listaBois">Carregando...</div>
-    </div>
-
-  </section>
-
-  <!-- AGENDA -->
-  <section id="secaoAgenda" class="oculto">
-
-    <div class="caixa">
-      <h2 id="tituloAgenda">
-        Cadastrar apresentação
-      </h2>
-
-      <form id="formAgenda">
-
-        <label>Selecione o boi</label>
-        <select id="boiApresentacao" required>
-          <option value="">Escolha um boi</option>
-        </select>
-
-        <label>Data</label>
-        <input
-          id="dataApresentacao"
-          type="date"
-          required
-        >
-
-        <label>Horário</label>
-        <input
-          id="horaApresentacao"
-          type="time"
-          required
-        >
-
-        <label>Comunidade ou local</label>
-        <input
-          id="comunidadeApresentacao"
-          maxlength="150"
-          required
-        >
-
-        <button
-          id="salvarAgenda"
-          class="botao-grande"
-          type="submit"
-        >
-          Salvar apresentação
-        </button>
-
-        <button
-          id="cancelarAgenda"
-          class="cinza botao-grande oculto"
-          type="button"
-        >
-          Cancelar edição
-        </button>
-      </form>
-
-      <p id="mensagemAgenda" class="mensagem"></p>
-    </div>
-
-    <div class="caixa">
-      <h2>Apresentações cadastradas</h2>
-      <div id="listaAgenda">Carregando...</div>
-    </div>
-
-  </section>
+<div class="caixa">
+<h2>🐂 Bois do Reisado</h2>
+<div class="aviso">
+Os 11 bois originais serão reaproveitados. Clique em Editar para atualizar o responsável, o WhatsApp e a comunidade. Após salvar, será possível copiar ou compartilhar o link GPS.
+</div>
+<div id="listaBois">Carregando...</div>
+</div>
 
 </section>
 
+<section id="secaoAgenda" class="oculto">
+
+<div class="caixa">
+<h2 id="tituloAgenda">Cadastrar apresentação</h2>
+
+<form id="formAgenda">
+<label>Selecione o boi</label>
+<select id="boiApresentacao" required>
+<option value="">Escolha um boi</option>
+</select>
+
+<label>Data</label>
+<input id="dataApresentacao" type="date" required>
+
+<label>Horário</label>
+<input id="horaApresentacao" type="time" required>
+
+<label>Comunidade ou local</label>
+<input id="comunidadeApresentacao" maxlength="150" required>
+
+<button id="salvarAgenda" class="botao-grande" type="submit">Salvar apresentação</button>
+<button id="cancelarAgenda" class="cinza botao-grande oculto" type="button">Cancelar edição</button>
+</form>
+
+<p id="mensagemAgenda" class="mensagem"></p>
+</div>
+
+<div class="caixa">
+<h2>Apresentações cadastradas</h2>
+<div id="listaAgenda">Carregando...</div>
+</div>
+
+</section>
+</section>
+
 <div class="links">
-  <a href="./inicio.html">🏠 Início</a>
-  <a href="./mapa.html">📍 Mapa</a>
-  <a href="./agenda.html">📅 Agenda</a>
+<a href="./inicio.html">🏠 Início</a>
+<a href="./mapa.html">📍 Mapa</a>
+<a href="./agenda.html">📅 Agenda</a>
 </div>
 
 </div>
 
 <script>
-
-// CONFIGURAÇÃO FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
   authDomain: "rastreamento-reisado.firebaseapp.com",
@@ -374,9 +180,9 @@ const db = firebase.database();
 const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
 
 const boisRef = db.ref("cadastroBois");
+const telefonesRef = db.ref("telefonesBois");
 const agendasRef = db.ref("agendas");
 
-// BOIS ORIGINAIS
 const nomesIniciais = [
   "Boi Estrela",
   "Boi Caridade",
@@ -392,6 +198,7 @@ const nomesIniciais = [
 ];
 
 let cadastros = [];
+let telefonesPrivados = {};
 let boisExibidos = [];
 let apresentacoes = [];
 
@@ -408,31 +215,38 @@ function normalizar(texto) {
     .toLocaleLowerCase("pt-BR");
 }
 
+function normalizarTelefone(telefone) {
+  let numero = String(telefone || "").replace(/\D/g, "");
+
+  if (
+    numero.startsWith("55") &&
+    (numero.length === 12 || numero.length === 13)
+  ) {
+    numero = numero.slice(2);
+  }
+
+  if (
+    (numero.length !== 10 && numero.length !== 11) ||
+    !/^[1-9][0-9]{9,10}$/.test(numero)
+  ) {
+    return "";
+  }
+
+  return "+55" + numero;
+}
+
 function mostrarAba(aba) {
-  $("secaoBois").classList.toggle(
-    "oculto", aba !== "bois"
-  );
-
-  $("secaoAgenda").classList.toggle(
-    "oculto", aba !== "agenda"
-  );
-
-  $("abaBois").classList.toggle(
-    "ativo", aba === "bois"
-  );
-
-  $("abaAgenda").classList.toggle(
-    "ativo", aba === "agenda"
-  );
+  $("secaoBois").classList.toggle("oculto", aba !== "bois");
+  $("secaoAgenda").classList.toggle("oculto", aba !== "agenda");
+  $("abaBois").classList.toggle("ativo", aba === "bois");
+  $("abaAgenda").classList.toggle("ativo", aba === "agenda");
 }
 
 $("abaBois").onclick = () => mostrarAba("bois");
 $("abaAgenda").onclick = () => mostrarAba("agenda");
 
-// LOGIN
 $("formLogin").onsubmit = async function(e) {
   e.preventDefault();
-
   $("mensagemLogin").textContent = "Entrando...";
 
   try {
@@ -448,7 +262,6 @@ $("formLogin").onsubmit = async function(e) {
 
     $("senha").value = "";
     $("mensagemLogin").textContent = "";
-
   } catch (erro) {
     $("mensagemLogin").textContent =
       "Acesso não autorizado. Confira seu e-mail e senha.";
@@ -459,33 +272,29 @@ $("formLogin").onsubmit = async function(e) {
 $("sair").onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(function(usuario) {
-  const administrador =
-    usuario && usuario.uid === ADMIN_UID;
-
+  const administrador = usuario && usuario.uid === ADMIN_UID;
   usuarioAtual = administrador ? usuario : null;
 
-  $("telaLogin").classList.toggle(
-    "oculto", !!administrador
-  );
-
-  $("telaPainel").classList.toggle(
-    "oculto", !administrador
-  );
+  $("telaLogin").classList.toggle("oculto", !!administrador);
+  $("telaPainel").classList.toggle("oculto", !administrador);
 
   if (administrador) {
-    $("usuarioLogado").textContent =
-      "Conta: " + usuario.email;
+    $("usuarioLogado").textContent = "Conta: " + usuario.email;
 
     if (!ouvindo) {
       boisRef.on("value", receberBois, erro => {
-        $("listaBois").textContent =
-          "Erro ao carregar bois.";
+        $("listaBois").textContent = "Erro ao carregar bois.";
+        console.error(erro);
+      });
+
+      telefonesRef.on("value", receberTelefones, erro => {
+        $("mensagemBoi").textContent =
+          "Erro ao carregar os telefones protegidos.";
         console.error(erro);
       });
 
       agendasRef.on("value", receberAgenda, erro => {
-        $("listaAgenda").textContent =
-          "Erro ao carregar agenda.";
+        $("listaAgenda").textContent = "Erro ao carregar agenda.";
         console.error(erro);
       });
 
@@ -494,24 +303,23 @@ auth.onAuthStateChanged(function(usuario) {
   } else {
     if (ouvindo) {
       boisRef.off("value", receberBois);
+      telefonesRef.off("value", receberTelefones);
       agendasRef.off("value", receberAgenda);
       ouvindo = false;
     }
 
     cadastros = [];
+    telefonesPrivados = {};
     boisExibidos = [];
     apresentacoes = [];
 
     cancelarEdicaoBoi();
     cancelarEdicaoAgenda();
 
-    if (usuario) {
-      auth.signOut();
-    }
+    if (usuario) auth.signOut();
   }
-});
+};
 
-// RECEBER CADASTROS
 function receberBois(snapshot) {
   cadastros = [];
 
@@ -523,7 +331,7 @@ function receberBois(snapshot) {
         id: item.key,
         nome: String(d.nome),
         dono: String(d.dono || "A definir"),
-        telefone: String(d.telefone || ""),
+        telefone: String(telefonesPrivados[item.key] || ""),
         comunidade: String(d.comunidade || ""),
         gpsAutorizado: d.gpsAutorizado === true,
         nomeOriginal: String(d.nomeOriginal || "")
@@ -531,15 +339,28 @@ function receberBois(snapshot) {
     }
   });
 
+  atualizarBois();
+}
+
+function receberTelefones(snapshot) {
+  telefonesPrivados = snapshot.val() || {};
+
+  cadastros = cadastros.map(c => ({
+    ...c,
+    telefone: String(telefonesPrivados[c.id] || "")
+  }));
+
+  atualizarBois();
+}
+
+function atualizarBois() {
   montarListaBois();
   renderizarBois();
   atualizarSelectBois();
 }
 
-// REAPROVEITAR BOIS ORIGINAIS
 function montarListaBois() {
   boisExibidos = [];
-
   const usados = new Set();
 
   nomesIniciais.forEach(nomeAntigo => {
@@ -560,15 +381,12 @@ function montarListaBois() {
         origem: nomeAntigo,
         antigo: false
       });
-
       usados.add(cadastro.id);
     } else {
       boisExibidos.push({
         id: null,
         nome: nomeAntigo,
-        dono: nomeAntigo === "Boi Estrela"
-          ? "Fábio Silva"
-          : "A definir",
+        dono: nomeAntigo === "Boi Estrela" ? "Fábio Silva" : "A definir",
         telefone: "",
         comunidade: "",
         gpsAutorizado: false,
@@ -593,21 +411,14 @@ function montarListaBois() {
   );
 }
 
-// GERAR LINK INDIVIDUAL DO BOI
 function gerarLinkGPS(boi) {
   if (!boi.id) return "";
 
-  const url = new URL(
-    "./transmitir.html",
-    window.location.href
-  );
-
+  const url = new URL("./transmitir.html", window.location.href);
   url.searchParams.set("boi", boi.id);
-
   return url.toString();
 }
 
-// COPIAR LINK GPS
 async function copiarLinkGPS(boi) {
   if (!boi.id) {
     alert("Salve primeiro o cadastro do boi.");
@@ -618,39 +429,12 @@ async function copiarLinkGPS(boi) {
 
   try {
     await navigator.clipboard.writeText(link);
-
-    alert(
-      "Link GPS de " + boi.nome +
-      " copiado com sucesso!"
-    );
+    alert("Link GPS de " + boi.nome + " copiado!");
   } catch (erro) {
     prompt("Copie o link GPS:", link);
   }
 }
 
-// NORMALIZAR TELEFONE BRASILEIRO
-function normalizarTelefone(telefone) {
-  let numero = String(telefone || "")
-    .replace(/\D/g, "");
-
-  if (
-    numero.startsWith("55") &&
-    (numero.length === 12 || numero.length === 13)
-  ) {
-    numero = numero.slice(2);
-  }
-
-  if (
-    numero.length !== 10 &&
-    numero.length !== 11
-  ) {
-    return "";
-  }
-
-  return "55" + numero;
-}
-
-// ENVIAR LINK GPS PELO WHATSAPP
 function enviarGPSWhatsApp(boi) {
   if (!boi.id) {
     alert("Salve primeiro o cadastro do boi.");
@@ -660,40 +444,27 @@ function enviarGPSWhatsApp(boi) {
   const telefone = normalizarTelefone(boi.telefone);
 
   if (!telefone) {
-    alert(
-      "Cadastre primeiro o WhatsApp do responsável."
-    );
-
+    alert("Cadastre primeiro o WhatsApp do responsável.");
     editarBoi(boi);
     return;
   }
-
-  const link = gerarLinkGPS(boi);
 
   const mensagem =
     "Olá, " + boi.dono + "!\n\n" +
     "🐂 REISADO DIGITAL DE BOA HORA - PI\n\n" +
     "Boi: " + boi.nome + "\n\n" +
-    "Segue o link individual de GPS do seu boi:\n\n" +
-    link + "\n\n" +
-    "📍 Quando a transmissão individual estiver " +
-    "liberada, abra o link no celular e permita " +
-    "o acesso à localização.\n\n" +
-    "O mapa do Reisado será atualizado " +
-    "automaticamente enquanto o GPS estiver ativo.";
+    "Segue seu link individual de GPS:\n\n" +
+    gerarLinkGPS(boi) + "\n\n" +
+    "📍 A transmissão será liberada após a configuração " +
+    "do acesso individual e a confirmação do telefone por SMS.";
 
   const destino =
-    "https://wa.me/" + telefone +
+    "https://wa.me/" + telefone.replace(/\D/g, "") +
     "?text=" + encodeURIComponent(mensagem);
 
-  window.open(
-    destino,
-    "_blank",
-    "noopener,noreferrer"
-  );
+  window.open(destino, "_blank", "noopener,noreferrer");
 }
 
-// MOSTRAR BOIS
 function renderizarBois() {
   const lista = $("listaBois");
   lista.replaceChildren();
@@ -706,118 +477,86 @@ function renderizarBois() {
     titulo.textContent = "🐂 " + boi.nome;
 
     const dono = document.createElement("p");
-    dono.textContent =
-      "👤 Dono/Responsável: " + boi.dono;
+    dono.textContent = "👤 Dono/Responsável: " + boi.dono;
 
     const telefone = document.createElement("p");
     telefone.textContent =
-      "📱 Telefone: " +
-      (boi.telefone || "Não informado");
+      "📱 Telefone: " + (boi.telefone || "Não informado");
 
     const comunidade = document.createElement("p");
     comunidade.textContent =
-      "🏘️ Comunidade: " +
-      (boi.comunidade || "Não informada");
+      "🏘️ Comunidade: " + (boi.comunidade || "Não informada");
 
     const autorizacao = document.createElement("p");
     autorizacao.textContent = boi.gpsAutorizado
       ? "✅ GPS: cadastro autorizado"
-      : "⏳ GPS: autorização administrativa pendente";
+      : "⏳ GPS: autorização pendente";
 
     const status = document.createElement("p");
     status.textContent = boi.antigo
-      ? "Cadastro antigo: disponível para edição"
+      ? "Cadastro original: disponível para edição"
       : "Cadastro salvo no Firebase";
 
     const botoes = document.createElement("div");
     botoes.className = "botoes";
 
-    // EDITAR
     const editar = document.createElement("button");
     editar.textContent = "✏️ Editar";
     editar.onclick = () => editarBoi(boi);
-
     botoes.appendChild(editar);
 
     if (!boi.antigo) {
-
-      // AUTORIZAÇÃO ADMINISTRATIVA
       const autorizar = document.createElement("button");
-
       autorizar.textContent = boi.gpsAutorizado
         ? "🔒 Revogar autorização"
         : "✅ Autorizar GPS";
 
-      if (boi.gpsAutorizado) {
-        autorizar.className = "cinza";
-      }
-
-      autorizar.onclick = () =>
-        alterarAutorizacaoGPS(boi);
-
+      if (boi.gpsAutorizado) autorizar.className = "cinza";
+      autorizar.onclick = () => alterarAutorizacaoGPS(boi);
       botoes.appendChild(autorizar);
 
-      // COPIAR LINK
       const copiar = document.createElement("button");
       copiar.className = "cinza";
       copiar.textContent = "🔗 Copiar link GPS";
       copiar.onclick = () => copiarLinkGPS(boi);
-
       botoes.appendChild(copiar);
 
-      // ENVIAR PELO WHATSAPP
       const whatsapp = document.createElement("button");
       whatsapp.className = "verde";
-      whatsapp.textContent =
-        "📲 Enviar GPS pelo WhatsApp";
-
-      whatsapp.onclick = () =>
-        enviarGPSWhatsApp(boi);
-
+      whatsapp.textContent = "📲 Enviar GPS pelo WhatsApp";
+      whatsapp.onclick = () => enviarGPSWhatsApp(boi);
       botoes.appendChild(whatsapp);
     }
 
-    // EXCLUIR APENAS BOIS NOVOS
-    if (
-      !boi.antigo &&
-      !nomesIniciais.some(n =>
-        normalizar(n) === normalizar(boi.origem)
-      )
-    ) {
+    const original = nomesIniciais.some(n =>
+      normalizar(n) === normalizar(boi.origem)
+    );
+
+    if (!boi.antigo && !original) {
       const excluir = document.createElement("button");
       excluir.className = "vermelho";
       excluir.textContent = "🗑️ Excluir";
       excluir.onclick = () => excluirBoi(boi);
-
       botoes.appendChild(excluir);
     }
 
     card.append(
-      titulo,
-      dono,
-      telefone,
-      comunidade,
-      autorizacao,
-      status,
-      botoes
+      titulo, dono, telefone, comunidade,
+      autorizacao, status, botoes
     );
-
     lista.appendChild(card);
   });
 }
 
-// AUTORIZAR OU REVOGAR GPS
 async function alterarAutorizacaoGPS(boi) {
   if (!usuarioAtual || !boi.id) return;
 
   const proximo = !boi.gpsAutorizado;
 
-  const mensagem = proximo
-    ? "Autorizar cadastro GPS para " + boi.nome + "?"
-    : "Revogar autorização administrativa de " +
-      boi.nome + "?";
-
-  if (!confirm(mensagem)) return;
+  if (!confirm(
+    (proximo ? "Autorizar GPS para " : "Revogar GPS de ") +
+    boi.nome + "?"
+  )) return;
 
   try {
     await boisRef.child(boi.id).update({
@@ -825,48 +564,45 @@ async function alterarAutorizacaoGPS(boi) {
     });
 
     $("mensagemBoi").textContent = proximo
-      ? "Cadastro autorizado. A transmissão ainda depende da autenticação e das regras de segurança do Firebase."
-      : "Autorização administrativa revogada. Para bloquear uma transmissão já vinculada, também é necessário revogar sua credencial de GPS.";
-
+      ? "GPS autorizado no cadastro. O responsável precisará confirmar o telefone por SMS quando o transmissor estiver pronto."
+      : "Autorização GPS revogada.";
   } catch (erro) {
     $("mensagemBoi").textContent =
-      "Erro ao alterar autorização. Verifique as regras do Firebase.";
+      "Erro ao alterar autorização.";
     console.error(erro);
   }
 }
 
-// EDITAR BOI
 function editarBoi(boi) {
   boiEmEdicao = { ...boi };
 
   $("nomeBoi").value = boi.nome;
-
   $("donoBoi").value =
     boi.dono === "A definir" ? "" : boi.dono;
-
   $("telefoneBoi").value = boi.telefone || "";
   $("comunidadeBoi").value = boi.comunidade || "";
 
   $("tituloBoi").textContent = "Editar boi";
   $("salvarBoi").textContent = "Salvar alterações";
-
   $("cancelarBoi").classList.remove("oculto");
   $("mensagemBoi").textContent = "";
 
   mostrarAba("bois");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// SALVAR BOI
 $("formBoi").onsubmit = async function(e) {
   e.preventDefault();
-
   if (!usuarioAtual) return;
 
   const nome = $("nomeBoi").value.trim();
   const dono = $("donoBoi").value.trim();
-  const telefone = $("telefoneBoi").value.trim();
+  const telefoneDigitado = $("telefoneBoi").value.trim();
   const comunidade = $("comunidadeBoi").value.trim();
+
+  const telefone = telefoneDigitado
+    ? normalizarTelefone(telefoneDigitado)
+    : "";
 
   if (!nome || !dono) {
     $("mensagemBoi").textContent =
@@ -874,14 +610,18 @@ $("formBoi").onsubmit = async function(e) {
     return;
   }
 
+  if (telefoneDigitado && !telefone) {
+    $("mensagemBoi").textContent =
+      "Telefone inválido. Informe DDD e número brasileiro.";
+    return;
+  }
+
   const repetido = boisExibidos.some(b =>
     normalizar(b.nome) === normalizar(nome) &&
     (
       !boiEmEdicao ||
-      (
-        b.id !== boiEmEdicao.id ||
-        b.origem !== boiEmEdicao.origem
-      )
+      b.id !== boiEmEdicao.id ||
+      b.origem !== boiEmEdicao.origem
     )
   );
 
@@ -895,60 +635,47 @@ $("formBoi").onsubmit = async function(e) {
   $("mensagemBoi").textContent = "Salvando...";
 
   try {
-    if (boiEmEdicao) {
-      const antigo = boiEmEdicao;
+    const antigo = boiEmEdicao;
+    const id = antigo && antigo.id
+      ? antigo.id
+      : boisRef.push().key;
 
-      const dados = {
-        nome,
-        dono,
-        telefone,
-        comunidade,
-        gpsAutorizado: antigo.gpsAutorizado === true,
-        nomeOriginal: antigo.origem
-      };
+    const dados = {
+      nome,
+      dono,
+      comunidade,
+      gpsAutorizado: antigo
+        ? antigo.gpsAutorizado === true
+        : false,
+      nomeOriginal: antigo
+        ? antigo.origem
+        : nome
+    };
 
-      const alteracoes = {};
+    const alteracoes = {};
 
-      const id = antigo.id || boisRef.push().key;
+    alteracoes["cadastroBois/" + id] = dados;
+    alteracoes["telefonesBois/" + id] = telefone || null;
 
-      alteracoes["cadastroBois/" + id] = dados;
-
-      // MANTER AGENDA LIGADA AO NOME
+    if (antigo) {
       apresentacoes.forEach(a => {
-        if (
-          normalizar(a.boi) ===
-          normalizar(antigo.nome)
-        ) {
-          alteracoes[
-            "agendas/" + a.id + "/boi"
-          ] = nome;
+        if (normalizar(a.boi) === normalizar(antigo.nome)) {
+          alteracoes["agendas/" + a.id + "/boi"] = nome;
         }
       });
-
-      await db.ref().update(alteracoes);
-
-      $("mensagemBoi").textContent =
-        "Boi atualizado com sucesso!";
-
-    } else {
-      await boisRef.push({
-        nome,
-        dono,
-        telefone,
-        comunidade,
-        gpsAutorizado: false,
-        nomeOriginal: nome
-      });
-
-      $("mensagemBoi").textContent =
-        "Novo boi cadastrado com sucesso!";
     }
 
-    cancelarEdicaoBoi(false);
+    await db.ref().update(alteracoes);
 
+    $("mensagemBoi").textContent =
+      antigo
+        ? "Boi atualizado com sucesso!"
+        : "Novo boi cadastrado com sucesso!";
+
+    cancelarEdicaoBoi(false);
   } catch (erro) {
     $("mensagemBoi").textContent =
-      "Erro ao salvar. Verifique as permissões do Firebase.";
+      "Erro ao salvar. Confira as regras do Firebase.";
     console.error(erro);
   } finally {
     $("salvarBoi").disabled = false;
@@ -959,82 +686,63 @@ function cancelarEdicaoBoi(limparMensagem = true) {
   boiEmEdicao = null;
   $("formBoi").reset();
 
-  $("tituloBoi").textContent =
-    "Cadastrar novo boi";
-
+  $("tituloBoi").textContent = "Cadastrar novo boi";
   $("salvarBoi").textContent = "Salvar boi";
-
   $("cancelarBoi").classList.add("oculto");
 
-  if (limparMensagem) {
-    $("mensagemBoi").textContent = "";
-  }
+  if (limparMensagem) $("mensagemBoi").textContent = "";
 }
 
-$("cancelarBoi").onclick = () =>
-  cancelarEdicaoBoi();
+$("cancelarBoi").onclick = () => cancelarEdicaoBoi();
 
-// EXCLUIR BOI NOVO
 async function excluirBoi(boi) {
+  if (!usuarioAtual || !boi.id) return;
+
   const temAgenda = apresentacoes.some(a =>
     normalizar(a.boi) === normalizar(boi.nome)
   );
 
   if (temAgenda) {
-    alert(
-      "Este boi possui apresentações. " +
-      "Exclua primeiro essas apresentações."
-    );
+    alert("Este boi possui apresentações. Exclua primeiro essas apresentações.");
     return;
   }
 
   if (!confirm("Excluir " + boi.nome + "?")) return;
 
   try {
-    await boisRef.child(boi.id).remove();
+    await db.ref().update({
+      ["cadastroBois/" + boi.id]: null,
+      ["telefonesBois/" + boi.id]: null,
+      ["autorizacoesGPS/" + boi.id]: null
+    });
 
-    $("mensagemBoi").textContent =
-      "Cadastro excluído.";
-
+    $("mensagemBoi").textContent = "Cadastro excluído.";
   } catch (erro) {
-    $("mensagemBoi").textContent =
-      "Erro ao excluir.";
+    $("mensagemBoi").textContent = "Erro ao excluir.";
     console.error(erro);
   }
 }
 
-// ATUALIZAR SELETOR DA AGENDA
 function atualizarSelectBois() {
   const select = $("boiApresentacao");
   const anterior = select.value;
 
   select.replaceChildren();
+  select.add(new Option("Escolha um boi", ""));
 
-  select.add(
-    new Option("Escolha um boi", "")
-  );
+  const nomes = new Set(boisExibidos.map(b => b.nome));
 
-  const nomes = new Set(
-    boisExibidos.map(b => b.nome)
-  );
-
-  // PRESERVAR APRESENTAÇÕES ANTIGAS
   apresentacoes.forEach(a => {
     if (a.boi) nomes.add(a.boi);
   });
 
   Array.from(nomes)
-    .sort((a, b) =>
-      a.localeCompare(b, "pt-BR")
-    )
-    .forEach(nome => {
-      select.add(new Option(nome, nome));
-    });
+    .sort((a,b) => a.localeCompare(b,"pt-BR"))
+    .forEach(nome => select.add(new Option(nome,nome)));
 
   select.value = anterior;
 }
 
-// RECEBER APRESENTAÇÕES
 function receberAgenda(snapshot) {
   apresentacoes = [];
 
@@ -1052,10 +760,8 @@ function receberAgenda(snapshot) {
     }
   });
 
-  apresentacoes.sort((a, b) =>
-    (a.data + a.horario).localeCompare(
-      b.data + b.horario
-    )
+  apresentacoes.sort((a,b) =>
+    (a.data + a.horario).localeCompare(b.data + b.horario)
   );
 
   renderizarAgenda();
@@ -1067,19 +773,16 @@ function formatarData(data) {
     return "A definir";
   }
 
-  const [ano, mes, dia] = data.split("-");
-
+  const [ano,mes,dia] = data.split("-");
   return dia + "/" + mes + "/" + ano;
 }
 
-// MOSTRAR APRESENTAÇÕES
 function renderizarAgenda() {
   const lista = $("listaAgenda");
   lista.replaceChildren();
 
   if (!apresentacoes.length) {
-    lista.textContent =
-      "Nenhuma apresentação cadastrada.";
+    lista.textContent = "Nenhuma apresentação cadastrada.";
     return;
   }
 
@@ -1108,16 +811,14 @@ function renderizarAgenda() {
     excluir.className = "vermelho";
     excluir.onclick = () => excluirAgenda(a);
 
-    botoes.append(editar, excluir);
-    card.append(titulo, info, botoes);
+    botoes.append(editar,excluir);
+    card.append(titulo,info,botoes);
     lista.appendChild(card);
   });
 }
 
-// SALVAR APRESENTAÇÃO
 $("formAgenda").onsubmit = async function(e) {
   e.preventDefault();
-
   if (!usuarioAtual) return;
 
   const dados = {
@@ -1137,18 +838,14 @@ $("formAgenda").onsubmit = async function(e) {
 
   try {
     if (agendaEmEdicao) {
-      await agendasRef
-        .child(agendaEmEdicao)
-        .update(dados);
+      await agendasRef.child(agendaEmEdicao).update(dados);
     } else {
       await agendasRef.push(dados);
     }
 
     cancelarEdicaoAgenda(false);
-
     $("mensagemAgenda").textContent =
       "Apresentação salva com sucesso!";
-
   } catch (erro) {
     $("mensagemAgenda").textContent =
       "Erro ao salvar apresentação.";
@@ -1158,7 +855,6 @@ $("formAgenda").onsubmit = async function(e) {
   }
 };
 
-// EDITAR APRESENTAÇÃO
 function editarAgenda(a) {
   agendaEmEdicao = a.id;
 
@@ -1167,34 +863,25 @@ function editarAgenda(a) {
   $("horaApresentacao").value = a.horario;
   $("comunidadeApresentacao").value = a.comunidade;
 
-  $("tituloAgenda").textContent =
-    "Editar apresentação";
-
-  $("salvarAgenda").textContent =
-    "Salvar alterações";
-
+  $("tituloAgenda").textContent = "Editar apresentação";
+  $("salvarAgenda").textContent = "Salvar alterações";
   $("cancelarAgenda").classList.remove("oculto");
 
   mostrarAba("agenda");
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-// EXCLUIR APRESENTAÇÃO
 async function excluirAgenda(a) {
-  if (!confirm(
-    "Excluir apresentação de " + a.boi + "?"
-  )) return;
+  if (!usuarioAtual) return;
+
+  if (!confirm("Excluir apresentação de " + a.boi + "?")) {
+    return;
+  }
 
   try {
     await agendasRef.child(a.id).remove();
-
     $("mensagemAgenda").textContent =
       "Apresentação excluída.";
-
   } catch (erro) {
     $("mensagemAgenda").textContent =
       "Erro ao excluir apresentação.";
@@ -1202,29 +889,19 @@ async function excluirAgenda(a) {
   }
 }
 
-// CANCELAR EDIÇÃO DA AGENDA
-function cancelarEdicaoAgenda(
-  limparMensagem = true
-) {
+function cancelarEdicaoAgenda(limparMensagem = true) {
   agendaEmEdicao = null;
   $("formAgenda").reset();
 
-  $("tituloAgenda").textContent =
-    "Cadastrar apresentação";
-
-  $("salvarAgenda").textContent =
-    "Salvar apresentação";
-
+  $("tituloAgenda").textContent = "Cadastrar apresentação";
+  $("salvarAgenda").textContent = "Salvar apresentação";
   $("cancelarAgenda").classList.add("oculto");
 
-  if (limparMensagem) {
-    $("mensagemAgenda").textContent = "";
-  }
+  if (limparMensagem) $("mensagemAgenda").textContent = "";
 }
 
-$("cancelarAgenda").onclick = () =>
-  cancelarEdicaoAgenda();
-
+$("cancelarAgenda").onclick = () => cancelarEdicaoAgenda();
 </script>
+
 </body>
 </html>
