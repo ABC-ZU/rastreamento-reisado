@@ -15,7 +15,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   --vinho: #890019;
   --vinho-escuro: #57000f;
   --dourado: #e6b52e;
-  --azul: #0c4d95;
 }
 
 * {
@@ -25,7 +24,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background: white;
+  background: #fff;
   color: #252525;
 }
 
@@ -64,7 +63,7 @@ button {
   font-size: 14px;
 }
 
-/* ESTRUTURA NO ESTILO IFPI */
+/* ESTRUTURA PRINCIPAL */
 
 .estrutura {
   width: min(1280px, calc(100% - 36px));
@@ -75,11 +74,11 @@ button {
   align-items: start;
 }
 
-/* MENU LATERAL */
-
-.lateral {
-  background: white;
+.conteudo {
+  min-width: 0;
 }
+
+/* MENU LATERAL */
 
 .logo-area {
   text-align: center;
@@ -138,23 +137,25 @@ button {
 
 /* CARROSSEL */
 
-.conteudo {
-  min-width: 0;
-}
-
 .carrossel {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  background: #e9e9e9;
+  background: #222;
   border-radius: 6px;
   overflow: hidden;
+}
+
+#slidesAutomaticos {
+  position: absolute;
+  inset: 0;
 }
 
 .slide {
   position: absolute;
   inset: 0;
   display: none;
+  overflow: hidden;
 }
 
 .slide.ativo {
@@ -163,11 +164,11 @@ button {
 
 .slide-fundo {
   position: absolute;
-  inset: 0;
+  inset: -25px;
   background-size: cover;
   background-position: center;
-  filter: blur(20px) brightness(.7);
-  transform: scale(1.08);
+  filter: blur(18px) brightness(.55);
+  transform: scale(1.06);
 }
 
 .slide-foto {
@@ -175,7 +176,7 @@ button {
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   display: block;
 }
@@ -187,15 +188,40 @@ button {
   left: 0;
   right: 0;
   padding: 17px 100px 17px 20px;
-  background: rgba(0,0,0,.72);
+  background: rgba(0, 0, 0, .75);
   color: white;
   font-size: clamp(15px, 1.6vw, 21px);
   font-weight: bold;
 }
 
+.controle {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 50px;
+  background: rgba(0, 0, 0, .35);
+  color: white;
+  border: 0;
+  font-size: 24px;
+}
+
+.controle:hover {
+  background: rgba(0, 0, 0, .7);
+}
+
+.anterior {
+  left: 0;
+}
+
+.proximo {
+  right: 0;
+}
+
 .indicadores {
   position: absolute;
-  z-index: 3;
+  z-index: 4;
   bottom: 12px;
   right: 12px;
   display: flex;
@@ -205,7 +231,7 @@ button {
 .indicadores button {
   border: 0;
   background: #6d6d6d;
-  width: 27px;
+  min-width: 27px;
   height: 24px;
   color: white;
   font-size: 13px;
@@ -216,29 +242,10 @@ button {
   color: #222;
 }
 
-.controle {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 34px;
-  height: 48px;
-  background: rgba(0,0,0,.25);
+.mensagem-carrossel {
   color: white;
-  border: 0;
-  font-size: 22px;
-}
-
-.controle:hover {
-  background: rgba(0,0,0,.6);
-}
-
-.anterior {
-  left: 0;
-}
-
-.proximo {
-  right: 0;
+  text-align: center;
+  padding: 30px;
 }
 
 /* TRÊS VÍDEOS */
@@ -319,7 +326,7 @@ button {
   opacity: .85;
 }
 
-/* CONTEÚDO CULTURAL */
+/* CULTURA */
 
 .secao {
   margin-top: 42px;
@@ -344,13 +351,17 @@ button {
   overflow: hidden;
 }
 
-.cultura img {
+.cultura-imagem {
   width: 100%;
   height: 280px;
-  object-fit: cover;
-  object-position: center;
-  display: block;
+  background: #f1f1f1;
+}
 
+.cultura-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .cultura .texto {
@@ -366,6 +377,8 @@ button {
   font-size: 14px;
   line-height: 1.6;
 }
+
+/* AGENDA */
 
 .agenda-item {
   padding: 13px 0;
@@ -440,10 +453,6 @@ footer {
   .grade-videos {
     gap: 10px;
   }
-
-  .video-nome {
-    font-size: 11px;
-  }
 }
 
 @media(max-width: 520px) {
@@ -465,7 +474,7 @@ footer {
   }
 
   .indicadores button {
-    width: 21px;
+    min-width: 21px;
   }
 }
 </style>
@@ -500,27 +509,33 @@ footer {
     <nav class="menu-lateral">
 
       <a href="inicio.html" class="ativo">
-        <i class="fa fa-house"></i> Início
+        <i class="fa fa-house"></i>
+        Início
       </a>
 
       <a href="agenda.html">
-        <i class="fa fa-calendar-days"></i> Agenda dos Bois
+        <i class="fa fa-calendar-days"></i>
+        Agenda dos Bois
       </a>
 
       <a href="mapa.html">
-        <i class="fa fa-map-location-dot"></i> Mapa Histórico
+        <i class="fa fa-map-location-dot"></i>
+        Mapa Histórico
       </a>
 
       <a href="bois.html">
-        <i class="fa fa-cow"></i> Conheça os Bois
+        <i class="fa fa-cow"></i>
+        Conheça os Bois
       </a>
 
       <a href="memoria.html">
-        <i class="fa fa-book-open"></i> Memória do Reisado
+        <i class="fa fa-book-open"></i>
+        Memória do Reisado
       </a>
 
       <a href="guia.html">
-        <i class="fa fa-robot"></i> Guia Cultural (IA)
+        <i class="fa fa-robot"></i>
+        Guia Cultural (IA)
       </a>
 
     </nav>
@@ -538,43 +553,52 @@ footer {
 
   </aside>
 
-  <!-- ÁREA PRINCIPAL -->
+  <!-- CONTEÚDO PRINCIPAL -->
 
   <main class="conteudo">
 
-    <!-- CARROSSEL COM CINCO IMAGENS -->
+    <!-- CARROSSEL AUTOMÁTICO -->
 
-    
-<!-- CARROSSEL AUTOMATICO -->
+    <section
+      class="carrossel"
+      id="carrossel"
+      aria-label="Fotografias do Reisado">
 
-<section class="carrossel"
-         id="carrossel"
-         aria-label="Destaques do Reisado">
+      <div id="slidesAutomaticos">
+        <p class="mensagem-carrossel">
+          Carregando fotografias...
+        </p>
+      </div>
 
-  <div id="slidesAutomaticos"></div>
+      <button
+        class="controle anterior"
+        type="button"
+        id="botaoAnterior"
+        aria-label="Fotografia anterior">
+        ❮
+      </button>
 
-  <button class="controle anterior"
-          onclick="mudarSlide(-1)"
-          aria-label="Imagem anterior">
-    ❮
-  </button>
+      <button
+        class="controle proximo"
+        type="button"
+        id="botaoProximo"
+        aria-label="Próxima fotografia">
+        ❯
+      </button>
 
-  <button class="controle proximo"
-          onclick="mudarSlide(1)"
-          aria-label="Próxima imagem">
-    ❯
-  </button>
+      <div
+        class="indicadores"
+        id="indicadoresAutomaticos">
+      </div>
 
-  <div class="indicadores" id="indicadoresAutomaticos"></div>
+    </section>
 
-</section>
+    <!-- TRÊS VÍDEOS -->
 
-
-    <!-- EXATAMENTE TRÊS VÍDEOS -->
-
-    <section class="grade-videos"
-             id="gradeVideos"
-             aria-label="Vídeos do Reisado">
+    <section
+      class="grade-videos"
+      id="gradeVideos"
+      aria-label="Vídeos do Reisado">
     </section>
 
     <!-- CULTURA -->
@@ -586,34 +610,44 @@ footer {
       <div class="cultura">
 
         <article>
-          <img
-            src="imagens/Igreja.jpeg"
-            alt="Igreja de Boa Hora"
-            loading="lazy">
+
+          <div class="cultura-imagem">
+            <img
+              src="imagens/Igreja.jpeg"
+              alt="Igreja de Boa Hora"
+              loading="lazy">
+          </div>
 
           <div class="texto">
             <h3>Nossa Cidade</h3>
+
             <p>
               Conheça os lugares e as tradições
               que fazem parte da história de Boa Hora.
             </p>
           </div>
+
         </article>
 
         <article>
-          <img
-            src="imagens/Três Reis.jpeg"
-            alt="Os Três Reis"
-            loading="lazy">
+
+          <div class="cultura-imagem">
+            <img
+              src="imagens/Três Reis.jpeg"
+              alt="Os Três Reis"
+              loading="lazy">
+          </div>
 
           <div class="texto">
             <h3>Os Três Reis</h3>
+
             <p>
               A tradição dos Santos Reis faz parte
               da identidade cultural e religiosa
               do município.
             </p>
           </div>
+
         </article>
 
       </div>
@@ -649,22 +683,61 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script>
-/* ==================================
-   CARROSSEL AUTOMÁTICO
-================================== */
 
+/* =====================================
+   CARROSSEL AUTOMÁTICO CORRIGIDO
+===================================== */
+
+const imagensPadrao = [
+  "imagens/Bois.webp",
+  "imagens/Festival.jpeg",
+  "imagens/Igreja.jpeg",
+  "imagens/Três Reis.jpeg"
+];
+
+const titulosPadrao = {
+  "Bois.webp": "Os Bois do Reisado",
+  "Festival.jpeg": "Festival do Reisado",
+  "Igreja.jpeg": "Boa Hora – Nossa Cidade",
+  "Três Reis.jpeg": "Os Três Reis de Boa Hora"
+};
+
+const slidesContainer =
+  document.getElementById("slidesAutomaticos");
+
+const indicadoresContainer =
+  document.getElementById("indicadoresAutomaticos");
+
+const botaoAnterior =
+  document.getElementById("botaoAnterior");
+
+const botaoProximo =
+  document.getElementById("botaoProximo");
+
+let slides = [];
+let indicadores = [];
 let slideAtual = 0;
-let intervalo;
+let intervaloCarrossel = null;
 
-const slides =
-  document.querySelectorAll(".slide");
+function obterNomeArquivo(caminho) {
+  return caminho.split("/").pop();
+}
 
-const indicadores =
-  document.querySelectorAll(".indicadores button");
+function obterTitulo(caminho) {
+  const arquivo = obterNomeArquivo(caminho);
+
+  return titulosPadrao[arquivo] ||
+    arquivo
+      .replace(/\.[^.]+$/, "")
+      .replace(/[-_]/g, " ");
+}
 
 function mostrarSlide(numero) {
+  if (slides.length === 0) return;
+
   slideAtual =
-    (numero + slides.length) % slides.length;
+    ((numero % slides.length) + slides.length)
+    % slides.length;
 
   slides.forEach((slide, indice) => {
     slide.classList.toggle(
@@ -681,6 +754,18 @@ function mostrarSlide(numero) {
   });
 }
 
+function iniciarCarrossel() {
+  if (intervaloCarrossel !== null) {
+    clearInterval(intervaloCarrossel);
+  }
+
+  if (slides.length < 2) return;
+
+  intervaloCarrossel = setInterval(() => {
+    mostrarSlide(slideAtual + 1);
+  }, 6000);
+}
+
 function mudarSlide(direcao) {
   mostrarSlide(slideAtual + direcao);
   iniciarCarrossel();
@@ -691,23 +776,137 @@ function irSlide(numero) {
   iniciarCarrossel();
 }
 
-function iniciarCarrossel() {
-  clearInterval(intervalo);
+botaoAnterior.addEventListener("click", () => {
+  mudarSlide(-1);
+});
 
-  intervalo = setInterval(() => {
-    mostrarSlide(slideAtual + 1);
-  }, 6000);
+botaoProximo.addEventListener("click", () => {
+  mudarSlide(1);
+});
+
+function criarCarrossel(caminhos) {
+  clearInterval(intervaloCarrossel);
+
+  slidesContainer.replaceChildren();
+  indicadoresContainer.replaceChildren();
+
+  const caminhosUnicos = [...new Set(caminhos)];
+
+  caminhosUnicos.forEach((caminho, indice) => {
+    const slide = document.createElement("div");
+    slide.className = "slide";
+
+    const fundo = document.createElement("div");
+    fundo.className = "slide-fundo";
+
+    const enderecoImagem = encodeURI(caminho);
+
+    fundo.style.backgroundImage =
+      'url("' + enderecoImagem + '")';
+
+    const foto = document.createElement("img");
+    foto.className = "slide-foto";
+    foto.src = enderecoImagem;
+    foto.alt = obterTitulo(caminho);
+    foto.loading = indice === 0 ? "eager" : "lazy";
+
+    const legenda = document.createElement("div");
+    legenda.className = "legenda";
+    legenda.textContent = obterTitulo(caminho);
+
+    slide.append(fundo, foto, legenda);
+    slidesContainer.appendChild(slide);
+
+    const indicador = document.createElement("button");
+    indicador.type = "button";
+    indicador.textContent = "•";
+    indicador.setAttribute(
+      "aria-label",
+      "Mostrar fotografia " + (indice + 1)
+    );
+
+    indicador.addEventListener("click", () => {
+      irSlide(indice);
+    });
+
+    indicadoresContainer.appendChild(indicador);
+  });
+
+  slides = Array.from(
+    slidesContainer.querySelectorAll(".slide")
+  );
+
+  indicadores = Array.from(
+    indicadoresContainer.querySelectorAll("button")
+  );
+
+  slideAtual = 0;
+  mostrarSlide(0);
+  iniciarCarrossel();
 }
 
-iniciarCarrossel();
+async function carregarImagensAutomaticamente() {
+  try {
+    const resposta = await fetch(
+      "imagens.json?v=" + Date.now(),
+      { cache: "no-store" }
+    );
 
-/* ==================================
+    if (!resposta.ok) {
+      throw new Error(
+        "Lista automática ainda não disponível"
+      );
+    }
+
+    const dados = await resposta.json();
+
+    if (!Array.isArray(dados)) {
+      throw new Error("Formato de lista inválido");
+    }
+
+    const caminhos = dados.filter(caminho => {
+      return (
+        typeof caminho === "string" &&
+        caminho.startsWith("imagens/") &&
+        !caminho.includes("..") &&
+        /\.(jpg|jpeg|png|webp|gif)$/i.test(caminho)
+      );
+    });
+
+    if (caminhos.length === 0) {
+      throw new Error("Nenhuma imagem encontrada");
+    }
+
+    criarCarrossel(caminhos);
+
+    console.log(
+      "Carrossel automático carregado:",
+      caminhos.length,
+      "fotografias"
+    );
+
+  } catch (erro) {
+    console.warn(
+      "Usando imagens cadastradas como alternativa:",
+      erro.message
+    );
+
+    criarCarrossel(imagensPadrao);
+  }
+}
+
+/* Inicia somente depois de preparar a página */
+
+carregarImagensAutomaticamente();
+
+/* =====================================
    TRÊS VÍDEOS DO YOUTUBE
-================================== */
+===================================== */
 
 /*
-  Quando tiver os vídeos, coloque
-  os links entre as aspas em url.
+  Adicione os links quando tiver os vídeos.
+  Exemplo:
+  url: "https://www.youtube.com/watch?v=XXXXXXXXXXX"
 */
 
 const videos = [
@@ -754,7 +953,10 @@ function obterIdYoutube(url) {
         return u.pathname.split("/")[2];
       }
     }
-  } catch(e) {}
+
+  } catch (erro) {
+    return null;
+  }
 
   return null;
 }
@@ -789,43 +991,32 @@ videos.forEach(video => {
     img.loading = "lazy";
 
     imagem.appendChild(img);
+
   } else {
     const placeholder =
       document.createElement("div");
 
-    placeholder.className =
-      "video-placeholder";
+    placeholder.className = "video-placeholder";
 
-    const icone =
-      document.createElement("i");
+    const icone = document.createElement("i");
+    icone.className = "fa-brands fa-youtube";
 
-    icone.className =
-      "fa-brands fa-youtube";
-
-    const texto =
-      document.createElement("span");
-
-    texto.textContent =
-      "Vídeo em breve";
+    const texto = document.createElement("span");
+    texto.textContent = "Vídeo em breve";
 
     placeholder.append(icone, texto);
     imagem.appendChild(placeholder);
   }
 
-  const nome =
-    document.createElement("div");
-
+  const nome = document.createElement("div");
   nome.className = "video-nome";
   nome.textContent = video.titulo;
 
-  const rodape =
-    document.createElement("div");
-
+  const rodape = document.createElement("div");
   rodape.className = "video-rodape";
 
   if (valido) {
-    const link =
-      document.createElement("a");
+    const link = document.createElement("a");
 
     link.href =
       "https://www.youtube.com/watch?v=" + id;
@@ -834,14 +1025,12 @@ videos.forEach(video => {
     link.rel = "noopener noreferrer";
     link.textContent = "ASSISTIR";
 
-    const icone =
-      document.createElement("i");
-
-    icone.className =
-      "fa fa-arrow-right";
+    const icone = document.createElement("i");
+    icone.className = "fa fa-arrow-right";
 
     link.appendChild(icone);
     rodape.appendChild(link);
+
   } else {
     rodape.textContent = "EM BREVE";
   }
@@ -850,9 +1039,9 @@ videos.forEach(video => {
   gradeVideos.appendChild(card);
 });
 
-/* ==================================
+/* =====================================
    FIREBASE - AGENDA
-================================== */
+===================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -897,14 +1086,11 @@ function converterData(valor) {
 
   const data = new Date(texto);
 
-  return isNaN(data.getTime())
-    ? null
-    : data;
+  return isNaN(data.getTime()) ? null : data;
 }
 
 function mostrarMensagemAgenda(mensagem) {
-  const lista =
-    document.getElementById("listaAgenda");
+  const lista = document.getElementById("listaAgenda");
 
   lista.textContent = "";
 
@@ -957,12 +1143,10 @@ db.ref("agendas").on("value", snapshot => {
   hoje.setHours(0, 0, 0, 0);
 
   const futuros = eventos
-    .filter(e =>
-      e.data.getTime() >= hoje.getTime()
+    .filter(evento =>
+      evento.data.getTime() >= hoje.getTime()
     )
-    .sort((a, b) =>
-      a.data - b.data
-    )
+    .sort((a, b) => a.data - b.data)
     .slice(0, 3);
 
   if (!futuros.length) {
@@ -972,24 +1156,17 @@ db.ref("agendas").on("value", snapshot => {
     return;
   }
 
-  const lista =
-    document.getElementById("listaAgenda");
-
+  const lista = document.getElementById("listaAgenda");
   lista.textContent = "";
 
   futuros.forEach(evento => {
-    const div =
-      document.createElement("div");
-
+    const div = document.createElement("div");
     div.className = "agenda-item";
 
-    const nome =
-      document.createElement("strong");
-
+    const nome = document.createElement("strong");
     nome.textContent = evento.nome;
 
-    const detalhe =
-      document.createElement("small");
+    const detalhe = document.createElement("small");
 
     detalhe.textContent = [
       evento.data.toLocaleDateString("pt-BR"),
@@ -1002,15 +1179,13 @@ db.ref("agendas").on("value", snapshot => {
   });
 
 }, erro => {
-  console.error(
-    "Erro ao carregar agenda:",
-    erro
-  );
+  console.error("Erro ao carregar agenda:", erro);
 
   mostrarMensagemAgenda(
     "Não foi possível carregar a agenda."
   );
 });
+
 </script>
 
 </body>
