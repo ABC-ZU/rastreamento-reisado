@@ -1,0 +1,64 @@
+
+name: Atualizar imagens do Reisado
+
+on:
+  push:
+    paths:
+      - "imagens/**"
+      - ".github/workflows/atualizar-imagens.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar arquivos do repositorio
+        uses: actions/checkout@v4
+
+      - name: Gerar lista de imagens
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          pasta = Path("imagens")
+          extensoes = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
+
+          arquivos = sorted(
+              [
+                  f"imagens/{arquivo.name}"
+                  for arquivo in pasta.iterdir()
+                  if arquivo.is_file()
+                  and arquivo.suffix.lower() in extensoes
+              ],
+              key=str.casefold
+          ) if pasta.exists() else []
+
+          with open("imagens.json", "w", encoding="utf-8") as arquivo:
+              json.dump(
+                  arquivos,
+                  arquivo,
+                  ensure_ascii=False,
+                  indent=2
+              )
+
+          print("Imagens encontradas:", len(arquivos))
+          PY
+
+      - name: Publicar lista atualizada
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add imagens.json
+
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteracao necessaria."
+          else
+            git commit -m "Atualizar lista automatica de imagens"
+            git push
+          fi
