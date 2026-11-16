@@ -16,7 +16,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   --vinho-escuro: #57000f;
   --dourado: #e6b52e;
   --azul: #0c4d95;
-  --cinza: #f4f5f7;
 }
 
 * {
@@ -65,7 +64,7 @@ button {
   font-size: 14px;
 }
 
-/* ESTRUTURA IFPI */
+/* ESTRUTURA NO ESTILO IFPI */
 
 .estrutura {
   width: min(1280px, calc(100% - 36px));
@@ -137,13 +136,11 @@ button {
   color: var(--vinho);
 }
 
-/* CONTEÚDO PRINCIPAL */
+/* CARROSSEL */
 
 .conteudo {
   min-width: 0;
 }
-
-/* CARROSSEL NO ESTILO IFPI */
 
 .carrossel {
   position: relative;
@@ -161,13 +158,6 @@ button {
 }
 
 .slide.ativo {
-  display: block;
-}
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
   display: block;
 }
 
@@ -194,7 +184,7 @@ button {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 17px 75px 17px 20px;
+  padding: 17px 100px 17px 20px;
   background: rgba(0,0,0,.72);
   color: white;
   font-size: clamp(15px, 1.6vw, 21px);
@@ -249,7 +239,7 @@ button {
   right: 0;
 }
 
-/* EXATAMENTE TRÊS VÍDEOS */
+/* TRÊS VÍDEOS */
 
 .grade-videos {
   display: grid;
@@ -327,7 +317,7 @@ button {
   opacity: .85;
 }
 
-/* SEÇÕES INFERIORES */
+/* CONTEÚDO CULTURAL */
 
 .secao {
   margin-top: 42px;
@@ -409,7 +399,7 @@ footer {
   font-size: 14px;
 }
 
-/* CELULAR */
+/* RESPONSIVIDADE */
 
 @media(max-width: 800px) {
   .estrutura {
@@ -469,6 +459,10 @@ footer {
     padding: 10px 65px 10px 12px;
     font-size: 13px;
   }
+
+  .indicadores button {
+    width: 21px;
+  }
 }
 </style>
 </head>
@@ -477,12 +471,15 @@ footer {
 
 <header class="topo">
   <h1>REISADO DIGITAL <span>2.0</span></h1>
-  <p>Boa Hora – PI | Cultura • Memória • História • Tradição</p>
+  <p>
+    Boa Hora – PI | Cultura • Memória • História • Tradição
+  </p>
 </header>
 
 <div class="estrutura">
 
-  <!-- COLUNA ESQUERDA -->
+  <!-- MENU LATERAL -->
+
   <aside class="lateral">
 
     <div class="logo-area">
@@ -496,7 +493,7 @@ footer {
       </div>
     </div>
 
-    <div class="menu-lateral">
+    <nav class="menu-lateral">
 
       <a href="inicio.html" class="ativo">
         <i class="fa fa-house"></i> Início
@@ -522,91 +519,167 @@ footer {
         <i class="fa fa-robot"></i> Guia Cultural (IA)
       </a>
 
-    </div>
+    </nav>
 
     <div class="menu-titulo">
       ADMINISTRAÇÃO
     </div>
 
-    <div class="menu-lateral">
+    <nav class="menu-lateral">
       <a href="admin.html">
         <i class="fa fa-user-shield"></i>
         Painel Administrativo
       </a>
-    </div>
+    </nav>
 
   </aside>
 
-  <!-- COLUNA DIREITA -->
+  <!-- ÁREA PRINCIPAL -->
+
   <main class="conteudo">
 
-    <!-- CARROSSEL -->
-    <section class="carrossel" aria-label="Destaques do Reisado">
+    <!-- CARROSSEL COM CINCO IMAGENS -->
+
+    <section class="carrossel"
+             aria-label="Destaques do Reisado">
+
+      <!-- IMAGEM 1: SÍMBOLO -->
 
       <div class="slide ativo">
         <div class="slide-fundo"
-             style="background-image:url('ícone-boi-reisado-logo.png')"></div>
+          style="background-image:url('ícone-boi-reisado-logo.png')">
+        </div>
+
         <img class="slide-foto"
-             src="ícone-boi-reisado-logo.png"
-             alt="Símbolo do Reisado">
+          src="ícone-boi-reisado-logo.png"
+          alt="Símbolo do Reisado">
+
         <div class="legenda">
-          Reisado de Boa Hora – Nossa cultura e tradição
+          Reisado de Boa Hora – Nossa Cultura e Tradição
         </div>
       </div>
 
-      <div class="slide">
-        <div class="slide-fundo"
-             style="background-image:url('imagens/Três Reis.jpeg')"></div>
-        <img class="slide-foto"
-             src="imagens/Três Reis.jpeg"
-             alt="Os Três Reis de Boa Hora">
-        <div class="legenda">
-          Os Três Reis – Fé, cultura e memória
-        </div>
-      </div>
+      <!-- IMAGEM 2: TRÊS REIS -->
 
       <div class="slide">
         <div class="slide-fundo"
-             style="background-image:url('imagens/Igreja.jpeg')"></div>
+          style="background-image:url('imagens/Três Reis.jpeg')">
+        </div>
+
         <img class="slide-foto"
-             src="imagens/Igreja.jpeg"
-             alt="Igreja de Boa Hora">
+          src="imagens/Três Reis.jpeg"
+          alt="Os Três Reis de Boa Hora">
+
         <div class="legenda">
-          Boa Hora – Nossa cidade, nossa história
+          Os Três Reis – Fé, Cultura e Memória
         </div>
       </div>
+
+      <!-- IMAGEM 3: IGREJA -->
+
+      <div class="slide">
+        <div class="slide-fundo"
+          style="background-image:url('imagens/Igreja.jpeg')">
+        </div>
+
+        <img class="slide-foto"
+          src="imagens/Igreja.jpeg"
+          alt="Igreja de Boa Hora">
+
+        <div class="legenda">
+          Boa Hora – Nossa Cidade, Nossa História
+        </div>
+      </div>
+
+      <!-- IMAGEM 4: BOIS - NOVA -->
+
+      <div class="slide">
+        <div class="slide-fundo"
+          style="background-image:url('imagens/Bois.webp')">
+        </div>
+
+        <img class="slide-foto"
+          src="imagens/Bois.webp"
+          alt="Bois do Reisado de Boa Hora">
+
+        <div class="legenda">
+          Os Bois do Reisado – Alegria e Tradição
+        </div>
+      </div>
+
+      <!-- IMAGEM 5: FESTIVAL - NOVA -->
+
+      <div class="slide">
+        <div class="slide-fundo"
+          style="background-image:url('imagens/Festival.jpeg')">
+        </div>
+
+        <img class="slide-foto"
+          src="imagens/Festival.jpeg"
+          alt="Festival do Reisado">
+
+        <div class="legenda">
+          Festival do Reisado – Cultura Viva de Boa Hora
+        </div>
+      </div>
+
+      <!-- SETAS -->
 
       <button class="controle anterior"
-              onclick="mudarSlide(-1)"
-              aria-label="Imagem anterior">❮</button>
+        onclick="mudarSlide(-1)"
+        aria-label="Imagem anterior">
+        ❮
+      </button>
 
       <button class="controle proximo"
-              onclick="mudarSlide(1)"
-              aria-label="Próxima imagem">❯</button>
+        onclick="mudarSlide(1)"
+        aria-label="Próxima imagem">
+        ❯
+      </button>
+
+      <!-- CINCO INDICADORES -->
 
       <div class="indicadores">
-        <button class="ativo" onclick="irSlide(0)" aria-label="Imagem 1">•</button>
-        <button onclick="irSlide(1)" aria-label="Imagem 2">•</button>
-        <button onclick="irSlide(2)" aria-label="Imagem 3">•</button>
+        <button class="ativo"
+          onclick="irSlide(0)"
+          aria-label="Imagem 1">•</button>
+
+        <button onclick="irSlide(1)"
+          aria-label="Imagem 2">•</button>
+
+        <button onclick="irSlide(2)"
+          aria-label="Imagem 3">•</button>
+
+        <button onclick="irSlide(3)"
+          aria-label="Imagem 4">•</button>
+
+        <button onclick="irSlide(4)"
+          aria-label="Imagem 5">•</button>
       </div>
 
     </section>
 
-    <!-- SOMENTE TRÊS VÍDEOS -->
-    <section class="grade-videos" id="gradeVideos"
+    <!-- EXATAMENTE TRÊS VÍDEOS -->
+
+    <section class="grade-videos"
+             id="gradeVideos"
              aria-label="Vídeos do Reisado">
     </section>
 
-    <!-- CONTEÚDO CULTURAL -->
+    <!-- CULTURA -->
+
     <section class="secao">
+
       <h2>Conheça a Cultura de Boa Hora</h2>
 
       <div class="cultura">
 
         <article>
-          <img src="imagens/Igreja.jpeg"
-               alt="Igreja de Boa Hora"
-               loading="lazy">
+          <img
+            src="imagens/Igreja.jpeg"
+            alt="Igreja de Boa Hora"
+            loading="lazy">
+
           <div class="texto">
             <h3>Nossa Cidade</h3>
             <p>
@@ -617,9 +690,11 @@ footer {
         </article>
 
         <article>
-          <img src="imagens/Três Reis.jpeg"
-               alt="Os Três Reis"
-               loading="lazy">
+          <img
+            src="imagens/Três Reis.jpeg"
+            alt="Os Três Reis"
+            loading="lazy">
+
           <div class="texto">
             <h3>Os Três Reis</h3>
             <p>
@@ -631,10 +706,13 @@ footer {
         </article>
 
       </div>
+
     </section>
 
     <!-- AGENDA -->
+
     <section class="secao">
+
       <h2>Próximas Apresentações</h2>
 
       <div id="listaAgenda">
@@ -644,9 +722,11 @@ footer {
       <a class="botao" href="agenda.html">
         Ver agenda completa
       </a>
+
     </section>
 
   </main>
+
 </div>
 
 <footer>
@@ -658,23 +738,35 @@ footer {
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script>
-/* CARROSSEL */
+/* ==================================
+   CARROSSEL AUTOMÁTICO
+================================== */
 
 let slideAtual = 0;
 let intervalo;
 
-const slides = document.querySelectorAll(".slide");
-const indicadores = document.querySelectorAll(".indicadores button");
+const slides =
+  document.querySelectorAll(".slide");
+
+const indicadores =
+  document.querySelectorAll(".indicadores button");
 
 function mostrarSlide(numero) {
-  slideAtual = (numero + slides.length) % slides.length;
+  slideAtual =
+    (numero + slides.length) % slides.length;
 
   slides.forEach((slide, indice) => {
-    slide.classList.toggle("ativo", indice === slideAtual);
+    slide.classList.toggle(
+      "ativo",
+      indice === slideAtual
+    );
   });
 
   indicadores.forEach((botao, indice) => {
-    botao.classList.toggle("ativo", indice === slideAtual);
+    botao.classList.toggle(
+      "ativo",
+      indice === slideAtual
+    );
   });
 }
 
@@ -690,6 +782,7 @@ function irSlide(numero) {
 
 function iniciarCarrossel() {
   clearInterval(intervalo);
+
   intervalo = setInterval(() => {
     mostrarSlide(slideAtual + 1);
   }, 6000);
@@ -697,12 +790,14 @@ function iniciarCarrossel() {
 
 iniciarCarrossel();
 
-/* ====================================
+/* ==================================
    TRÊS VÍDEOS DO YOUTUBE
+================================== */
 
-   Quando tiver os links, substitua
-   as strings vazias abaixo.
-==================================== */
+/*
+  Quando tiver os vídeos, coloque
+  os links entre as aspas em url.
+*/
 
 const videos = [
   {
@@ -724,19 +819,27 @@ function obterIdYoutube(url) {
     const u = new URL(url);
     const host = u.hostname.toLowerCase();
 
-    if (host === "youtu.be" || host === "www.youtu.be") {
+    if (
+      host === "youtu.be" ||
+      host === "www.youtu.be"
+    ) {
       return u.pathname.split("/")[1];
     }
 
-    if (["youtube.com", "www.youtube.com",
-         "m.youtube.com"].includes(host)) {
+    if ([
+      "youtube.com",
+      "www.youtube.com",
+      "m.youtube.com"
+    ].includes(host)) {
 
       if (u.pathname === "/watch") {
         return u.searchParams.get("v");
       }
 
-      if (u.pathname.startsWith("/shorts/") ||
-          u.pathname.startsWith("/embed/")) {
+      if (
+        u.pathname.startsWith("/shorts/") ||
+        u.pathname.startsWith("/embed/")
+      ) {
         return u.pathname.split("/")[2];
       }
     }
@@ -745,56 +848,86 @@ function obterIdYoutube(url) {
   return null;
 }
 
-const gradeVideos = document.getElementById("gradeVideos");
+const gradeVideos =
+  document.getElementById("gradeVideos");
 
 videos.forEach(video => {
   const id = obterIdYoutube(video.url);
-  const valido = id && /^[A-Za-z0-9_-]{11}$/.test(id);
+
+  const valido =
+    id && /^[A-Za-z0-9_-]{11}$/.test(id);
 
   const card = document.createElement("article");
   card.className = "video-card";
 
-  if (!valido) card.classList.add("indisponivel");
+  if (!valido) {
+    card.classList.add("indisponivel");
+  }
 
   const imagem = document.createElement("div");
   imagem.className = "video-imagem";
 
   if (valido) {
     const img = document.createElement("img");
-    img.src = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+
+    img.src =
+      "https://img.youtube.com/vi/" +
+      id + "/hqdefault.jpg";
+
     img.alt = video.titulo;
     img.loading = "lazy";
+
     imagem.appendChild(img);
   } else {
-    const placeholder = document.createElement("div");
-    placeholder.className = "video-placeholder";
+    const placeholder =
+      document.createElement("div");
 
-    const icone = document.createElement("i");
-    icone.className = "fa-brands fa-youtube";
+    placeholder.className =
+      "video-placeholder";
 
-    const texto = document.createElement("span");
-    texto.textContent = "Vídeo em breve";
+    const icone =
+      document.createElement("i");
+
+    icone.className =
+      "fa-brands fa-youtube";
+
+    const texto =
+      document.createElement("span");
+
+    texto.textContent =
+      "Vídeo em breve";
 
     placeholder.append(icone, texto);
     imagem.appendChild(placeholder);
   }
 
-  const nome = document.createElement("div");
+  const nome =
+    document.createElement("div");
+
   nome.className = "video-nome";
   nome.textContent = video.titulo;
 
-  const rodape = document.createElement("div");
+  const rodape =
+    document.createElement("div");
+
   rodape.className = "video-rodape";
 
   if (valido) {
-    const link = document.createElement("a");
-    link.href = "https://www.youtube.com/watch?v=" + id;
+    const link =
+      document.createElement("a");
+
+    link.href =
+      "https://www.youtube.com/watch?v=" + id;
+
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.textContent = "ASSISTIR";
 
-    const icone = document.createElement("i");
-    icone.className = "fa fa-arrow-right";
+    const icone =
+      document.createElement("i");
+
+    icone.className =
+      "fa fa-arrow-right";
 
     link.appendChild(icone);
     rodape.appendChild(link);
@@ -806,9 +939,9 @@ videos.forEach(video => {
   gradeVideos.appendChild(card);
 });
 
-/* ====================================
+/* ==================================
    FIREBASE - AGENDA
-==================================== */
+================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -827,13 +960,24 @@ if (!firebase.apps.length) {
 const db = firebase.database();
 
 function converterData(valor) {
-  if (typeof valor !== "string") return null;
+  if (typeof valor === "number") {
+    const d = new Date(valor);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  if (typeof valor !== "string") {
+    return null;
+  }
 
   let texto = valor.trim();
 
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
     const partes = texto.split("/");
-    texto = partes[2] + "-" + partes[1] + "-" + partes[0];
+
+    texto =
+      partes[2] + "-" +
+      partes[1] + "-" +
+      partes[0];
   }
 
   if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
@@ -841,15 +985,21 @@ function converterData(valor) {
   }
 
   const data = new Date(texto);
-  return isNaN(data.getTime()) ? null : data;
+
+  return isNaN(data.getTime())
+    ? null
+    : data;
 }
 
 function mostrarMensagemAgenda(mensagem) {
-  const lista = document.getElementById("listaAgenda");
+  const lista =
+    document.getElementById("listaAgenda");
+
   lista.textContent = "";
 
   const p = document.createElement("p");
   p.textContent = mensagem;
+
   lista.appendChild(p);
 }
 
@@ -858,15 +1008,37 @@ db.ref("agendas").on("value", snapshot => {
 
   snapshot.forEach(item => {
     const v = item.val();
-    if (!v || typeof v !== "object") return;
 
-    const nome = v.nomeBoi || v.boiNome || v.boi || "";
-    const data = converterData(v.data || v.dataApresentacao || "");
-    const hora = v.hora || v.horario || "";
-    const local = v.local || v.localidade || v.comunidade || "";
+    if (!v || typeof v !== "object") {
+      return;
+    }
+
+    const nome =
+      v.nomeBoi ||
+      v.boiNome ||
+      v.boi ||
+      "";
+
+    const data = converterData(
+      v.data || v.dataApresentacao || ""
+    );
+
+    const hora =
+      v.hora || v.horario || "";
+
+    const local =
+      v.local ||
+      v.localidade ||
+      v.comunidade ||
+      "";
 
     if (nome && data) {
-      eventos.push({nome, data, hora, local});
+      eventos.push({
+        nome,
+        data,
+        hora,
+        local
+      });
     }
   });
 
@@ -874,26 +1046,40 @@ db.ref("agendas").on("value", snapshot => {
   hoje.setHours(0, 0, 0, 0);
 
   const futuros = eventos
-    .filter(e => e.data.getTime() >= hoje.getTime())
-    .sort((a, b) => a.data - b.data)
+    .filter(e =>
+      e.data.getTime() >= hoje.getTime()
+    )
+    .sort((a, b) =>
+      a.data - b.data
+    )
     .slice(0, 3);
 
   if (!futuros.length) {
-    mostrarMensagemAgenda("Nenhuma apresentação futura disponível.");
+    mostrarMensagemAgenda(
+      "Nenhuma apresentação futura disponível."
+    );
     return;
   }
 
-  const lista = document.getElementById("listaAgenda");
+  const lista =
+    document.getElementById("listaAgenda");
+
   lista.textContent = "";
 
   futuros.forEach(evento => {
-    const div = document.createElement("div");
+    const div =
+      document.createElement("div");
+
     div.className = "agenda-item";
 
-    const nome = document.createElement("strong");
+    const nome =
+      document.createElement("strong");
+
     nome.textContent = evento.nome;
 
-    const detalhe = document.createElement("small");
+    const detalhe =
+      document.createElement("small");
+
     detalhe.textContent = [
       evento.data.toLocaleDateString("pt-BR"),
       evento.hora,
@@ -905,8 +1091,14 @@ db.ref("agendas").on("value", snapshot => {
   });
 
 }, erro => {
-  console.error("Erro ao carregar agenda:", erro);
-  mostrarMensagemAgenda("Não foi possível carregar a agenda.");
+  console.error(
+    "Erro ao carregar agenda:",
+    erro
+  );
+
+  mostrarMensagemAgenda(
+    "Não foi possível carregar a agenda."
+  );
 });
 </script>
 
