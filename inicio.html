@@ -544,124 +544,31 @@ footer {
 
     <!-- CARROSSEL COM CINCO IMAGENS -->
 
-    <section class="carrossel"
-             aria-label="Destaques do Reisado">
+    
+<!-- CARROSSEL AUTOMATICO -->
 
-      <!-- IMAGEM 1: SÍMBOLO -->
+<section class="carrossel"
+         id="carrossel"
+         aria-label="Destaques do Reisado">
 
-      <div class="slide ativo">
-        <div class="slide-fundo"
-          style="background-image:url('ícone-boi-reisado-logo.png')">
-        </div>
+  <div id="slidesAutomaticos"></div>
 
-        <img class="slide-foto"
-          src="ícone-boi-reisado-logo.png"
-          alt="Símbolo do Reisado">
+  <button class="controle anterior"
+          onclick="mudarSlide(-1)"
+          aria-label="Imagem anterior">
+    ❮
+  </button>
 
-        <div class="legenda">
-          Reisado de Boa Hora – Nossa Cultura e Tradição
-        </div>
-      </div>
+  <button class="controle proximo"
+          onclick="mudarSlide(1)"
+          aria-label="Próxima imagem">
+    ❯
+  </button>
 
-      <!-- IMAGEM 2: TRÊS REIS -->
+  <div class="indicadores" id="indicadoresAutomaticos"></div>
 
-      <div class="slide">
-        <div class="slide-fundo"
-          style="background-image:url('imagens/Três Reis.jpeg')">
-        </div>
+</section>
 
-        <img class="slide-foto"
-          src="imagens/Três Reis.jpeg"
-          alt="Os Três Reis de Boa Hora">
-
-        <div class="legenda">
-          Os Três Reis – Fé, Cultura e Memória
-        </div>
-      </div>
-
-      <!-- IMAGEM 3: IGREJA -->
-
-      <div class="slide">
-        <div class="slide-fundo"
-          style="background-image:url('imagens/Igreja.jpeg')">
-        </div>
-
-        <img class="slide-foto"
-          src="imagens/Igreja.jpeg"
-          alt="Igreja de Boa Hora">
-
-        <div class="legenda">
-          Boa Hora – Nossa Cidade, Nossa História
-        </div>
-      </div>
-
-      <!-- IMAGEM 4: BOIS - NOVA -->
-
-      <div class="slide">
-        <div class="slide-fundo"
-          style="background-image:url('imagens/Bois.webp')">
-        </div>
-
-        <img class="slide-foto"
-          src="imagens/Bois.webp"
-          alt="Bois do Reisado de Boa Hora">
-
-        <div class="legenda">
-          Os Bois do Reisado – Alegria e Tradição
-        </div>
-      </div>
-
-      <!-- IMAGEM 5: FESTIVAL - NOVA -->
-
-      <div class="slide">
-        <div class="slide-fundo"
-          style="background-image:url('imagens/Festival.jpeg')">
-        </div>
-
-        <img class="slide-foto"
-          src="imagens/Festival.jpeg"
-          alt="Festival do Reisado">
-
-        <div class="legenda">
-          Festival do Reisado – Cultura Viva de Boa Hora
-        </div>
-      </div>
-
-      <!-- SETAS -->
-
-      <button class="controle anterior"
-        onclick="mudarSlide(-1)"
-        aria-label="Imagem anterior">
-        ❮
-      </button>
-
-      <button class="controle proximo"
-        onclick="mudarSlide(1)"
-        aria-label="Próxima imagem">
-        ❯
-      </button>
-
-      <!-- CINCO INDICADORES -->
-
-      <div class="indicadores">
-        <button class="ativo"
-          onclick="irSlide(0)"
-          aria-label="Imagem 1">•</button>
-
-        <button onclick="irSlide(1)"
-          aria-label="Imagem 2">•</button>
-
-        <button onclick="irSlide(2)"
-          aria-label="Imagem 3">•</button>
-
-        <button onclick="irSlide(3)"
-          aria-label="Imagem 4">•</button>
-
-        <button onclick="irSlide(4)"
-          aria-label="Imagem 5">•</button>
-      </div>
-
-    </section>
 
     <!-- EXATAMENTE TRÊS VÍDEOS -->
 
