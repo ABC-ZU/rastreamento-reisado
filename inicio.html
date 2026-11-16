@@ -1,360 +1,587 @@
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reisado Digital 2.0 | Boa Hora - PI</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <meta name="description"
-        content="Reisado Digital de Boa Hora, Piauí. Acompanhe a localização dos bois e consulte a agenda de apresentações.">
+<style>
+:root {
+  --vinho:#8c0015;
+  --vermelho:#bd0617;
+  --azul:#0755c6;
+  --amarelo:#ffdf00;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f5f8;
+  color:#20202a;
+}
+a { text-decoration:none; color:inherit; }
+button { cursor:pointer; font:inherit; }
+header {
+  background:linear-gradient(120deg,#0879d9,#b5e6ff);
+  min-height:185px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 3%;
+  overflow:hidden;
+}
+header img {
+  width:22%;
+  max-width:235px;
+  height:155px;
+  object-fit:contain;
+}
+header .igreja {
+  object-fit:cover;
+  border-radius:12px;
+}
+.marca { text-align:center; flex:1; }
+.marca h1 {
+  margin:0;
+  padding:12px;
+  background:linear-gradient(#e90018,#94000e);
+  border:3px solid white;
+  border-radius:55px;
+  color:white;
+  font-size:clamp(21px,3.2vw,46px);
+  text-shadow:2px 3px #650000;
+}
+.marca h1 span { color:var(--amarelo); }
+.marca h2 {
+  background:#063b9b;
+  color:white;
+  border-radius:30px;
+  margin:6px auto;
+  padding:6px 18px;
+  width:max-content;
+  max-width:100%;
+}
+.marca p { font-weight:bold; margin:5px; }
 
-  <title>Reisado Digital - Boa Hora PI</title>
+nav {
+  background:linear-gradient(#b40018,#62000d);
+  display:flex;
+  gap:5px;
+  justify-content:space-around;
+  align-items:center;
+  padding:10px;
+  flex-wrap:wrap;
+}
+nav a {
+  color:white;
+  font-weight:bold;
+  padding:12px;
+  border-radius:30px;
+  font-size:14px;
+}
+nav a:hover, nav a.ativo {
+  background:var(--amarelo);
+  color:#1b1b1b;
+}
+nav i { margin-right:5px; }
+main { max-width:1550px; margin:auto; padding:15px; }
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+.carrossel {
+  height:340px;
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  background:linear-gradient(120deg,#40001c,#0c306e);
+  box-shadow:0 5px 15px #0002;
+}
+.slide {
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity .65s;
+  background-size:cover;
+  background-position:center;
+}
+.slide.ativo { opacity:1; }
+.slide .texto {
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:26px 60px;
+  background:linear-gradient(transparent,#000d);
+  color:white;
+  font-size:clamp(18px,2.3vw,28px);
+  font-weight:bold;
+}
+.seta {
+  position:absolute;
+  top:45%;
+  border:0;
+  border-radius:50%;
+  width:43px;
+  height:43px;
+  background:white;
+  color:#111;
+  font-size:22px;
+  z-index:2;
+}
+.anterior { left:12px; }
+.proximo { right:12px; }
+.pontos {
+  position:absolute;
+  right:25px;
+  bottom:16px;
+  z-index:2;
+  display:flex;
+  gap:8px;
+}
+.pontos button {
+  width:11px;
+  height:11px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  opacity:.6;
+}
+.pontos button.ativo {
+  background:var(--amarelo);
+  opacity:1;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f4f7;
-      color: #263348;
-    }
+.boas-vindas {
+  text-align:center;
+  margin:25px auto;
+}
+.boas-vindas h2 {
+  color:var(--vinho);
+  font-size:30px;
+  margin-bottom:7px;
+}
+.boas-vindas p { color:#555; }
 
-    .container {
-      max-width: 520px;
-      min-height: 100vh;
-      margin: auto;
-      background: white;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 20px rgba(0,0,0,0.05);
-    }
+.cards {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px;
+  margin:20px 0;
+}
+.card {
+  padding:24px 12px;
+  min-height:175px;
+  border-radius:16px;
+  color:white;
+  text-align:center;
+  box-shadow:0 4px 9px #0002;
+  transition:transform .2s;
+}
+.card:hover { transform:translateY(-5px); }
+.card i { font-size:35px; }
+.card h3 { margin:12px 0 8px; }
+.card p { font-size:13px; }
+.vermelho { background:linear-gradient(#f3232b,#a9000b); }
+.azul { background:linear-gradient(#117bf4,#00378f); }
+.verde { background:linear-gradient(#0cae23,#005b0a); }
+.roxo { background:linear-gradient(#9219aa,#4a005f); }
+.laranja { background:linear-gradient(#ff9d0a,#dc4600); }
 
-    .topo {
-      background: linear-gradient(
-        135deg,
-        #0b3974,
-        #1262b8
-      );
-      color: white;
-      text-align: center;
-      padding: 42px 20px 38px;
-      border-bottom: 5px solid #c52931;
-    }
-
-    .topo h1 {
-      font-size: 43px;
-      margin: 0;
-      letter-spacing: 2px;
-    }
-
-    .topo h2 {
-      font-size: 24px;
-      font-weight: normal;
-      margin: 10px 0;
-    }
-
-    .topo p {
-      margin: 12px 0 0;
-      font-size: 16px;
-    }
-
-    .selo {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 8px 15px;
-      background: rgba(255,255,255,0.16);
-      border: 1px solid rgba(255,255,255,0.35);
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    main {
-      padding: 28px 22px;
-      flex: 1;
-    }
-
-    .apresentacao {
-      text-align: center;
-      margin-bottom: 27px;
-    }
-
-    .apresentacao h2 {
-      color: #104b91;
-      font-size: 23px;
-      margin: 0 0 12px;
-    }
-
-    .apresentacao p {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #596579;
-      margin: 0;
-    }
-
-    .pergunta {
-      text-align: center;
-      font-size: 20px;
-      margin: 0 0 22px;
-    }
-
-    .card {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 27px 20px;
-      margin-bottom: 22px;
-      border-radius: 20px;
-      color: white;
-      text-decoration: none;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.17);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.20);
-    }
-
-    .card:focus-visible {
-      outline: 4px solid #d4a73b;
-      outline-offset: 4px;
-    }
-
-    .monitoramento {
-      background: linear-gradient(
-        135deg,
-        #0b3974,
-        #1262b8
-      );
-    }
-
-    .agenda {
-      background: linear-gradient(
-        135deg,
-        #b40d18,
-        #dc2932
-      );
-    }
-
-    .icone {
-      width: 70px;
-      height: 70px;
-      min-width: 70px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.17);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 37px;
-    }
-
-    .card h2 {
-      font-size: 24px;
-      margin: 0 0 8px;
-    }
-
-    .card p {
-      font-size: 15px;
-      line-height: 1.5;
-      margin: 0;
-    }
-
-    .informacao {
-      background: #f1f6fd;
-      border-left: 4px solid #104b91;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 5px;
-    }
-
-    .informacao h3 {
-      color: #104b91;
-      font-size: 16px;
-      margin: 0 0 8px;
-    }
-
-    .informacao p {
-      color: #526176;
-      font-size: 13px;
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    footer {
-      text-align: center;
-      color: #657080;
-      padding: 20px;
-      font-size: 13px;
-      border-top: 1px solid #e5e9f0;
-    }
-
-    footer p {
-      margin: 6px 0;
-    }
-
-    @media (max-width: 600px) {
-      .topo h1 {
-        font-size: 36px;
-      }
-
-      .card {
-        padding: 24px 16px;
-        gap: 13px;
-      }
-
-      .card h2 {
-        font-size: 21px;
-      }
-
-      .card p {
-        font-size: 14px;
-      }
-
-      .icone {
-        width: 60px;
-        height: 60px;
-        min-width: 60px;
-        font-size: 32px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .card {
-        transition: none;
-      }
-    }
-  </style>
+.paineis {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:15px;
+}
+.painel {
+  background:white;
+  border-radius:17px;
+  padding:16px;
+  box-shadow:0 3px 12px #0002;
+  min-width:0;
+}
+.painel h2 {
+  color:var(--vinho);
+  font-size:21px;
+  margin:0 0 15px;
+}
+.painel h2 i { color:#ec001a; }
+.mapa-preview {
+  background:linear-gradient(140deg,#d8f0cf,#8dbb7d);
+  min-height:220px;
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+.mapa-preview i { font-size:55px; color:#b6001b; }
+.botao {
+  display:inline-block;
+  margin-top:12px;
+  background:var(--vinho);
+  color:white;
+  border-radius:30px;
+  padding:11px 20px;
+  font-weight:bold;
+}
+.evento {
+  border-bottom:1px solid #eee;
+  padding:13px 3px;
+}
+.evento strong { color:var(--vinho); }
+.evento small {
+  display:block;
+  color:#666;
+  margin-top:6px;
+}
+.video-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.video {
+  min-width:0;
+  border:1px solid #ddd;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+.video img {
+  display:block;
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+}
+.video .thumb { position:relative; }
+.video .play {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#ed0016;
+  color:white;
+  padding:9px 14px;
+  border-radius:9px;
+}
+.video p {
+  font-size:12px;
+  font-weight:bold;
+  padding:8px;
+  margin:0;
+}
+.aviso {
+  color:#777;
+  text-align:center;
+  padding:20px 5px;
+}
+footer {
+  margin-top:25px;
+  padding:30px 15px;
+  text-align:center;
+  background:linear-gradient(90deg,#690009,#d40b0b,#690009);
+  color:white;
+  font-weight:bold;
+  font-size:18px;
+}
+@media(max-width:1000px) {
+  .cards { grid-template-columns:repeat(3,1fr); }
+  .paineis { grid-template-columns:1fr 1fr; }
+  .paineis .painel:last-child { grid-column:1/-1; }
+}
+@media(max-width:650px) {
+  header { min-height:120px; }
+  header img { width:19%; height:90px; }
+  .marca h1 { font-size:19px; padding:8px; }
+  .marca h2 { font-size:13px; }
+  .marca p { font-size:9px; }
+  nav { justify-content:center; }
+  nav a { font-size:12px; padding:9px; }
+  .carrossel { height:230px; }
+  .slide .texto { padding:20px 50px; }
+  .cards { grid-template-columns:repeat(2,1fr); }
+  .cards .card:last-child { grid-column:1/-1; }
+  .paineis { grid-template-columns:1fr; }
+  .paineis .painel:last-child { grid-column:auto; }
+}
+</style>
 </head>
 
 <body>
-
-  <div class="container">
-
-    <header class="topo">
-
-      <img
-        src="./ícone-boi-reisado-logo.png"
-        alt="Logo Reisado de Boa Hora"
-        style="
-          width: 110px;
-          height: 110px;
-          object-fit: contain;
-          display: block;
-          margin: 0 auto 12px;
-        "
-      >
-
-      <h1>REISADO</h1>
-
-      <h2>Boa Hora - Piauí</h2>
-
-      <p>Cultura • Fé • Tradição</p>
-
-      <span class="selo">
-        🐂 Reisado Digital
-      </span>
-
-    </header>
-
-    <main>
-
-      <section class="apresentacao">
-
-        <h2>Bem-vindo ao Reisado Digital!</h2>
-
-        <p>
-          Um espaço dedicado à valorização
-          da cultura e das tradições do
-          Reisado de Boa Hora, no Piauí.
-        </p>
-
-      </section>
-
-      <h2 class="pergunta">
-        O que você deseja acessar?
-      </h2>
-
-      <!-- MONITORAMENTO DOS BOIS -->
-
-      <a href="./mapa.html"
-         class="card monitoramento">
-
-        <div class="icone" aria-hidden="true">
-          📍
-        </div>
-
-        <div>
-
-          <h2>Monitoramento dos Bois</h2>
-
-          <p>
-            Acompanhe no mapa a localização
-            registrada pelo GPS do Boi Estrela
-            e conheça os demais bois cadastrados.
-          </p>
-
-        </div>
-
-      </a>
-
-      <!-- AGENDA DOS BOIS -->
-
-      <a href="./agenda.html"
-         class="card agenda">
-
-        <div class="icone" aria-hidden="true">
-          📅
-        </div>
-
-        <div>
-
-          <h2>Agenda dos Bois</h2>
-
-          <p>
-            Consulte as datas, horários
-            e comunidades das próximas
-            apresentações cadastradas.
-          </p>
-
-        </div>
-
-      </a>
-
-      <!-- INFORMAÇÃO IMPORTANTE -->
-
-      <section class="informacao">
-
-        <h3>ℹ️ Sobre o monitoramento</h3>
-
-        <p>
-          O Boi Estrela possui acompanhamento
-          por GPS. Os marcadores amarelos
-          representam posições fictícias
-          utilizadas para demonstração
-          do sistema.
-        </p>
-
-      </section>
-
-    </main>
-
-    <footer>
-
-      <p><strong>Reisado de Boa Hora - Piauí</strong></p>
-
-      <p>Preservando nossa cultura e tradição.</p>
-
-      <p>🐂 Cultura • Tecnologia • Tradição</p>
-
-    </footer>
-
+<header>
+  <img src="icone-boi-reisado.png" alt="Boi do Reisado"
+       onerror="this.style.visibility='hidden'">
+  <div class="marca">
+    <h1>REISADO DIGITAL <span>2.0</span></h1>
+    <h2>Boa Hora – PI</h2>
+    <p>Cultura • Memória • História • Tradição • Comunidade</p>
   </div>
+  <img class="igreja" src="igreja-boa-hora.jpg"
+       alt="Igreja de Boa Hora"
+       onerror="this.style.visibility='hidden'">
+</header>
 
+<nav>
+  <a class="ativo" href="inicio.html"><i class="fa fa-house"></i> Início</a>
+  <a href="agenda.html"><i class="fa fa-calendar-days"></i> Agenda</a>
+  <a href="mapa.html"><i class="fa fa-location-dot"></i> Mapa Histórico</a>
+  <a href="bois.html"><i class="fa fa-cow"></i> Conheça os Bois</a>
+  <a href="memoria.html"><i class="fa fa-book-open"></i> Memória do Reisado</a>
+  <a href="guia.html"><i class="fa fa-robot"></i> Guia Cultural (IA)</a>
+  <a href="admin.html"><i class="fa fa-user"></i> Painel Administrativo</a>
+</nav>
+
+<main>
+  <section class="carrossel" aria-label="Imagens do Reisado">
+    <div id="slides"></div>
+    <button class="seta anterior" onclick="mudarSlide(-1)" aria-label="Anterior">❮</button>
+    <button class="seta proximo" onclick="mudarSlide(1)" aria-label="Próximo">❯</button>
+    <div class="pontos" id="pontos"></div>
+  </section>
+
+  <section class="boas-vindas">
+    <h2>Bem-vindo ao Reisado Digital</h2>
+    <p>A plataforma que valoriza, preserva e divulga a história,
+       a memória e a tradição do Reisado de Boa Hora – PI.</p>
+  </section>
+
+  <section class="cards">
+    <a href="agenda.html" class="card vermelho">
+      <i class="fa fa-calendar-days"></i>
+      <h3>Agenda dos Bois</h3>
+      <p>Confira a programação das apresentações.</p>
+    </a>
+    <a href="mapa.html" class="card azul">
+      <i class="fa fa-map-location-dot"></i>
+      <h3>Mapa Histórico</h3>
+      <p>Explore lugares, memórias e histórias.</p>
+    </a>
+    <a href="bois.html" class="card verde">
+      <i class="fa fa-cow"></i>
+      <h3>Conheça os Bois</h3>
+      <p>Conheça os bois do Reisado de Boa Hora.</p>
+    </a>
+    <a href="memoria.html" class="card roxo">
+      <i class="fa fa-book-open"></i>
+      <h3>Memória do Reisado</h3>
+      <p>Homenagem coletiva aos personagens da cultura.</p>
+    </a>
+    <a href="guia.html" class="card laranja">
+      <i class="fa fa-robot"></i>
+      <h3>Guia Cultural com IA</h3>
+      <p>Conheça melhor a história e a tradição.</p>
+    </a>
+  </section>
+
+  <section class="paineis">
+    <article class="painel">
+      <h2><i class="fa fa-location-dot"></i> Mapa Histórico do Reisado</h2>
+      <div class="mapa-preview">
+        <i class="fa fa-map-location-dot"></i>
+        <h3>Boa Hora – PI</h3>
+        <p>Conheça os lugares que guardam a memória do Reisado.</p>
+      </div>
+      <a href="mapa.html" class="botao">Explorar Mapa →</a>
+    </article>
+
+    <article class="painel">
+      <h2><i class="fa fa-calendar-days"></i> Próximas Apresentações</h2>
+      <div id="listaAgenda">
+        <p class="aviso">Carregando programação...</p>
+      </div>
+      <a href="agenda.html" class="botao">Ver agenda completa →</a>
+    </article>
+
+    <article class="painel">
+      <h2><i class="fa-brands fa-youtube"></i> Vídeos do Reisado</h2>
+      <div class="video-grid" id="listaVideos"></div>
+      <p id="avisoVideos" class="aviso">Vídeos serão adicionados em breve.</p>
+    </article>
+  </section>
+</main>
+
+<footer>
+  Preservando a memória do nosso povo e a tradição do Reisado de Boa Hora – PI.
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<script>
+const imagens = [
+  {arquivo:"carrossel-1.jpg",titulo:"Reisado de Boa Hora – Cultura viva do nosso povo"},
+  {arquivo:"carrossel-2.jpg",titulo:"A tradição que atravessa gerações"},
+  {arquivo:"carrossel-3.jpg",titulo:"Memórias e histórias do nosso Reisado"}
+];
+
+let indice = 0;
+let intervalo;
+
+const areaSlides = document.getElementById("slides");
+const areaPontos = document.getElementById("pontos");
+
+imagens.forEach((item,i)=>{
+  const slide = document.createElement("div");
+  slide.className = "slide" + (i===0?" ativo":"");
+  slide.style.backgroundImage =
+    `linear-gradient(90deg,#0005,#0004),url("${item.arquivo}")`;
+  const texto = document.createElement("div");
+  texto.className = "texto";
+  texto.textContent = item.titulo;
+  slide.appendChild(texto);
+  areaSlides.appendChild(slide);
+
+  const ponto = document.createElement("button");
+  ponto.className = i===0?"ativo":"";
+  ponto.setAttribute("aria-label","Mostrar imagem "+(i+1));
+  ponto.onclick=()=>mostrarSlide(i);
+  areaPontos.appendChild(ponto);
+});
+
+function mostrarSlide(i) {
+  const slides=document.querySelectorAll(".slide");
+  const pontos=document.querySelectorAll(".pontos button");
+  indice=(i+slides.length)%slides.length;
+  slides.forEach((s,n)=>s.classList.toggle("ativo",n===indice));
+  pontos.forEach((p,n)=>p.classList.toggle("ativo",n===indice));
+  clearInterval(intervalo);
+  intervalo=setInterval(()=>mostrarSlideAutomatico(),5500);
+}
+function mudarSlide(d) { mostrarSlide(indice+d); }
+function mostrarSlideAutomatico() {
+  const total=imagens.length;
+  indice=(indice+1)%total;
+  document.querySelectorAll(".slide").forEach(
+    (s,n)=>s.classList.toggle("ativo",n===indice)
+  );
+  document.querySelectorAll(".pontos button").forEach(
+    (p,n)=>p.classList.toggle("ativo",n===indice)
+  );
+}
+intervalo=setInterval(mostrarSlideAutomatico,5500);
+
+// Adicione aqui links reais do YouTube.
+// Exemplo: {titulo:"Apresentação do Reisado",url:"https://www.youtube.com/watch?v=ID"}
+const videos = [];
+
+function obterIdYoutube(url) {
+  try {
+    const u=new URL(url);
+    const host=u.hostname.toLowerCase();
+    if(host==="youtu.be" || host==="www.youtu.be")
+      return u.pathname.split("/")[1];
+    if(["youtube.com","www.youtube.com","m.youtube.com"].includes(host)){
+      if(u.pathname==="/watch") return u.searchParams.get("v");
+      if(u.pathname.startsWith("/shorts/") ||
+         u.pathname.startsWith("/embed/"))
+        return u.pathname.split("/")[2];
+    }
+  } catch(e) {}
+  return null;
+}
+function carregarVideos(){
+  const lista=document.getElementById("listaVideos");
+  const aviso=document.getElementById("avisoVideos");
+  lista.innerHTML="";
+  videos.forEach(v=>{
+    const id=obterIdYoutube(v.url);
+    if(!id || !/^[A-Za-z0-9_-]{11}$/.test(id)) return;
+    const link=document.createElement("a");
+    link.className="video";
+    link.href="https://www.youtube.com/watch?v="+id;
+    link.target="_blank";
+    link.rel="noopener noreferrer";
+
+    const thumb=document.createElement("div");
+    thumb.className="thumb";
+    const img=document.createElement("img");
+    img.src="https://img.youtube.com/vi/"+id+"/hqdefault.jpg";
+    img.alt=v.titulo;
+    const play=document.createElement("span");
+    play.className="play";
+    play.textContent="▶";
+    thumb.append(img,play);
+
+    const titulo=document.createElement("p");
+    titulo.textContent=v.titulo;
+    link.append(thumb,titulo);
+    lista.appendChild(link);
+  });
+  aviso.style.display=lista.children.length?"none":"block";
+}
+carregarVideos();
+
+// Leitura pública da agenda já existente no Firebase.
+const firebaseConfig={
+  apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain:"rastreamento-reisado.firebaseapp.com",
+  databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId:"rastreamento-reisado",
+  storageBucket:"rastreamento-reisado.firebasestorage.app",
+  messagingSenderId:"796420970266",
+  appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
+
+function mostrarAvisoAgenda(texto){
+  const lista=document.getElementById("listaAgenda");
+  lista.textContent="";
+  const p=document.createElement("p");
+  p.className="aviso";
+  p.textContent=texto;
+  lista.appendChild(p);
+}
+
+db.ref("agendas").on("value",snapshot=>{
+  const lista=document.getElementById("listaAgenda");
+  lista.innerHTML="";
+  const registros=[];
+  snapshot.forEach(item=>{
+    const v=item.val();
+    if(v && typeof v==="object") registros.push(v);
+  });
+
+  // A estrutura da agenda antiga pode ter nomes de campos
+  // diferentes. Esta leitura será ajustada na próxima etapa.
+  const eventos=registros.map(v=>{
+    const data=v.data || v.dataApresentacao || "";
+    const nome=v.nomeBoi || v.boiNome || v.boi || "";
+    const hora=v.hora || v.horario || "";
+    const local=v.local || v.localidade || v.comunidade || "";
+    const momento=new Date(
+      /^\d{4}-\d{2}-\d{2}$/.test(data)
+      ? data+"T00:00:00":data
+    );
+    return {data,nome,hora,local,momento};
+  }).filter(e=>e.nome && !isNaN(e.momento.getTime()) &&
+    e.momento.getTime()+86400000>Date.now());
+
+  eventos.sort((a,b)=>a.momento-b.momento);
+
+  if(!eventos.length){
+    mostrarAvisoAgenda("Nenhuma apresentação futura disponível.");
+    return;
+  }
+  eventos.slice(0,3).forEach(e=>{
+    const div=document.createElement("div");
+    div.className="evento";
+    const nome=document.createElement("strong");
+    nome.textContent=e.nome;
+    const detalhes=document.createElement("small");
+    const data=e.momento.toLocaleDateString("pt-BR");
+    detalhes.textContent=[data,e.hora,e.local].filter(Boolean).join(" • ");
+    div.append(nome,detalhes);
+    lista.appendChild(div);
+  });
+},erro=>{
+  console.error("Agenda:",erro);
+  mostrarAvisoAgenda("Não foi possível carregar a programação.");
+});
+</script>
 </body>
 </html>
