@@ -3,9 +3,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reisado Digital 2.0 | Boa Hora - PI</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reisado Digital 2.0 - Boa Hora PI</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 :root {
@@ -14,15 +17,30 @@
   --azul:#0755c6;
   --amarelo:#ffdf00;
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing:border-box;
+}
+
 body {
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:#f4f5f8;
   color:#20202a;
 }
-a { text-decoration:none; color:inherit; }
-button { cursor:pointer; font:inherit; }
+
+a {
+  text-decoration:none;
+  color:inherit;
+}
+
+button {
+  cursor:pointer;
+  font:inherit;
+}
+
+/* CABEÇALHO */
+
 header {
   background:linear-gradient(120deg,#0879d9,#b5e6ff);
   min-height:185px;
@@ -33,17 +51,25 @@ header {
   padding:12px 3%;
   overflow:hidden;
 }
+
 header img {
   width:22%;
   max-width:235px;
   height:155px;
   object-fit:contain;
 }
+
 header .igreja {
   object-fit:cover;
   border-radius:12px;
+  border:3px solid white;
 }
-.marca { text-align:center; flex:1; }
+
+.marca {
+  text-align:center;
+  flex:1;
+}
+
 .marca h1 {
   margin:0;
   padding:12px;
@@ -54,7 +80,11 @@ header .igreja {
   font-size:clamp(21px,3.2vw,46px);
   text-shadow:2px 3px #650000;
 }
-.marca h1 span { color:var(--amarelo); }
+
+.marca h1 span {
+  color:var(--amarelo);
+}
+
 .marca h2 {
   background:#063b9b;
   color:white;
@@ -64,7 +94,13 @@ header .igreja {
   width:max-content;
   max-width:100%;
 }
-.marca p { font-weight:bold; margin:5px; }
+
+.marca p {
+  font-weight:bold;
+  margin:5px;
+}
+
+/* MENU */
 
 nav {
   background:linear-gradient(#b40018,#62000d);
@@ -75,6 +111,7 @@ nav {
   padding:10px;
   flex-wrap:wrap;
 }
+
 nav a {
   color:white;
   font-weight:bold;
@@ -82,12 +119,24 @@ nav a {
   border-radius:30px;
   font-size:14px;
 }
-nav a:hover, nav a.ativo {
+
+nav a:hover,
+nav a.ativo {
   background:var(--amarelo);
   color:#1b1b1b;
 }
-nav i { margin-right:5px; }
-main { max-width:1550px; margin:auto; padding:15px; }
+
+nav i {
+  margin-right:5px;
+}
+
+main {
+  max-width:1550px;
+  margin:auto;
+  padding:15px;
+}
+
+/* CARROSSEL */
 
 .carrossel {
   height:340px;
@@ -97,6 +146,7 @@ main { max-width:1550px; margin:auto; padding:15px; }
   background:linear-gradient(120deg,#40001c,#0c306e);
   box-shadow:0 5px 15px #0002;
 }
+
 .slide {
   position:absolute;
   inset:0;
@@ -105,7 +155,11 @@ main { max-width:1550px; margin:auto; padding:15px; }
   background-size:cover;
   background-position:center;
 }
-.slide.ativo { opacity:1; }
+
+.slide.ativo {
+  opacity:1;
+}
+
 .slide .texto {
   position:absolute;
   bottom:0;
@@ -117,6 +171,7 @@ main { max-width:1550px; margin:auto; padding:15px; }
   font-size:clamp(18px,2.3vw,28px);
   font-weight:bold;
 }
+
 .seta {
   position:absolute;
   top:45%;
@@ -129,8 +184,15 @@ main { max-width:1550px; margin:auto; padding:15px; }
   font-size:22px;
   z-index:2;
 }
-.anterior { left:12px; }
-.proximo { right:12px; }
+
+.anterior {
+  left:12px;
+}
+
+.proximo {
+  right:12px;
+}
+
 .pontos {
   position:absolute;
   right:25px;
@@ -139,6 +201,7 @@ main { max-width:1550px; margin:auto; padding:15px; }
   display:flex;
   gap:8px;
 }
+
 .pontos button {
   width:11px;
   height:11px;
@@ -148,21 +211,30 @@ main { max-width:1550px; margin:auto; padding:15px; }
   background:#fff;
   opacity:.6;
 }
+
 .pontos button.ativo {
   background:var(--amarelo);
   opacity:1;
 }
 
+/* BOAS-VINDAS */
+
 .boas-vindas {
   text-align:center;
   margin:25px auto;
 }
+
 .boas-vindas h2 {
   color:var(--vinho);
   font-size:30px;
   margin-bottom:7px;
 }
-.boas-vindas p { color:#555; }
+
+.boas-vindas p {
+  color:#555;
+}
+
+/* CARDS */
 
 .cards {
   display:grid;
@@ -170,6 +242,7 @@ main { max-width:1550px; margin:auto; padding:15px; }
   gap:12px;
   margin:20px 0;
 }
+
 .card {
   padding:24px 12px;
   min-height:175px;
@@ -179,21 +252,51 @@ main { max-width:1550px; margin:auto; padding:15px; }
   box-shadow:0 4px 9px #0002;
   transition:transform .2s;
 }
-.card:hover { transform:translateY(-5px); }
-.card i { font-size:35px; }
-.card h3 { margin:12px 0 8px; }
-.card p { font-size:13px; }
-.vermelho { background:linear-gradient(#f3232b,#a9000b); }
-.azul { background:linear-gradient(#117bf4,#00378f); }
-.verde { background:linear-gradient(#0cae23,#005b0a); }
-.roxo { background:linear-gradient(#9219aa,#4a005f); }
-.laranja { background:linear-gradient(#ff9d0a,#dc4600); }
+
+.card:hover {
+  transform:translateY(-5px);
+}
+
+.card i {
+  font-size:35px;
+}
+
+.card h3 {
+  margin:12px 0 8px;
+}
+
+.card p {
+  font-size:13px;
+}
+
+.vermelho {
+  background:linear-gradient(#f3232b,#a9000b);
+}
+
+.azul {
+  background:linear-gradient(#117bf4,#00378f);
+}
+
+.verde {
+  background:linear-gradient(#0cae23,#005b0a);
+}
+
+.roxo {
+  background:linear-gradient(#9219aa,#4a005f);
+}
+
+.laranja {
+  background:linear-gradient(#ff9d0a,#dc4600);
+}
+
+/* PAINÉIS */
 
 .paineis {
   display:grid;
-  grid-template-columns:1fr 1fr 1fr;
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:15px;
 }
+
 .painel {
   background:white;
   border-radius:17px;
@@ -201,12 +304,17 @@ main { max-width:1550px; margin:auto; padding:15px; }
   box-shadow:0 3px 12px #0002;
   min-width:0;
 }
+
 .painel h2 {
   color:var(--vinho);
   font-size:21px;
   margin:0 0 15px;
 }
-.painel h2 i { color:#ec001a; }
+
+.painel h2 i {
+  color:#ec001a;
+}
+
 .mapa-preview {
   background:linear-gradient(140deg,#d8f0cf,#8dbb7d);
   min-height:220px;
@@ -218,7 +326,12 @@ main { max-width:1550px; margin:auto; padding:15px; }
   text-align:center;
   padding:20px;
 }
-.mapa-preview i { font-size:55px; color:#b6001b; }
+
+.mapa-preview i {
+  font-size:55px;
+  color:#b6001b;
+}
+
 .botao {
   display:inline-block;
   margin-top:12px;
@@ -228,21 +341,30 @@ main { max-width:1550px; margin:auto; padding:15px; }
   padding:11px 20px;
   font-weight:bold;
 }
+
 .evento {
   border-bottom:1px solid #eee;
   padding:13px 3px;
 }
-.evento strong { color:var(--vinho); }
+
+.evento strong {
+  color:var(--vinho);
+}
+
 .evento small {
   display:block;
   color:#666;
   margin-top:6px;
 }
+
+/* VÍDEOS */
+
 .video-grid {
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:9px;
 }
+
 .video {
   min-width:0;
   border:1px solid #ddd;
@@ -250,13 +372,18 @@ main { max-width:1550px; margin:auto; padding:15px; }
   overflow:hidden;
   background:#fff;
 }
+
 .video img {
   display:block;
   width:100%;
   aspect-ratio:16/9;
   object-fit:cover;
 }
-.video .thumb { position:relative; }
+
+.video .thumb {
+  position:relative;
+}
+
 .video .play {
   position:absolute;
   top:50%;
@@ -267,17 +394,63 @@ main { max-width:1550px; margin:auto; padding:15px; }
   padding:9px 14px;
   border-radius:9px;
 }
+
 .video p {
   font-size:12px;
   font-weight:bold;
   padding:8px;
   margin:0;
 }
+
+/* TRÊS REIS */
+
+.secao-reis {
+  margin-top:25px;
+  background:white;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 3px 12px #0002;
+}
+
+.secao-reis h2 {
+  text-align:center;
+  color:var(--vinho);
+  font-size:28px;
+}
+
+.conteudo-reis {
+  display:flex;
+  align-items:center;
+  gap:30px;
+}
+
+.conteudo-reis img {
+  width:45%;
+  max-height:380px;
+  object-fit:cover;
+  border-radius:15px;
+  border:4px solid #f1d45c;
+}
+
+.texto-reis {
+  flex:1;
+  font-size:17px;
+  line-height:1.7;
+}
+
+.texto-reis h3 {
+  color:var(--vinho);
+  font-size:24px;
+}
+
 .aviso {
   color:#777;
   text-align:center;
   padding:20px 5px;
 }
+
+/* RODAPÉ */
+
 footer {
   margin-top:25px;
   padding:30px 15px;
@@ -287,134 +460,344 @@ footer {
   font-weight:bold;
   font-size:18px;
 }
+
+/* RESPONSIVIDADE */
+
 @media(max-width:1000px) {
-  .cards { grid-template-columns:repeat(3,1fr); }
-  .paineis { grid-template-columns:1fr 1fr; }
-  .paineis .painel:last-child { grid-column:1/-1; }
+  .cards {
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .paineis {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .paineis .painel:last-child {
+    grid-column:1/-1;
+  }
 }
+
 @media(max-width:650px) {
-  header { min-height:120px; }
-  header img { width:19%; height:90px; }
-  .marca h1 { font-size:19px; padding:8px; }
-  .marca h2 { font-size:13px; }
-  .marca p { font-size:9px; }
-  nav { justify-content:center; }
-  nav a { font-size:12px; padding:9px; }
-  .carrossel { height:230px; }
-  .slide .texto { padding:20px 50px; }
-  .cards { grid-template-columns:repeat(2,1fr); }
-  .cards .card:last-child { grid-column:1/-1; }
-  .paineis { grid-template-columns:1fr; }
-  .paineis .painel:last-child { grid-column:auto; }
+  header {
+    min-height:120px;
+  }
+
+  header img {
+    width:19%;
+    height:90px;
+  }
+
+  .marca h1 {
+    font-size:19px;
+    padding:8px;
+  }
+
+  .marca h2 {
+    font-size:13px;
+  }
+
+  .marca p {
+    font-size:9px;
+  }
+
+  nav {
+    justify-content:center;
+  }
+
+  nav a {
+    font-size:12px;
+    padding:9px;
+  }
+
+  .carrossel {
+    height:230px;
+  }
+
+  .slide .texto {
+    padding:20px 50px;
+  }
+
+  .cards {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .cards .card:last-child {
+    grid-column:1/-1;
+  }
+
+  .paineis {
+    grid-template-columns:1fr;
+  }
+
+  .paineis .painel:last-child {
+    grid-column:auto;
+  }
+
+  .conteudo-reis {
+    flex-direction:column;
+  }
+
+  .conteudo-reis img {
+    width:100%;
+  }
+
+  .secao-reis {
+    padding:15px;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<!-- CABEÇALHO -->
+
 <header>
-  <img src="icone-boi-reisado.png" alt="Boi do Reisado"
-       onerror="this.style.visibility='hidden'">
+
+  <img
+    src="ícone-boi-reisado-logo.png"
+    alt="Símbolo do Reisado de Boa Hora"
+  >
+
   <div class="marca">
     <h1>REISADO DIGITAL <span>2.0</span></h1>
     <h2>Boa Hora – PI</h2>
     <p>Cultura • Memória • História • Tradição • Comunidade</p>
   </div>
-  <img class="igreja" src="igreja-boa-hora.jpg"
-       alt="Igreja de Boa Hora"
-       onerror="this.style.visibility='hidden'">
+
+  <img
+    class="igreja"
+    src="imagens/Igreja.jpeg"
+    alt="Igreja de Boa Hora - PI"
+  >
+
 </header>
 
+<!-- MENU -->
+
 <nav>
-  <a class="ativo" href="inicio.html"><i class="fa fa-house"></i> Início</a>
-  <a href="agenda.html"><i class="fa fa-calendar-days"></i> Agenda</a>
-  <a href="mapa.html"><i class="fa fa-location-dot"></i> Mapa Histórico</a>
-  <a href="bois.html"><i class="fa fa-cow"></i> Conheça os Bois</a>
-  <a href="memoria.html"><i class="fa fa-book-open"></i> Memória do Reisado</a>
-  <a href="guia.html"><i class="fa fa-robot"></i> Guia Cultural (IA)</a>
-  <a href="admin.html"><i class="fa fa-user"></i> Painel Administrativo</a>
+  <a class="ativo" href="inicio.html">
+    <i class="fa fa-house"></i> Início
+  </a>
+
+  <a href="agenda.html">
+    <i class="fa fa-calendar-days"></i> Agenda
+  </a>
+
+  <a href="mapa.html">
+    <i class="fa fa-location-dot"></i> Mapa Histórico
+  </a>
+
+  <a href="bois.html">
+    <i class="fa fa-cow"></i> Conheça os Bois
+  </a>
+
+  <a href="memoria.html">
+    <i class="fa fa-book-open"></i> Memória do Reisado
+  </a>
+
+  <a href="guia.html">
+    <i class="fa fa-robot"></i> Guia Cultural (IA)
+  </a>
+
+  <a href="admin.html">
+    <i class="fa fa-user"></i> Painel Administrativo
+  </a>
 </nav>
 
 <main>
-  <section class="carrossel" aria-label="Imagens do Reisado">
-    <div id="slides"></div>
-    <button class="seta anterior" onclick="mudarSlide(-1)" aria-label="Anterior">❮</button>
-    <button class="seta proximo" onclick="mudarSlide(1)" aria-label="Próximo">❯</button>
-    <div class="pontos" id="pontos"></div>
-  </section>
 
-  <section class="boas-vindas">
-    <h2>Bem-vindo ao Reisado Digital</h2>
-    <p>A plataforma que valoriza, preserva e divulga a história,
-       a memória e a tradição do Reisado de Boa Hora – PI.</p>
-  </section>
+<!-- CARROSSEL -->
 
-  <section class="cards">
-    <a href="agenda.html" class="card vermelho">
-      <i class="fa fa-calendar-days"></i>
-      <h3>Agenda dos Bois</h3>
-      <p>Confira a programação das apresentações.</p>
-    </a>
-    <a href="mapa.html" class="card azul">
+<section class="carrossel" aria-label="Imagens do Reisado">
+
+  <div id="slides"></div>
+
+  <button class="seta anterior"
+    onclick="mudarSlide(-1)" aria-label="Imagem anterior">
+    ❮
+  </button>
+
+  <button class="seta proximo"
+    onclick="mudarSlide(1)" aria-label="Próxima imagem">
+    ❯
+  </button>
+
+  <div class="pontos" id="pontos"></div>
+
+</section>
+
+<!-- BOAS-VINDAS -->
+
+<section class="boas-vindas">
+  <h2>Bem-vindo ao Reisado Digital</h2>
+
+  <p>
+    A plataforma que valoriza, preserva e divulga a história,
+    a memória e a tradição do Reisado de Boa Hora – PI.
+  </p>
+</section>
+
+<!-- CARDS -->
+
+<section class="cards">
+
+  <a href="agenda.html" class="card vermelho">
+    <i class="fa fa-calendar-days"></i>
+    <h3>Agenda dos Bois</h3>
+    <p>Confira a programação das apresentações.</p>
+  </a>
+
+  <a href="mapa.html" class="card azul">
+    <i class="fa fa-map-location-dot"></i>
+    <h3>Mapa Histórico</h3>
+    <p>Explore lugares, memórias e histórias.</p>
+  </a>
+
+  <a href="bois.html" class="card verde">
+    <i class="fa fa-cow"></i>
+    <h3>Conheça os Bois</h3>
+    <p>Conheça os bois do Reisado de Boa Hora.</p>
+  </a>
+
+  <a href="memoria.html" class="card roxo">
+    <i class="fa fa-book-open"></i>
+    <h3>Memória do Reisado</h3>
+    <p>Homenagem coletiva aos personagens da cultura.</p>
+  </a>
+
+  <a href="guia.html" class="card laranja">
+    <i class="fa fa-robot"></i>
+    <h3>Guia Cultural com IA</h3>
+    <p>Conheça melhor a história e a tradição.</p>
+  </a>
+
+</section>
+
+<!-- PAINÉIS -->
+
+<section class="paineis">
+
+  <article class="painel">
+
+    <h2>
+      <i class="fa fa-location-dot"></i>
+      Mapa Histórico do Reisado
+    </h2>
+
+    <div class="mapa-preview">
       <i class="fa fa-map-location-dot"></i>
-      <h3>Mapa Histórico</h3>
-      <p>Explore lugares, memórias e histórias.</p>
-    </a>
-    <a href="bois.html" class="card verde">
-      <i class="fa fa-cow"></i>
-      <h3>Conheça os Bois</h3>
-      <p>Conheça os bois do Reisado de Boa Hora.</p>
-    </a>
-    <a href="memoria.html" class="card roxo">
-      <i class="fa fa-book-open"></i>
-      <h3>Memória do Reisado</h3>
-      <p>Homenagem coletiva aos personagens da cultura.</p>
-    </a>
-    <a href="guia.html" class="card laranja">
-      <i class="fa fa-robot"></i>
-      <h3>Guia Cultural com IA</h3>
-      <p>Conheça melhor a história e a tradição.</p>
-    </a>
-  </section>
+      <h3>Boa Hora – PI</h3>
+      <p>Conheça os lugares que guardam a memória do Reisado.</p>
+    </div>
 
-  <section class="paineis">
-    <article class="painel">
-      <h2><i class="fa fa-location-dot"></i> Mapa Histórico do Reisado</h2>
-      <div class="mapa-preview">
-        <i class="fa fa-map-location-dot"></i>
-        <h3>Boa Hora – PI</h3>
-        <p>Conheça os lugares que guardam a memória do Reisado.</p>
-      </div>
-      <a href="mapa.html" class="botao">Explorar Mapa →</a>
-    </article>
+    <a href="mapa.html" class="botao">
+      Explorar Mapa →
+    </a>
 
-    <article class="painel">
-      <h2><i class="fa fa-calendar-days"></i> Próximas Apresentações</h2>
-      <div id="listaAgenda">
-        <p class="aviso">Carregando programação...</p>
-      </div>
-      <a href="agenda.html" class="botao">Ver agenda completa →</a>
-    </article>
+  </article>
 
-    <article class="painel">
-      <h2><i class="fa-brands fa-youtube"></i> Vídeos do Reisado</h2>
-      <div class="video-grid" id="listaVideos"></div>
-      <p id="avisoVideos" class="aviso">Vídeos serão adicionados em breve.</p>
-    </article>
-  </section>
+  <article class="painel">
+
+    <h2>
+      <i class="fa fa-calendar-days"></i>
+      Próximas Apresentações
+    </h2>
+
+    <div id="listaAgenda">
+      <p class="aviso">Carregando programação...</p>
+    </div>
+
+    <a href="agenda.html" class="botao">
+      Ver agenda completa →
+    </a>
+
+  </article>
+
+  <article class="painel">
+
+    <h2>
+      <i class="fa-brands fa-youtube"></i>
+      Vídeos do Reisado
+    </h2>
+
+    <div class="video-grid" id="listaVideos"></div>
+
+    <p id="avisoVideos" class="aviso">
+      Vídeos serão adicionados em breve.
+    </p>
+
+  </article>
+
+</section>
+
+<!-- IMAGEM DOS TRÊS REIS -->
+
+<section class="secao-reis">
+
+  <h2>👑 Os Três Reis de Boa Hora</h2>
+
+  <div class="conteudo-reis">
+
+    <img
+      src="imagens/Três Reis.jpeg"
+      alt="Estátuas dos Três Reis em Boa Hora - PI"
+    >
+
+    <div class="texto-reis">
+
+      <h3>Fé, Cultura e Tradição</h3>
+
+      <p>
+        O Reisado de Boa Hora – PI representa uma importante
+        manifestação da cultura popular, reunindo tradições,
+        personagens, músicas, apresentações e memórias
+        transmitidas entre gerações.
+      </p>
+
+      <p>
+        Este espaço valoriza os registros culturais e a
+        história da comunidade, contribuindo para preservar
+        e divulgar as tradições do nosso município.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
 </main>
 
+<!-- RODAPÉ -->
+
 <footer>
-  Preservando a memória do nosso povo e a tradição do Reisado de Boa Hora – PI.
+  Preservando a memória do nosso povo e a tradição
+  do Reisado de Boa Hora – PI.
 </footer>
+
+<!-- FIREBASE -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script>
+
+// CONFIGURAÇÃO DAS IMAGENS DO CARROSSEL
+
 const imagens = [
-  {arquivo:"carrossel-1.jpg",titulo:"Reisado de Boa Hora – Cultura viva do nosso povo"},
-  {arquivo:"carrossel-2.jpg",titulo:"A tradição que atravessa gerações"},
-  {arquivo:"carrossel-3.jpg",titulo:"Memórias e histórias do nosso Reisado"}
+  {
+    arquivo:"imagens/Igreja.jpeg",
+    titulo:"Boa Hora – PI: nossa cultura e tradição"
+  },
+  {
+    arquivo:"imagens/Três Reis.jpeg",
+    titulo:"Os Três Reis: fé, cultura e memória"
+  },
+  {
+    arquivo:"ícone-boi-reisado-logo.png",
+    titulo:"Reisado de Boa Hora – Memórias e histórias do nosso povo"
+  }
 ];
 
 let indice = 0;
@@ -424,72 +807,122 @@ const areaSlides = document.getElementById("slides");
 const areaPontos = document.getElementById("pontos");
 
 imagens.forEach((item,i)=>{
+
   const slide = document.createElement("div");
+
   slide.className = "slide" + (i===0?" ativo":"");
+
   slide.style.backgroundImage =
     `linear-gradient(90deg,#0005,#0004),url("${item.arquivo}")`;
+
   const texto = document.createElement("div");
   texto.className = "texto";
   texto.textContent = item.titulo;
+
   slide.appendChild(texto);
   areaSlides.appendChild(slide);
 
   const ponto = document.createElement("button");
+
   ponto.className = i===0?"ativo":"";
+
   ponto.setAttribute("aria-label","Mostrar imagem "+(i+1));
+
   ponto.onclick=()=>mostrarSlide(i);
+
   areaPontos.appendChild(ponto);
+
 });
 
-function mostrarSlide(i) {
-  const slides=document.querySelectorAll(".slide");
-  const pontos=document.querySelectorAll(".pontos button");
-  indice=(i+slides.length)%slides.length;
-  slides.forEach((s,n)=>s.classList.toggle("ativo",n===indice));
-  pontos.forEach((p,n)=>p.classList.toggle("ativo",n===indice));
+function atualizarSlide(){
+
+  document.querySelectorAll(".slide").forEach((s,n)=>{
+    s.classList.toggle("ativo",n===indice);
+  });
+
+  document.querySelectorAll(".pontos button").forEach((p,n)=>{
+    p.classList.toggle("ativo",n===indice);
+  });
+
+}
+
+function mostrarSlide(i){
+
+  indice=(i+imagens.length)%imagens.length;
+
+  atualizarSlide();
+
   clearInterval(intervalo);
-  intervalo=setInterval(()=>mostrarSlideAutomatico(),5500);
+
+  intervalo=setInterval(mostrarSlideAutomatico,5500);
+
 }
-function mudarSlide(d) { mostrarSlide(indice+d); }
-function mostrarSlideAutomatico() {
-  const total=imagens.length;
-  indice=(indice+1)%total;
-  document.querySelectorAll(".slide").forEach(
-    (s,n)=>s.classList.toggle("ativo",n===indice)
-  );
-  document.querySelectorAll(".pontos button").forEach(
-    (p,n)=>p.classList.toggle("ativo",n===indice)
-  );
+
+function mudarSlide(d){
+  mostrarSlide(indice+d);
 }
+
+function mostrarSlideAutomatico(){
+
+  indice=(indice+1)%imagens.length;
+
+  atualizarSlide();
+
+}
+
 intervalo=setInterval(mostrarSlideAutomatico,5500);
 
-// Adicione aqui links reais do YouTube.
-// Exemplo: {titulo:"Apresentação do Reisado",url:"https://www.youtube.com/watch?v=ID"}
+
+// VÍDEOS DO YOUTUBE
+// Adicione posteriormente os links reais.
+
 const videos = [];
 
-function obterIdYoutube(url) {
+function obterIdYoutube(url){
+
   try {
+
     const u=new URL(url);
     const host=u.hostname.toLowerCase();
-    if(host==="youtu.be" || host==="www.youtu.be")
+
+    if(host==="youtu.be" || host==="www.youtu.be"){
       return u.pathname.split("/")[1];
-    if(["youtube.com","www.youtube.com","m.youtube.com"].includes(host)){
-      if(u.pathname==="/watch") return u.searchParams.get("v");
-      if(u.pathname.startsWith("/shorts/") ||
-         u.pathname.startsWith("/embed/"))
-        return u.pathname.split("/")[2];
     }
+
+    if(["youtube.com","www.youtube.com","m.youtube.com"].includes(host)){
+
+      if(u.pathname==="/watch"){
+        return u.searchParams.get("v");
+      }
+
+      if(u.pathname.startsWith("/shorts/") ||
+         u.pathname.startsWith("/embed/")){
+        return u.pathname.split("/")[2];
+      }
+
+    }
+
   } catch(e) {}
+
   return null;
+
 }
+
 function carregarVideos(){
+
   const lista=document.getElementById("listaVideos");
   const aviso=document.getElementById("avisoVideos");
+
   lista.innerHTML="";
+
   videos.forEach(v=>{
+
     const id=obterIdYoutube(v.url);
+
     if(!id || !/^[A-Za-z0-9_-]{11}$/.test(id)) return;
+
     const link=document.createElement("a");
+
     link.className="video";
     link.href="https://www.youtube.com/watch?v="+id;
     link.target="_blank";
@@ -497,24 +930,35 @@ function carregarVideos(){
 
     const thumb=document.createElement("div");
     thumb.className="thumb";
+
     const img=document.createElement("img");
     img.src="https://img.youtube.com/vi/"+id+"/hqdefault.jpg";
     img.alt=v.titulo;
+
     const play=document.createElement("span");
     play.className="play";
     play.textContent="▶";
+
     thumb.append(img,play);
 
     const titulo=document.createElement("p");
     titulo.textContent=v.titulo;
+
     link.append(thumb,titulo);
+
     lista.appendChild(link);
+
   });
+
   aviso.style.display=lista.children.length?"none":"block";
+
 }
+
 carregarVideos();
 
-// Leitura pública da agenda já existente no Firebase.
+
+// FIREBASE
+
 const firebaseConfig={
   apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
   authDomain:"rastreamento-reisado.firebaseapp.com",
@@ -526,62 +970,116 @@ const firebaseConfig={
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const db=firebase.database();
 
 function mostrarAvisoAgenda(texto){
+
   const lista=document.getElementById("listaAgenda");
+
   lista.textContent="";
+
   const p=document.createElement("p");
+
   p.className="aviso";
   p.textContent=texto;
+
   lista.appendChild(p);
+
 }
 
 db.ref("agendas").on("value",snapshot=>{
+
   const lista=document.getElementById("listaAgenda");
+
   lista.innerHTML="";
+
   const registros=[];
+
   snapshot.forEach(item=>{
+
     const v=item.val();
-    if(v && typeof v==="object") registros.push(v);
+
+    if(v && typeof v==="object"){
+      registros.push(v);
+    }
+
   });
 
-  // A estrutura da agenda antiga pode ter nomes de campos
-  // diferentes. Esta leitura será ajustada na próxima etapa.
   const eventos=registros.map(v=>{
+
     const data=v.data || v.dataApresentacao || "";
     const nome=v.nomeBoi || v.boiNome || v.boi || "";
     const hora=v.hora || v.horario || "";
     const local=v.local || v.localidade || v.comunidade || "";
+
     const momento=new Date(
       /^\d{4}-\d{2}-\d{2}$/.test(data)
-      ? data+"T00:00:00":data
+      ? data+"T00:00:00"
+      : data
     );
-    return {data,nome,hora,local,momento};
-  }).filter(e=>e.nome && !isNaN(e.momento.getTime()) &&
-    e.momento.getTime()+86400000>Date.now());
+
+    return {
+      data,
+      nome,
+      hora,
+      local,
+      momento
+    };
+
+  }).filter(e=>
+    e.nome &&
+    !isNaN(e.momento.getTime()) &&
+    e.momento.getTime()+86400000>Date.now()
+  );
 
   eventos.sort((a,b)=>a.momento-b.momento);
 
   if(!eventos.length){
-    mostrarAvisoAgenda("Nenhuma apresentação futura disponível.");
+
+    mostrarAvisoAgenda(
+      "Nenhuma apresentação futura disponível."
+    );
+
     return;
+
   }
+
   eventos.slice(0,3).forEach(e=>{
+
     const div=document.createElement("div");
     div.className="evento";
+
     const nome=document.createElement("strong");
     nome.textContent=e.nome;
+
     const detalhes=document.createElement("small");
+
     const data=e.momento.toLocaleDateString("pt-BR");
-    detalhes.textContent=[data,e.hora,e.local].filter(Boolean).join(" • ");
+
+    detalhes.textContent=[
+      data,
+      e.hora,
+      e.local
+    ].filter(Boolean).join(" • ");
+
     div.append(nome,detalhes);
+
     lista.appendChild(div);
+
   });
+
 },erro=>{
+
   console.error("Agenda:",erro);
-  mostrarAvisoAgenda("Não foi possível carregar a programação.");
+
+  mostrarAvisoAgenda(
+    "Não foi possível carregar a programação."
+  );
+
 });
+
 </script>
+
 </body>
 </html>
