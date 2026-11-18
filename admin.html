@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
-
 <title>Administração | Reisado Digital 2.0</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -22,18 +21,13 @@
   --cinza:#6e6870;
   --borda:#e9e4e2;
 }
-
-* {
-  box-sizing:border-box;
-}
-
+* { box-sizing:border-box; }
 body {
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:var(--fundo);
   color:var(--texto);
 }
-
 header {
   background:linear-gradient(115deg,var(--vinho),var(--escuro));
   color:white;
@@ -41,29 +35,18 @@ header {
   padding:25px 15px;
   border-bottom:5px solid var(--ouro);
 }
-
 header img {
   width:85px;
   height:85px;
   object-fit:contain;
 }
-
-header h1 {
-  margin:10px 0;
-  font-size:27px;
-}
-
-header p {
-  margin:5px;
-  color:#f5dce2;
-}
-
+header h1 { margin:10px 0;font-size:27px; }
+header p { margin:5px;color:#f5dce2; }
 .container {
   max-width:1000px;
   margin:auto;
   padding:20px;
 }
-
 .caixa {
   background:white;
   border:1px solid var(--borda);
@@ -72,36 +55,31 @@ header p {
   margin-bottom:20px;
   box-shadow:0 7px 20px #32111b0b;
 }
-
-h2,h3 {
-  color:var(--vinho);
-}
-
-h2 {
-  margin-top:0;
-}
-
+h2,h3 { color:var(--vinho); }
+h2 { margin-top:0; }
 label {
   display:block;
   margin:15px 0 7px;
   font-weight:bold;
   font-size:14px;
 }
-
-input,select {
+input,select,textarea {
   width:100%;
   padding:13px;
   border:1px solid #ccc;
   border-radius:8px;
   font-size:15px;
   background:white;
+  font-family:inherit;
 }
-
-input:focus,select:focus {
+textarea {
+  min-height:110px;
+  resize:vertical;
+}
+input:focus,select:focus,textarea:focus {
   outline:2px solid var(--ouro);
   outline-offset:1px;
 }
-
 button {
   background:var(--vinho);
   color:white;
@@ -112,52 +90,23 @@ button {
   font-weight:bold;
   cursor:pointer;
 }
-
-button:hover {
-  filter:brightness(.94);
-}
-
-button:disabled {
-  opacity:.55;
-  cursor:wait;
-}
-
-.botao-grande {
-  width:100%;
-  margin-top:15px;
-}
-
-.cinza {
-  background:#69717d;
-}
-
-.vermelho {
-  background:#b32635;
-}
-
-.oculto {
-  display:none!important;
-}
-
+button:hover { filter:brightness(.94); }
+button:disabled { opacity:.55;cursor:wait; }
+.botao-grande { width:100%;margin-top:15px; }
+.cinza { background:#69717d; }
+.vermelho { background:#b32635; }
+.oculto { display:none!important; }
 .abas,.botoes {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
 }
-
-.abas {
-  margin-bottom:20px;
-}
-
-.abas button {
-  flex:1;
-}
-
+.abas { margin-bottom:20px; }
+.abas button { flex:1; }
 .abas button.ativo {
   background:var(--escuro);
   box-shadow:inset 0 -4px var(--ouro);
 }
-
 .item {
   padding:18px;
   border:1px solid var(--borda);
@@ -165,25 +114,15 @@ button:disabled {
   margin-top:13px;
   background:#fffdfd;
 }
-
-.item h3 {
-  margin:0 0 10px;
-}
-
+.item h3 { margin:0 0 10px; }
 .item p {
   margin:8px 0;
   font-size:14px;
   line-height:1.6;
+  overflow-wrap:anywhere;
 }
-
-.botoes {
-  margin-top:12px;
-}
-
-.botoes button {
-  flex:1 1 120px;
-}
-
+.botoes { margin-top:12px; }
+.botoes button { flex:1 1 120px; }
 .aviso {
   padding:15px;
   border-left:4px solid var(--ouro);
@@ -193,20 +132,17 @@ button:disabled {
   line-height:1.7;
   margin:15px 0;
 }
-
 .mensagem {
   font-weight:bold;
   font-size:14px;
   line-height:1.6;
   margin-top:14px;
 }
-
 .linha {
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:15px;
 }
-
 .links {
   display:flex;
   justify-content:center;
@@ -214,13 +150,11 @@ button:disabled {
   gap:20px;
   padding:25px 0;
 }
-
 .links a {
   color:var(--vinho);
   font-weight:bold;
   text-decoration:none;
 }
-
 footer {
   text-align:center;
   background:var(--escuro);
@@ -229,24 +163,11 @@ footer {
   padding:25px;
   font-size:13px;
 }
-
 @media(max-width:600px) {
-  .container {
-    padding:12px;
-  }
-
-  .caixa {
-    padding:17px;
-  }
-
-  .linha {
-    grid-template-columns:1fr;
-    gap:0;
-  }
-
-  .abas button {
-    font-size:13px;
-  }
+  .container { padding:12px; }
+  .caixa { padding:17px; }
+  .linha { grid-template-columns:1fr;gap:0; }
+  .abas button { font-size:13px; }
 }
 </style>
 </head>
@@ -254,11 +175,8 @@ footer {
 <body>
 
 <header>
-  <img
-    src="./ícone-boi-reisado-logo.png"
-    alt="Símbolo do Reisado"
-  >
-
+  <img src="./ícone-boi-reisado-logo.png"
+       alt="Símbolo do Reisado">
   <h1>REISADO DIGITAL 2.0</h1>
   <p>Painel Administrativo Cultural</p>
   <p>Boa Hora – Piauí</p>
@@ -266,372 +184,321 @@ footer {
 
 <div class="container">
 
-<!-- LOGIN -->
+  <!-- LOGIN -->
 
-<section id="telaLogin" class="caixa">
+  <section id="telaLogin" class="caixa">
+    <h2>🔐 Acesso do administrador</h2>
 
-  <h2>🔐 Acesso do administrador</h2>
+    <form id="formLogin">
+      <label for="email">E-mail</label>
+      <input id="email" type="email"
+             autocomplete="username" required>
 
-  <form id="formLogin">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password"
+             autocomplete="current-password" required>
 
-    <label for="email">E-mail</label>
-    <input
-      id="email"
-      type="email"
-      autocomplete="username"
-      required
-    >
+      <button type="submit" class="botao-grande">
+        Entrar
+      </button>
+    </form>
 
-    <label for="senha">Senha</label>
-    <input
-      id="senha"
-      type="password"
-      autocomplete="current-password"
-      required
-    >
-
-    <button type="submit" class="botao-grande">
-      Entrar
-    </button>
-
-  </form>
-
-  <p
-    id="mensagemLogin"
-    class="mensagem"
-    role="status"
-  ></p>
-
-</section>
-
-<!-- PAINEL -->
-
-<section id="telaPainel" class="oculto">
-
-  <div class="caixa">
-
-    <h2>Painel Administrativo</h2>
-
-    <p id="usuarioLogado"></p>
-
-    <div class="aviso">
-      <strong>Temporada inicial: 2027</strong>
-      <p>
-        Período: 31/12/2026 a 06/01/2027.
-      </p>
-      Os registros serão organizados por temporada,
-      preservando os cadastros dos anos anteriores.
-    </div>
-
-    <button
-      id="sair"
-      type="button"
-      class="cinza botao-grande"
-    >
-      Sair da conta
-    </button>
-
-  </div>
-
-  <!-- ABAS -->
-
-  <div class="abas">
-
-    <button
-      id="abaBois"
-      type="button"
-      class="ativo"
-    >
-      🐂 Cadastro de Bois
-    </button>
-
-    <button
-      id="abaAgenda"
-      type="button"
-    >
-      📅 Apresentações
-    </button>
-
-  </div>
-
-  <!-- SEÇÃO BOIS -->
-
-  <section id="secaoBois">
-
-    <div class="caixa">
-
-      <h2>Temporada do Reisado</h2>
-
-      <label for="anoTemporada">
-        Selecionar temporada
-      </label>
-
-      <select id="anoTemporada">
-        <option value="2027">2027</option>
-      </select>
-
-      <p id="periodo" class="aviso"></p>
-
-      <label for="novoAno">
-        Adicionar temporada futura
-      </label>
-
-      <div class="linha">
-
-        <input
-          id="novoAno"
-          type="number"
-          min="2028"
-          max="2100"
-          placeholder="Ex.: 2028"
-        >
-
-        <button
-          id="adicionarAno"
-          type="button"
-        >
-          Adicionar temporada
-        </button>
-
-      </div>
-
-      <p id="mensagemAno" class="mensagem"></p>
-
-    </div>
-
-    <!-- FORMULÁRIO DOS BOIS -->
-
-    <div class="caixa">
-
-      <h2 id="tituloBoi">
-        Cadastrar boi — 2027
-      </h2>
-
-      <form id="formBoi">
-
-        <label for="nomeBoi">
-          Nome do boi
-        </label>
-
-        <input
-          id="nomeBoi"
-          maxlength="100"
-          placeholder="Nome do boi"
-          required
-        >
-
-        <label for="donoBoi">
-          Nome do proprietário
-        </label>
-
-        <input
-          id="donoBoi"
-          maxlength="100"
-          placeholder="Nome do dono ou responsável"
-          required
-        >
-
-        <label for="comunidadeBoi">
-          Comunidade ou localidade
-        </label>
-
-        <input
-          id="comunidadeBoi"
-          maxlength="150"
-          placeholder="Ex.: Centro, comunidade rural"
-        >
-
-        <button
-          id="salvarBoi"
-          type="submit"
-          class="botao-grande"
-        >
-          Salvar boi
-        </button>
-
-        <button
-          id="cancelarBoi"
-          type="button"
-          class="cinza botao-grande oculto"
-        >
-          Cancelar edição
-        </button>
-
-      </form>
-
-      <p
-        id="mensagemBoi"
-        class="mensagem"
-        role="status"
-      ></p>
-
-    </div>
-
-    <!-- LISTA DOS BOIS -->
-
-    <div class="caixa">
-
-      <h2>🐂 Bois cadastrados</h2>
-
-      <p id="quantidadeBois"></p>
-
-      <div id="listaBois">
-        Carregando...
-      </div>
-
-    </div>
-
+    <p id="mensagemLogin" class="mensagem"
+       role="status"></p>
   </section>
 
-  <!-- SEÇÃO AGENDA -->
+  <!-- PAINEL -->
 
-  <section id="secaoAgenda" class="oculto">
+  <section id="telaPainel" class="oculto">
 
     <div class="caixa">
-
-      <h2 id="tituloAgenda">
-        Cadastrar apresentação
-      </h2>
+      <h2>Painel Administrativo</h2>
+      <p id="usuarioLogado"></p>
 
       <div class="aviso">
-        As apresentações da temporada 2027
-        devem ocorrer entre 31/12/2026
-        e 06/01/2027.
+        <strong>Temporada inicial: 2027</strong>
+        <p>Período: 31/12/2026 a 06/01/2027.</p>
+        Os bois e as apresentações são organizados
+        por temporada. As homenagens fazem parte
+        do memorial permanente do Reisado.
       </div>
 
-      <form id="formAgenda">
+      <button id="sair" type="button"
+              class="cinza botao-grande">
+        Sair da conta
+      </button>
+    </div>
 
-        <label for="boiApresentacao">
-          Selecione o boi
+    <!-- ABAS -->
+
+    <div class="abas">
+      <button id="abaBois" type="button" class="ativo">
+        🐂 Cadastro de Bois
+      </button>
+
+      <button id="abaAgenda" type="button">
+        📅 Apresentações
+      </button>
+
+      <button id="abaHomenagens" type="button">
+        🕊️ Homenagens
+      </button>
+    </div>
+
+    <!-- CADASTRO DE BOIS -->
+
+    <section id="secaoBois">
+
+      <div class="caixa">
+        <h2>Temporada do Reisado</h2>
+
+        <label for="anoTemporada">
+          Selecionar temporada
         </label>
 
-        <select
-          id="boiApresentacao"
-          required
-        >
-          <option value="">
-            Escolha um boi
-          </option>
+        <select id="anoTemporada">
+          <option value="2027">2027</option>
         </select>
 
-        <div class="linha">
+        <p id="periodo" class="aviso"></p>
 
-          <div>
-            <label for="dataApresentacao">
-              Data
-            </label>
-
-            <input
-              id="dataApresentacao"
-              type="date"
-              required
-            >
-          </div>
-
-          <div>
-            <label for="horaApresentacao">
-              Horário
-            </label>
-
-            <input
-              id="horaApresentacao"
-              type="time"
-              required
-            >
-          </div>
-
-        </div>
-
-        <label for="comunidadeApresentacao">
-          Comunidade ou local da apresentação
+        <label for="novoAno">
+          Adicionar temporada futura
         </label>
 
-        <input
-          id="comunidadeApresentacao"
-          maxlength="150"
-          required
-        >
+        <div class="linha">
+          <input id="novoAno" type="number"
+                 min="2028" max="2099"
+                 placeholder="Ex.: 2028">
 
-        <button
-          id="salvarAgenda"
-          type="submit"
-          class="botao-grande"
-        >
-          Salvar apresentação
-        </button>
+          <button id="adicionarAno" type="button">
+            Adicionar temporada
+          </button>
+        </div>
 
-        <button
-          id="cancelarAgenda"
-          type="button"
-          class="cinza botao-grande oculto"
-        >
-          Cancelar edição
-        </button>
-
-      </form>
-
-      <p
-        id="mensagemAgenda"
-        class="mensagem"
-        role="status"
-      ></p>
-
-    </div>
-
-    <div class="caixa">
-
-      <h2>Apresentações cadastradas</h2>
-
-      <div id="listaAgenda">
-        Carregando...
+        <p id="mensagemAno" class="mensagem"></p>
       </div>
 
-    </div>
+      <div class="caixa">
+        <h2 id="tituloBoi">Cadastrar boi — 2027</h2>
+
+        <form id="formBoi">
+
+          <label for="nomeBoi">Nome do boi</label>
+          <input id="nomeBoi" maxlength="100"
+                 placeholder="Nome do boi" required>
+
+          <label for="donoBoi">
+            Nome do proprietário
+          </label>
+          <input id="donoBoi" maxlength="100"
+                 placeholder="Nome do dono ou responsável"
+                 required>
+
+          <label for="comunidadeBoi">
+            Comunidade ou localidade
+          </label>
+          <input id="comunidadeBoi" maxlength="150"
+                 placeholder="Ex.: Centro, comunidade rural">
+
+          <button id="salvarBoi" type="submit"
+                  class="botao-grande">
+            Salvar boi
+          </button>
+
+          <button id="cancelarBoi" type="button"
+                  class="cinza botao-grande oculto">
+            Cancelar edição
+          </button>
+        </form>
+
+        <p id="mensagemBoi" class="mensagem"
+           role="status"></p>
+      </div>
+
+      <div class="caixa">
+        <h2>🐂 Bois cadastrados</h2>
+        <p id="quantidadeBois"></p>
+        <div id="listaBois">Carregando...</div>
+      </div>
+
+    </section>
+
+    <!-- APRESENTAÇÕES -->
+
+    <section id="secaoAgenda" class="oculto">
+
+      <div class="caixa">
+        <h2 id="tituloAgenda">
+          Cadastrar apresentação
+        </h2>
+
+        <div id="avisoAgenda" class="aviso">
+          As apresentações devem ocorrer dentro
+          do período da temporada selecionada.
+        </div>
+
+        <form id="formAgenda">
+
+          <label for="boiApresentacao">
+            Selecione o boi
+          </label>
+          <select id="boiApresentacao" required>
+            <option value="">Escolha um boi</option>
+          </select>
+
+          <div class="linha">
+            <div>
+              <label for="dataApresentacao">Data</label>
+              <input id="dataApresentacao"
+                     type="date" required>
+            </div>
+
+            <div>
+              <label for="horaApresentacao">Horário</label>
+              <input id="horaApresentacao"
+                     type="time" required>
+            </div>
+          </div>
+
+          <label for="comunidadeApresentacao">
+            Comunidade ou local da apresentação
+          </label>
+          <input id="comunidadeApresentacao"
+                 maxlength="150" required>
+
+          <button id="salvarAgenda" type="submit"
+                  class="botao-grande">
+            Salvar apresentação
+          </button>
+
+          <button id="cancelarAgenda" type="button"
+                  class="cinza botao-grande oculto">
+            Cancelar edição
+          </button>
+        </form>
+
+        <p id="mensagemAgenda" class="mensagem"
+           role="status"></p>
+      </div>
+
+      <div class="caixa">
+        <h2>Apresentações cadastradas</h2>
+        <div id="listaAgenda">Carregando...</div>
+      </div>
+
+    </section>
+
+    <!-- HOMENAGENS -->
+
+    <section id="secaoHomenagens" class="oculto">
+
+      <div class="caixa">
+        <h2>🕊️ Memória Viva do Reisado</h2>
+
+        <div class="aviso">
+          Este espaço é dedicado à memória
+          das pessoas que contribuíram para
+          o Reisado de Boa Hora–PI e que
+          já partiram.
+
+          <p>
+            Cadastre os homenageados aos poucos.
+            Os registros serão preservados no
+            memorial cultural, independentemente
+            da temporada.
+          </p>
+        </div>
+      </div>
+
+      <div class="caixa">
+        <h2 id="tituloHomenagem">
+          Cadastrar homenageado
+        </h2>
+
+        <form id="formHomenagem">
+
+          <label for="nomeHomenagem">
+            Nome da pessoa homenageada
+          </label>
+          <input id="nomeHomenagem"
+                 maxlength="120"
+                 placeholder="Nome ou como era conhecida"
+                 required>
+
+          <label for="papelHomenagem">
+            Participação no Reisado
+          </label>
+          <input id="papelHomenagem"
+                 maxlength="150"
+                 placeholder="Ex.: mestre, brincante, músico, proprietário de boi"
+                 required>
+
+          <label for="textoHomenagem">
+            Mensagem de homenagem (opcional)
+          </label>
+          <textarea id="textoHomenagem"
+                    maxlength="1500"
+                    placeholder="Escreva uma breve lembrança sobre sua contribuição ao Reisado."></textarea>
+
+          <button id="salvarHomenagem"
+                  type="submit"
+                  class="botao-grande">
+            Salvar homenagem
+          </button>
+
+          <button id="cancelarHomenagem"
+                  type="button"
+                  class="cinza botao-grande oculto">
+            Cancelar edição
+          </button>
+        </form>
+
+        <p id="mensagemHomenagem"
+           class="mensagem" role="status"></p>
+      </div>
+
+      <div class="caixa">
+        <h2>🕊️ Pessoas homenageadas</h2>
+        <p id="quantidadeHomenagens"></p>
+        <div id="listaHomenagens">
+          Carregando homenagens...
+        </div>
+      </div>
+
+    </section>
 
   </section>
 
-</section>
+  <!-- LINKS -->
 
-<!-- LINKS -->
-
-<div class="links">
-
-  <a href="./inicio.html">
-    🏠 Início
-  </a>
-
-  <a href="./bois.html">
-    🐂 Conheça os Bois
-  </a>
-
-  <a href="./agenda.html">
-    📅 Agenda Pública
-  </a>
-
-</div>
+  <div class="links">
+    <a href="./inicio.html">🏠 Início</a>
+    <a href="./bois.html">🐂 Conheça os Bois</a>
+    <a href="./agenda.html">📅 Agenda Pública</a>
+    <a href="./memoria.html">🕊️ Memorial</a>
+  </div>
 
 </div>
 
 <footer>
   Reisado Digital 2.0 — Boa Hora, Piauí
-  <p>
-    Preservando a cultura e a memória do Reisado
-  </p>
+  <p>Preservando a cultura e a memória do Reisado</p>
 </footer>
 
 <script>
 "use strict";
 
-/* CONFIGURAÇÃO FIREBASE */
+/* FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-  authDomain: "rastreamento-reisado.firebaseapp.com",
-  databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
-  projectId: "rastreamento-reisado",
-  storageBucket: "rastreamento-reisado.firebasestorage.app",
-  messagingSenderId: "796420970266",
-  appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+  apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain:"rastreamento-reisado.firebaseapp.com",
+  databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId:"rastreamento-reisado",
+  storageBucket:"rastreamento-reisado.firebasestorage.app",
+  messagingSenderId:"796420970266",
+  appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -643,6 +510,7 @@ const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
 
 const boisRef = db.ref("boisPorAno");
 const agendasRef = db.ref("agendas");
+const homenagensRef = db.ref("homenagens");
 
 const $ = id => document.getElementById(id);
 
@@ -650,17 +518,20 @@ let usuarioAtual = null;
 let temporada = "2027";
 let bois = [];
 let apresentacoes = [];
+let homenagens = [];
 
 let boiEmEdicao = null;
 let agendaEmEdicao = null;
+let homenagemEmEdicao = null;
 
 let refBoisAtiva = null;
 let ouvindoAgenda = false;
+let ouvindoHomenagens = false;
 let geracaoConsulta = 0;
 
 const temporadasLocais = new Set(["2027"]);
 
-/* FUNÇÕES AUXILIARES */
+/* AUXILIARES */
 
 function normalizar(valor) {
   return String(valor || "")
@@ -671,25 +542,33 @@ function normalizar(valor) {
 }
 
 function mostrarAba(aba) {
-  $("secaoBois").classList.toggle(
-    "oculto", aba !== "bois"
-  );
+  ["bois","agenda","homenagens"].forEach(nome => {
+    const secao = nome === "bois"
+      ? "secaoBois"
+      : nome === "agenda"
+        ? "secaoAgenda"
+        : "secaoHomenagens";
 
-  $("secaoAgenda").classList.toggle(
-    "oculto", aba !== "agenda"
-  );
+    const botao = nome === "bois"
+      ? "abaBois"
+      : nome === "agenda"
+        ? "abaAgenda"
+        : "abaHomenagens";
 
-  $("abaBois").classList.toggle(
-    "ativo", aba === "bois"
-  );
+    $(secao).classList.toggle(
+      "oculto",aba !== nome
+    );
 
-  $("abaAgenda").classList.toggle(
-    "ativo", aba === "agenda"
-  );
+    $(botao).classList.toggle(
+      "ativo",aba === nome
+    );
+  });
 }
 
 $("abaBois").onclick = () => mostrarAba("bois");
 $("abaAgenda").onclick = () => mostrarAba("agenda");
+$("abaHomenagens").onclick = () =>
+  mostrarAba("homenagens");
 
 /* LOGIN */
 
@@ -715,7 +594,6 @@ $("formLogin").onsubmit = async function(e) {
 
   } catch(erro) {
     console.error(erro);
-
     $("mensagemLogin").textContent =
       "Acesso não autorizado. Confira seus dados.";
   }
@@ -724,28 +602,30 @@ $("formLogin").onsubmit = async function(e) {
 $("sair").onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(async usuario => {
-
   const autorizado =
     !!usuario && usuario.uid === ADMIN_UID;
 
   usuarioAtual = autorizado ? usuario : null;
 
   $("telaLogin").classList.toggle(
-    "oculto", autorizado
+    "oculto",autorizado
   );
 
   $("telaPainel").classList.toggle(
-    "oculto", !autorizado
+    "oculto",!autorizado
   );
 
   if (!autorizado) {
     pararConsultas();
+    pararHomenagens();
 
     bois = [];
     apresentacoes = [];
+    homenagens = [];
 
     cancelarEdicaoBoi();
     cancelarEdicaoAgenda();
+    cancelarEdicaoHomenagem();
 
     if (usuario) {
       await auth.signOut();
@@ -760,6 +640,7 @@ auth.onAuthStateChanged(async usuario => {
 
   if (usuarioAtual) {
     iniciarConsultas();
+    iniciarHomenagens();
   }
 });
 
@@ -767,8 +648,8 @@ auth.onAuthStateChanged(async usuario => {
 
 function periodoTemporada(ano) {
   return {
-    inicio:(Number(ano)-1) + "-12-31",
-    fim:ano + "-01-06"
+    inicio:(Number(ano)-1)+"-12-31",
+    fim:ano+"-01-06"
   };
 }
 
@@ -778,8 +659,7 @@ function formatarData(data) {
   }
 
   const [ano,mes,dia] = data.split("-");
-
-  return dia + "/" + mes + "/" + ano;
+  return dia+"/"+mes+"/"+ano;
 }
 
 function dataNaTemporada(data,ano) {
@@ -793,20 +673,25 @@ function atualizarPeriodo() {
   const datas = periodoTemporada(temporada);
 
   $("periodo").textContent =
-    "Temporada " + temporada + ": " +
-    formatarData(datas.inicio) + " a " +
+    "Temporada "+temporada+": "+
+    formatarData(datas.inicio)+" a "+
     formatarData(datas.fim);
 
   $("tituloBoi").textContent =
-    "Cadastrar boi — " + temporada;
+    "Cadastrar boi — "+temporada;
 
   $("dataApresentacao").min = datas.inicio;
   $("dataApresentacao").max = datas.fim;
+
+  $("avisoAgenda").textContent =
+    "As apresentações da temporada "+
+    temporada+" devem ocorrer entre "+
+    formatarData(datas.inicio)+" e "+
+    formatarData(datas.fim)+".";
 }
 
 function atualizarOpcoesTemporadas() {
   const seletor = $("anoTemporada");
-
   seletor.replaceChildren();
 
   [...temporadasLocais]
@@ -835,8 +720,7 @@ async function carregarTemporadas() {
     console.error(erro);
 
     $("mensagemAno").textContent =
-      "Não foi possível consultar as temporadas. " +
-      "Confira as regras do Firebase.";
+      "Não foi possível consultar as temporadas.";
   }
 
   atualizarOpcoesTemporadas();
@@ -850,10 +734,10 @@ $("adicionarAno").onclick = function() {
   if (
     !Number.isInteger(ano) ||
     ano < 2028 ||
-    ano > 2100
+    ano > 2099
   ) {
     $("mensagemAno").textContent =
-      "Informe um ano entre 2028 e 2100.";
+      "Informe um ano entre 2028 e 2099.";
     return;
   }
 
@@ -861,15 +745,16 @@ $("adicionarAno").onclick = function() {
 
   if (!temporadasLocais.has(anoTexto)) {
     if (!confirm(
-      "Preparar a temporada " + anoTexto + "?"
+      "Preparar a temporada "+anoTexto+"?"
     )) return;
 
     temporadasLocais.add(anoTexto);
   }
 
   $("novoAno").value = "";
+
   $("mensagemAno").textContent =
-    "Temporada selecionada. Ela será registrada " +
+    "Temporada selecionada. Ela será registrada "+
     "no Firebase quando o primeiro boi for salvo.";
 
   mudarTemporada(anoTexto);
@@ -898,7 +783,7 @@ function mudarTemporada(ano) {
   iniciarConsultas();
 }
 
-/* CONSULTAS DO FIREBASE */
+/* CONSULTAS FIREBASE */
 
 function iniciarConsultas() {
   if (!usuarioAtual || refBoisAtiva) return;
@@ -916,7 +801,6 @@ function iniciarConsultas() {
 
       snapshot.forEach(item => {
         const d = item.val();
-
         if (!d || !d.nome) return;
 
         bois.push({
@@ -936,10 +820,8 @@ function iniciarConsultas() {
     },
     erro => {
       console.error(erro);
-
       $("listaBois").textContent =
-        "Erro ao consultar os bois. " +
-        "Confira as regras do Firebase.";
+        "Erro ao consultar os bois.";
     }
   );
 
@@ -951,7 +833,6 @@ function iniciarConsultas() {
 
         snapshot.forEach(item => {
           const d = item.val();
-
           if (!d || !d.boi) return;
 
           apresentacoes.push({
@@ -972,7 +853,6 @@ function iniciarConsultas() {
       },
       erro => {
         console.error(erro);
-
         $("listaAgenda").textContent =
           "Erro ao consultar a agenda.";
       }
@@ -1002,12 +882,11 @@ function pararConsultas() {
 
 function renderizarBois() {
   const lista = $("listaBois");
-
   lista.replaceChildren();
 
   $("quantidadeBois").textContent =
-    bois.length +
-    " bois cadastrados na temporada " +
+    bois.length+
+    " bois cadastrados na temporada "+
     temporada;
 
   if (!bois.length) {
@@ -1021,15 +900,15 @@ function renderizarBois() {
     card.className = "item";
 
     const titulo = document.createElement("h3");
-    titulo.textContent = "🐂 " + boi.nome;
+    titulo.textContent = "🐂 "+boi.nome;
 
     const dono = document.createElement("p");
     dono.textContent =
-      "👤 Proprietário: " + boi.dono;
+      "👤 Proprietário: "+boi.dono;
 
     const comunidade = document.createElement("p");
     comunidade.textContent =
-      "🏘️ Comunidade: " +
+      "🏘️ Comunidade: "+
       (boi.comunidade || "Não informada");
 
     const botoes = document.createElement("div");
@@ -1045,19 +924,10 @@ function renderizarBois() {
     excluir.onclick = () => excluirBoi(boi);
 
     botoes.append(editar,excluir);
-
-    card.append(
-      titulo,
-      dono,
-      comunidade,
-      botoes
-    );
-
+    card.append(titulo,dono,comunidade,botoes);
     lista.appendChild(card);
   });
 }
-
-/* EDITAR BOI */
 
 function editarBoi(boi) {
   boiEmEdicao = boi.id;
@@ -1067,33 +937,25 @@ function editarBoi(boi) {
   $("comunidadeBoi").value = boi.comunidade;
 
   $("tituloBoi").textContent =
-    "Editar boi — " + temporada;
+    "Editar boi — "+temporada;
 
-  $("salvarBoi").textContent =
-    "Salvar alterações";
-
+  $("salvarBoi").textContent = "Salvar alterações";
   $("cancelarBoi").classList.remove("oculto");
-
   $("mensagemBoi").textContent = "";
 
   mostrarAba("bois");
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function cancelarEdicaoBoi(limpar=true) {
   boiEmEdicao = null;
-
   $("formBoi").reset();
 
   $("tituloBoi").textContent =
-    "Cadastrar boi — " + temporada;
+    "Cadastrar boi — "+temporada;
 
   $("salvarBoi").textContent = "Salvar boi";
-
   $("cancelarBoi").classList.add("oculto");
 
   if (limpar) {
@@ -1108,7 +970,6 @@ $("cancelarBoi").onclick = () =>
 
 $("formBoi").onsubmit = async function(e) {
   e.preventDefault();
-
   if (!usuarioAtual) return;
 
   const anoOperacao = temporada;
@@ -1132,8 +993,7 @@ $("formBoi").onsubmit = async function(e) {
 
   if (repetido) {
     $("mensagemBoi").textContent =
-      "Já existe um boi com esse nome " +
-      "nesta temporada.";
+      "Já existe um boi com esse nome nesta temporada.";
     return;
   }
 
@@ -1142,10 +1002,7 @@ $("formBoi").onsubmit = async function(e) {
 
   try {
     const ref = boisRef.child(anoOperacao);
-
-    const antigo = bois.find(
-      b => b.id === boiEmEdicao
-    );
+    const antigo = bois.find(b => b.id === boiEmEdicao);
 
     if (boiEmEdicao) {
       await ref.child(boiEmEdicao).update(dados);
@@ -1158,8 +1015,7 @@ $("formBoi").onsubmit = async function(e) {
 
       apresentacoes.forEach(a => {
         if (
-          normalizar(a.boi) ===
-          normalizar(antigo.nome) &&
+          normalizar(a.boi) === normalizar(antigo.nome) &&
           dataNaTemporada(a.data,anoOperacao)
         ) {
           atualizacoes[a.id+"/boi"] = dados.nome;
@@ -1182,8 +1038,7 @@ $("formBoi").onsubmit = async function(e) {
     console.error(erro);
 
     $("mensagemBoi").textContent =
-      "Erro ao salvar. " +
-      "Confira as regras do Firebase.";
+      "Erro ao salvar. Confira as regras do Firebase.";
   } finally {
     $("salvarBoi").disabled = false;
   }
@@ -1201,16 +1056,15 @@ async function excluirBoi(boi) {
 
   if (possuiAgenda) {
     alert(
-      "Este boi possui apresentações " +
-      "na temporada. Exclua ou altere " +
-      "essas apresentações primeiro."
+      "Este boi possui apresentações na temporada. "+
+      "Exclua ou altere essas apresentações primeiro."
     );
     return;
   }
 
   if (!confirm(
-    "Excluir " + boi.nome +
-    " da temporada " + temporada + "?"
+    "Excluir "+boi.nome+
+    " da temporada "+temporada+"?"
   )) return;
 
   try {
@@ -1235,15 +1089,10 @@ function atualizarSelectBois() {
   const anterior = select.value;
 
   select.replaceChildren();
-
-  select.add(
-    new Option("Escolha um boi","")
-  );
+  select.add(new Option("Escolha um boi",""));
 
   bois.forEach(boi => {
-    select.add(
-      new Option(boi.nome,boi.nome)
-    );
+    select.add(new Option(boi.nome,boi.nome));
   });
 
   select.value = anterior;
@@ -1253,7 +1102,6 @@ function atualizarSelectBois() {
 
 function renderizarAgenda() {
   const lista = $("listaAgenda");
-
   lista.replaceChildren();
 
   const filtradas = apresentacoes.filter(a =>
@@ -1262,8 +1110,8 @@ function renderizarAgenda() {
 
   if (!filtradas.length) {
     lista.textContent =
-      "Nenhuma apresentação cadastrada " +
-      "na temporada " + temporada + ".";
+      "Nenhuma apresentação cadastrada na temporada "+
+      temporada+".";
     return;
   }
 
@@ -1272,14 +1120,13 @@ function renderizarAgenda() {
     card.className = "item";
 
     const titulo = document.createElement("h3");
-    titulo.textContent = "🐂 " + a.boi;
+    titulo.textContent = "🐂 "+a.boi;
 
     const info = document.createElement("p");
-
     info.textContent =
-      "📅 " + formatarData(a.data) +
-      " | 🕒 " + a.horario +
-      " | 📍 " + a.comunidade;
+      "📅 "+formatarData(a.data)+
+      " | 🕒 "+a.horario+
+      " | 📍 "+a.comunidade;
 
     const botoes = document.createElement("div");
     botoes.className = "botoes";
@@ -1294,9 +1141,7 @@ function renderizarAgenda() {
     excluir.onclick = () => excluirAgenda(a);
 
     botoes.append(editar,excluir);
-
     card.append(titulo,info,botoes);
-
     lista.appendChild(card);
   });
 }
@@ -1305,7 +1150,6 @@ function renderizarAgenda() {
 
 $("formAgenda").onsubmit = async function(e) {
   e.preventDefault();
-
   if (!usuarioAtual) return;
 
   const anoOperacao = temporada;
@@ -1326,15 +1170,14 @@ $("formAgenda").onsubmit = async function(e) {
 
   if (!dataNaTemporada(dados.data,anoOperacao)) {
     $("mensagemAgenda").textContent =
-      "A data deve estar dentro da temporada " +
-      anoOperacao + ".";
+      "A data deve estar dentro da temporada "+
+      anoOperacao+".";
     return;
   }
 
   if (!bois.some(b => b.nome === dados.boi)) {
     $("mensagemAgenda").textContent =
-      "Selecione um boi cadastrado " +
-      "nesta temporada.";
+      "Selecione um boi cadastrado nesta temporada.";
     return;
   }
 
@@ -1363,17 +1206,13 @@ $("formAgenda").onsubmit = async function(e) {
   }
 };
 
-/* EDITAR APRESENTAÇÃO */
-
 function editarAgenda(a) {
   agendaEmEdicao = a.id;
 
   $("boiApresentacao").value = a.boi;
   $("dataApresentacao").value = a.data;
   $("horaApresentacao").value = a.horario;
-
-  $("comunidadeApresentacao").value =
-    a.comunidade;
+  $("comunidadeApresentacao").value = a.comunidade;
 
   $("tituloAgenda").textContent =
     "Editar apresentação";
@@ -1385,19 +1224,14 @@ function editarAgenda(a) {
 
   mostrarAba("agenda");
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-
-/* EXCLUIR APRESENTAÇÃO */
 
 async function excluirAgenda(a) {
   if (!usuarioAtual) return;
 
   if (!confirm(
-    "Excluir apresentação de " + a.boi + "?"
+    "Excluir apresentação de "+a.boi+"?"
   )) return;
 
   try {
@@ -1414,11 +1248,8 @@ async function excluirAgenda(a) {
   }
 }
 
-/* CANCELAR EDIÇÃO DA AGENDA */
-
 function cancelarEdicaoAgenda(limpar=true) {
   agendaEmEdicao = null;
-
   $("formAgenda").reset();
 
   $("tituloAgenda").textContent =
@@ -1437,15 +1268,266 @@ function cancelarEdicaoAgenda(limpar=true) {
 $("cancelarAgenda").onclick = () =>
   cancelarEdicaoAgenda();
 
+/* ===================================== */
+/* HOMENAGENS - NOVA FUNCIONALIDADE       */
+/* ===================================== */
+
+function iniciarHomenagens() {
+  if (!usuarioAtual || ouvindoHomenagens) return;
+
+  ouvindoHomenagens = true;
+
+  homenagensRef.on(
+    "value",
+    snapshot => {
+      homenagens = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.nome) return;
+
+        homenagens.push({
+          id:item.key,
+          nome:String(d.nome || ""),
+          papel:String(d.papel || ""),
+          mensagem:String(d.mensagem || "")
+        });
+      });
+
+      homenagens.sort((a,b) =>
+        a.nome.localeCompare(b.nome,"pt-BR")
+      );
+
+      renderizarHomenagens();
+    },
+    erro => {
+      console.error(erro);
+
+      $("listaHomenagens").textContent =
+        "Erro ao consultar as homenagens. "+
+        "Verifique as regras do Firebase.";
+    }
+  );
+}
+
+function pararHomenagens() {
+  if (ouvindoHomenagens) {
+    homenagensRef.off();
+    ouvindoHomenagens = false;
+  }
+}
+
+/* LISTAR HOMENAGEADOS */
+
+function renderizarHomenagens() {
+  const lista = $("listaHomenagens");
+  lista.replaceChildren();
+
+  $("quantidadeHomenagens").textContent =
+    homenagens.length+
+    (homenagens.length === 1
+      ? " pessoa homenageada."
+      : " pessoas homenageadas.");
+
+  if (!homenagens.length) {
+    lista.textContent =
+      "Ainda não há homenageados cadastrados.";
+    return;
+  }
+
+  homenagens.forEach(pessoa => {
+    const card = document.createElement("div");
+    card.className = "item";
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = "🕊️ "+pessoa.nome;
+
+    const papel = document.createElement("p");
+    papel.textContent =
+      "Participação no Reisado: "+
+      pessoa.papel;
+
+    card.append(titulo,papel);
+
+    if (pessoa.mensagem) {
+      const mensagem = document.createElement("p");
+      mensagem.textContent = pessoa.mensagem;
+      card.appendChild(mensagem);
+    }
+
+    const botoes = document.createElement("div");
+    botoes.className = "botoes";
+
+    const editar = document.createElement("button");
+    editar.textContent = "✏️ Editar";
+    editar.onclick = () =>
+      editarHomenagem(pessoa);
+
+    const excluir = document.createElement("button");
+    excluir.className = "vermelho";
+    excluir.textContent = "🗑️ Excluir";
+    excluir.onclick = () =>
+      excluirHomenagem(pessoa);
+
+    botoes.append(editar,excluir);
+    card.appendChild(botoes);
+    lista.appendChild(card);
+  });
+}
+
+/* EDITAR HOMENAGEM */
+
+function editarHomenagem(pessoa) {
+  homenagemEmEdicao = pessoa.id;
+
+  $("nomeHomenagem").value = pessoa.nome;
+  $("papelHomenagem").value = pessoa.papel;
+  $("textoHomenagem").value = pessoa.mensagem;
+
+  $("tituloHomenagem").textContent =
+    "Editar homenagem";
+
+  $("salvarHomenagem").textContent =
+    "Salvar alterações";
+
+  $("cancelarHomenagem")
+    .classList.remove("oculto");
+
+  $("mensagemHomenagem").textContent = "";
+
+  mostrarAba("homenagens");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+/* CANCELAR EDIÇÃO */
+
+function cancelarEdicaoHomenagem(limpar=true) {
+  homenagemEmEdicao = null;
+
+  $("formHomenagem").reset();
+
+  $("tituloHomenagem").textContent =
+    "Cadastrar homenageado";
+
+  $("salvarHomenagem").textContent =
+    "Salvar homenagem";
+
+  $("cancelarHomenagem")
+    .classList.add("oculto");
+
+  if (limpar) {
+    $("mensagemHomenagem").textContent = "";
+  }
+}
+
+$("cancelarHomenagem").onclick = () =>
+  cancelarEdicaoHomenagem();
+
+/* SALVAR HOMENAGEM */
+
+$("formHomenagem").onsubmit = async function(e) {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const dados = {
+    nome:$("nomeHomenagem").value.trim(),
+    papel:$("papelHomenagem").value.trim(),
+    mensagem:$("textoHomenagem").value.trim()
+  };
+
+  if (!dados.nome || !dados.papel) {
+    $("mensagemHomenagem").textContent =
+      "Informe o nome e a participação no Reisado.";
+    return;
+  }
+
+  const repetido = homenagens.some(pessoa =>
+    normalizar(pessoa.nome) ===
+      normalizar(dados.nome) &&
+    pessoa.id !== homenagemEmEdicao
+  );
+
+  if (repetido) {
+    $("mensagemHomenagem").textContent =
+      "Já existe uma homenagem com esse nome.";
+    return;
+  }
+
+  $("salvarHomenagem").disabled = true;
+
+  $("mensagemHomenagem").textContent =
+    "Salvando homenagem...";
+
+  try {
+    if (homenagemEmEdicao) {
+      await homenagensRef
+        .child(homenagemEmEdicao)
+        .update(dados);
+    } else {
+      await homenagensRef.push(dados);
+    }
+
+    cancelarEdicaoHomenagem(false);
+
+    $("mensagemHomenagem").textContent =
+      "Homenagem salva com sucesso!";
+
+  } catch(erro) {
+    console.error(erro);
+
+    $("mensagemHomenagem").textContent =
+      "Erro ao salvar homenagem. "+
+      "Verifique as regras do Firebase.";
+  } finally {
+    $("salvarHomenagem").disabled = false;
+  }
+};
+
+/* EXCLUIR HOMENAGEM */
+
+async function excluirHomenagem(pessoa) {
+  if (!usuarioAtual) return;
+
+  if (!confirm(
+    "Deseja realmente excluir a homenagem a "+
+    pessoa.nome+"?"
+  )) return;
+
+  try {
+    await homenagensRef
+      .child(pessoa.id)
+      .remove();
+
+    if (homenagemEmEdicao === pessoa.id) {
+      cancelarEdicaoHomenagem();
+    }
+
+    $("mensagemHomenagem").textContent =
+      "Homenagem excluída com sucesso.";
+
+  } catch(erro) {
+    console.error(erro);
+
+    $("mensagemHomenagem").textContent =
+      "Erro ao excluir homenagem.";
+  }
+}
+
 /* INICIALIZAÇÃO */
 
 atualizarPeriodo();
 
 window.addEventListener("beforeunload",() => {
   pararConsultas();
+  pararHomenagens();
 });
 
 </script>
-
 </body>
 </html>
