@@ -1,0 +1,892 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#850c29">
+<title>Conheça os Bois | Reisado Digital 2.0</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --vinho:#850c29;
+  --escuro:#50091c;
+  --ouro:#e9ba4e;
+  --fundo:#f8f7f5;
+  --texto:#27252a;
+  --cinza:#6e6870;
+  --borda:#e9e4e2;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--fundo);
+  color:var(--texto);
+}
+a {text-decoration:none;color:inherit}
+button,input,select {font:inherit}
+button {cursor:pointer}
+.barra {
+  background:var(--escuro);
+  color:#fff;
+  padding:10px 6%;
+  font-size:12px;
+}
+.barra div {
+  max-width:1350px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+header {
+  background:linear-gradient(115deg,#990c2f,#65091e);
+  color:white;
+  border-bottom:5px solid var(--ouro);
+}
+.topo {
+  max-width:1350px;
+  margin:auto;
+  padding:25px 30px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.topo img {
+  width:70px;
+  height:70px;
+  object-fit:contain;
+  border-radius:50%;
+  background:white;
+  padding:6px;
+}
+.topo h1 {margin:0;font-size:32px}
+.topo h1 span {color:#ffdb70}
+.topo p {font-size:13px;color:#f7dfe5}
+
+.estrutura {
+  max-width:1350px;
+  width:calc(100% - 48px);
+  margin:30px auto;
+  display:grid;
+  grid-template-columns:245px minmax(0,1fr);
+  gap:30px;
+  align-items:start;
+}
+.lateral {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  overflow:hidden;
+}
+.logo-area {
+  padding:24px 15px;
+  text-align:center;
+  background:#fcf5f6;
+}
+.logo-area img {
+  width:120px;
+  height:120px;
+  object-fit:contain;
+}
+.logo-area h3 {color:var(--vinho);margin:10px 0 5px}
+.logo-area p {font-size:12px;color:var(--cinza)}
+nav {padding:8px}
+nav a {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 12px;
+  border-radius:7px;
+  font-size:13px;
+}
+nav a:hover {background:#f9edf0}
+nav a.ativo {
+  background:var(--vinho);
+  color:white;
+  font-weight:bold;
+}
+nav i {width:19px;text-align:center}
+.menu-titulo {
+  background:#f4f1ef;
+  border-top:3px solid var(--ouro);
+  padding:14px;
+  color:var(--vinho);
+  font-size:12px;
+  font-weight:bold;
+}
+.menu-mobile {
+  display:none;
+  background:var(--vinho);
+  color:white;
+  border:0;
+  padding:13px;
+  border-radius:8px;
+  width:100%;
+  text-align:left;
+  font-weight:bold;
+}
+main {min-width:0}
+.introducao {
+  background:white;
+  border-left:5px solid var(--ouro);
+  border-radius:12px;
+  padding:28px;
+}
+.introducao small {
+  color:var(--vinho);
+  font-weight:bold;
+  letter-spacing:1px;
+}
+.introducao h2 {
+  color:var(--vinho);
+  font-size:30px;
+  margin:12px 0;
+}
+.introducao p {
+  font-size:14px;
+  color:var(--cinza);
+  line-height:1.8;
+}
+.temporada {
+  background:linear-gradient(115deg,var(--vinho),var(--escuro));
+  color:white;
+  border-radius:12px;
+  padding:24px;
+  margin-top:22px;
+}
+.temporada h3 {margin:0 0 12px;font-size:23px}
+.temporada p {margin:5px 0;color:#f7e7eb;font-size:14px}
+.filtros {
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin:30px 0 22px;
+}
+.filtros label {
+  display:block;
+  color:var(--vinho);
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:7px;
+}
+.filtros input,.filtros select {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:8px;
+  padding:13px;
+  min-height:46px;
+}
+.filtros input {width:290px;max-width:100%}
+.filtros select {min-width:130px}
+#contador {
+  font-size:13px;
+  color:var(--cinza);
+  margin:0 0 18px;
+}
+.grade {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+}
+.card {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 8px 25px #2d141e12;
+}
+.foto {
+  width:100%;
+  aspect-ratio:4/3;
+  background:linear-gradient(135deg,#f7e8eb,#fff3db);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--vinho);
+  font-size:55px;
+}
+.foto img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.card-conteudo {padding:19px}
+.card small {
+  color:var(--vinho);
+  font-weight:bold;
+  letter-spacing:.5px;
+}
+.card h3 {
+  color:var(--vinho);
+  font-size:21px;
+  margin:10px 0 15px;
+  overflow-wrap:anywhere;
+}
+.card p {
+  font-size:13px;
+  color:#555;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.card p i {color:var(--vinho);margin-right:6px}
+.estado {
+  grid-column:1/-1;
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  padding:40px 20px;
+  text-align:center;
+  color:var(--cinza);
+  line-height:1.7;
+}
+.estado i {
+  display:block;
+  color:var(--vinho);
+  font-size:30px;
+  margin-bottom:15px;
+}
+.informacao {
+  background:white;
+  border-left:5px solid var(--ouro);
+  border-radius:10px;
+  padding:25px;
+  margin-top:35px;
+}
+.informacao h3 {color:var(--vinho)}
+.informacao p {
+  color:var(--cinza);
+  font-size:14px;
+  line-height:1.8;
+}
+.botao {
+  display:inline-block;
+  background:var(--vinho);
+  color:white;
+  padding:13px 20px;
+  border-radius:8px;
+  margin-top:20px;
+  font-size:13px;
+  font-weight:bold;
+}
+footer {
+  background:var(--escuro);
+  color:white;
+  border-top:5px solid var(--ouro);
+  padding:35px 20px;
+  text-align:center;
+  margin-top:55px;
+}
+footer h3 {color:var(--ouro)}
+footer p {font-size:13px;line-height:1.7}
+
+@media(max-width:1100px) {
+  .grade {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:800px) {
+  .estrutura {grid-template-columns:1fr}
+  .menu-mobile {display:block}
+  .lateral {display:none}
+  .lateral.aberta {display:block}
+  .logo-area {display:none}
+}
+@media(max-width:520px) {
+  .topo {padding:20px 15px}
+  .topo h1 {font-size:22px}
+  .topo img {width:55px;height:55px}
+  .estrutura {width:calc(100% - 24px)}
+  .introducao {padding:20px}
+  .introducao h2 {font-size:25px}
+  .grade {grid-template-columns:1fr}
+  .filtros {align-items:stretch}
+  .filtros input {width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<div class="barra">
+  <div>
+    <span>📍 Boa Hora, Piauí, Brasil</span>
+    <span>Cultura • História • Memória • Tradição</span>
+  </div>
+</div>
+
+<header>
+  <div class="topo">
+    <img
+      src="ícone-boi-reisado-logo.png"
+      alt="Símbolo do Reisado"
+    >
+    <div>
+      <h1>REISADO DIGITAL <span>2.0</span></h1>
+      <p>Portal Cultural do Reisado de Boa Hora – PI</p>
+    </div>
+  </div>
+</header>
+
+<div class="estrutura">
+
+  <div class="area-menu">
+    <button
+      id="botaoMenu"
+      class="menu-mobile"
+      aria-expanded="false"
+      aria-controls="menuLateral"
+    >
+      <i class="fa-solid fa-bars"></i>
+      Explorar o site
+    </button>
+
+    <aside class="lateral" id="menuLateral">
+
+      <div class="logo-area">
+        <img
+          src="ícone-boi-reisado-logo.png"
+          alt="Reisado de Boa Hora"
+        >
+        <h3>Reisado de Boa Hora</h3>
+        <p>Uma tradição que atravessa gerações</p>
+      </div>
+
+      <nav>
+        <a href="inicio.html">
+          <i class="fa-solid fa-house"></i> Início
+        </a>
+
+        <a href="agenda.html">
+          <i class="fa-solid fa-calendar-days"></i>
+          Agenda dos Bois
+        </a>
+
+        <a href="bois.html" class="ativo">
+          <i class="fa-solid fa-users"></i>
+          Conheça os Bois
+        </a>
+
+        <a href="memoria.html">
+          <i class="fa-solid fa-book-open"></i>
+          Memória do Reisado
+        </a>
+
+        <a href="guia.html">
+          <i class="fa-solid fa-robot"></i>
+          Guia Cultural (IA)
+        </a>
+      </nav>
+
+      <div class="menu-titulo">ADMINISTRAÇÃO</div>
+
+      <nav>
+        <a href="admin.html">
+          <i class="fa-solid fa-user-shield"></i>
+          Painel Administrativo
+        </a>
+      </nav>
+    </aside>
+  </div>
+
+  <main>
+
+    <section class="introducao">
+      <small>PATRIMÔNIO CULTURAL DE BOA HORA</small>
+
+      <h2>Conheça os Bois do Reisado</h2>
+
+      <p>
+        O Reisado de Boa Hora reúne grupos que mantêm
+        viva uma tradição cultural transmitida
+        entre gerações.
+      </p>
+
+      <p>
+        Neste espaço, você poderá conhecer os bois
+        e seus respectivos proprietários,
+        organizados por temporada.
+      </p>
+    </section>
+
+    <section class="temporada">
+      <h3>
+        <i class="fa-solid fa-calendar-days"></i>
+        <span id="tituloTemporada">Temporada 2027</span>
+      </h3>
+
+      <p id="periodoTemporada">
+        De 31 de dezembro de 2026 a 6 de janeiro de 2027
+      </p>
+
+      <p>
+        Fé, cultura, alegria e tradição em Boa Hora–PI.
+      </p>
+    </section>
+
+    <section class="filtros">
+
+      <div>
+        <label for="ano">Selecionar temporada</label>
+
+        <select id="ano">
+          <option value="2027">2027</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="pesquisa">Pesquisar boi ou proprietário</label>
+
+        <input
+          id="pesquisa"
+          type="search"
+          placeholder="Digite o nome..."
+        >
+      </div>
+
+    </section>
+
+    <p id="contador" aria-live="polite">
+      Carregando informações...
+    </p>
+
+    <section class="grade" id="gradeBois">
+      <div class="estado">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Consultando os cadastros da temporada...
+      </div>
+    </section>
+
+    <section class="informacao">
+      <h3>
+        <i class="fa-solid fa-book-open"></i>
+        Preservando a história do Reisado
+      </h3>
+
+      <p>
+        A cada temporada, o Reisado Digital 2.0
+        poderá registrar os bois participantes,
+        seus proprietários, fotografias
+        e outras informações culturais.
+      </p>
+
+      <p>
+        Os registros das temporadas anteriores
+        serão preservados para consulta,
+        contribuindo para a memória cultural
+        do município de Boa Hora.
+      </p>
+    </section>
+
+    <a class="botao" href="agenda.html">
+      <i class="fa-solid fa-calendar-check"></i>
+      Consultar agenda de apresentações
+    </a>
+
+  </main>
+</div>
+
+<footer>
+  <h3>Reisado Digital 2.0</h3>
+  <p>
+    Portal Cultural do Reisado de Boa Hora – PI
+  </p>
+  <p>
+    Cultura • Memória • Tradição
+  </p>
+  <p>
+    © <span id="anoRodape"></span>
+    Reisado Digital 2.0
+  </p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<script>
+"use strict";
+
+/* CONFIGURAÇÃO FIREBASE */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain: "rastreamento-reisado.firebaseapp.com",
+  databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId: "rastreamento-reisado",
+  storageBucket: "rastreamento-reisado.firebasestorage.app",
+  messagingSenderId: "796420970266",
+  appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+};
+
+/* ELEMENTOS */
+
+const seletorAno = document.getElementById("ano");
+const pesquisa = document.getElementById("pesquisa");
+const grade = document.getElementById("gradeBois");
+const contador = document.getElementById("contador");
+
+let db = null;
+let bois = [];
+let temporadaAtual = "2027";
+let anosDisponiveis = ["2027"];
+
+/* MENU */
+
+document.getElementById("botaoMenu")
+  .addEventListener("click", function() {
+    const menu = document.getElementById("menuLateral");
+    const aberto = menu.classList.toggle("aberta");
+    this.setAttribute("aria-expanded", String(aberto));
+  });
+
+document.getElementById("anoRodape").textContent =
+  new Date().getFullYear();
+
+/* FUNÇÕES AUXILIARES */
+
+function texto(valor) {
+  if (typeof valor === "string") return valor.trim();
+  if (typeof valor === "number") return String(valor);
+  return "";
+}
+
+function primeiro(...valores) {
+  for (const valor of valores) {
+    const t = texto(valor);
+    if (t) return t;
+  }
+  return "";
+}
+
+function normalizar(valor) {
+  return String(valor)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function mostrarMensagem(mensagem, icone = "fa-circle-info") {
+  grade.replaceChildren();
+
+  const caixa = document.createElement("div");
+  caixa.className = "estado";
+
+  const simbolo = document.createElement("i");
+  simbolo.className = "fa-solid " + icone;
+
+  const paragrafo = document.createElement("p");
+  paragrafo.textContent = mensagem;
+
+  caixa.append(simbolo, paragrafo);
+  grade.appendChild(caixa);
+}
+
+/* IDENTIFICAÇÃO DA TEMPORADA */
+
+function atualizarPeriodo(ano) {
+  const numero = Number(ano);
+
+  document.getElementById("tituloTemporada")
+    .textContent = "Temporada " + ano;
+
+  document.getElementById("periodoTemporada")
+    .textContent =
+      "De 31 de dezembro de " + (numero - 1) +
+      " a 6 de janeiro de " + numero;
+}
+
+/* CONVERTER REGISTRO DO FIREBASE */
+
+function converterBoi(valor, id) {
+  if (!valor || typeof valor !== "object") return null;
+
+  const nome = primeiro(
+    valor.nome,
+    valor.nomeBoi,
+    valor.boiNome
+  );
+
+  if (!nome) return null;
+
+  return {
+    id,
+    nome,
+    dono: primeiro(
+      valor.dono,
+      valor.nomeDono,
+      valor.proprietario,
+      valor.responsavel
+    ),
+    foto: primeiro(
+      valor.foto,
+      valor.imagem,
+      valor.fotografia,
+      valor.urlFoto
+    ),
+    local: primeiro(
+      valor.localidade,
+      valor.comunidade,
+      valor.bairro
+    )
+  };
+}
+
+/* CRIAR CARDS */
+
+function criarCard(boi) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const fotoArea = document.createElement("div");
+  fotoArea.className = "foto";
+
+  const icone = document.createElement("i");
+  icone.className = "fa-solid fa-masks-theater";
+
+  const endereco = boi.foto;
+
+  const fotoValida =
+    endereco.startsWith("https://") ||
+    (
+      endereco &&
+      !endereco.startsWith("/") &&
+      !endereco.startsWith("//") &&
+      !endereco.includes("..") &&
+      !/^[a-z]+:/i.test(endereco)
+    );
+
+  if (fotoValida) {
+    const img = document.createElement("img");
+    img.alt = "Fotografia de " + boi.nome;
+    img.loading = "lazy";
+
+    img.onerror = () => {
+      img.replaceWith(icone);
+    };
+
+    img.src = endereco;
+    fotoArea.appendChild(img);
+  } else {
+    fotoArea.appendChild(icone);
+  }
+
+  const corpo = document.createElement("div");
+  corpo.className = "card-conteudo";
+
+  const categoria = document.createElement("small");
+  categoria.textContent = "REISADO " + temporadaAtual;
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = boi.nome;
+
+  const dono = document.createElement("p");
+
+  const donoIcone = document.createElement("i");
+  donoIcone.className = "fa-solid fa-user";
+
+  dono.append(
+    donoIcone,
+    document.createTextNode(
+      "Proprietário: " +
+      (boi.dono || "Não informado")
+    )
+  );
+
+  corpo.append(categoria, titulo, dono);
+
+  if (boi.local) {
+    const local = document.createElement("p");
+
+    const localIcone = document.createElement("i");
+    localIcone.className = "fa-solid fa-location-dot";
+
+    local.append(
+      localIcone,
+      document.createTextNode(boi.local)
+    );
+
+    corpo.appendChild(local);
+  }
+
+  card.append(fotoArea, corpo);
+  return card;
+}
+
+/* FILTRAR */
+
+function renderizar() {
+  const termo = normalizar(pesquisa.value.trim());
+
+  const filtrados = bois.filter(boi => {
+    const dados = normalizar(
+      boi.nome + " " + boi.dono + " " + boi.local
+    );
+
+    return dados.includes(termo);
+  });
+
+  contador.textContent =
+    filtrados.length + " de " +
+    bois.length + " bois da temporada " +
+    temporadaAtual;
+
+  grade.replaceChildren();
+
+  if (!filtrados.length) {
+    mostrarMensagem(
+      termo
+        ? "Nenhum boi encontrado para esta pesquisa."
+        : "Ainda não há bois cadastrados para esta temporada.",
+      "fa-magnifying-glass"
+    );
+    return;
+  }
+
+  filtrados.forEach(boi => {
+    grade.appendChild(criarCard(boi));
+  });
+}
+
+/* CONSULTAR TEMPORADA */
+
+async function carregarTemporada(ano) {
+  temporadaAtual = ano;
+  atualizarPeriodo(ano);
+
+  bois = [];
+  contador.textContent = "Carregando temporada " + ano;
+
+  mostrarMensagem(
+    "Consultando os bois cadastrados...",
+    "fa-spinner fa-spin"
+  );
+
+  try {
+    const snapshot = await db
+      .ref("boisPorAno/" + ano)
+      .once("value");
+
+    const registros = [];
+
+    snapshot.forEach(item => {
+      const boi = converterBoi(item.val(), item.key);
+      if (boi) registros.push(boi);
+    });
+
+    // Evita exibir dados de uma consulta anterior.
+    if (temporadaAtual !== ano) return;
+
+    bois = registros.sort((a,b) =>
+      a.nome.localeCompare(b.nome, "pt-BR")
+    );
+
+    renderizar();
+
+  } catch (erro) {
+    console.error(erro);
+
+    if (temporadaAtual !== ano) return;
+
+    contador.textContent = "Consulta indisponível";
+
+    mostrarMensagem(
+      "Não foi possível consultar esta temporada. " +
+      "Verifique as permissões de leitura do Firebase.",
+      "fa-triangle-exclamation"
+    );
+  }
+}
+
+/* LISTAR ANOS EXISTENTES */
+
+async function carregarAnos() {
+  try {
+    const snapshot = await db.ref("boisPorAno").once("value");
+
+    const anos = new Set(["2027"]);
+
+    snapshot.forEach(item => {
+      const ano = item.key;
+
+      if (
+        /^\d{4}$/.test(ano) &&
+        Number(ano) >= 2027
+      ) {
+        anos.add(ano);
+      }
+    });
+
+    anosDisponiveis = [...anos].sort((a,b) =>
+      Number(b) - Number(a)
+    );
+
+  } catch (erro) {
+    console.warn(
+      "Não foi possível consultar as temporadas.",
+      erro
+    );
+
+    anosDisponiveis = ["2027"];
+  }
+
+  seletorAno.replaceChildren();
+
+  anosDisponiveis.forEach(ano => {
+    const opcao = document.createElement("option");
+    opcao.value = ano;
+    opcao.textContent = ano;
+    seletorAno.appendChild(opcao);
+  });
+
+  seletorAno.value = temporadaAtual;
+}
+
+/* EVENTOS */
+
+pesquisa.addEventListener("input", renderizar);
+
+seletorAno.addEventListener("change", () => {
+  pesquisa.value = "";
+  carregarTemporada(seletorAno.value);
+});
+
+/* INICIALIZAÇÃO */
+
+async function iniciar() {
+  if (typeof firebase === "undefined") {
+    mostrarMensagem(
+      "O serviço de dados está indisponível.",
+      "fa-triangle-exclamation"
+    );
+    return;
+  }
+
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+
+    db = firebase.database();
+
+    await carregarAnos();
+    await carregarTemporada("2027");
+
+  } catch (erro) {
+    console.error(erro);
+
+    mostrarMensagem(
+      "Não foi possível iniciar a página.",
+      "fa-triangle-exclamation"
+    );
+  }
+}
+
+iniciar();
+</script>
+
+</body>
+</html>
