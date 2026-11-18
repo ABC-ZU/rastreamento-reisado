@@ -139,7 +139,7 @@ header p {
   flex:1;
 }
 
-/* BANNER MAIS COMPACTO */
+/* BANNER */
 
 .banner {
   background:linear-gradient(
@@ -173,7 +173,7 @@ header p {
   font-size:15px;
 }
 
-/* DEDICATÓRIA COMPACTA */
+/* DEDICATÓRIA */
 
 .dedicatoria {
   background:white;
@@ -241,16 +241,17 @@ header p {
   margin:16px 0;
 }
 
+/* CARTÕES CENTRALIZADOS */
+
 .lista {
   display:grid;
   grid-template-columns:repeat(
     auto-fit,
-    minmax(270px,1fr)
+    minmax(270px,380px)
   );
+  justify-content:center;
   gap:18px;
 }
-
-/* CARTÕES MAIS COMPACTOS */
 
 .cartao {
   background:white;
@@ -300,7 +301,7 @@ header p {
   padding-top:15px;
 }
 
-/* ESTADOS */
+/* MENSAGENS DE ESTADO */
 
 .estado {
   background:white;
@@ -332,7 +333,7 @@ footer p {
   margin:5px;
 }
 
-/* CELULAR */
+/* RESPONSIVIDADE */
 
 @media(max-width:850px) {
   .sidebar {
@@ -388,10 +389,13 @@ footer p {
   }
 
   .lista {
-    grid-template-columns:1fr;
+    grid-template-columns:minmax(0,1fr);
   }
 
   .cartao {
+    width:100%;
+    max-width:380px;
+    justify-self:center;
     padding:22px 17px;
   }
 }
@@ -575,7 +579,7 @@ footer p {
 <script>
 "use strict";
 
-/* FIREBASE */
+/* CONFIGURAÇÃO FIREBASE */
 
 const firebaseConfig = {
   apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -590,11 +594,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
+
 const homenagensRef = db.ref("homenagens");
 
 const $ = id => document.getElementById(id);
 
-/* MENU */
+/* MENU RESPONSIVO */
 
 function alternarMenu() {
   $("menuLateral").classList.toggle("aberta");
@@ -612,11 +617,12 @@ document.addEventListener("keydown",evento => {
   }
 });
 
-/* BUSCAR HOMENAGENS */
+/* CONSULTAR HOMENAGENS */
 
 homenagensRef.on(
   "value",
   snapshot => {
+
     const homenagens = [];
 
     snapshot.forEach(item => {
@@ -636,9 +642,13 @@ homenagensRef.on(
     );
 
     mostrarHomenagens(homenagens);
+
   },
   erro => {
-    console.error(erro);
+    console.error(
+      "Erro ao carregar homenagens:",
+      erro
+    );
 
     $("estado").classList.remove("oculto");
 
@@ -654,6 +664,7 @@ homenagensRef.on(
 /* EXIBIR HOMENAGENS */
 
 function mostrarHomenagens(homenagens) {
+
   const lista = $("listaHomenagens");
   const estado = $("estado");
 
@@ -678,6 +689,7 @@ function mostrarHomenagens(homenagens) {
   estado.classList.add("oculto");
 
   homenagens.forEach(pessoa => {
+
     const cartao = document.createElement("article");
     cartao.className = "cartao";
 
@@ -714,6 +726,7 @@ function mostrarHomenagens(homenagens) {
     lista.appendChild(cartao);
   });
 }
+
 </script>
 
 </body>
