@@ -1,0 +1,727 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#850c29">
+
+<title>Memória Viva | Reisado Digital 2.0</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<style>
+:root {
+  --vinho:#850c29;
+  --escuro:#50091c;
+  --ouro:#e9ba4e;
+  --fundo:#f8f7f5;
+  --texto:#27252a;
+  --cinza:#6e6870;
+  --borda:#e9e4e2;
+}
+
+* {
+  box-sizing:border-box;
+}
+
+body {
+  margin:0;
+  background:var(--fundo);
+  color:var(--texto);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+a {
+  text-decoration:none;
+}
+
+/* MENU LATERAL */
+
+.sidebar {
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  width:250px;
+  background:var(--escuro);
+  color:white;
+  padding:25px 15px;
+  overflow-y:auto;
+  z-index:100;
+}
+
+.sidebar h2 {
+  color:var(--ouro);
+  font-size:20px;
+  text-align:center;
+  margin:10px 0 25px;
+}
+
+.sidebar a {
+  display:block;
+  color:white;
+  padding:14px;
+  border-radius:8px;
+  margin-bottom:8px;
+  font-size:15px;
+}
+
+.sidebar a:hover {
+  background:#ffffff20;
+}
+
+.sidebar a.ativo {
+  background:var(--vinho);
+  border-left:4px solid var(--ouro);
+  font-weight:bold;
+}
+
+.sidebar .subtitulo {
+  text-align:center;
+  color:#f5dce2;
+  font-size:13px;
+  margin-bottom:25px;
+}
+
+.menu-botao {
+  display:none;
+  background:var(--vinho);
+  color:white;
+  border:0;
+  border-radius:8px;
+  padding:12px 15px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.fundo-menu {
+  display:none;
+}
+
+/* CONTEÚDO */
+
+.principal {
+  margin-left:250px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+header {
+  background:linear-gradient(
+    115deg,
+    var(--vinho),
+    var(--escuro)
+  );
+  color:white;
+  padding:28px 20px;
+  text-align:center;
+  border-bottom:5px solid var(--ouro);
+}
+
+header h1 {
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+header p {
+  margin:5px;
+  color:#f5dce2;
+}
+
+.conteudo {
+  width:100%;
+  max-width:1150px;
+  margin:0 auto;
+  padding:25px 20px 45px;
+  flex:1;
+}
+
+/* APRESENTAÇÃO */
+
+.banner {
+  background:linear-gradient(
+    120deg,
+    var(--vinho),
+    var(--escuro)
+  );
+  color:white;
+  text-align:center;
+  border-radius:15px;
+  padding:40px 25px;
+  margin-bottom:25px;
+  border-bottom:5px solid var(--ouro);
+}
+
+.simbolo {
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.banner h2 {
+  font-size:30px;
+  margin:0 0 15px;
+  color:var(--ouro);
+}
+
+.banner p {
+  line-height:1.8;
+  max-width:800px;
+  margin:12px auto;
+  font-size:16px;
+}
+
+/* DEDICATÓRIA */
+
+.dedicatoria {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:15px;
+  padding:35px 28px;
+  text-align:center;
+  margin-bottom:30px;
+  box-shadow:0 7px 20px #32111b0b;
+}
+
+.dedicatoria h2 {
+  color:var(--vinho);
+  font-size:25px;
+  margin:0 0 20px;
+}
+
+.dedicatoria p {
+  max-width:850px;
+  margin:15px auto;
+  font-size:16px;
+  line-height:1.9;
+}
+
+.dedicatoria .frase {
+  color:var(--vinho);
+  font-style:italic;
+  font-weight:bold;
+  font-size:19px;
+  margin-top:25px;
+}
+
+.linha-ouro {
+  height:3px;
+  width:90px;
+  background:var(--ouro);
+  margin:25px auto;
+  border-radius:3px;
+}
+
+/* HOMENAGEADOS */
+
+.titulo-secao {
+  text-align:center;
+  margin:35px 0 25px;
+}
+
+.titulo-secao h2 {
+  color:var(--vinho);
+  font-size:27px;
+  margin-bottom:10px;
+}
+
+.titulo-secao p {
+  color:var(--cinza);
+  line-height:1.7;
+}
+
+.contador {
+  color:var(--vinho);
+  font-size:14px;
+  font-weight:bold;
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.lista {
+  display:grid;
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(280px,1fr)
+  );
+  gap:20px;
+}
+
+.cartao {
+  background:white;
+  border:1px solid var(--borda);
+  border-top:5px solid var(--ouro);
+  border-radius:13px;
+  padding:28px 23px;
+  text-align:center;
+  box-shadow:0 7px 20px #32111b0b;
+  overflow-wrap:anywhere;
+}
+
+.cartao .icone {
+  font-size:32px;
+  margin-bottom:15px;
+}
+
+.cartao h3 {
+  color:var(--vinho);
+  font-size:23px;
+  margin:0 0 15px;
+}
+
+.cartao .papel {
+  color:var(--escuro);
+  font-weight:bold;
+  font-size:15px;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.cartao .mensagem {
+  color:#514b50;
+  font-size:15px;
+  line-height:1.85;
+  white-space:pre-line;
+}
+
+.cartao .saudade {
+  color:var(--vinho);
+  font-style:italic;
+  font-size:13px;
+  margin-top:22px;
+  border-top:1px solid var(--borda);
+  padding-top:17px;
+}
+
+/* ESTADOS */
+
+.estado {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  padding:30px;
+  text-align:center;
+  color:var(--cinza);
+  line-height:1.8;
+}
+
+.oculto {
+  display:none!important;
+}
+
+/* RODAPÉ */
+
+footer {
+  background:var(--escuro);
+  border-top:4px solid var(--ouro);
+  color:white;
+  padding:25px 15px;
+  text-align:center;
+  font-size:13px;
+  line-height:1.8;
+}
+
+footer p {
+  margin:5px;
+}
+
+/* RESPONSIVIDADE */
+
+@media(max-width:850px) {
+  .sidebar {
+    transform:translateX(-100%);
+    transition:transform .25s;
+  }
+
+  .sidebar.aberta {
+    transform:translateX(0);
+  }
+
+  .principal {
+    margin-left:0;
+  }
+
+  .menu-botao {
+    display:inline-block;
+    margin-bottom:15px;
+  }
+
+  .fundo-menu.aberto {
+    display:block;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:90;
+  }
+}
+
+@media(max-width:600px) {
+  header h1 {
+    font-size:23px;
+  }
+
+  .conteudo {
+    padding:15px 12px 35px;
+  }
+
+  .banner {
+    padding:30px 17px;
+  }
+
+  .banner h2 {
+    font-size:25px;
+  }
+
+  .dedicatoria {
+    padding:28px 18px;
+  }
+
+  .dedicatoria h2 {
+    font-size:23px;
+  }
+
+  .lista {
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- MENU LATERAL -->
+
+<div id="fundoMenu"
+     class="fundo-menu"
+     onclick="fecharMenu()"></div>
+
+<nav id="menuLateral"
+     class="sidebar"
+     aria-label="Menu principal">
+
+  <h2>REISADO DIGITAL 2.0</h2>
+
+  <p class="subtitulo">
+    Cultura e tradição de Boa Hora–PI
+  </p>
+
+  <a href="./inicio.html">
+    🏠 Início
+  </a>
+
+  <a href="./bois.html">
+    🐂 Conheça os Bois
+  </a>
+
+  <a href="./agenda.html">
+    📅 Agenda de Apresentações
+  </a>
+
+  <a href="./memoria.html"
+     class="ativo"
+     aria-current="page">
+    🕊️ Memória do Reisado
+  </a>
+
+  <a href="./guia.html">
+    💬 Guia Cultural
+  </a>
+
+  <a href="./admin.html">
+    🔐 Administração
+  </a>
+
+</nav>
+
+<!-- CONTEÚDO PRINCIPAL -->
+
+<div class="principal">
+
+  <header>
+
+    <button class="menu-botao"
+            type="button"
+            onclick="alternarMenu()">
+      ☰ Menu
+    </button>
+
+    <h1>REISADO DIGITAL 2.0</h1>
+
+    <p>Memória Viva do Reisado</p>
+    <p>Boa Hora – Piauí</p>
+
+  </header>
+
+  <main class="conteudo">
+
+    <!-- BANNER -->
+
+    <section class="banner">
+
+      <div class="simbolo">🕊️</div>
+
+      <h2>Memória Viva do Reisado</h2>
+
+      <p>
+        Uma homenagem àqueles que fizeram
+        parte da história do Reisado de
+        Boa Hora–PI e que hoje permanecem
+        vivos em nossas lembranças.
+      </p>
+
+    </section>
+
+    <!-- DEDICATÓRIA -->
+
+    <section class="dedicatoria">
+
+      <h2>Uma homenagem eterna</h2>
+
+      <div class="linha-ouro"></div>
+
+      <p>
+        O Reisado de Boa Hora é uma tradição
+        construída por muitas mãos, vozes,
+        talentos e histórias.
+      </p>
+
+      <p>
+        Esta página é dedicada aos mestres,
+        brincantes, músicos, proprietários
+        de bois, devotos de Santos Reis
+        e a todas as pessoas que dedicaram
+        parte de suas vidas à preservação
+        dessa manifestação cultural.
+      </p>
+
+      <p>
+        Aos que já partiram, deixamos
+        nossa gratidão por cada ensinamento,
+        cada apresentação, cada gesto
+        de fé e cada contribuição para
+        manter viva a cultura do nosso povo.
+      </p>
+
+      <p>
+        Seus nomes e suas histórias
+        continuarão presentes na memória
+        das novas gerações.
+      </p>
+
+      <div class="linha-ouro"></div>
+
+      <p class="frase">
+        “A vida passa, mas a tradição
+        e as boas lembranças permanecem.”
+      </p>
+
+      <p>
+        Nossa eterna gratidão,
+        respeito e saudade. 🕊️
+      </p>
+
+    </section>
+
+    <!-- LISTA DE HOMENAGEADOS -->
+
+    <section>
+
+      <div class="titulo-secao">
+
+        <h2>🕊️ Nossos Homenageados</h2>
+
+        <p>
+          Pessoas que deixaram sua contribuição
+          para a história e a tradição
+          do Reisado de Boa Hora–PI.
+        </p>
+
+      </div>
+
+      <p id="contador" class="contador"></p>
+
+      <div id="estado" class="estado">
+        Carregando homenagens...
+      </div>
+
+      <div id="listaHomenagens"
+           class="lista"
+           aria-live="polite">
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+
+    <strong>
+      Reisado Digital 2.0
+    </strong>
+
+    <p>Boa Hora – Piauí</p>
+
+    <p>
+      Preservando a memória daqueles
+      que fizeram parte da nossa tradição.
+    </p>
+
+  </footer>
+
+</div>
+
+<script>
+"use strict";
+
+/* CONFIGURAÇÃO FIREBASE */
+
+const firebaseConfig = {
+  apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain:"rastreamento-reisado.firebaseapp.com",
+  databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId:"rastreamento-reisado",
+  storageBucket:"rastreamento-reisado.firebasestorage.app",
+  messagingSenderId:"796420970266",
+  appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+
+const homenagensRef = db.ref("homenagens");
+
+const $ = id => document.getElementById(id);
+
+/* MENU RESPONSIVO */
+
+function alternarMenu() {
+  $("menuLateral").classList.toggle("aberta");
+  $("fundoMenu").classList.toggle("aberto");
+}
+
+function fecharMenu() {
+  $("menuLateral").classList.remove("aberta");
+  $("fundoMenu").classList.remove("aberto");
+}
+
+document.addEventListener("keydown",evento => {
+  if (evento.key === "Escape") {
+    fecharMenu();
+  }
+});
+
+/* CONSULTAR HOMENAGENS */
+
+homenagensRef.on(
+  "value",
+  snapshot => {
+
+    const homenagens = [];
+
+    snapshot.forEach(item => {
+      const dados = item.val();
+
+      if (!dados || !dados.nome) return;
+
+      homenagens.push({
+        nome:String(dados.nome || ""),
+        papel:String(dados.papel || ""),
+        mensagem:String(dados.mensagem || "")
+      });
+    });
+
+    homenagens.sort((a,b) =>
+      a.nome.localeCompare(b.nome,"pt-BR")
+    );
+
+    mostrarHomenagens(homenagens);
+
+  },
+  erro => {
+    console.error(
+      "Erro ao carregar homenagens:",
+      erro
+    );
+
+    $("estado").classList.remove("oculto");
+
+    $("estado").textContent =
+      "Não foi possível carregar as homenagens. "+
+      "Verifique a conexão ou as permissões do Firebase.";
+
+    $("contador").textContent = "";
+    $("listaHomenagens").replaceChildren();
+  }
+);
+
+/* EXIBIR HOMENAGENS */
+
+function mostrarHomenagens(homenagens) {
+
+  const lista = $("listaHomenagens");
+  const estado = $("estado");
+
+  lista.replaceChildren();
+
+  $("contador").textContent =
+    homenagens.length === 1
+      ? "1 pessoa homenageada"
+      : homenagens.length+" pessoas homenageadas";
+
+  if (!homenagens.length) {
+    estado.classList.remove("oculto");
+
+    estado.textContent =
+      "O memorial está sendo construído. "+
+      "Em breve, os nomes dos homenageados "+
+      "serão apresentados neste espaço.";
+
+    return;
+  }
+
+  estado.classList.add("oculto");
+
+  homenagens.forEach(pessoa => {
+
+    const cartao = document.createElement("article");
+    cartao.className = "cartao";
+
+    const icone = document.createElement("div");
+    icone.className = "icone";
+    icone.textContent = "🕊️";
+
+    const nome = document.createElement("h3");
+    nome.textContent = pessoa.nome;
+
+    const papel = document.createElement("p");
+    papel.className = "papel";
+    papel.textContent = pessoa.papel;
+
+    cartao.append(icone,nome,papel);
+
+    if (pessoa.mensagem.trim()) {
+      const mensagem = document.createElement("p");
+      mensagem.className = "mensagem";
+      mensagem.textContent = pessoa.mensagem;
+
+      cartao.appendChild(mensagem);
+    }
+
+    const saudade = document.createElement("p");
+    saudade.className = "saudade";
+    saudade.textContent =
+      "Nossa eterna gratidão e saudade.";
+
+    cartao.appendChild(saudade);
+
+    lista.appendChild(cartao);
+  });
+}
+
+</script>
+
+</body>
+</html>
