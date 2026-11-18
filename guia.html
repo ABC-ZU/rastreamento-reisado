@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#850c29">
+<title>Guia Cultural | Reisado Digital 2.0</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+
+<style>
+:root {
+  --vinho:#850c29;
+  --escuro:#50091c;
+  --ouro:#e9ba4e;
+  --fundo:#f8f7f5;
+  --texto:#27252a;
+  --cinza:#6e6870;
+  --borda:#e9e4e2;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--fundo);
+  color:var(--texto);
+  font-family:Arial,Helvetica,sans-serif;
+}
+a { text-decoration:none; }
+button,input { font:inherit; }
+
+.sidebar {
+  position:fixed;
+  top:0;left:0;bottom:0;
+  width:250px;
+  background:var(--escuro);
+  color:white;
+  padding:25px 15px;
+  overflow-y:auto;
+  z-index:100;
+}
+.sidebar h2 {
+  color:var(--ouro);
+  font-size:20px;
+  text-align:center;
+  margin:10px 0 25px;
+}
+.sidebar .subtitulo {
+  text-align:center;
+  color:#f5dce2;
+  font-size:13px;
+  margin-bottom:25px;
+}
+.sidebar a {
+  display:block;
+  color:white;
+  padding:14px;
+  border-radius:8px;
+  margin-bottom:8px;
+  font-size:15px;
+}
+.sidebar a:hover { background:#ffffff20; }
+.sidebar a.ativo {
+  background:var(--vinho);
+  border-left:4px solid var(--ouro);
+  font-weight:bold;
+}
+.fundo-menu { display:none; }
+.menu-botao {
+  display:none;
+  background:var(--vinho);
+  color:white;
+  border:0;
+  border-radius:8px;
+  padding:12px 15px;
+  cursor:pointer;
+}
+
+.principal {
+  margin-left:250px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+header {
+  background:linear-gradient(115deg,var(--vinho),var(--escuro));
+  color:white;
+  text-align:center;
+  padding:23px 18px;
+  border-bottom:5px solid var(--ouro);
+}
+header h1 { margin:0 0 8px; font-size:27px; }
+header p { margin:5px; color:#f5dce2; }
+
+.conteudo {
+  width:100%;
+  max-width:1050px;
+  margin:auto;
+  padding:22px 18px 35px;
+  flex:1;
+}
+.apresentacao {
+  background:linear-gradient(120deg,var(--vinho),var(--escuro));
+  color:white;
+  border-radius:15px;
+  border-bottom:5px solid var(--ouro);
+  padding:27px 20px;
+  text-align:center;
+  margin-bottom:20px;
+}
+.apresentacao h2 {
+  color:var(--ouro);
+  margin:10px 0;
+  font-size:27px;
+}
+.apresentacao p {
+  line-height:1.7;
+  margin:8px auto;
+  max-width:730px;
+}
+
+.painel {
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 7px 20px #32111b0b;
+}
+.chat-topo {
+  background:#fff8eb;
+  padding:17px 20px;
+  border-bottom:1px solid var(--borda);
+}
+.chat-topo strong { color:var(--vinho); }
+.chat-topo p {
+  color:var(--cinza);
+  font-size:13px;
+  margin:7px 0 0;
+  line-height:1.5;
+}
+.mensagens {
+  height:420px;
+  overflow-y:auto;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  background:#fcfbfa;
+}
+.bolha {
+  padding:13px 16px;
+  border-radius:15px;
+  max-width:88%;
+  line-height:1.7;
+  font-size:15px;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+.bolha.guia {
+  align-self:flex-start;
+  background:#f1ece9;
+  color:var(--texto);
+  border-bottom-left-radius:4px;
+}
+.bolha.usuario {
+  align-self:flex-end;
+  background:var(--vinho);
+  color:white;
+  border-bottom-right-radius:4px;
+}
+.sugestoes {
+  padding:14px 17px;
+  border-top:1px solid var(--borda);
+}
+.sugestoes p {
+  margin:0 0 10px;
+  color:var(--cinza);
+  font-size:13px;
+}
+.botoes {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.sugestao {
+  background:white;
+  border:1px solid #d8b8c1;
+  border-radius:25px;
+  padding:9px 13px;
+  color:var(--vinho);
+  font-size:13px;
+  cursor:pointer;
+}
+.sugestao:hover {
+  background:#fff3e0;
+  border-color:var(--ouro);
+}
+.formulario {
+  display:flex;
+  gap:10px;
+  padding:15px;
+  border-top:1px solid var(--borda);
+}
+.formulario input {
+  flex:1;
+  min-width:0;
+  padding:13px 15px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  outline:none;
+}
+.formulario input:focus {
+  border-color:var(--vinho);
+}
+.formulario button {
+  border:0;
+  background:var(--vinho);
+  color:white;
+  padding:12px 19px;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.formulario button:hover { background:var(--escuro); }
+.aviso {
+  text-align:center;
+  font-size:12px;
+  color:var(--cinza);
+  padding:0 16px 15px;
+  line-height:1.5;
+}
+footer {
+  background:var(--escuro);
+  border-top:4px solid var(--ouro);
+  color:white;
+  text-align:center;
+  padding:23px 15px;
+  font-size:13px;
+  line-height:1.8;
+}
+footer p { margin:5px; }
+
+@media(max-width:850px) {
+  .sidebar {
+    transform:translateX(-100%);
+    transition:transform .25s;
+  }
+  .sidebar.aberta { transform:translateX(0); }
+  .principal { margin-left:0; }
+  .menu-botao {
+    display:inline-block;
+    margin-bottom:15px;
+  }
+  .fundo-menu.aberto {
+    display:block;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:90;
+  }
+}
+@media(max-width:600px) {
+  header h1 { font-size:23px; }
+  .conteudo { padding:12px 10px 28px; }
+  .apresentacao { padding:23px 14px; }
+  .apresentacao h2 { font-size:23px; }
+  .mensagens { height:390px; padding:13px; }
+  .bolha { max-width:94%; font-size:14px; }
+  .formulario { padding:10px; gap:7px; }
+  .formulario button { padding:12px; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="fundoMenu" class="fundo-menu"
+     onclick="fecharMenu()"></div>
+
+<nav id="menuLateral" class="sidebar"
+     aria-label="Menu principal">
+  <h2>REISADO DIGITAL 2.0</h2>
+  <p class="subtitulo">Cultura e tradição de Boa Hora–PI</p>
+
+  <a href="./inicio.html">🏠 Início</a>
+  <a href="./bois.html">🐂 Conheça os Bois</a>
+  <a href="./agenda.html">📅 Agenda de Apresentações</a>
+  <a href="./memoria.html">🕊️ Memória do Reisado</a>
+  <a href="./guia.html" class="ativo"
+     aria-current="page">💬 Guia Cultural</a>
+  <a href="./admin.html">🔐 Administração</a>
+</nav>
+
+<div class="principal">
+
+<header>
+  <button class="menu-botao" type="button"
+          onclick="alternarMenu()">☰ Menu</button>
+  <h1>REISADO DIGITAL 2.0</h1>
+  <p>Guia Cultural Inteligente</p>
+  <p>Boa Hora – Piauí</p>
+</header>
+
+<main class="conteudo">
+
+<section class="apresentacao">
+  <div style="font-size:36px">🐂 💬</div>
+  <h2>Guia Cultural do Reisado</h2>
+  <p>
+    Conheça os bois, descubra as apresentações
+    e explore a memória cultural do Reisado
+    de Boa Hora–PI.
+  </p>
+</section>
+
+<section class="painel" aria-label="Conversa com o guia cultural">
+
+  <div class="chat-topo">
+    <strong>💬 Assistente Cultural</strong>
+    <p id="situacao">
+      Consultando as informações públicas do Reisado...
+    </p>
+  </div>
+
+  <div id="mensagens" class="mensagens"
+       role="log" aria-live="polite"></div>
+
+  <div class="sugestoes">
+    <p>Experimente perguntar:</p>
+    <div class="botoes">
+      <button class="sugestao" type="button"
+        onclick="perguntar('Quais são os bois de 2027?')">
+        🐂 Bois de 2027
+      </button>
+      <button class="sugestao" type="button"
+        onclick="perguntar('Quais são as próximas apresentações?')">
+        📅 Próximas apresentações
+      </button>
+      <button class="sugestao" type="button"
+        onclick="perguntar('Quem são os homenageados?')">
+        🕊️ Homenageados
+      </button>
+      <button class="sugestao" type="button"
+        onclick="perguntar('O que é o Reisado?')">
+        📖 Sobre o Reisado
+      </button>
+    </div>
+  </div>
+
+  <form class="formulario" id="formPergunta">
+    <input id="pergunta" type="text"
+      maxlength="300"
+      placeholder="Pergunte sobre o Reisado..."
+      aria-label="Sua pergunta"
+      required>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <div class="aviso">
+    Esta primeira versão consulta os cadastros públicos.
+    Respostas abertas por inteligência artificial
+    serão adicionadas em uma etapa futura.
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <strong>Reisado Digital 2.0</strong>
+  <p>Boa Hora – Piauí</p>
+  <p>Preservando e divulgando nossa cultura.</p>
+</footer>
+
+</div>
+
+<script>
+"use strict";
+
+/* FIREBASE */
+
+const firebaseConfig = {
+  apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain:"rastreamento-reisado.firebaseapp.com",
+  databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId:"rastreamento-reisado",
+  storageBucket:"rastreamento-reisado.firebasestorage.app",
+  messagingSenderId:"796420970266",
+  appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const $ = id => document.getElementById(id);
+
+let boisPorAno = {};
+let agendas = {};
+let homenagens = {};
+let carregado = false;
+let erroDados = false;
+
+/* MENU */
+
+function alternarMenu() {
+  $("menuLateral").classList.toggle("aberta");
+  $("fundoMenu").classList.toggle("aberto");
+}
+function fecharMenu() {
+  $("menuLateral").classList.remove("aberta");
+  $("fundoMenu").classList.remove("aberto");
+}
+document.addEventListener("keydown",e => {
+  if(e.key === "Escape") fecharMenu();
+});
+
+/* CARREGAR DADOS PÚBLICOS */
+
+async function carregarDados() {
+  try {
+    const resultados = await Promise.all([
+      db.ref("boisPorAno").once("value"),
+      db.ref("agendas").once("value"),
+      db.ref("homenagens").once("value")
+    ]);
+
+    boisPorAno = resultados[0].val() || {};
+    agendas = resultados[1].val() || {};
+    homenagens = resultados[2].val() || {};
+    carregado = true;
+
+    $("situacao").textContent =
+      "Informações públicas carregadas. Faça sua pergunta!";
+
+  } catch(erro) {
+    console.error("Erro ao consultar Firebase:",erro);
+    erroDados = true;
+
+    $("situacao").textContent =
+      "Não foi possível consultar todos os cadastros.";
+  }
+}
+
+/* CONVERSA */
+
+function adicionarMensagem(texto,tipo) {
+  const elemento = document.createElement("div");
+  elemento.className = "bolha " + tipo;
+  elemento.textContent = texto;
+  $("mensagens").appendChild(elemento);
+  $("mensagens").scrollTop = $("mensagens").scrollHeight;
+}
+
+function normalizar(texto) {
+  return String(texto)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .trim();
+}
+
+function formatarData(data) {
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(data || "")) {
+    return data || "Data não informada";
+  }
+  const partes = data.split("-");
+  return partes[2]+"/"+partes[1]+"/"+partes[0];
+}
+
+function dataValida(data) {
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(data || "")) return false;
+  const d = new Date(data+"T12:00:00");
+  return !isNaN(d.getTime()) &&
+    d.getFullYear() === Number(data.slice(0,4)) &&
+    d.getMonth()+1 === Number(data.slice(5,7)) &&
+    d.getDate() === Number(data.slice(8,10));
+}
+
+function hojeLocal() {
+  const d = new Date();
+  const ano = d.getFullYear();
+  const mes = String(d.getMonth()+1).padStart(2,"0");
+  const dia = String(d.getDate()).padStart(2,"0");
+  return ano+"-"+mes+"-"+dia;
+}
+
+function listarBois(ano) {
+  const registros = Object.values(boisPorAno[ano] || {});
+
+  if(!registros.length) {
+    return "Ainda não há bois cadastrados para a temporada "+
+      ano+".";
+  }
+
+  registros.sort((a,b) =>
+    String(a.nome || "").localeCompare(
+      String(b.nome || ""),"pt-BR"
+    )
+  );
+
+  let resposta = "🐂 Bois da temporada "+ano+":\n\n";
+
+  registros.forEach((boi,i) => {
+    resposta += (i+1)+". "+(boi.nome || "Sem nome");
+    resposta += "\nResponsável: "+(boi.dono || "Não informado");
+
+    if(boi.comunidade) {
+      resposta += "\nComunidade: "+boi.comunidade;
+    }
+    resposta += "\n\n";
+  });
+
+  resposta += "Consulte também a página Conheça os Bois.";
+  return resposta;
+}
+
+function todasApresentacoes() {
+  return Object.values(agendas)
+    .filter(item =>
+      item &&
+      typeof item === "object" &&
+      dataValida(item.data)
+    )
+    .sort((a,b) =>
+      (a.data+" "+(a.horario || "")).localeCompare(
+        b.data+" "+(b.horario || "")
+      )
+    );
+}
+
+function listarApresentacoes(pergunta) {
+  const registros = todasApresentacoes();
+  const hoje = hojeLocal();
+
+  const ehHoje = pergunta.includes("hoje");
+  const ehProximas = pergunta.includes("proxim");
+
+  let selecionadas = registros;
+
+  if(ehHoje) {
+    selecionadas = registros.filter(a => a.data === hoje);
+  } else if(ehProximas) {
+    selecionadas = registros.filter(a => a.data >= hoje);
+  }
+
+  const dataPerguntada = extrairData(pergunta);
+  if(dataPerguntada) {
+    selecionadas = registros.filter(a =>
+      a.data === dataPerguntada
+    );
+  }
+
+  if(!selecionadas.length) {
+    return "Não encontrei apresentações cadastradas"+
+      (ehHoje ? " para hoje." : " para essa consulta.")+
+      "\n\nA agenda pode ser atualizada pelo administrador.";
+  }
+
+  let resposta = "📅 Apresentações cadastradas:\n\n";
+
+  selecionadas.slice(0,15).forEach((a,i) => {
+    resposta += (i+1)+". 🐂 "+(a.boi || "Boi não informado");
+    resposta += "\nData: "+formatarData(a.data);
+    resposta += "\nHorário: "+(a.horario || "A definir");
+    resposta += "\nComunidade: "+
+      (a.comunidade || "Não informada");
+    resposta += "\n\n";
+  });
+
+  if(selecionadas.length > 15) {
+    resposta += "Há mais apresentações na agenda pública.";
+  }
+
+  return resposta;
+}
+
+function extrairData(pergunta) {
+  const iso = pergunta.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
+  if(iso) {
+    const data = iso[1]+"-"+iso[2]+"-"+iso[3];
+    return dataValida(data) ? data : null;
+  }
+
+  const br = pergunta.match(/\b(\d{1,2})\/(\d{1,2})\/(20\d{2})\b/);
+  if(br) {
+    const data = br[3]+"-"+
+      br[2].padStart(2,"0")+"-"+
+      br[1].padStart(2,"0");
+    return dataValida(data) ? data : null;
+  }
+
+  return null;
+}
+
+function listarHomenagens() {
+  const pessoas = Object.values(homenagens)
+    .filter(p => p && p.nome)
+    .sort((a,b) =>
+      String(a.nome).localeCompare(String(b.nome),"pt-BR")
+    );
+
+  if(!pessoas.length) {
+    return "Ainda não há homenagens cadastradas no memorial.";
+  }
+
+  let resposta = "🕊️ Memória Viva do Reisado:\n\n";
+
+  pessoas.forEach((p,i) => {
+    resposta += (i+1)+". "+p.nome;
+    if(p.papel) resposta += "\nParticipação: "+p.papel;
+    resposta += "\n\n";
+  });
+
+  resposta += "Conheça as mensagens completas na página Memória do Reisado.";
+  return resposta;
+}
+
+function identificarAno(pergunta) {
+  const anos = pergunta.match(/\b20\d{2}\b/g);
+  if(anos && anos.length) return anos[0];
+
+  const disponiveis = Object.keys(boisPorAno)
+    .filter(a => /^\d{4}$/.test(a))
+    .sort((a,b) => Number(b)-Number(a));
+
+  return disponiveis[0] || "2027";
+}
+
+function responder(texto) {
+  const pergunta = normalizar(texto);
+
+  if(!carregado) {
+    return erroDados
+      ? "Não consegui consultar o Firebase agora. Tente novamente mais tarde."
+      : "Ainda estou carregando as informações. Aguarde um instante e tente novamente.";
+  }
+
+  if(pergunta.includes("homenag") ||
+     pergunta.includes("memoria") ||
+     pergunta.includes("falecid") ||
+     pergunta.includes("partiram")) {
+    return listarHomenagens();
+  }
+
+  if(pergunta.includes("apresent") ||
+     pergunta.includes("agenda") ||
+     pergunta.includes("programacao") ||
+     pergunta.includes("horario") ||
+     pergunta.includes("onde vai") ||
+     pergunta.includes("quando vai")) {
+    return listarApresentacoes(pergunta);
+  }
+
+  if(pergunta.includes("boi") ||
+     pergunta.includes("dono") ||
+     pergunta.includes("responsavel") ||
+     pergunta.includes("temporada")) {
+    return listarBois(identificarAno(pergunta));
+  }
+
+  if(pergunta.includes("o que e o reisado") ||
+     pergunta.includes("historia") ||
+     pergunta.includes("tradicao") ||
+     pergunta.includes("santos reis")) {
+    return "📖 O Reisado é uma manifestação cultural"+
+      " ligada às tradições populares e à devoção"+
+      " a Santos Reis.\n\n"+
+      "Em Boa Hora–PI, os bois e seus participantes"+
+      " fazem parte dessa expressão cultural.\n\n"+
+      "Para conhecer detalhes históricos específicos,"+
+      " o portal precisará de registros culturais"+
+      " confirmados pelo administrador.";
+  }
+
+  if(pergunta.includes("ola") ||
+     pergunta.includes("oi") ||
+     pergunta.includes("bom dia") ||
+     pergunta.includes("boa tarde") ||
+     pergunta.includes("boa noite")) {
+    return "Olá! Seja bem-vindo ao Reisado Digital 2.0! 🐂\n\n"+
+      "Você pode perguntar sobre os bois, seus donos,"+
+      " as apresentações ou os homenageados.";
+  }
+
+  return "Ainda não tenho uma resposta cadastrada"+
+    " para essa pergunta.\n\n"+
+    "Posso ajudar com:\n"+
+    "🐂 Bois e seus responsáveis\n"+
+    "📅 Agenda de apresentações\n"+
+    "🕊️ Pessoas homenageadas\n"+
+    "📖 Informações gerais sobre o Reisado\n\n"+
+    "Estamos preparando uma futura integração"+
+    " com inteligência artificial para ampliar"+
+    " nossas respostas.";
+}
+
+function perguntar(texto) {
+  const pergunta = String(texto || "").trim();
+  if(!pergunta) return;
+
+  adicionarMensagem(pergunta,"usuario");
+  adicionarMensagem(responder(pergunta),"guia");
+}
+
+$("formPergunta").addEventListener("submit",e => {
+  e.preventDefault();
+  const texto = $("pergunta").value.trim();
+  if(!texto) return;
+  $("pergunta").value = "";
+  perguntar(texto);
+});
+
+/* INICIAR */
+
+adicionarMensagem(
+  "Olá! 🐂 Seja bem-vindo ao Guia Cultural do "+
+  "Reisado de Boa Hora–PI!\n\n"+
+  "Posso consultar os bois, seus responsáveis, "+
+  "a agenda de apresentações e as homenagens "+
+  "da Memória Viva.\n\n"+
+  "O que você gostaria de saber?",
+  "guia"
+);
+
+carregarDados();
+</script>
+
+</body>
+</html>
