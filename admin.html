@@ -810,10 +810,9 @@ $("formBoi").onsubmit = async e => {
   if (!usuarioAtual) return;
 
   const dados = {
-    nome:$("nomeBoi").value.trim(),
-    dono:$("donoBoi").value.trim(),
-    comunidade:$("comunidadeBoi").value.trim(),
-    foto:$("fotoBoi").value.trim()
+    nome: $("nomeBoi").value.trim(),
+  dono: $("donoBoi").value.trim(),
+  comunidade: $("comunidadeBoi").value.trim()
   };
 
   if (!dados.nome || !dados.dono) {
