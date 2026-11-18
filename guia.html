@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
+
 <title>Guia Cultural | Reisado Digital 2.0</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -20,16 +21,31 @@
   --cinza:#6e6870;
   --borda:#e9e4e2;
 }
-* { box-sizing:border-box; }
+
+* {
+  box-sizing:border-box;
+}
+
 body {
   margin:0;
   background:var(--fundo);
   color:var(--texto);
   font-family:Arial,Helvetica,sans-serif;
 }
-a { text-decoration:none; }
-button,input { font:inherit; }
-button { cursor:pointer; }
+
+a {
+  text-decoration:none;
+}
+
+button,input {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
+
+/* MENU LATERAL */
 
 .sidebar {
   position:fixed;
@@ -43,18 +59,21 @@ button { cursor:pointer; }
   overflow-y:auto;
   z-index:100;
 }
+
 .sidebar h2 {
   color:var(--ouro);
   font-size:20px;
   text-align:center;
   margin:10px 0 25px;
 }
+
 .sidebar .subtitulo {
   text-align:center;
   color:#f5dce2;
   font-size:13px;
   margin-bottom:25px;
 }
+
 .sidebar a {
   display:block;
   color:white;
@@ -63,13 +82,21 @@ button { cursor:pointer; }
   margin-bottom:8px;
   font-size:15px;
 }
-.sidebar a:hover { background:#ffffff20; }
+
+.sidebar a:hover {
+  background:#ffffff20;
+}
+
 .sidebar a.ativo {
   background:var(--vinho);
   border-left:4px solid var(--ouro);
   font-weight:bold;
 }
-.fundo-menu { display:none; }
+
+.fundo-menu {
+  display:none;
+}
+
 .menu-botao {
   display:none;
   background:var(--vinho);
@@ -79,21 +106,36 @@ button { cursor:pointer; }
   padding:12px 15px;
 }
 
+/* ESTRUTURA */
+
 .principal {
   margin-left:250px;
   min-height:100vh;
   display:flex;
   flex-direction:column;
 }
+
 header {
-  background:linear-gradient(115deg,var(--vinho),var(--escuro));
+  background:linear-gradient(
+    115deg,
+    var(--vinho),
+    var(--escuro)
+  );
   color:white;
   text-align:center;
   padding:23px 18px;
   border-bottom:5px solid var(--ouro);
 }
-header h1 { margin:0 0 8px; font-size:27px; }
-header p { margin:5px; color:#f5dce2; }
+
+header h1 {
+  margin:0 0 8px;
+  font-size:27px;
+}
+
+header p {
+  margin:5px;
+  color:#f5dce2;
+}
 
 .conteudo {
   width:100%;
@@ -102,8 +144,15 @@ header p { margin:5px; color:#f5dce2; }
   padding:22px 18px 35px;
   flex:1;
 }
+
+/* APRESENTAÇÃO */
+
 .apresentacao {
-  background:linear-gradient(120deg,var(--vinho),var(--escuro));
+  background:linear-gradient(
+    120deg,
+    var(--vinho),
+    var(--escuro)
+  );
   color:white;
   border-radius:15px;
   border-bottom:5px solid var(--ouro);
@@ -111,16 +160,20 @@ header p { margin:5px; color:#f5dce2; }
   text-align:center;
   margin-bottom:20px;
 }
+
 .apresentacao h2 {
   color:var(--ouro);
   margin:10px 0;
   font-size:27px;
 }
+
 .apresentacao p {
   line-height:1.7;
   margin:8px auto;
   max-width:730px;
 }
+
+/* CHAT */
 
 .painel {
   background:white;
@@ -129,18 +182,24 @@ header p { margin:5px; color:#f5dce2; }
   overflow:hidden;
   box-shadow:0 7px 20px #32111b0b;
 }
+
 .chat-topo {
   background:#fff8eb;
   padding:17px 20px;
   border-bottom:1px solid var(--borda);
 }
-.chat-topo strong { color:var(--vinho); }
+
+.chat-topo strong {
+  color:var(--vinho);
+}
+
 .chat-topo p {
   color:var(--cinza);
   font-size:13px;
   margin:7px 0 0;
   line-height:1.5;
 }
+
 .mensagens {
   height:420px;
   overflow-y:auto;
@@ -150,6 +209,7 @@ header p { margin:5px; color:#f5dce2; }
   gap:15px;
   background:#fcfbfa;
 }
+
 .bolha {
   padding:13px 16px;
   border-radius:15px;
@@ -159,32 +219,55 @@ header p { margin:5px; color:#f5dce2; }
   white-space:pre-line;
   overflow-wrap:anywhere;
 }
+
 .bolha.guia {
   align-self:flex-start;
   background:#f1ece9;
   color:var(--texto);
   border-bottom-left-radius:4px;
 }
+
 .bolha.usuario {
   align-self:flex-end;
   background:var(--vinho);
   color:white;
   border-bottom-right-radius:4px;
 }
+
+/* LINKS DENTRO DAS RESPOSTAS */
+
+.bolha.guia a {
+  color:var(--vinho);
+  font-weight:bold;
+  text-decoration:underline;
+  display:inline-block;
+  margin-top:8px;
+  overflow-wrap:anywhere;
+}
+
+.bolha.guia a:hover {
+  color:var(--escuro);
+}
+
+/* PERGUNTAS SUGERIDAS */
+
 .sugestoes {
   padding:14px 17px;
   border-top:1px solid var(--borda);
 }
+
 .sugestoes p {
   margin:0 0 10px;
   color:var(--cinza);
   font-size:13px;
 }
+
 .botoes {
   display:flex;
   flex-wrap:wrap;
   gap:8px;
 }
+
 .sugestao {
   background:white;
   border:1px solid #d8b8c1;
@@ -193,16 +276,21 @@ header p { margin:5px; color:#f5dce2; }
   color:var(--vinho);
   font-size:13px;
 }
+
 .sugestao:hover {
   background:#fff3e0;
   border-color:var(--ouro);
 }
+
+/* FORMULÁRIO */
+
 .formulario {
   display:flex;
   gap:10px;
   padding:15px;
   border-top:1px solid var(--borda);
 }
+
 .formulario input {
   flex:1;
   min-width:0;
@@ -211,9 +299,11 @@ header p { margin:5px; color:#f5dce2; }
   border-radius:9px;
   outline:none;
 }
+
 .formulario input:focus {
   border-color:var(--vinho);
 }
+
 .formulario button {
   border:0;
   background:var(--vinho);
@@ -222,7 +312,11 @@ header p { margin:5px; color:#f5dce2; }
   border-radius:9px;
   font-weight:bold;
 }
-.formulario button:hover { background:var(--escuro); }
+
+.formulario button:hover {
+  background:var(--escuro);
+}
+
 .aviso {
   text-align:center;
   font-size:12px;
@@ -230,6 +324,9 @@ header p { margin:5px; color:#f5dce2; }
   padding:0 16px 15px;
   line-height:1.5;
 }
+
+/* RODAPÉ */
+
 footer {
   background:var(--escuro);
   border-top:4px solid var(--ouro);
@@ -239,19 +336,32 @@ footer {
   font-size:13px;
   line-height:1.8;
 }
-footer p { margin:5px; }
+
+footer p {
+  margin:5px;
+}
+
+/* RESPONSIVIDADE */
 
 @media(max-width:850px) {
   .sidebar {
     transform:translateX(-100%);
     transition:transform .25s;
   }
-  .sidebar.aberta { transform:translateX(0); }
-  .principal { margin-left:0; }
+
+  .sidebar.aberta {
+    transform:translateX(0);
+  }
+
+  .principal {
+    margin-left:0;
+  }
+
   .menu-botao {
     display:inline-block;
     margin-bottom:15px;
   }
+
   .fundo-menu.aberto {
     display:block;
     position:fixed;
@@ -260,121 +370,219 @@ footer p { margin:5px; }
     z-index:90;
   }
 }
+
 @media(max-width:600px) {
-  header h1 { font-size:23px; }
-  .conteudo { padding:12px 10px 28px; }
-  .apresentacao { padding:23px 14px; }
-  .apresentacao h2 { font-size:23px; }
-  .mensagens { height:390px; padding:13px; }
-  .bolha { max-width:94%; font-size:14px; }
-  .formulario { padding:10px; gap:7px; }
-  .formulario button { padding:12px; }
+  header h1 {
+    font-size:23px;
+  }
+
+  .conteudo {
+    padding:12px 10px 28px;
+  }
+
+  .apresentacao {
+    padding:23px 14px;
+  }
+
+  .apresentacao h2 {
+    font-size:23px;
+  }
+
+  .mensagens {
+    height:390px;
+    padding:13px;
+  }
+
+  .bolha {
+    max-width:94%;
+    font-size:14px;
+  }
+
+  .formulario {
+    padding:10px;
+    gap:7px;
+  }
+
+  .formulario button {
+    padding:12px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="fundoMenu" class="fundo-menu"
+<!-- MENU LATERAL -->
+
+<div id="fundoMenu"
+     class="fundo-menu"
      onclick="fecharMenu()"></div>
 
-<nav id="menuLateral" class="sidebar"
+<nav id="menuLateral"
+     class="sidebar"
      aria-label="Menu principal">
+
   <h2>REISADO DIGITAL 2.0</h2>
+
   <p class="subtitulo">
     Cultura e tradição de Boa Hora–PI
   </p>
 
-  <a href="./inicio.html">🏠 Início</a>
-  <a href="./bois.html">🐂 Conheça os Bois</a>
-  <a href="./agenda.html">📅 Agenda de Apresentações</a>
-  <a href="./memoria.html">🕊️ Memória do Reisado</a>
-  <a href="./guia.html" class="ativo"
-     aria-current="page">💬 Guia Cultural</a>
-  <a href="./admin.html">🔐 Administração</a>
+  <a href="./inicio.html">
+    🏠 Início
+  </a>
+
+  <a href="./bois.html">
+    🐂 Conheça os Bois
+  </a>
+
+  <a href="./agenda.html">
+    📅 Agenda de Apresentações
+  </a>
+
+  <a href="./memoria.html">
+    🕊️ Memória do Reisado
+  </a>
+
+  <a href="./guia.html"
+     class="ativo"
+     aria-current="page">
+    💬 Guia Cultural
+  </a>
+
+  <a href="./admin.html">
+    🔐 Administração
+  </a>
+
 </nav>
 
 <div class="principal">
 
 <header>
-  <button class="menu-botao" type="button"
-          onclick="alternarMenu()">☰ Menu</button>
+
+  <button class="menu-botao"
+          type="button"
+          onclick="alternarMenu()">
+    ☰ Menu
+  </button>
+
   <h1>REISADO DIGITAL 2.0</h1>
   <p>Guia Cultural Inteligente</p>
   <p>Boa Hora – Piauí</p>
+
 </header>
 
 <main class="conteudo">
 
 <section class="apresentacao">
-  <div style="font-size:36px">🐂 💬</div>
+
+  <div style="font-size:36px">
+    🐂 💬
+  </div>
+
   <h2>Guia Cultural do Reisado</h2>
+
   <p>
-    Descubra a história de Boa Hora, conheça
-    as tradições do Reisado, os bois, as festas
-    de Santos Reis e a programação cultural.
+    Descubra a história de Boa Hora,
+    conheça as tradições do Reisado,
+    os bois, as festas de Santos Reis
+    e a programação cultural.
   </p>
+
 </section>
 
-<section class="painel" aria-label="Conversa com o guia cultural">
+<section class="painel"
+         aria-label="Conversa com o guia cultural">
 
   <div class="chat-topo">
+
     <strong>💬 Assistente Cultural</strong>
+
     <p id="situacao">
       Consultando as informações públicas...
     </p>
+
   </div>
 
-  <div id="mensagens" class="mensagens"
-       role="log" aria-live="polite"></div>
+  <div id="mensagens"
+       class="mensagens"
+       role="log"
+       aria-live="polite">
+  </div>
 
   <div class="sugestoes">
+
     <p>Experimente perguntar:</p>
+
     <div class="botoes">
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Onde fica Boa Hora?')">
         📍 Onde fica Boa Hora?
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Qual a história de Boa Hora?')">
         🏘️ História da cidade
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Como surgiu o Reisado?')">
         📖 Origem do Reisado
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Quais são os dias da Festa de Reis?')">
         🎉 Dias da Festa de Reis
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Quais são os bois de 2027?')">
         🐂 Bois de 2027
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Quais são as próximas apresentações?')">
         📅 Apresentações
       </button>
-      <button class="sugestao" type="button"
+
+      <button class="sugestao"
+        type="button"
         onclick="perguntar('Quem são os homenageados?')">
         🕊️ Homenageados
       </button>
+
     </div>
+
   </div>
 
-  <form class="formulario" id="formPergunta">
-    <input id="pergunta" type="text"
+  <form class="formulario"
+        id="formPergunta">
+
+    <input id="pergunta"
+      type="text"
       maxlength="300"
       placeholder="Pergunte sobre Boa Hora ou o Reisado..."
       aria-label="Sua pergunta"
       required>
-    <button type="submit">Enviar</button>
+
+    <button type="submit">
+      Enviar
+    </button>
+
   </form>
 
   <div class="aviso">
-    O guia utiliza informações culturais previamente
-    cadastradas e dados públicos do Firebase.
-    A IA generativa será integrada futuramente.
+    O guia utiliza informações culturais
+    previamente cadastradas e dados públicos
+    do Firebase. A IA generativa será
+    integrada futuramente.
   </div>
 
 </section>
@@ -382,9 +590,15 @@ footer p { margin:5px; }
 </main>
 
 <footer>
+
   <strong>Reisado Digital 2.0</strong>
+
   <p>Boa Hora – Piauí</p>
-  <p>Preservando e divulgando nossa cultura.</p>
+
+  <p>
+    Preservando e divulgando nossa cultura.
+  </p>
+
 </footer>
 
 </div>
@@ -407,7 +621,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.database();
+
 const $ = id => document.getElementById(id);
+
+const LINK_MAPA =
+  "https://www.google.com/maps/search/?api=1&query=Boa+Hora+Piaui";
 
 let boisPorAno = {};
 let agendas = {};
@@ -428,10 +646,12 @@ function fecharMenu() {
 }
 
 document.addEventListener("keydown",e => {
-  if(e.key === "Escape") fecharMenu();
+  if(e.key === "Escape") {
+    fecharMenu();
+  }
 });
 
-/* CARREGAR DADOS */
+/* CARREGAR FIREBASE */
 
 async function carregarDados() {
   try {
@@ -444,6 +664,7 @@ async function carregarDados() {
     boisPorAno = resultados[0].val() || {};
     agendas = resultados[1].val() || {};
     homenagens = resultados[2].val() || {};
+
     carregado = true;
     erroDados = false;
 
@@ -451,22 +672,66 @@ async function carregarDados() {
       "Informações públicas carregadas. Faça sua pergunta!";
 
   } catch(erro) {
-    console.error("Erro ao consultar Firebase:",erro);
+    console.error("Erro no Firebase:",erro);
+
     erroDados = true;
+
     $("situacao").textContent =
       "Não foi possível consultar todos os cadastros.";
   }
 }
 
-/* CONVERSA */
+/* MENSAGENS COM LINKS CLICÁVEIS */
 
 function adicionarMensagem(texto,tipo) {
+
   const elemento = document.createElement("div");
   elemento.className = "bolha " + tipo;
-  elemento.textContent = texto;
+
+  if(tipo === "guia") {
+
+    const partes = String(texto).split(
+      /(https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=Boa\+Hora\+Piaui)/g
+    );
+
+    partes.forEach(parte => {
+
+      if(parte === LINK_MAPA) {
+
+        const link = document.createElement("a");
+
+        link.href = LINK_MAPA;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+
+        link.textContent =
+          "📍 Clique aqui para abrir o mapa de Boa Hora–PI";
+
+        elemento.appendChild(link);
+
+      } else {
+
+        elemento.appendChild(
+          document.createTextNode(parte)
+        );
+
+      }
+
+    });
+
+  } else {
+
+    elemento.textContent = texto;
+
+  }
+
   $("mensagens").appendChild(elemento);
-  $("mensagens").scrollTop = $("mensagens").scrollHeight;
+
+  $("mensagens").scrollTop =
+    $("mensagens").scrollHeight;
 }
+
+/* FUNÇÕES AUXILIARES */
 
 function normalizar(texto) {
   return String(texto)
@@ -477,21 +742,28 @@ function normalizar(texto) {
 }
 
 function contem(texto,termos) {
-  return termos.some(termo => texto.includes(termo));
+  return termos.some(termo =>
+    texto.includes(normalizar(termo))
+  );
 }
 
 function formatarData(data) {
   if(!/^\d{4}-\d{2}-\d{2}$/.test(data || "")) {
     return data || "Data não informada";
   }
+
   const partes = data.split("-");
+
   return partes[2]+"/"+partes[1]+"/"+partes[0];
 }
 
 function dataValida(data) {
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(data || "")) return false;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(data || "")) {
+    return false;
+  }
 
   const d = new Date(data+"T12:00:00");
+
   return !isNaN(d.getTime()) &&
     d.getFullYear() === Number(data.slice(0,4)) &&
     d.getMonth()+1 === Number(data.slice(5,7)) &&
@@ -500,13 +772,17 @@ function dataValida(data) {
 
 function hojeLocal() {
   const d = new Date();
+
   return d.getFullYear()+"-"+
     String(d.getMonth()+1).padStart(2,"0")+"-"+
     String(d.getDate()).padStart(2,"0");
 }
 
 function extrairData(pergunta) {
-  const iso = pergunta.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/);
+
+  const iso = pergunta.match(
+    /\b(20\d{2})-(\d{2})-(\d{2})\b/
+  );
 
   if(iso) {
     const data = iso[1]+"-"+iso[2]+"-"+iso[3];
@@ -530,84 +806,81 @@ function extrairData(pergunta) {
 
 /* CONHECIMENTO CULTURAL */
 
-/* Informações gerais. Dados históricos locais
-   mais detalhados devem ser confirmados
-   antes de serem adicionados. */
-
 function sobreBoaHora() {
   return "🏘️ BOA HORA – PIAUÍ\n\n"+
-    "Boa Hora é um município brasileiro localizado "+
-    "no estado do Piauí.\n\n"+
-    "O município possui uma identidade cultural "+
-    "marcada por manifestações populares, entre "+
-    "elas o tradicional Reisado de Boa Hora.\n\n"+
-    "A cidade recebe atenção especial durante "+
-    "o período das Festas de Reis, quando a "+
-    "tradição dos bois e a devoção a Santos Reis "+
-    "ganham destaque.\n\n"+
+    "Boa Hora é um município brasileiro "+
+    "localizado no estado do Piauí.\n\n"+
+    "O município possui uma identidade "+
+    "cultural marcada por manifestações "+
+    "populares, entre elas o tradicional "+
+    "Reisado de Boa Hora.\n\n"+
+    "A cidade ganha destaque durante "+
+    "as Festas de Reis, quando a tradição "+
+    "dos bois e a devoção a Santos Reis "+
+    "são celebradas.\n\n"+
     "Para conhecer a programação, consulte "+
     "a Agenda de Apresentações do portal.";
 }
 
 function historiaCidade() {
   return "📖 HISTÓRIA DE BOA HORA\n\n"+
-    "Boa Hora é um município do Piauí que "+
-    "se desmembrou de Barras na década de 1990.\n\n"+
-    "Sua história cultural está ligada às "+
-    "comunidades locais e às tradições populares, "+
-    "incluindo o Reisado.\n\n"+
+    "Boa Hora é um município do Piauí "+
+    "que se desmembrou de Barras "+
+    "na década de 1990.\n\n"+
+    "Sua história cultural está ligada "+
+    "às comunidades locais e às tradições "+
+    "populares, incluindo o Reisado.\n\n"+
     "O guia ainda não possui um histórico "+
     "municipal detalhado e documentado. "+
-    "Novas informações poderão ser acrescentadas "+
-    "conforme forem confirmadas em fontes históricas.";
+    "Novas informações poderão ser "+
+    "acrescentadas após confirmação "+
+    "em fontes históricas.";
 }
+
+/* LOCALIZAÇÃO COM LINK CLICÁVEL */
 
 function localizacaoBoaHora() {
   return "📍 ONDE FICA BOA HORA?\n\n"+
     "Boa Hora fica no estado do Piauí, "+
     "na região Nordeste do Brasil.\n\n"+
     "O município tem ligação histórica "+
-    "com a cidade de Barras, da qual foi "+
-    "desmembrado.\n\n"+
-    "Para consultar a localização e "+
-    "planejar uma visita, utilize o mapa:\n"+
-    "https://www.google.com/maps/search/?api=1&query=Boa+Hora+Piaui";
+    "com Barras, da qual foi desmembrado.\n\n"+
+    "Para consultar sua localização "+
+    "e planejar uma visita, abra o mapa:\n\n"+
+    LINK_MAPA;
 }
 
 function origemReisado() {
   return "🐂 COMO SURGIU O REISADO?\n\n"+
-    "O Reisado é uma manifestação da cultura "+
-    "popular brasileira, associada às "+
-    "celebrações de Santos Reis e às "+
-    "tradições do ciclo natalino.\n\n"+
-    "Suas raízes estão relacionadas a "+
-    "costumes ibéricos que, no Brasil, "+
+    "O Reisado é uma manifestação "+
+    "da cultura popular brasileira, "+
+    "associada às celebrações de Santos Reis "+
+    "e às tradições do ciclo natalino.\n\n"+
+    "Suas raízes estão relacionadas "+
+    "a costumes ibéricos que, no Brasil, "+
     "se transformaram com as contribuições "+
     "das comunidades locais.\n\n"+
     "Em Boa Hora–PI, a tradição envolve "+
     "os bois, os brincantes, os músicos "+
     "e a devoção a Santos Reis, incluindo "+
     "o cumprimento de promessas.\n\n"+
-    "A data exata e as circunstâncias "+
-    "da chegada do Reisado a Boa Hora "+
-    "ainda precisam ser documentadas "+
-    "com fontes históricas locais.";
+    "A data exata da chegada do Reisado "+
+    "a Boa Hora ainda precisa ser "+
+    "documentada com fontes históricas locais.";
 }
 
 function festaDeReis() {
   return "🎉 FESTAS DE REIS EM BOA HORA–PI\n\n"+
     "O período tradicional das comemorações "+
     "vai de 31 de dezembro a 6 de janeiro.\n\n"+
-    "A primeira temporada cadastrada no "+
-    "Reisado Digital 2.0 é a de 2027, "+
+    "A primeira temporada cadastrada "+
+    "no Reisado Digital 2.0 é a de 2027, "+
     "que vai de 31/12/2026 a 06/01/2027.\n\n"+
-    "O dia 6 de janeiro é conhecido como "+
-    "Dia de Reis, ligado à celebração "+
-    "dos Santos Reis.\n\n"+
+    "O dia 6 de janeiro é conhecido "+
+    "como Dia de Reis.\n\n"+
     "As datas, os horários e as comunidades "+
-    "de cada apresentação devem ser "+
-    "consultados na agenda oficial cadastrada "+
-    "no portal, pois podem variar.";
+    "das apresentações devem ser consultados "+
+    "na agenda pública do portal.";
 }
 
 function santosReis() {
@@ -615,19 +888,22 @@ function santosReis() {
     "Na tradição cristã, os Santos Reis "+
     "são os magos que visitaram Jesus "+
     "após seu nascimento.\n\n"+
-    "A celebração do Dia de Reis acontece "+
+    "O Dia de Reis é celebrado "+
     "em 6 de janeiro.\n\n"+
-    "Essa devoção está presente em "+
-    "diversas manifestações culturais "+
+    "Essa devoção está presente "+
+    "em diversas manifestações culturais "+
     "brasileiras, incluindo o Reisado "+
-    "e as práticas de pagamento de promessas.";
+    "e o pagamento de promessas.";
 }
 
-/* CONSULTAS AO FIREBASE */
+/* BOIS */
 
 function identificarAno(pergunta) {
   const anos = pergunta.match(/\b20\d{2}\b/g);
-  if(anos && anos.length) return anos[0];
+
+  if(anos && anos.length) {
+    return anos[0];
+  }
 
   const disponiveis = Object.keys(boisPorAno)
     .filter(a => /^\d{4}$/.test(a))
@@ -637,20 +913,28 @@ function identificarAno(pergunta) {
 }
 
 function registrosBois() {
+
   const lista = [];
 
-  Object.entries(boisPorAno).forEach(([ano,bois]) => {
-    Object.values(bois || {}).forEach(boi => {
-      if(boi && boi.nome) {
-        lista.push({...boi,ano});
-      }
-    });
-  });
+  Object.entries(boisPorAno).forEach(
+    ([ano,bois]) => {
+
+      Object.values(bois || {}).forEach(boi => {
+
+        if(boi && boi.nome) {
+          lista.push({...boi,ano});
+        }
+
+      });
+
+    }
+  );
 
   return lista;
 }
 
 function encontrarBoi(pergunta) {
+
   const texto = normalizar(pergunta);
   const registros = registrosBois();
 
@@ -658,17 +942,22 @@ function encontrarBoi(pergunta) {
     texto.includes(normalizar(boi.nome))
   );
 
-  encontrados.sort((a,b) => Number(b.ano)-Number(a.ano));
+  encontrados.sort(
+    (a,b) => Number(b.ano)-Number(a.ano)
+  );
 
   return encontrados[0] || null;
 }
 
 function listarBois(ano) {
-  const registros = Object.values(boisPorAno[ano] || {});
+
+  const registros = Object.values(
+    boisPorAno[ano] || {}
+  );
 
   if(!registros.length) {
-    return "Ainda não há bois cadastrados para a temporada "+
-      ano+".";
+    return "Ainda não há bois cadastrados "+
+      "para a temporada "+ano+".";
   }
 
   registros.sort((a,b) =>
@@ -677,18 +966,23 @@ function listarBois(ano) {
     )
   );
 
-  let resposta = "🐂 BOIS DA TEMPORADA "+ano+"\n\n";
+  let resposta =
+    "🐂 BOIS DA TEMPORADA "+ano+"\n\n";
 
   registros.forEach((boi,i) => {
+
     resposta += (i+1)+". "+boi.nome;
+
     resposta += "\nResponsável: "+
       (boi.dono || "Não informado");
 
     if(boi.comunidade) {
-      resposta += "\nComunidade: "+boi.comunidade;
+      resposta += "\nComunidade: "+
+        boi.comunidade;
     }
 
     resposta += "\n\n";
+
   });
 
   return resposta;
@@ -697,12 +991,18 @@ function listarBois(ano) {
 function detalhesBoi(boi) {
   return "🐂 "+boi.nome+"\n\n"+
     "Temporada: "+boi.ano+"\n"+
-    "Responsável: "+(boi.dono || "Não informado")+"\n"+
-    "Comunidade: "+(boi.comunidade || "Não informada")+
-    "\n\nConsulte também a página Conheça os Bois.";
+    "Responsável: "+
+    (boi.dono || "Não informado")+"\n"+
+    "Comunidade: "+
+    (boi.comunidade || "Não informada")+
+    "\n\nConsulte também a página "+
+    "Conheça os Bois.";
 }
 
+/* APRESENTAÇÕES */
+
 function todasApresentacoes() {
+
   return Object.values(agendas)
     .filter(item =>
       item &&
@@ -716,7 +1016,11 @@ function todasApresentacoes() {
     );
 }
 
-function listarApresentacoes(pergunta,boiEspecifico=null) {
+function listarApresentacoes(
+  pergunta,
+  boiEspecifico=null
+) {
+
   const registros = todasApresentacoes();
   const hoje = hojeLocal();
 
@@ -726,97 +1030,143 @@ function listarApresentacoes(pergunta,boiEspecifico=null) {
   const ehProximas = pergunta.includes("proxim");
 
   if(ehHoje) {
-    selecionadas = selecionadas.filter(a => a.data === hoje);
+
+    selecionadas = selecionadas.filter(
+      a => a.data === hoje
+    );
+
   } else if(ehProximas) {
-    selecionadas = selecionadas.filter(a => a.data >= hoje);
+
+    selecionadas = selecionadas.filter(
+      a => a.data >= hoje
+    );
+
   }
 
   const dataPerguntada = extrairData(pergunta);
 
   if(dataPerguntada) {
-    selecionadas = registros.filter(a =>
-      a.data === dataPerguntada
+
+    selecionadas = registros.filter(
+      a => a.data === dataPerguntada
     );
+
   }
 
   if(boiEspecifico) {
-    selecionadas = selecionadas.filter(a =>
-      normalizar(a.boi || "") ===
+
+    selecionadas = selecionadas.filter(
+      a => normalizar(a.boi || "") ===
       normalizar(boiEspecifico.nome)
     );
+
   }
 
   if(!selecionadas.length) {
-    return "Não encontrei apresentações cadastradas "+
-      "para essa consulta.\n\n"+
+    return "Não encontrei apresentações "+
+      "cadastradas para essa consulta.\n\n"+
       "Verifique a página Agenda de Apresentações.";
   }
 
-  let resposta = "📅 APRESENTAÇÕES CADASTRADAS\n\n";
+  let resposta =
+    "📅 APRESENTAÇÕES CADASTRADAS\n\n";
 
   selecionadas.slice(0,15).forEach((a,i) => {
+
     resposta += (i+1)+". 🐂 "+
       (a.boi || "Boi não informado");
-    resposta += "\nData: "+formatarData(a.data);
-    resposta += "\nHorário: "+(a.horario || "A definir");
+
+    resposta += "\nData: "+
+      formatarData(a.data);
+
+    resposta += "\nHorário: "+
+      (a.horario || "A definir");
+
     resposta += "\nComunidade: "+
       (a.comunidade || "Não informada");
+
     resposta += "\n\n";
+
   });
 
   if(selecionadas.length > 15) {
-    resposta += "Há mais apresentações na agenda pública.";
+    resposta +=
+      "Há mais apresentações na agenda pública.";
   }
 
   return resposta;
 }
 
+/* HOMENAGENS */
+
 function registrosHomenagens() {
+
   return Object.values(homenagens)
     .filter(p => p && p.nome)
     .sort((a,b) =>
-      String(a.nome).localeCompare(String(b.nome),"pt-BR")
+      String(a.nome).localeCompare(
+        String(b.nome),"pt-BR"
+      )
     );
 }
 
 function encontrarHomenageado(pergunta) {
+
   return registrosHomenagens().find(p =>
-    normalizar(pergunta).includes(normalizar(p.nome))
+    normalizar(pergunta).includes(
+      normalizar(p.nome)
+    )
   );
 }
 
 function listarHomenagens() {
+
   const pessoas = registrosHomenagens();
 
   if(!pessoas.length) {
     return "Ainda não há homenagens cadastradas.";
   }
 
-  let resposta = "🕊️ MEMÓRIA VIVA DO REISADO\n\n";
+  let resposta =
+    "🕊️ MEMÓRIA VIVA DO REISADO\n\n";
 
   pessoas.forEach((p,i) => {
+
     resposta += (i+1)+". "+p.nome;
-    if(p.papel) resposta += "\nParticipação: "+p.papel;
+
+    if(p.papel) {
+      resposta += "\nParticipação: "+p.papel;
+    }
+
     resposta += "\n\n";
+
   });
 
-  resposta += "Leia as homenagens completas "+
+  resposta +=
+    "Leia as homenagens completas "+
     "na página Memória do Reisado.";
 
   return resposta;
 }
 
 function detalhesHomenageado(pessoa) {
-  let resposta = "🕊️ "+pessoa.nome+"\n\n";
+
+  let resposta =
+    "🕊️ "+pessoa.nome+"\n\n";
 
   if(pessoa.papel) {
-    resposta += "Participação no Reisado: "+
+
+    resposta +=
+      "Participação no Reisado: "+
       pessoa.papel+"\n\n";
+
   }
 
   if(pessoa.mensagem) {
+
     resposta += String(pessoa.mensagem)
       .replace(/\*\*(.*?)\*\*/g,"$1");
+
   }
 
   return resposta;
@@ -825,9 +1175,10 @@ function detalhesHomenageado(pessoa) {
 /* INTERPRETAR PERGUNTAS */
 
 function responder(texto) {
+
   const p = normalizar(texto);
 
-  /* CIDADE E HISTÓRIA */
+  /* LOCALIZAÇÃO */
 
   if(contem(p,[
     "onde fica boa hora",
@@ -835,10 +1186,13 @@ function responder(texto) {
     "localizacao de boa hora",
     "localizar boa hora",
     "como chegar a boa hora",
-    "mapa de boa hora"
+    "mapa de boa hora",
+    "onde esta boa hora"
   ])) {
     return localizacaoBoaHora();
   }
+
+  /* HISTÓRIA DA CIDADE */
 
   if(contem(p,[
     "historia de boa hora",
@@ -859,7 +1213,7 @@ function responder(texto) {
     return sobreBoaHora();
   }
 
-  /* FESTA DE REIS */
+  /* FESTAS DE REIS */
 
   if(contem(p,[
     "quando acontece a festa",
@@ -882,10 +1236,12 @@ function responder(texto) {
     "quem foram os reis magos",
     "significado de santos reis",
     "dia de reis",
-    "devoção a santos reis"
+    "devocao a santos reis"
   ])) {
     return santosReis();
   }
+
+  /* ORIGEM DO REISADO */
 
   if(contem(p,[
     "como surgiu o reisado",
@@ -898,17 +1254,20 @@ function responder(texto) {
     return origemReisado();
   }
 
-  /* CONSULTAS CADASTRADAS */
+  /* DADOS DO FIREBASE */
 
   if(!carregado) {
+
     return erroDados
-      ? "Não consegui consultar os cadastros do Firebase. "+
-        "As informações culturais gerais continuam disponíveis."
+      ? "Não consegui consultar os cadastros "+
+        "do Firebase agora."
       : "Estou carregando os cadastros. "+
         "Aguarde um instante e tente novamente.";
+
   }
 
   const pessoa = encontrarHomenageado(p);
+
   if(pessoa) {
     return detalhesHomenageado(pessoa);
   }
@@ -981,11 +1340,12 @@ function responder(texto) {
     "boa tarde",
     "boa noite"
   ])) {
-    return "Olá! Seja bem-vindo ao Reisado "+
-      "Digital 2.0! 🐂\n\n"+
-      "Posso ajudar você a conhecer Boa Hora, "+
-      "a origem do Reisado, os dias da Festa "+
-      "de Reis, os bois e a programação.";
+    return "Olá! Seja bem-vindo ao "+
+      "Reisado Digital 2.0! 🐂\n\n"+
+      "Posso ajudar você a conhecer "+
+      "Boa Hora, a origem do Reisado, "+
+      "os dias das Festas de Reis, "+
+      "os bois e a programação.";
   }
 
   return "Ainda não tenho uma resposta "+
@@ -996,33 +1356,49 @@ function responder(texto) {
     "🐂 Origem do Reisado\n"+
     "🎉 Festas de Reis\n"+
     "📅 Agenda de apresentações\n"+
-    "🕊️ Homenageados\n\n"+
-    "Estamos ampliando o conhecimento "+
-    "cultural do assistente.";
+    "🕊️ Homenageados";
 }
+
+/* ENVIAR PERGUNTAS */
 
 function perguntar(texto) {
+
   const pergunta = String(texto || "").trim();
-  if(!pergunta) return;
+
+  if(!pergunta) {
+    return;
+  }
 
   adicionarMensagem(pergunta,"usuario");
-  adicionarMensagem(responder(pergunta),"guia");
+
+  const resposta = responder(pergunta);
+
+  adicionarMensagem(resposta,"guia");
 }
 
-$("formPergunta").addEventListener("submit",e => {
-  e.preventDefault();
+$("formPergunta").addEventListener(
+  "submit",
+  e => {
 
-  const texto = $("pergunta").value.trim();
-  if(!texto) return;
+    e.preventDefault();
 
-  $("pergunta").value = "";
-  perguntar(texto);
-});
+    const texto = $("pergunta").value.trim();
 
-/* INICIAR */
+    if(!texto) {
+      return;
+    }
+
+    $("pergunta").value = "";
+
+    perguntar(texto);
+
+  }
+);
+
+/* INICIAR ASSISTENTE */
 
 adicionarMensagem(
-  "Olá! 🐂 Seja bem-vindo ao Guia Cultural "+
+  "Olá!  Seja bem-vindo ao Guia Cultural "+
   "do Reisado de Boa Hora–PI!\n\n"+
   "Posso ajudar você a conhecer a cidade, "+
   "a origem do Reisado, as Festas de Reis, "+
