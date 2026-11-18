@@ -3,8 +3,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
+
 <title>Administração | Reisado Digital 2.0</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
@@ -21,13 +22,18 @@
   --cinza:#6e6870;
   --borda:#e9e4e2;
 }
-* {box-sizing:border-box}
+
+* {
+  box-sizing:border-box;
+}
+
 body {
   margin:0;
   font-family:Arial,Helvetica,sans-serif;
   background:var(--fundo);
   color:var(--texto);
 }
+
 header {
   background:linear-gradient(115deg,var(--vinho),var(--escuro));
   color:white;
@@ -35,18 +41,29 @@ header {
   padding:25px 15px;
   border-bottom:5px solid var(--ouro);
 }
+
 header img {
   width:85px;
   height:85px;
   object-fit:contain;
 }
-header h1 {margin:10px 0;font-size:27px}
-header p {margin:5px;color:#f5dce2}
+
+header h1 {
+  margin:10px 0;
+  font-size:27px;
+}
+
+header p {
+  margin:5px;
+  color:#f5dce2;
+}
+
 .container {
   max-width:1000px;
   margin:auto;
   padding:20px;
 }
+
 .caixa {
   background:white;
   border:1px solid var(--borda);
@@ -55,14 +72,22 @@ header p {margin:5px;color:#f5dce2}
   margin-bottom:20px;
   box-shadow:0 7px 20px #32111b0b;
 }
-h2,h3 {color:var(--vinho)}
-h2 {margin-top:0}
+
+h2,h3 {
+  color:var(--vinho);
+}
+
+h2 {
+  margin-top:0;
+}
+
 label {
   display:block;
   margin:15px 0 7px;
   font-weight:bold;
   font-size:14px;
 }
+
 input,select {
   width:100%;
   padding:13px;
@@ -71,10 +96,12 @@ input,select {
   font-size:15px;
   background:white;
 }
+
 input:focus,select:focus {
   outline:2px solid var(--ouro);
   outline-offset:1px;
 }
+
 button {
   background:var(--vinho);
   color:white;
@@ -85,24 +112,52 @@ button {
   font-weight:bold;
   cursor:pointer;
 }
-button:hover {filter:brightness(.94)}
-button:disabled {opacity:.55;cursor:wait}
-.botao-grande {width:100%;margin-top:15px}
-.cinza {background:#69717d}
-.vermelho {background:#b32635}
-.verde {background:#187b4d}
-.oculto {display:none!important}
+
+button:hover {
+  filter:brightness(.94);
+}
+
+button:disabled {
+  opacity:.55;
+  cursor:wait;
+}
+
+.botao-grande {
+  width:100%;
+  margin-top:15px;
+}
+
+.cinza {
+  background:#69717d;
+}
+
+.vermelho {
+  background:#b32635;
+}
+
+.oculto {
+  display:none!important;
+}
+
 .abas,.botoes {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
 }
-.abas {margin-bottom:20px}
-.abas button {flex:1}
+
+.abas {
+  margin-bottom:20px;
+}
+
+.abas button {
+  flex:1;
+}
+
 .abas button.ativo {
   background:var(--escuro);
   box-shadow:inset 0 -4px var(--ouro);
 }
+
 .item {
   padding:18px;
   border:1px solid var(--borda);
@@ -110,20 +165,25 @@ button:disabled {opacity:.55;cursor:wait}
   margin-top:13px;
   background:#fffdfd;
 }
-.item h3 {margin:0 0 10px}
+
+.item h3 {
+  margin:0 0 10px;
+}
+
 .item p {
   margin:8px 0;
   font-size:14px;
   line-height:1.6;
 }
-.item img {
-  width:160px;
-  max-width:100%;
-  border-radius:8px;
-  margin:8px 0;
+
+.botoes {
+  margin-top:12px;
 }
-.botoes {margin-top:12px}
-.botoes button {flex:1 1 120px}
+
+.botoes button {
+  flex:1 1 120px;
+}
+
 .aviso {
   padding:15px;
   border-left:4px solid var(--ouro);
@@ -133,17 +193,20 @@ button:disabled {opacity:.55;cursor:wait}
   line-height:1.7;
   margin:15px 0;
 }
+
 .mensagem {
   font-weight:bold;
   font-size:14px;
   line-height:1.6;
   margin-top:14px;
 }
+
 .linha {
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:15px;
 }
+
 .links {
   display:flex;
   justify-content:center;
@@ -151,11 +214,13 @@ button:disabled {opacity:.55;cursor:wait}
   gap:20px;
   padding:25px 0;
 }
+
 .links a {
   color:var(--vinho);
   font-weight:bold;
   text-decoration:none;
 }
+
 footer {
   text-align:center;
   background:var(--escuro);
@@ -164,11 +229,24 @@ footer {
   padding:25px;
   font-size:13px;
 }
+
 @media(max-width:600px) {
-  .container {padding:12px}
-  .caixa {padding:17px}
-  .linha {grid-template-columns:1fr;gap:0}
-  .abas button {font-size:13px}
+  .container {
+    padding:12px;
+  }
+
+  .caixa {
+    padding:17px;
+  }
+
+  .linha {
+    grid-template-columns:1fr;
+    gap:0;
+  }
+
+  .abas button {
+    font-size:13px;
+  }
 }
 </style>
 </head>
@@ -176,7 +254,11 @@ footer {
 <body>
 
 <header>
-  <img src="./ícone-boi-reisado-logo.png" alt="Reisado">
+  <img
+    src="./ícone-boi-reisado-logo.png"
+    alt="Símbolo do Reisado"
+  >
+
   <h1>REISADO DIGITAL 2.0</h1>
   <p>Painel Administrativo Cultural</p>
   <p>Boa Hora – Piauí</p>
@@ -184,208 +266,363 @@ footer {
 
 <div class="container">
 
+<!-- LOGIN -->
+
 <section id="telaLogin" class="caixa">
+
   <h2>🔐 Acesso do administrador</h2>
+
   <form id="formLogin">
+
     <label for="email">E-mail</label>
-    <input id="email" type="email" autocomplete="username" required>
+    <input
+      id="email"
+      type="email"
+      autocomplete="username"
+      required
+    >
 
     <label for="senha">Senha</label>
-    <input id="senha" type="password"
-           autocomplete="current-password" required>
+    <input
+      id="senha"
+      type="password"
+      autocomplete="current-password"
+      required
+    >
 
     <button type="submit" class="botao-grande">
       Entrar
     </button>
+
   </form>
-  <p id="mensagemLogin" class="mensagem" role="status"></p>
+
+  <p
+    id="mensagemLogin"
+    class="mensagem"
+    role="status"
+  ></p>
+
 </section>
+
+<!-- PAINEL -->
 
 <section id="telaPainel" class="oculto">
 
   <div class="caixa">
+
     <h2>Painel Administrativo</h2>
+
     <p id="usuarioLogado"></p>
 
     <div class="aviso">
-      Temporada inicial: <strong>2027</strong><br>
-      Período: 31/12/2026 a 06/01/2027.<br>
-      Os registros das temporadas anteriores serão preservados.
+      <strong>Temporada inicial: 2027</strong>
+      <p>
+        Período: 31/12/2026 a 06/01/2027.
+      </p>
+      Os registros serão organizados por temporada,
+      preservando os cadastros dos anos anteriores.
     </div>
 
-    <button id="sair" class="cinza botao-grande">
+    <button
+      id="sair"
+      type="button"
+      class="cinza botao-grande"
+    >
       Sair da conta
     </button>
+
   </div>
+
+  <!-- ABAS -->
 
   <div class="abas">
-    <button id="abaBois" class="ativo" type="button">
+
+    <button
+      id="abaBois"
+      type="button"
+      class="ativo"
+    >
       🐂 Cadastro de Bois
     </button>
-    <button id="abaAgenda" type="button">
+
+    <button
+      id="abaAgenda"
+      type="button"
+    >
       📅 Apresentações
     </button>
+
   </div>
 
-  <!-- CADASTRO DOS BOIS -->
+  <!-- SEÇÃO BOIS -->
 
   <section id="secaoBois">
 
     <div class="caixa">
+
       <h2>Temporada do Reisado</h2>
 
-      <label for="anoTemporada">Selecionar temporada</label>
+      <label for="anoTemporada">
+        Selecionar temporada
+      </label>
+
       <select id="anoTemporada">
         <option value="2027">2027</option>
       </select>
 
       <p id="periodo" class="aviso"></p>
 
-      <label for="novoAno">Adicionar temporada futura</label>
+      <label for="novoAno">
+        Adicionar temporada futura
+      </label>
+
       <div class="linha">
-        <input id="novoAno" type="number"
-               min="2028" max="2100"
-               placeholder="Ex.: 2028">
-        <button id="adicionarAno" type="button">
+
+        <input
+          id="novoAno"
+          type="number"
+          min="2028"
+          max="2100"
+          placeholder="Ex.: 2028"
+        >
+
+        <button
+          id="adicionarAno"
+          type="button"
+        >
           Adicionar temporada
         </button>
+
       </div>
+
       <p id="mensagemAno" class="mensagem"></p>
+
     </div>
 
+    <!-- FORMULÁRIO DOS BOIS -->
+
     <div class="caixa">
-      <h2 id="tituloBoi">Cadastrar boi — 2027</h2>
+
+      <h2 id="tituloBoi">
+        Cadastrar boi — 2027
+      </h2>
 
       <form id="formBoi">
 
-        <label for="nomeBoi">Nome do boi</label>
-        <input id="nomeBoi" maxlength="100" required
-               placeholder="Nome do grupo">
+        <label for="nomeBoi">
+          Nome do boi
+        </label>
 
-        <label for="donoBoi">Nome do proprietário</label>
-        <input id="donoBoi" maxlength="100" required
-               placeholder="Nome do dono ou responsável">
+        <input
+          id="nomeBoi"
+          maxlength="100"
+          placeholder="Nome do boi"
+          required
+        >
+
+        <label for="donoBoi">
+          Nome do proprietário
+        </label>
+
+        <input
+          id="donoBoi"
+          maxlength="100"
+          placeholder="Nome do dono ou responsável"
+          required
+        >
 
         <label for="comunidadeBoi">
           Comunidade ou localidade
         </label>
-        <input id="comunidadeBoi" maxlength="150"
-               placeholder="Ex.: Centro, comunidade rural">
 
-        <label for="fotoBoi">
-          Fotografia do boi (endereço da imagem)
-        </label>
-        <input id="fotoBoi" type="text"
-               placeholder="Ex.: imagens/boi-estrela.jpg">
+        <input
+          id="comunidadeBoi"
+          maxlength="150"
+          placeholder="Ex.: Centro, comunidade rural"
+        >
 
-        <div class="aviso">
-          Para adicionar uma fotografia, envie a imagem
-          para a pasta <strong>imagens</strong> do GitHub
-          e informe o caminho neste campo.
-          A fotografia é opcional.
-        </div>
-
-        <button id="salvarBoi" type="submit"
-                class="botao-grande">
+        <button
+          id="salvarBoi"
+          type="submit"
+          class="botao-grande"
+        >
           Salvar boi
         </button>
 
-        <button id="cancelarBoi" type="button"
-                class="cinza botao-grande oculto">
+        <button
+          id="cancelarBoi"
+          type="button"
+          class="cinza botao-grande oculto"
+        >
           Cancelar edição
         </button>
+
       </form>
 
-      <p id="mensagemBoi" class="mensagem" role="status"></p>
+      <p
+        id="mensagemBoi"
+        class="mensagem"
+        role="status"
+      ></p>
+
     </div>
 
+    <!-- LISTA DOS BOIS -->
+
     <div class="caixa">
+
       <h2>🐂 Bois cadastrados</h2>
+
       <p id="quantidadeBois"></p>
-      <div id="listaBois">Carregando...</div>
+
+      <div id="listaBois">
+        Carregando...
+      </div>
+
     </div>
 
   </section>
 
-  <!-- AGENDA -->
+  <!-- SEÇÃO AGENDA -->
 
   <section id="secaoAgenda" class="oculto">
 
     <div class="caixa">
-      <h2 id="tituloAgenda">Cadastrar apresentação</h2>
 
-      <p class="aviso">
-        As apresentações devem ocorrer entre
-        31 de dezembro e 6 de janeiro,
-        conforme a temporada selecionada.
-      </p>
+      <h2 id="tituloAgenda">
+        Cadastrar apresentação
+      </h2>
+
+      <div class="aviso">
+        As apresentações da temporada 2027
+        devem ocorrer entre 31/12/2026
+        e 06/01/2027.
+      </div>
 
       <form id="formAgenda">
 
-        <label for="boiApresentacao">Selecione o boi</label>
-        <select id="boiApresentacao" required>
-          <option value="">Escolha um boi</option>
+        <label for="boiApresentacao">
+          Selecione o boi
+        </label>
+
+        <select
+          id="boiApresentacao"
+          required
+        >
+          <option value="">
+            Escolha um boi
+          </option>
         </select>
 
         <div class="linha">
+
           <div>
-            <label for="dataApresentacao">Data</label>
-            <input id="dataApresentacao"
-                   type="date" required>
+            <label for="dataApresentacao">
+              Data
+            </label>
+
+            <input
+              id="dataApresentacao"
+              type="date"
+              required
+            >
           </div>
+
           <div>
-            <label for="horaApresentacao">Horário</label>
-            <input id="horaApresentacao"
-                   type="time" required>
+            <label for="horaApresentacao">
+              Horário
+            </label>
+
+            <input
+              id="horaApresentacao"
+              type="time"
+              required
+            >
           </div>
+
         </div>
 
         <label for="comunidadeApresentacao">
           Comunidade ou local da apresentação
         </label>
-        <input id="comunidadeApresentacao"
-               maxlength="150" required>
 
-        <button id="salvarAgenda" type="submit"
-                class="botao-grande">
+        <input
+          id="comunidadeApresentacao"
+          maxlength="150"
+          required
+        >
+
+        <button
+          id="salvarAgenda"
+          type="submit"
+          class="botao-grande"
+        >
           Salvar apresentação
         </button>
 
-        <button id="cancelarAgenda" type="button"
-                class="cinza botao-grande oculto">
+        <button
+          id="cancelarAgenda"
+          type="button"
+          class="cinza botao-grande oculto"
+        >
           Cancelar edição
         </button>
+
       </form>
 
-      <p id="mensagemAgenda" class="mensagem" role="status"></p>
+      <p
+        id="mensagemAgenda"
+        class="mensagem"
+        role="status"
+      ></p>
+
     </div>
 
     <div class="caixa">
+
       <h2>Apresentações cadastradas</h2>
-      <div id="listaAgenda">Carregando...</div>
+
+      <div id="listaAgenda">
+        Carregando...
+      </div>
+
     </div>
 
   </section>
 
 </section>
 
+<!-- LINKS -->
+
 <div class="links">
-  <a href="./inicio.html">🏠 Início</a>
-  <a href="./bois.html">🐂 Conheça os Bois</a>
-  <a href="./agenda.html">📅 Agenda Pública</a>
+
+  <a href="./inicio.html">
+    🏠 Início
+  </a>
+
+  <a href="./bois.html">
+    🐂 Conheça os Bois
+  </a>
+
+  <a href="./agenda.html">
+    📅 Agenda Pública
+  </a>
+
 </div>
 
 </div>
 
 <footer>
-  Reisado Digital 2.0 — Boa Hora, Piauí<br>
-  Preservando a cultura e a memória do Reisado
+  Reisado Digital 2.0 — Boa Hora, Piauí
+  <p>
+    Preservando a cultura e a memória do Reisado
+  </p>
 </footer>
 
 <script>
 "use strict";
 
-/* FIREBASE */
+/* CONFIGURAÇÃO FIREBASE */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -413,10 +650,17 @@ let usuarioAtual = null;
 let temporada = "2027";
 let bois = [];
 let apresentacoes = [];
+
 let boiEmEdicao = null;
 let agendaEmEdicao = null;
-let ouvindo = false;
+
+let refBoisAtiva = null;
+let ouvindoAgenda = false;
 let geracaoConsulta = 0;
+
+const temporadasLocais = new Set(["2027"]);
+
+/* FUNÇÕES AUXILIARES */
 
 function normalizar(valor) {
   return String(valor || "")
@@ -428,33 +672,38 @@ function normalizar(valor) {
 
 function mostrarAba(aba) {
   $("secaoBois").classList.toggle(
-    "oculto",aba !== "bois"
+    "oculto", aba !== "bois"
   );
+
   $("secaoAgenda").classList.toggle(
-    "oculto",aba !== "agenda"
+    "oculto", aba !== "agenda"
   );
+
   $("abaBois").classList.toggle(
-    "ativo",aba === "bois"
+    "ativo", aba === "bois"
   );
+
   $("abaAgenda").classList.toggle(
-    "ativo",aba === "agenda"
+    "ativo", aba === "agenda"
   );
 }
 
 $("abaBois").onclick = () => mostrarAba("bois");
 $("abaAgenda").onclick = () => mostrarAba("agenda");
 
-/* AUTENTICAÇÃO */
+/* LOGIN */
 
-$("formLogin").onsubmit = async e => {
+$("formLogin").onsubmit = async function(e) {
   e.preventDefault();
+
   $("mensagemLogin").textContent = "Entrando...";
 
   try {
-    const credencial = await auth.signInWithEmailAndPassword(
-      $("email").value.trim(),
-      $("senha").value
-    );
+    const credencial =
+      await auth.signInWithEmailAndPassword(
+        $("email").value.trim(),
+        $("senha").value
+      );
 
     if (credencial.user.uid !== ADMIN_UID) {
       await auth.signOut();
@@ -466,6 +715,7 @@ $("formLogin").onsubmit = async e => {
 
   } catch(erro) {
     console.error(erro);
+
     $("mensagemLogin").textContent =
       "Acesso não autorizado. Confira seus dados.";
   }
@@ -474,41 +724,51 @@ $("formLogin").onsubmit = async e => {
 $("sair").onclick = () => auth.signOut();
 
 auth.onAuthStateChanged(async usuario => {
-  const autorizado = !!usuario &&
-    usuario.uid === ADMIN_UID;
+
+  const autorizado =
+    !!usuario && usuario.uid === ADMIN_UID;
 
   usuarioAtual = autorizado ? usuario : null;
 
   $("telaLogin").classList.toggle(
-    "oculto",autorizado
+    "oculto", autorizado
   );
+
   $("telaPainel").classList.toggle(
-    "oculto",!autorizado
+    "oculto", !autorizado
   );
 
   if (!autorizado) {
     pararConsultas();
+
     bois = [];
     apresentacoes = [];
+
     cancelarEdicaoBoi();
     cancelarEdicaoAgenda();
 
-    if (usuario) await auth.signOut();
+    if (usuario) {
+      await auth.signOut();
+    }
     return;
   }
 
   $("usuarioLogado").textContent =
     "Conta: " + usuario.email;
 
-  iniciarConsultas();
+  await carregarTemporadas();
+
+  if (usuarioAtual) {
+    iniciarConsultas();
+  }
 });
 
 /* TEMPORADAS */
 
 function periodoTemporada(ano) {
   return {
-    inicio:(Number(ano)-1)+"-12-31",
-    fim:ano+"-01-06"
+    inicio:(Number(ano)-1) + "-12-31",
+    fim:ano + "-01-06"
   };
 }
 
@@ -516,8 +776,17 @@ function formatarData(data) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) {
     return "Data não informada";
   }
+
   const [ano,mes,dia] = data.split("-");
-  return `${dia}/${mes}/${ano}`;
+
+  return dia + "/" + mes + "/" + ano;
+}
+
+function dataNaTemporada(data,ano) {
+  const periodo = periodoTemporada(ano);
+
+  return data >= periodo.inicio &&
+         data <= periodo.fim;
 }
 
 function atualizarPeriodo() {
@@ -535,188 +804,210 @@ function atualizarPeriodo() {
   $("dataApresentacao").max = datas.fim;
 }
 
+function atualizarOpcoesTemporadas() {
+  const seletor = $("anoTemporada");
+
+  seletor.replaceChildren();
+
+  [...temporadasLocais]
+    .sort((a,b) => Number(b)-Number(a))
+    .forEach(ano => {
+      seletor.add(new Option(ano,ano));
+    });
+
+  seletor.value = temporada;
+}
+
 async function carregarTemporadas() {
   try {
     const snapshot = await boisRef.once("value");
-    const anos = new Set(["2027"]);
 
     snapshot.forEach(item => {
-      if (/^\d{4}$/.test(item.key) &&
-          Number(item.key) >= 2027) {
-        anos.add(item.key);
+      if (
+        /^\d{4}$/.test(item.key) &&
+        Number(item.key) >= 2027
+      ) {
+        temporadasLocais.add(item.key);
       }
     });
 
-    const atual = temporada;
-
-    $("anoTemporada").replaceChildren();
-
-    [...anos]
-      .sort((a,b) => Number(b)-Number(a))
-      .forEach(ano => {
-        $("anoTemporada").add(
-          new Option(ano,ano)
-        );
-      });
-
-    $("anoTemporada").value = atual;
-
   } catch(erro) {
     console.error(erro);
+
     $("mensagemAno").textContent =
-      "Não foi possível consultar as temporadas.";
+      "Não foi possível consultar as temporadas. " +
+      "Confira as regras do Firebase.";
   }
+
+  atualizarOpcoesTemporadas();
 }
 
-$("adicionarAno").onclick = async () => {
+$("adicionarAno").onclick = function() {
   if (!usuarioAtual) return;
 
   const ano = Number($("novoAno").value);
 
-  if (!Number.isInteger(ano) ||
-      ano < 2028 || ano > 2100) {
+  if (
+    !Number.isInteger(ano) ||
+    ano < 2028 ||
+    ano > 2100
+  ) {
     $("mensagemAno").textContent =
       "Informe um ano entre 2028 e 2100.";
     return;
   }
 
-  if ([...$("anoTemporada").options]
-      .some(op => op.value === String(ano))) {
-    $("anoTemporada").value = String(ano);
-    mudarTemporada(String(ano));
-    return;
+  const anoTexto = String(ano);
+
+  if (!temporadasLocais.has(anoTexto)) {
+    if (!confirm(
+      "Preparar a temporada " + anoTexto + "?"
+    )) return;
+
+    temporadasLocais.add(anoTexto);
   }
 
-  if (!confirm(
-    "Preparar a temporada " + ano + "?"
-  )) return;
-
-  // A temporada passa a existir no banco
-  // quando seu primeiro boi for cadastrado.
-  $("anoTemporada").add(
-    new Option(String(ano),String(ano))
-  );
-
-  $("anoTemporada").value = String(ano);
   $("novoAno").value = "";
-
-  mudarTemporada(String(ano));
-
   $("mensagemAno").textContent =
-    "Temporada selecionada. Cadastre o primeiro boi para salvá-la.";
+    "Temporada selecionada. Ela será registrada " +
+    "no Firebase quando o primeiro boi for salvo.";
+
+  mudarTemporada(anoTexto);
 };
 
-$("anoTemporada").onchange = () => {
-  mudarTemporada($("anoTemporada").value);
+$("anoTemporada").onchange = function() {
+  mudarTemporada(this.value);
 };
 
 function mudarTemporada(ano) {
   pararConsultas();
+
   temporada = ano;
   bois = [];
+
   cancelarEdicaoBoi();
   cancelarEdicaoAgenda();
+
   atualizarPeriodo();
+  atualizarOpcoesTemporadas();
+
   renderizarBois();
+  atualizarSelectBois();
   renderizarAgenda();
+
   iniciarConsultas();
 }
 
-/* CONSULTAS */
+/* CONSULTAS DO FIREBASE */
 
 function iniciarConsultas() {
-  if (!usuarioAtual || ouvindo) return;
+  if (!usuarioAtual || refBoisAtiva) return;
 
   const geracao = ++geracaoConsulta;
-  const anoConsultado = temporada;
 
-  const refAtual = boisRef.child(anoConsultado);
+  refBoisAtiva = boisRef.child(temporada);
 
-  refAtual.on("value",snapshot => {
-    if (geracao !== geracaoConsulta) return;
+  refBoisAtiva.on(
+    "value",
+    snapshot => {
+      if (geracao !== geracaoConsulta) return;
 
-    bois = [];
+      bois = [];
 
-    snapshot.forEach(item => {
-      const d = item.val();
+      snapshot.forEach(item => {
+        const d = item.val();
 
-      if (!d || !d.nome) return;
+        if (!d || !d.nome) return;
 
-      bois.push({
-        id:item.key,
-        nome:String(d.nome),
-        dono:String(d.dono || ""),
-        comunidade:String(d.comunidade || ""),
-        foto:String(d.foto || "")
+        bois.push({
+          id:item.key,
+          nome:String(d.nome),
+          dono:String(d.dono || ""),
+          comunidade:String(d.comunidade || "")
+        });
       });
-    });
 
-    bois.sort((a,b) =>
-      a.nome.localeCompare(b.nome,"pt-BR")
+      bois.sort((a,b) =>
+        a.nome.localeCompare(b.nome,"pt-BR")
+      );
+
+      renderizarBois();
+      atualizarSelectBois();
+    },
+    erro => {
+      console.error(erro);
+
+      $("listaBois").textContent =
+        "Erro ao consultar os bois. " +
+        "Confira as regras do Firebase.";
+    }
+  );
+
+  if (!ouvindoAgenda) {
+    agendasRef.on(
+      "value",
+      snapshot => {
+        apresentacoes = [];
+
+        snapshot.forEach(item => {
+          const d = item.val();
+
+          if (!d || !d.boi) return;
+
+          apresentacoes.push({
+            id:item.key,
+            boi:String(d.boi),
+            data:String(d.data || ""),
+            horario:String(d.horario || ""),
+            comunidade:String(d.comunidade || "")
+          });
+        });
+
+        apresentacoes.sort((a,b) =>
+          (a.data+a.horario)
+            .localeCompare(b.data+b.horario)
+        );
+
+        renderizarAgenda();
+      },
+      erro => {
+        console.error(erro);
+
+        $("listaAgenda").textContent =
+          "Erro ao consultar a agenda.";
+      }
     );
 
-    renderizarBois();
-    atualizarSelectBois();
-  },erro => {
-    console.error(erro);
-    $("listaBois").textContent =
-      "Erro ao consultar bois. Verifique as regras do Firebase.";
-  });
+    ouvindoAgenda = true;
+  }
 
-  agendasRef.on("value",snapshot => {
-    if (geracao !== geracaoConsulta) return;
-
-    apresentacoes = [];
-
-    snapshot.forEach(item => {
-      const d = item.val();
-
-      if (!d || !d.boi) return;
-
-      apresentacoes.push({
-        id:item.key,
-        boi:String(d.boi),
-        data:String(d.data || ""),
-        horario:String(d.horario || ""),
-        comunidade:String(d.comunidade || "")
-      });
-    });
-
-    apresentacoes.sort((a,b) =>
-      (a.data+a.horario)
-        .localeCompare(b.data+b.horario)
-    );
-
-    renderizarAgenda();
-  },erro => {
-    console.error(erro);
-    $("listaAgenda").textContent =
-      "Erro ao consultar agenda.";
-  });
-
-  ouvindo = true;
   atualizarPeriodo();
 }
 
 function pararConsultas() {
   ++geracaoConsulta;
 
-  if (!ouvindo) return;
+  if (refBoisAtiva) {
+    refBoisAtiva.off();
+    refBoisAtiva = null;
+  }
 
-  boisRef.child(temporada).off();
-  agendasRef.off("value");
-
-  ouvindo = false;
+  if (ouvindoAgenda) {
+    agendasRef.off();
+    ouvindoAgenda = false;
+  }
 }
 
-/* LISTAGEM DE BOIS */
+/* LISTA DOS BOIS */
 
 function renderizarBois() {
   const lista = $("listaBois");
+
   lista.replaceChildren();
 
   $("quantidadeBois").textContent =
-    bois.length + " bois cadastrados na temporada " +
+    bois.length +
+    " bois cadastrados na temporada " +
     temporada;
 
   if (!bois.length) {
@@ -741,15 +1032,6 @@ function renderizarBois() {
       "🏘️ Comunidade: " +
       (boi.comunidade || "Não informada");
 
-    card.append(titulo,dono,comunidade);
-
-    if (boi.foto) {
-      const foto = document.createElement("p");
-      foto.textContent =
-        "📷 Fotografia: " + boi.foto;
-      card.appendChild(foto);
-    }
-
     const botoes = document.createElement("div");
     botoes.className = "botoes";
 
@@ -763,10 +1045,19 @@ function renderizarBois() {
     excluir.onclick = () => excluirBoi(boi);
 
     botoes.append(editar,excluir);
-    card.appendChild(botoes);
+
+    card.append(
+      titulo,
+      dono,
+      comunidade,
+      botoes
+    );
+
     lista.appendChild(card);
   });
 }
+
+/* EDITAR BOI */
 
 function editarBoi(boi) {
   boiEmEdicao = boi.id;
@@ -774,7 +1065,6 @@ function editarBoi(boi) {
   $("nomeBoi").value = boi.nome;
   $("donoBoi").value = boi.dono;
   $("comunidadeBoi").value = boi.comunidade;
-  $("fotoBoi").value = boi.foto;
 
   $("tituloBoi").textContent =
     "Editar boi — " + temporada;
@@ -783,54 +1073,55 @@ function editarBoi(boi) {
     "Salvar alterações";
 
   $("cancelarBoi").classList.remove("oculto");
+
   $("mensagemBoi").textContent = "";
 
   mostrarAba("bois");
-  window.scrollTo({top:0,behavior:"smooth"});
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
 function cancelarEdicaoBoi(limpar=true) {
   boiEmEdicao = null;
+
   $("formBoi").reset();
 
   $("tituloBoi").textContent =
     "Cadastrar boi — " + temporada;
 
   $("salvarBoi").textContent = "Salvar boi";
+
   $("cancelarBoi").classList.add("oculto");
 
-  if (limpar) $("mensagemBoi").textContent = "";
+  if (limpar) {
+    $("mensagemBoi").textContent = "";
+  }
 }
 
 $("cancelarBoi").onclick = () =>
   cancelarEdicaoBoi();
 
-$("formBoi").onsubmit = async e => {
+/* SALVAR BOI */
+
+$("formBoi").onsubmit = async function(e) {
   e.preventDefault();
+
   if (!usuarioAtual) return;
 
+  const anoOperacao = temporada;
+
   const dados = {
-    nome: $("nomeBoi").value.trim(),
-  dono: $("donoBoi").value.trim(),
-  comunidade: $("comunidadeBoi").value.trim()
+    nome:$("nomeBoi").value.trim(),
+    dono:$("donoBoi").value.trim(),
+    comunidade:$("comunidadeBoi").value.trim()
   };
 
   if (!dados.nome || !dados.dono) {
     $("mensagemBoi").textContent =
       "Informe o nome do boi e do proprietário.";
-    return;
-  }
-
-  if (dados.foto &&
-      !dados.foto.startsWith("https://") &&
-      (
-        dados.foto.startsWith("/") ||
-        dados.foto.startsWith("//") ||
-        dados.foto.includes("..") ||
-        /^[a-z]+:/i.test(dados.foto)
-      )) {
-    $("mensagemBoi").textContent =
-      "Informe uma imagem HTTPS ou um caminho relativo válido.";
     return;
   }
 
@@ -841,7 +1132,8 @@ $("formBoi").onsubmit = async e => {
 
   if (repetido) {
     $("mensagemBoi").textContent =
-      "Já existe um boi com esse nome nesta temporada.";
+      "Já existe um boi com esse nome " +
+      "nesta temporada.";
     return;
   }
 
@@ -849,7 +1141,8 @@ $("formBoi").onsubmit = async e => {
   $("mensagemBoi").textContent = "Salvando...";
 
   try {
-    const ref = boisRef.child(temporada);
+    const ref = boisRef.child(anoOperacao);
+
     const antigo = bois.find(
       b => b.id === boiEmEdicao
     );
@@ -860,15 +1153,15 @@ $("formBoi").onsubmit = async e => {
       await ref.push(dados);
     }
 
-    // Atualiza a referência nas apresentações
-    // da mesma temporada, quando o nome muda.
     if (antigo && antigo.nome !== dados.nome) {
       const atualizacoes = {};
 
       apresentacoes.forEach(a => {
-        if (normalizar(a.boi) ===
-            normalizar(antigo.nome) &&
-            dataNaTemporada(a.data,temporada)) {
+        if (
+          normalizar(a.boi) ===
+          normalizar(antigo.nome) &&
+          dataNaTemporada(a.data,anoOperacao)
+        ) {
           atualizacoes[a.id+"/boi"] = dados.nome;
         }
       });
@@ -879,6 +1172,7 @@ $("formBoi").onsubmit = async e => {
     }
 
     cancelarEdicaoBoi(false);
+
     $("mensagemBoi").textContent =
       "Boi salvo com sucesso!";
 
@@ -886,12 +1180,16 @@ $("formBoi").onsubmit = async e => {
 
   } catch(erro) {
     console.error(erro);
+
     $("mensagemBoi").textContent =
-      "Erro ao salvar. Confira as regras do Firebase.";
+      "Erro ao salvar. " +
+      "Confira as regras do Firebase.";
   } finally {
     $("salvarBoi").disabled = false;
   }
 };
+
+/* EXCLUIR BOI */
 
 async function excluirBoi(boi) {
   if (!usuarioAtual) return;
@@ -903,8 +1201,9 @@ async function excluirBoi(boi) {
 
   if (possuiAgenda) {
     alert(
-      "Este boi possui apresentações na temporada. " +
-      "Exclua ou altere essas apresentações primeiro."
+      "Este boi possui apresentações " +
+      "na temporada. Exclua ou altere " +
+      "essas apresentações primeiro."
     );
     return;
   }
@@ -920,37 +1219,41 @@ async function excluirBoi(boi) {
 
     $("mensagemBoi").textContent =
       "Boi excluído da temporada.";
+
   } catch(erro) {
     console.error(erro);
+
     $("mensagemBoi").textContent =
-      "Erro ao excluir.";
+      "Erro ao excluir o cadastro.";
   }
 }
 
-/* AGENDA */
-
-function dataNaTemporada(data,ano) {
-  const periodo = periodoTemporada(ano);
-  return data >= periodo.inicio &&
-         data <= periodo.fim;
-}
+/* SELEÇÃO DE BOIS NA AGENDA */
 
 function atualizarSelectBois() {
   const select = $("boiApresentacao");
   const anterior = select.value;
 
   select.replaceChildren();
-  select.add(new Option("Escolha um boi",""));
+
+  select.add(
+    new Option("Escolha um boi","")
+  );
 
   bois.forEach(boi => {
-    select.add(new Option(boi.nome,boi.nome));
+    select.add(
+      new Option(boi.nome,boi.nome)
+    );
   });
 
   select.value = anterior;
 }
 
+/* LISTAGEM DA AGENDA */
+
 function renderizarAgenda() {
   const lista = $("listaAgenda");
+
   lista.replaceChildren();
 
   const filtradas = apresentacoes.filter(a =>
@@ -959,8 +1262,8 @@ function renderizarAgenda() {
 
   if (!filtradas.length) {
     lista.textContent =
-      "Nenhuma apresentação cadastrada na temporada " +
-      temporada + ".";
+      "Nenhuma apresentação cadastrada " +
+      "na temporada " + temporada + ".";
     return;
   }
 
@@ -972,6 +1275,7 @@ function renderizarAgenda() {
     titulo.textContent = "🐂 " + a.boi;
 
     const info = document.createElement("p");
+
     info.textContent =
       "📅 " + formatarData(a.data) +
       " | 🕒 " + a.horario +
@@ -990,20 +1294,28 @@ function renderizarAgenda() {
     excluir.onclick = () => excluirAgenda(a);
 
     botoes.append(editar,excluir);
+
     card.append(titulo,info,botoes);
+
     lista.appendChild(card);
   });
 }
 
-$("formAgenda").onsubmit = async e => {
+/* SALVAR APRESENTAÇÃO */
+
+$("formAgenda").onsubmit = async function(e) {
   e.preventDefault();
+
   if (!usuarioAtual) return;
+
+  const anoOperacao = temporada;
 
   const dados = {
     boi:$("boiApresentacao").value,
     data:$("dataApresentacao").value,
     horario:$("horaApresentacao").value,
-    comunidade:$("comunidadeApresentacao").value.trim()
+    comunidade:
+      $("comunidadeApresentacao").value.trim()
   };
 
   if (Object.values(dados).some(v => !v)) {
@@ -1012,16 +1324,17 @@ $("formAgenda").onsubmit = async e => {
     return;
   }
 
-  if (!dataNaTemporada(dados.data,temporada)) {
+  if (!dataNaTemporada(dados.data,anoOperacao)) {
     $("mensagemAgenda").textContent =
       "A data deve estar dentro da temporada " +
-      temporada + ".";
+      anoOperacao + ".";
     return;
   }
 
   if (!bois.some(b => b.nome === dados.boi)) {
     $("mensagemAgenda").textContent =
-      "Selecione um boi cadastrado nesta temporada.";
+      "Selecione um boi cadastrado " +
+      "nesta temporada.";
     return;
   }
 
@@ -1036,11 +1349,13 @@ $("formAgenda").onsubmit = async e => {
     }
 
     cancelarEdicaoAgenda(false);
+
     $("mensagemAgenda").textContent =
       "Apresentação salva com sucesso!";
 
   } catch(erro) {
     console.error(erro);
+
     $("mensagemAgenda").textContent =
       "Erro ao salvar apresentação.";
   } finally {
@@ -1048,13 +1363,17 @@ $("formAgenda").onsubmit = async e => {
   }
 };
 
+/* EDITAR APRESENTAÇÃO */
+
 function editarAgenda(a) {
   agendaEmEdicao = a.id;
 
   $("boiApresentacao").value = a.boi;
   $("dataApresentacao").value = a.data;
   $("horaApresentacao").value = a.horario;
-  $("comunidadeApresentacao").value = a.comunidade;
+
+  $("comunidadeApresentacao").value =
+    a.comunidade;
 
   $("tituloAgenda").textContent =
     "Editar apresentação";
@@ -1065,8 +1384,14 @@ function editarAgenda(a) {
   $("cancelarAgenda").classList.remove("oculto");
 
   mostrarAba("agenda");
-  window.scrollTo({top:0,behavior:"smooth"});
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
+
+/* EXCLUIR APRESENTAÇÃO */
 
 async function excluirAgenda(a) {
   if (!usuarioAtual) return;
@@ -1083,13 +1408,17 @@ async function excluirAgenda(a) {
 
   } catch(erro) {
     console.error(erro);
+
     $("mensagemAgenda").textContent =
       "Erro ao excluir apresentação.";
   }
 }
 
+/* CANCELAR EDIÇÃO DA AGENDA */
+
 function cancelarEdicaoAgenda(limpar=true) {
   agendaEmEdicao = null;
+
   $("formAgenda").reset();
 
   $("tituloAgenda").textContent =
@@ -1100,13 +1429,15 @@ function cancelarEdicaoAgenda(limpar=true) {
 
   $("cancelarAgenda").classList.add("oculto");
 
-  if (limpar) $("mensagemAgenda").textContent = "";
+  if (limpar) {
+    $("mensagemAgenda").textContent = "";
+  }
 }
 
 $("cancelarAgenda").onclick = () =>
   cancelarEdicaoAgenda();
 
-/* INICIAR E ENCERRAR */
+/* INICIALIZAÇÃO */
 
 atualizarPeriodo();
 
@@ -1115,5 +1446,6 @@ window.addEventListener("beforeunload",() => {
 });
 
 </script>
+
 </body>
 </html>
