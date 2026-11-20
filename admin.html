@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -295,11 +294,19 @@ footer {
                  placeholder="Nome do dono ou responsável"
                  required>
 
+          <!-- ALTERADO: BAIRRO / LOCALIDADE -->
+
           <label for="comunidadeBoi">
-            Comunidade ou localidade
+            Bairro / Localidade
           </label>
           <input id="comunidadeBoi" maxlength="150"
-                 placeholder="Ex.: Centro, comunidade rural">
+                 placeholder="Ex.: Planalto São Raimundo, Centro ou localidade rural">
+
+          <div class="aviso">
+            Informe o bairro ou a localidade de origem
+            do boi. Essa informação será utilizada
+            também no Mapa dos Bois de Boa Hora–PI.
+          </div>
 
           <button id="salvarBoi" type="submit"
                   class="botao-grande">
@@ -361,11 +368,15 @@ footer {
             </div>
           </div>
 
+          <!-- ALTERADO: LOCAL DA APRESENTAÇÃO -->
+
           <label for="comunidadeApresentacao">
-            Comunidade ou local da apresentação
+            Bairro / Local da apresentação
           </label>
           <input id="comunidadeApresentacao"
-                 maxlength="150" required>
+                 maxlength="150"
+                 placeholder="Informe onde acontecerá a apresentação"
+                 required>
 
           <button id="salvarAgenda" type="submit"
                   class="botao-grande">
@@ -476,6 +487,7 @@ footer {
     <a href="./inicio.html">🏠 Início</a>
     <a href="./bois.html">🐂 Conheça os Bois</a>
     <a href="./agenda.html">📅 Agenda Pública</a>
+    <a href="./mapa.html">🗺️ Mapa dos Bois</a>
     <a href="./memoria.html">🕊️ Memorial</a>
   </div>
 
@@ -907,8 +919,10 @@ function renderizarBois() {
       "👤 Proprietário: "+boi.dono;
 
     const comunidade = document.createElement("p");
+
+    // ALTERADO: TEXTO EXIBIDO AO VISITANTE
     comunidade.textContent =
-      "🏘️ Comunidade: "+
+      "🏘️ Bairro / Localidade: "+
       (boi.comunidade || "Não informada");
 
     const botoes = document.createElement("div");
@@ -977,6 +991,8 @@ $("formBoi").onsubmit = async function(e) {
   const dados = {
     nome:$("nomeBoi").value.trim(),
     dono:$("donoBoi").value.trim(),
+
+    // MANTIDO PARA COMPATIBILIDADE COM FIREBASE
     comunidade:$("comunidadeBoi").value.trim()
   };
 
@@ -1158,6 +1174,8 @@ $("formAgenda").onsubmit = async function(e) {
     boi:$("boiApresentacao").value,
     data:$("dataApresentacao").value,
     horario:$("horaApresentacao").value,
+
+    // CAMPO FIREBASE PRESERVADO
     comunidade:
       $("comunidadeApresentacao").value.trim()
   };
@@ -1268,9 +1286,7 @@ function cancelarEdicaoAgenda(limpar=true) {
 $("cancelarAgenda").onclick = () =>
   cancelarEdicaoAgenda();
 
-/* ===================================== */
-/* HOMENAGENS - NOVA FUNCIONALIDADE       */
-/* ===================================== */
+/* HOMENAGENS */
 
 function iniciarHomenagens() {
   if (!usuarioAtual || ouvindoHomenagens) return;
