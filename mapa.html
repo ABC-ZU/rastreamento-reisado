@@ -3,230 +3,252 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reisado Digital de Boa Hora - Mapa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#850c29">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<title>Mapa dos Bois | Reisado Digital 2.0</title>
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
-* { box-sizing: border-box; }
+:root {
+  --vinho:#850c29;
+  --escuro:#50091c;
+  --ouro:#e9ba4e;
+  --fundo:#f8f7f5;
+  --texto:#29252a;
+}
 
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  font-family: Arial, sans-serif;
+* {
+  box-sizing:border-box;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  background: #f2f5fa;
+  margin:0;
+  background:var(--fundo);
+  color:var(--texto);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
 header {
-  flex-shrink: 0;
-  background: linear-gradient(135deg, #073c80, #1765af);
-  color: white;
-  text-align: center;
-  padding: 12px;
-  border-bottom: 5px solid #c52931;
-}
-
-header img {
-  width: 85px;
-  height: 85px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto 7px;
+  background:linear-gradient(120deg,var(--vinho),var(--escuro));
+  color:white;
+  text-align:center;
+  padding:20px 15px;
+  border-bottom:5px solid var(--ouro);
 }
 
 header h1 {
-  margin: 0 0 6px;
-  font-size: 25px;
+  font-size:27px;
+  margin:5px 0;
 }
 
 header p {
-  margin: 0;
-  font-size: 14px;
+  margin:8px 0;
+  color:#f9e7eb;
+}
+
+.voltar {
+  display:inline-block;
+  margin-top:10px;
+  padding:9px 15px;
+  border-radius:8px;
+  background:var(--ouro);
+  color:var(--escuro);
+  font-weight:bold;
+  text-decoration:none;
+}
+
+.conteudo {
+  max-width:1200px;
+  margin:0 auto;
+  padding:20px 15px 35px;
+}
+
+.introducao {
+  background:white;
+  border-left:5px solid var(--ouro);
+  padding:17px;
+  border-radius:10px;
+  margin-bottom:15px;
+  line-height:1.6;
+}
+
+.controles {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.controles label {
+  font-weight:bold;
+  color:var(--vinho);
+}
+
+.controles select {
+  padding:11px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  background:white;
+  font-size:15px;
 }
 
 #mapa {
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  z-index: 1;
+  width:100%;
+  height:530px;
+  border-radius:13px;
+  border:3px solid var(--ouro);
+  z-index:1;
+}
+
+.status {
+  background:white;
+  border:1px solid #eee;
+  border-radius:9px;
+  padding:13px 15px;
+  margin-top:12px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.pendentes {
+  background:white;
+  border-radius:12px;
+  padding:20px;
+  margin-top:20px;
+  border-top:4px solid var(--ouro);
+}
+
+.pendentes h2 {
+  margin-top:0;
+  color:var(--vinho);
+  font-size:20px;
+}
+
+.pendentes p {
+  color:#625d61;
+  line-height:1.6;
+}
+
+.lista-pendentes {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:12px;
+}
+
+.item-pendente {
+  background:#fbf7f2;
+  border:1px solid #eadfcd;
+  border-radius:9px;
+  padding:13px;
+  line-height:1.6;
+}
+
+.item-pendente strong {
+  color:var(--vinho);
 }
 
 .marcador-boi {
-  background: transparent;
-  border: none;
+  background:transparent;
+  border:none;
 }
 
 .icone-boi {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  background: white;
-  border: 4px solid #d4a000;
-  border-radius: 50%;
-  box-shadow: 0 3px 10px #0005;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
+  width:52px;
+  height:52px;
+  border:4px solid var(--ouro);
+  background:white;
+  border-radius:50%;
+  box-shadow:0 3px 10px #0005;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .icone-boi img {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  background: white;
-  border-radius: 50%;
-}
-
-.icone-boi.gps-antigo {
-  border-color: #d62828;
-}
-
-.icone-boi.gps-ativo {
-  border-color: #00a651;
-  box-shadow: 0 0 0 2px #00a65133, 0 3px 10px #0005;
-}
-
-.icone-boi.gps-ativo::before,
-.icone-boi.gps-ativo::after {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border: 3px solid #00c853;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: ondaGPS 2.4s ease-out infinite;
-}
-
-.icone-boi.gps-ativo::after {
-  animation-delay: 1.2s;
-}
-
-@keyframes ondaGPS {
-  0% {
-    transform: scale(1);
-    opacity: .9;
-  }
-  100% {
-    transform: scale(2.1);
-    opacity: 0;
-  }
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:50%;
 }
 
 .grupo-bois {
-  background: #104b9138;
-  border-radius: 50%;
+  background:#850c2933;
+  border-radius:50%;
 }
 
 .grupo-bois div {
-  width: 46px;
-  height: 46px;
-  margin: 5px;
-  border-radius: 50%;
-  background: #104b91;
-  border: 3px solid white;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-  font-weight: bold;
-  box-shadow: 0 3px 10px #0005;
-}
-
-.nome-boi {
-  background: white;
-  color: #173b66;
-  border: 1px solid #aaa;
-  border-radius: 7px;
-  padding: 4px 7px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.leaflet-popup-content {
-  font-family: Arial, sans-serif;
-  min-width: 205px;
-  line-height: 1.5;
+  width:46px;
+  height:46px;
+  margin:5px;
+  border-radius:50%;
+  background:var(--vinho);
+  border:3px solid white;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:19px;
 }
 
 .popup-titulo {
-  font-size: 19px;
-  color: #104b91;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size:18px;
+  font-weight:bold;
+  color:var(--vinho);
+  margin-bottom:8px;
 }
 
 .popup-info {
-  font-size: 14px;
-  margin: 7px 0;
+  font-size:14px;
+  line-height:1.7;
 }
 
-.popup-status {
-  padding: 9px;
-  border-radius: 7px;
-  background: #f1f4f8;
-  margin: 10px 0;
-  font-size: 13px;
+.popup-aviso {
+  margin-top:10px;
+  padding:8px;
+  background:#fff6e5;
+  border-radius:6px;
+  font-size:12px;
 }
 
-.popup-rota {
-  display: block;
-  text-align: center;
-  background: #198754;
-  color: white !important;
-  text-decoration: none;
-  padding: 11px;
-  border-radius: 8px;
-  font-weight: bold;
-  margin-top: 10px;
+footer {
+  background:var(--escuro);
+  border-top:4px solid var(--ouro);
+  color:white;
+  padding:20px;
+  text-align:center;
+  line-height:1.7;
 }
 
-.aviso-mapa {
-  position: absolute;
-  bottom: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 900;
-  background: white;
-  padding: 9px 12px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px #0003;
-  font-size: 12px;
-  text-align: center;
-  max-width: 90%;
-  pointer-events: none;
-}
+@media(max-width:600px) {
+  header h1 {
+    font-size:22px;
+  }
 
-@media (max-width: 600px) {
-  header { padding: 9px; }
-  header img { width: 65px; height: 65px; }
-  header h1 { font-size: 20px; }
-  header p { font-size: 12px; }
-  .aviso-mapa { bottom: 10px; font-size: 11px; }
-}
+  #mapa {
+    height:430px;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .icone-boi.gps-ativo::before,
-  .icone-boi.gps-ativo::after {
-    animation: none;
-    opacity: .4;
+  .conteudo {
+    padding:12px 10px 25px;
   }
 }
 </style>
@@ -235,500 +257,659 @@ header p {
 <body>
 
 <header>
-  <img src="./ícone-boi-reisado-logo.png"
-       alt="Logomarca do Reisado de Boa Hora">
-  <h1>🐂 Reisado Digital de Boa Hora</h1>
-  <p>📍 Encontre seu boi favorito em tempo real</p>
+  <h1>🐂 Mapa dos Bois de Boa Hora–PI</h1>
+  <p>Reisado Digital 2.0</p>
+  <p>Conheça os bois e suas comunidades de origem</p>
+
+  <a class="voltar" href="./inicio.html">
+    🏠 Voltar ao início
+  </a>
 </header>
 
-<div id="mapa"></div>
+<main class="conteudo">
 
-<div class="aviso-mapa" id="aviso">
-  Carregando bois cadastrados...
-</div>
+  <section class="introducao">
+    <strong>Mapa Cultural dos Bois</strong>
+    <p>
+      Explore a distribuição dos bois do Reisado
+      pelos bairros e localidades de Boa Hora–PI.
+      Clique nos ícones para conhecer o boi,
+      seu responsável e sua comunidade.
+    </p>
+    <small>
+      Este mapa apresenta comunidades de origem.
+      Não mostra a localização atual dos bois
+      e não utiliza rastreamento GPS.
+    </small>
+  </section>
+
+  <div class="controles">
+    <label for="ano">Temporada:</label>
+    <select id="ano"></select>
+  </div>
+
+  <div id="mapa" aria-label="Mapa cultural dos bois"></div>
+
+  <div id="status" class="status">
+    Carregando os bois cadastrados...
+  </div>
+
+  <section class="pendentes">
+    <h2>📍 Comunidades ainda não localizadas</h2>
+    <p>
+      Alguns bairros e comunidades podem não estar
+      identificados no OpenStreetMap.
+      Os bois dessas localidades continuam
+      relacionados abaixo, até que possamos
+      confirmar sua posição geográfica.
+    </p>
+    <div id="listaPendentes" class="lista-pendentes">
+      Aguardando os cadastros...
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>Reisado Digital 2.0</strong>
+  <div>Boa Hora – Piauí</div>
+  <div>Preservando nossa cultura e tradição.</div>
+</footer>
 
 <script>
+"use strict";
 
-// ======================================
-// FIREBASE
-// ======================================
+/* FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-  authDomain: "rastreamento-reisado.firebaseapp.com",
-  databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
-  projectId: "rastreamento-reisado",
-  storageBucket: "rastreamento-reisado.firebasestorage.app",
-  messagingSenderId: "796420970266",
-  appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+  apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain:"rastreamento-reisado.firebaseapp.com",
+  databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId:"rastreamento-reisado",
+  storageBucket:"rastreamento-reisado.firebasestorage.app",
+  messagingSenderId:"796420970266",
+  appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 
-// ======================================
-// MAPA
-// ======================================
+const $ = id => document.getElementById(id);
 
-const mapa = L.map("mapa").setView(
-  [-4.3074, -42.0363],
-  14
-);
+/*
+  COORDENADAS CONFIRMADAS
+
+  Quando uma comunidade não for encontrada,
+  podemos acrescentar sua posição aqui.
+
+  Exemplo de formato:
+  "nome da comunidade": [latitude, longitude]
+
+  Não preencha com coordenadas aproximadas
+  ou inventadas.
+*/
+
+const comunidadesConfirmadas = {};
+
+/*
+  Centro inicial do mapa, aproveitado
+  do arquivo antigo.
+
+  Este ponto serve apenas para iniciar
+  a visualização de Boa Hora.
+  Não é a localização de nenhum boi.
+*/
+
+const CENTRO_INICIAL = [-4.3074,-42.0363];
+
+const mapa = L.map("mapa",{
+  scrollWheelZoom:false
+}).setView(CENTRO_INICIAL,13);
 
 L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap"
+    maxZoom:19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }
 ).addTo(mapa);
 
-// ======================================
-// AGRUPAMENTO
-// ======================================
+/* AGRUPAMENTO */
 
 const grupoMarcadores = L.markerClusterGroup({
-  showCoverageOnHover: false,
-  zoomToBoundsOnClick: true,
-  spiderfyOnMaxZoom: true,
-  removeOutsideVisibleBounds: false,
-  animate: true,
-  maxClusterRadius: 85,
-  spiderfyDistanceMultiplier: 2.2,
+  showCoverageOnHover:false,
+  zoomToBoundsOnClick:true,
+  spiderfyOnMaxZoom:true,
+  spiderfyDistanceMultiplier:2.5,
+  maxClusterRadius:65,
 
-  iconCreateFunction: function(cluster) {
+  iconCreateFunction:function(cluster) {
     return L.divIcon({
-      html: "<div>" + cluster.getChildCount() + "</div>",
-      className: "grupo-bois",
-      iconSize: [56, 56],
-      iconAnchor: [28, 28]
+      html:"<div>"+cluster.getChildCount()+"</div>",
+      className:"grupo-bois",
+      iconSize:[56,56],
+      iconAnchor:[28,28]
     });
   }
 });
 
 mapa.addLayer(grupoMarcadores);
 
-// ======================================
-// POSIÇÕES DE DEMONSTRAÇÃO
-// NÃO SÃO COORDENADAS REAIS
-// ======================================
+/* VARIÁVEIS */
 
-const posicoesDemo = {
-  "boi caridade": [-4.3035, -42.0340],
-  "boi ramalhete": [-4.3050, -42.0390],
-  "boi soberano": [-4.3080, -42.0320],
-  "boi mimoso": [-4.3105, -42.0370],
-  "boi luar": [-4.3065, -42.0430],
-  "boi bugarim": [-4.3120, -42.0410],
-  "boi encantado": [-4.3010, -42.0370],
-  "boi flor do sertão": [-4.3140, -42.0340],
-  "boi diamante": [-4.3090, -42.0460],
-  "boi esperança": [-4.3000, -42.0430]
-};
+let boisPorAno = {};
+let versaoConsulta = 0;
 
-// ======================================
-// DADOS DO SISTEMA
-// ======================================
+const cacheLocalidades = new Map();
 
-let cadastros = [];
-let localizacoes = {};
-let cadastrosCarregados = false;
-let gpsCarregado = false;
-
-const marcadores = new Map();
-
-// ======================================
-// FUNÇÕES AUXILIARES
-// ======================================
+/* FUNÇÕES AUXILIARES */
 
 function normalizar(texto) {
   return String(texto || "")
-    .trim()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+    .replace(/[\u0300-\u036f]/g,"")
+    .toLowerCase()
+    .replace(/\s+/g," ")
+    .trim();
 }
 
 function escapar(texto) {
   return String(texto ?? "").replace(
     /[&<>"']/g,
     c => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
     }[c])
   );
 }
 
-function coordenadasValidas(dados) {
-  if (!dados ||
-      dados.latitude == null ||
-      dados.longitude == null) {
-    return false;
-  }
-
-  const lat = Number(dados.latitude);
-  const lng = Number(dados.longitude);
-
-  return Number.isFinite(lat) &&
-         Number.isFinite(lng) &&
-         Math.abs(lat) <= 90 &&
-         Math.abs(lng) <= 180;
+function esperar(ms) {
+  return new Promise(resolve => setTimeout(resolve,ms));
 }
 
-function tempoAtualizacao(dados) {
-  const valor = Number(dados?.atualizadoEm);
-
-  if (!Number.isFinite(valor) || valor <= 0) {
-    return null;
-  }
-
-  return valor < 1e11 ? valor * 1000 : valor;
+function coordenadasValidas(valor) {
+  return Array.isArray(valor) &&
+    valor.length === 2 &&
+    Number.isFinite(Number(valor[0])) &&
+    Number.isFinite(Number(valor[1])) &&
+    Math.abs(Number(valor[0])) <= 90 &&
+    Math.abs(Number(valor[1])) <= 180;
 }
 
-function gpsRecente(dados) {
-  const tempo = tempoAtualizacao(dados);
+/* ÍCONE ORIGINAL */
 
-  if (!tempo) return false;
-
-  const diferenca = Date.now() - tempo;
-
-  return diferenca >= 0 && diferenca <= 120000;
-}
-
-function formatarHorario(dados) {
-  const tempo = tempoAtualizacao(dados);
-
-  return tempo
-    ? new Date(tempo).toLocaleString("pt-BR")
-    : "Não informado";
-}
-
-// ======================================
-// IDENTIFICAR BOI ESTRELA
-// ======================================
-
-function ehBoiEstrela(boi) {
-  return normalizar(boi.nomeOriginal) === "boi estrela" ||
-         normalizar(boi.nome) === "boi estrela";
-}
-
-// ======================================
-// LOCALIZAÇÃO DE CADA BOI
-// ======================================
-
-function localizarBoi(boi) {
-
-  // Primeiro procura o GPS pelo ID
-  // do cadastro no Firebase.
-  const ids = [boi.id];
-
-  // Preserva a transmissão antiga
-  // que já funciona no Boi Estrela.
-  if (ehBoiEstrela(boi)) {
-    ids.push("boi-estrela");
-  }
-
-  for (const id of ids) {
-    const dados = localizacoes[id];
-
-    if (coordenadasValidas(dados)) {
-      return {
-        latitude: Number(dados.latitude),
-        longitude: Number(dados.longitude),
-        real: true,
-        dados
-      };
-    }
-  }
-
-  // Se ainda não existe GPS, usa
-  // posição de demonstração conhecida.
-  const nomeReferencia =
-    normalizar(boi.nomeOriginal || boi.nome);
-
-  const demo = posicoesDemo[nomeReferencia];
-
-  if (demo) {
-    return {
-      latitude: demo[0],
-      longitude: demo[1],
-      real: false,
-      dados: null
-    };
-  }
-
-  // Não inventa coordenadas para
-  // cadastros sem GPS ou posição demo.
-  return null;
-}
-
-// ======================================
-// ÍCONE DO BOI
-// ======================================
-
-function iconeBoi(posicao) {
-  const classe = !posicao.real
-    ? ""
-    : gpsRecente(posicao.dados)
-      ? "gps-ativo"
-      : "gps-antigo";
-
+function iconeBoi() {
   return L.divIcon({
-    className: "marcador-boi",
+    className:"marcador-boi",
     html:
-      '<div class="icone-boi ' + classe + '">' +
-      '<img src="./icone-boi-reisado.png" alt="Boi">' +
+      '<div class="icone-boi">'+
+      '<img src="./icone-boi-reisado.png" alt="">'+
       '</div>',
-    iconSize: [52, 52],
-    iconAnchor: [26, 26],
-    popupAnchor: [0, -25]
+    iconSize:[52,52],
+    iconAnchor:[26,26],
+    popupAnchor:[0,-26]
   });
 }
 
-// ======================================
-// INFORMAÇÕES DO BOI
-// ======================================
+/* IDENTIFICAR COMUNIDADE */
 
-function conteudoPopup(boi, posicao) {
-  let html =
-    '<div class="popup-titulo">🐂 ' +
-    escapar(boi.nome) +
-    '</div>' +
-    '<div class="popup-info">' +
-    '👤 Responsável: <b>' +
-    escapar(boi.dono || "A definir") +
-    '</b></div>';
-
-  if (!posicao.real) {
-    return html +
-      '<div class="popup-status">' +
-      '🟡 Localização de demonstração.' +
-      '<br>Este boi ainda não está transmitindo GPS.' +
-      '</div>';
-  }
-
-  const recente = gpsRecente(posicao.dados);
-
-  html +=
-    '<div class="popup-status">' +
-    (recente
-      ? '🟢 GPS atualizado - localização recente.'
-      : '🔴 GPS desatualizado - última posição conhecida.') +
-    '</div>';
-
-  html +=
-    '<div class="popup-info">' +
-    '🕒 Atualizado em: ' +
-    escapar(formatarHorario(posicao.dados)) +
-    '</div>';
-
-  const precisao =
-    posicao.dados.precisao ??
-    posicao.dados.accuracy;
-
-  if (precisao != null &&
-      Number.isFinite(Number(precisao)) &&
-      Number(precisao) > 0) {
-
-    html +=
-      '<div class="popup-info">' +
-      '🎯 Precisão: ' +
-      Math.round(Number(precisao)) +
-      ' metros</div>';
-  }
-
-  if (recente) {
-    const destino =
-      posicao.latitude + "," +
-      posicao.longitude;
-
-    const url =
-      "https://www.google.com/maps/dir/?api=1" +
-      "&destination=" +
-      encodeURIComponent(destino);
-
-    html +=
-      '<a class="popup-rota" ' +
-      'href="' + url + '" ' +
-      'target="_blank" ' +
-      'rel="noopener noreferrer">' +
-      '🧭 Como chegar ao boi' +
-      '</a>';
-  }
-
-  return html;
+function obterComunidades(texto) {
+  return String(texto || "")
+    .split(/[,;]|\s+e\s+/i)
+    .map(nome => nome.trim())
+    .filter(Boolean);
 }
 
-// ======================================
-// ATUALIZAR O MAPA
-// ======================================
+/*
+  GEOCODIFICAÇÃO
 
-function atualizarMapa() {
+  Consulta o OpenStreetMap por intermédio
+  do serviço Nominatim.
 
-  // Não apaga marcadores enquanto
-  // os cadastros ainda carregam.
-  if (!cadastrosCarregados) return;
+  Só aceita resultados identificados
+  como pertencentes a Boa Hora–PI.
 
-  const idsValidos = new Set(
-    cadastros.map(boi => boi.id)
-  );
+  Se não houver correspondência confiável,
+  a comunidade fica pendente.
+*/
 
-  for (const [id, marcador] of marcadores) {
-    if (!idsValidos.has(id)) {
-      grupoMarcadores.removeLayer(marcador);
-      marcadores.delete(id);
-    }
+async function consultarLocalidade(nome) {
+
+  const chave = normalizar(nome);
+
+  if(cacheLocalidades.has(chave)) {
+    return cacheLocalidades.get(chave);
   }
 
-  let comPosicao = 0;
-  let gpsAtivos = 0;
+  if(coordenadasValidas(
+    comunidadesConfirmadas[chave]
+  )) {
+    const resultado = comunidadesConfirmadas[chave];
+    cacheLocalidades.set(chave,resultado);
+    return resultado;
+  }
 
-  cadastros.forEach(boi => {
-    const posicao = localizarBoi(boi);
-    let marcador = marcadores.get(boi.id);
+  const consulta =
+    nome+", Boa Hora, Piauí, Brasil";
 
-    if (!posicao) {
-      if (marcador) {
-        grupoMarcadores.removeLayer(marcador);
-        marcadores.delete(boi.id);
+  const url =
+    "https://nominatim.openstreetmap.org/search"+
+    "?format=json"+
+    "&limit=5"+
+    "&addressdetails=1"+
+    "&countrycodes=br"+
+    "&q="+encodeURIComponent(consulta);
+
+  try {
+
+    const resposta = await fetch(url,{
+      headers:{
+        "Accept":"application/json"
       }
-      return;
+    });
+
+    if(!resposta.ok) {
+      return null;
     }
 
-    comPosicao++;
+    const resultados = await resposta.json();
 
-    if (posicao.real && gpsRecente(posicao.dados)) {
-      gpsAtivos++;
+    const encontrado = resultados.find(item => {
+
+      const endereco = item.address || {};
+
+      const municipio = normalizar(
+        endereco.city ||
+        endereco.town ||
+        endereco.village ||
+        endereco.municipality ||
+        endereco.county ||
+        ""
+      );
+
+      const estado = normalizar(
+        endereco.state || ""
+      );
+
+      const local = normalizar(
+        item.display_name || ""
+      );
+
+      const nomeEncontrado = normalizar(
+        endereco.suburb ||
+        endereco.neighbourhood ||
+        endereco.hamlet ||
+        endereco.quarter ||
+        endereco.village ||
+        endereco.locality ||
+        item.name ||
+        ""
+      );
+
+      const correspondeComunidade =
+        nomeEncontrado === chave;
+
+      const correspondeMunicipio =
+        municipio === "boa hora" ||
+        (
+          local.includes("boa hora") &&
+          estado === "piaui"
+        );
+
+      return correspondeComunidade &&
+        correspondeMunicipio &&
+        estado === "piaui";
+
+    });
+
+    if(!encontrado) {
+      return null;
     }
 
     const coordenadas = [
-      posicao.latitude,
-      posicao.longitude
+      Number(encontrado.lat),
+      Number(encontrado.lon)
     ];
 
-    if (!marcador) {
-      marcador = L.marker(coordenadas, {
-        icon: iconeBoi(posicao),
-        title: boi.nome
-      });
-
-      marcador.bindPopup(
-        conteudoPopup(boi, posicao)
-      );
-
-      marcador.bindTooltip(boi.nome, {
-        permanent: false,
-        direction: "top",
-        className: "nome-boi"
-      });
-
-      grupoMarcadores.addLayer(marcador);
-      marcadores.set(boi.id, marcador);
-
-    } else {
-      marcador.setLatLng(coordenadas);
-      marcador.setIcon(iconeBoi(posicao));
-      marcador.setTooltipContent(boi.nome);
-      marcador.setPopupContent(
-        conteudoPopup(boi, posicao)
-      );
+    if(!coordenadasValidas(coordenadas)) {
+      return null;
     }
-  });
 
-  grupoMarcadores.refreshClusters();
+    cacheLocalidades.set(chave,coordenadas);
 
-  const aviso = document.getElementById("aviso");
+    return coordenadas;
 
-  if (!gpsCarregado) {
-    aviso.textContent = "Carregando localizações GPS...";
+  } catch(erro) {
+    console.warn(
+      "Não foi possível consultar:",
+      nome,erro
+    );
+    return null;
+  }
+}
+
+/* POPUP */
+
+function conteudoPopup(boi,comunidade,ano) {
+
+  return (
+    '<div class="popup-titulo">🐂 '+
+    escapar(boi.nome)+
+    '</div>'+
+
+    '<div class="popup-info">'+
+    '👤 <strong>Responsável:</strong> '+
+    escapar(boi.dono || "Não informado")+
+    '<br>'+
+
+    '📍 <strong>Comunidade:</strong> '+
+    escapar(comunidade)+
+    '<br>'+
+
+    '📅 <strong>Temporada:</strong> '+
+    escapar(ano)+
+    '</div>'+
+
+    '<div class="popup-aviso">'+
+    'Localização cultural da comunidade. '+
+    'Não representa a posição atual do boi.'+
+    '</div>'
+  );
+}
+
+/* PENDÊNCIAS */
+
+function mostrarPendentes(lista) {
+
+  const area = $("listaPendentes");
+  area.replaceChildren();
+
+  if(!lista.length) {
+    const p = document.createElement("p");
+    p.textContent =
+      "Todos os bois desta temporada possuem "+
+      "ao menos uma comunidade localizada.";
+    area.appendChild(p);
     return;
   }
 
-  const semPosicao = cadastros.length - comPosicao;
+  lista.forEach(item => {
 
-  aviso.textContent =
-    "🐂 " + cadastros.length + " cadastrados | " +
-    "🟢 " + gpsAtivos + " GPS recente(s)" +
-    (semPosicao > 0
-      ? " | ⚪ " + semPosicao + " sem posição"
-      : "") +
-    " | 🟡 Demais posições de demonstração ou GPS antigo";
+    const card = document.createElement("div");
+    card.className = "item-pendente";
+
+    const nome = document.createElement("strong");
+    nome.textContent = "🐂 "+item.nome;
+
+    const detalhe = document.createElement("div");
+    detalhe.textContent =
+      "Comunidade: "+item.comunidade;
+
+    card.appendChild(nome);
+    card.appendChild(detalhe);
+
+    area.appendChild(card);
+  });
 }
 
-// ======================================
-// CADASTROS DIRETO DO FIREBASE
-// ======================================
+/* DESENHAR MAPA */
 
-database.ref("cadastroBois").on(
-  "value",
+async function atualizarMapa() {
 
-  snapshot => {
-    const lista = [];
+  const versao = ++versaoConsulta;
+  const ano = $("ano").value;
 
-    snapshot.forEach(item => {
-      const dados = item.val();
+  grupoMarcadores.clearLayers();
 
-      if (!dados ||
-          typeof dados.nome !== "string" ||
-          !dados.nome.trim()) {
-        return;
+  mapa.setView(CENTRO_INICIAL,13);
+
+  const registros = Object.values(
+    boisPorAno[ano] || {}
+  ).filter(boi => boi && boi.nome);
+
+  if(!registros.length) {
+
+    $("status").textContent =
+      "Nenhum boi cadastrado na temporada "+ano+".";
+
+    mostrarPendentes([]);
+    return;
+  }
+
+  $("status").textContent =
+    "Consultando as comunidades dos "+
+    registros.length+" bois cadastrados...";
+
+  const pendentes = [];
+  const marcadoresCriados = [];
+
+  /*
+    Agrupa as comunidades para evitar
+    consultas repetidas ao mesmo lugar.
+  */
+
+  const comunidades = new Map();
+
+  registros.forEach(boi => {
+
+    const nomes = obterComunidades(
+      boi.comunidade
+    );
+
+    if(!nomes.length) {
+      pendentes.push({
+        nome:boi.nome,
+        comunidade:"Não informada"
+      });
+      return;
+    }
+
+    nomes.forEach(nome => {
+
+      const chave = normalizar(nome);
+
+      if(!comunidades.has(chave)) {
+        comunidades.set(chave,{
+          nome,
+          bois:[]
+        });
       }
 
-      lista.push({
-        id: item.key,
-        nome: dados.nome.trim(),
-        dono: String(dados.dono || "A definir"),
-        nomeOriginal: String(
-          dados.nomeOriginal || ""
-        ).trim()
+      comunidades.get(chave).bois.push(boi);
+
+    });
+  });
+
+  let primeiraConsulta = true;
+
+  for(const grupo of comunidades.values()) {
+
+    if(versao !== versaoConsulta) {
+      return;
+    }
+
+    const chave = normalizar(grupo.nome);
+
+    const possuiCoordenadas =
+      coordenadasValidas(
+        comunidadesConfirmadas[chave]
+      );
+
+    const estaNoCache =
+      cacheLocalidades.has(chave);
+
+    /*
+      Respeita intervalo entre chamadas
+      ao serviço público de geocodificação.
+    */
+
+    if(!possuiCoordenadas && !estaNoCache) {
+
+      if(!primeiraConsulta) {
+        await esperar(1200);
+      }
+
+      primeiraConsulta = false;
+    }
+
+    const coordenadas =
+      await consultarLocalidade(grupo.nome);
+
+    if(versao !== versaoConsulta) {
+      return;
+    }
+
+    if(!coordenadas) {
+
+      grupo.bois.forEach(boi => {
+        pendentes.push({
+          nome:boi.nome,
+          comunidade:grupo.nome
+        });
       });
+
+      continue;
+    }
+
+    grupo.bois.forEach(boi => {
+
+      const marcador = L.marker(
+        coordenadas,
+        {
+          icon:iconeBoi(),
+          title:boi.nome
+        }
+      );
+
+      marcador.bindPopup(
+        conteudoPopup(
+          boi,
+          grupo.nome,
+          ano
+        )
+      );
+
+      marcador.bindTooltip(
+        boi.nome,
+        {
+          direction:"top"
+        }
+      );
+
+      grupoMarcadores.addLayer(marcador);
+      marcadoresCriados.push(marcador);
+
     });
 
-    cadastros = lista;
-    cadastrosCarregados = true;
-
-    atualizarMapa();
-  },
-
-  erro => {
-    console.error("Erro ao ler cadastroBois:", erro);
-
-    document.getElementById("aviso").textContent =
-      "Não foi possível carregar os cadastros.";
   }
-);
 
-// ======================================
-// GPS EM TEMPO REAL
-// ======================================
+  if(versao !== versaoConsulta) {
+    return;
+  }
 
-database.ref("bois").on(
+  mostrarPendentes(pendentes);
+
+  if(marcadoresCriados.length) {
+
+    const limites =
+      grupoMarcadores.getBounds();
+
+    if(limites.isValid()) {
+      mapa.fitBounds(limites,{
+        padding:[35,35],
+        maxZoom:15
+      });
+    }
+
+  }
+
+  const totalLocalizados =
+    new Set(
+      marcadoresCriados.map(m =>
+        m.options.title
+      )
+    ).size;
+
+  $("status").textContent =
+    "🐂 "+registros.length+
+    " bois cadastrados | "+
+    "📍 "+totalLocalizados+
+    " bois com comunidade localizada | "+
+    "⚪ "+pendentes.length+
+    " associações de comunidade pendentes.";
+
+}
+
+/* TEMPORADAS */
+
+function preencherTemporadas() {
+
+  const anos = Object.keys(boisPorAno)
+    .filter(ano => /^\d{4}$/.test(ano))
+    .sort((a,b) => Number(b)-Number(a));
+
+  if(!anos.includes("2027")) {
+    anos.push("2027");
+    anos.sort((a,b) => Number(b)-Number(a));
+  }
+
+  const select = $("ano");
+  const anterior = select.value;
+
+  select.replaceChildren();
+
+  anos.forEach(ano => {
+
+    const opcao =
+      document.createElement("option");
+
+    opcao.value = ano;
+    opcao.textContent = ano;
+
+    select.appendChild(opcao);
+  });
+
+  select.value = anos.includes(anterior)
+    ? anterior
+    : "2027";
+}
+
+/* CARREGAR BOIS */
+
+database.ref("boisPorAno").on(
   "value",
 
   snapshot => {
-    localizacoes = snapshot.val() || {};
-    gpsCarregado = true;
 
+    boisPorAno = snapshot.val() || {};
+
+    preencherTemporadas();
     atualizarMapa();
+
   },
 
   erro => {
-    console.error("Erro ao ler GPS:", erro);
 
-    gpsCarregado = false;
+    console.error(
+      "Erro ao carregar bois:",erro
+    );
 
-    document.getElementById("aviso").textContent =
-      "GPS indisponível. Verifique a conexão.";
+    $("status").textContent =
+      "Não foi possível carregar os bois. "+
+      "Verifique a conexão e as permissões "+
+      "de leitura do Firebase.";
   }
 );
 
-// Verifica periodicamente se as
-// coordenadas ainda são recentes.
-setInterval(atualizarMapa, 30000);
+$("ano").addEventListener(
+  "change",
+  atualizarMapa
+);
 
 </script>
 </body>
