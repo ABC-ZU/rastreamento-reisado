@@ -18,29 +18,29 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
-:root{
+:root {
   --vinho:#850c29;
   --escuro:#50091c;
   --ouro:#e9ba4e;
   --fundo:#f8f7f5;
 }
-*{box-sizing:border-box}
-body{
+* { box-sizing:border-box; }
+body {
   margin:0;
   background:var(--fundo);
   color:#29252a;
   font-family:Arial,Helvetica,sans-serif;
 }
-header{
+header {
   background:linear-gradient(120deg,var(--vinho),var(--escuro));
   border-bottom:5px solid var(--ouro);
   color:white;
   padding:22px 15px;
   text-align:center;
 }
-header h1{font-size:27px;margin:0 0 8px}
-header p{margin:7px 0}
-.voltar{
+header h1 { font-size:27px;margin:0 0 8px; }
+header p { margin:7px 0; }
+.voltar {
   display:inline-block;
   margin-top:12px;
   background:var(--ouro);
@@ -50,35 +50,35 @@ header p{margin:7px 0}
   padding:10px 16px;
   border-radius:8px;
 }
-main{
+main {
   max-width:1200px;
   margin:auto;
   padding:20px 15px 35px;
 }
-.intro,.painel,.pendentes{
+.intro,.painel,.pendentes {
   background:white;
   border-radius:12px;
   padding:20px;
   margin-bottom:16px;
 }
-.intro{border-left:5px solid var(--ouro)}
-.intro p{line-height:1.6}
-.controles{
+.intro { border-left:5px solid var(--ouro); }
+.intro p { line-height:1.6; }
+.controles {
   display:flex;
   align-items:center;
   flex-wrap:wrap;
   gap:12px;
   margin:15px 0;
 }
-label{font-weight:bold;color:var(--vinho)}
-select,input{
+label { font-weight:bold;color:var(--vinho); }
+select,input {
   padding:11px;
   border:1px solid #ccc;
   border-radius:8px;
   font-size:15px;
   max-width:100%;
 }
-button{
+button {
   padding:11px 15px;
   border:0;
   border-radius:8px;
@@ -87,80 +87,79 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
-button.secundario{
+button:disabled { opacity:.5;cursor:not-allowed; }
+button.secundario {
   background:#ece5e7;
   color:var(--vinho);
 }
-button.ouro{
+button.ouro {
   background:var(--ouro);
   color:var(--escuro);
 }
-#mapa{
+#mapa {
   width:100%;
   height:530px;
   border:3px solid var(--ouro);
   border-radius:12px;
   z-index:1;
 }
-.status{
+.status {
   background:white;
   border-radius:9px;
   padding:14px;
   margin-top:12px;
-  line-height:1.6;
+  margin-bottom:16px;
+  line-height:1.8;
 }
-.painel{
-  border-top:4px solid var(--ouro);
-}
-.painel h2,.pendentes h2{
+.painel { border-top:4px solid var(--ouro); }
+.painel h2,.pendentes h2 {
   margin-top:0;
   color:var(--vinho);
 }
-.oculto{display:none!important}
-.formulario{
+.oculto { display:none!important; }
+.formulario {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:12px;
   margin:14px 0;
 }
-.campo{
+.campo {
   display:flex;
   flex-direction:column;
   gap:7px;
 }
-.campo input,.campo select{width:100%}
-.acoes{
+.campo input,.campo select { width:100%; }
+.acoes {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   margin-top:12px;
 }
-.mensagem{
+.mensagem {
   padding:12px;
   background:#fff6e5;
   border-radius:8px;
   line-height:1.6;
   margin-top:12px;
 }
-.lista{
+.lista {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:12px;
 }
-.cartao{
+.cartao {
   background:#fbf7f2;
   border:1px solid #eadfcd;
   padding:14px;
   border-radius:9px;
   line-height:1.7;
 }
-.cartao strong{color:var(--vinho)}
-.marcador-boi{
+.cartao strong { color:var(--vinho); }
+.marcador-boi {
   background:transparent;
   border:none;
 }
-.icone-boi{
+.icone-boi {
   width:52px;
   height:52px;
   border:4px solid var(--ouro);
@@ -171,17 +170,17 @@ button.ouro{
   align-items:center;
   justify-content:center;
 }
-.icone-boi img{
+.icone-boi img {
   width:100%;
   height:100%;
   object-fit:contain;
   border-radius:50%;
 }
-.grupo-bois{
+.grupo-bois {
   background:#850c2933;
   border-radius:50%;
 }
-.grupo-bois div{
+.grupo-bois div {
   width:46px;
   height:46px;
   margin:5px;
@@ -195,21 +194,26 @@ button.ouro{
   font-size:19px;
   font-weight:bold;
 }
-.popup-titulo{
+.popup-titulo {
   font-size:18px;
   font-weight:bold;
   color:var(--vinho);
   margin-bottom:8px;
 }
-.popup-info{line-height:1.7}
-.popup-aviso{
+.popup-info { line-height:1.7; }
+.popup-aviso {
   background:#fff6e5;
   padding:8px;
   border-radius:7px;
   font-size:12px;
   margin-top:10px;
 }
-footer{
+.pendente-aviso {
+  color:#815e22;
+  font-size:13px;
+  margin-top:8px;
+}
+footer {
   background:var(--escuro);
   color:white;
   border-top:4px solid var(--ouro);
@@ -217,10 +221,10 @@ footer{
   padding:22px;
   line-height:1.8;
 }
-@media(max-width:600px){
-  header h1{font-size:22px}
-  #mapa{height:430px}
-  main{padding:12px 10px 25px}
+@media(max-width:600px) {
+  header h1 { font-size:22px; }
+  #mapa { height:430px; }
+  main { padding:12px 10px 25px; }
 }
 </style>
 </head>
@@ -230,8 +234,10 @@ footer{
 <header>
   <h1>🐂 Mapa dos Bois de Boa Hora–PI</h1>
   <p>Reisado Digital 2.0</p>
-  <p>Os bois e suas comunidades de origem</p>
-  <a href="./inicio.html" class="voltar">🏠 Voltar ao início</a>
+  <p>Os bois e seus bairros e localidades de origem</p>
+  <a href="./inicio.html" class="voltar">
+    🏠 Voltar ao início
+  </a>
 </header>
 
 <main>
@@ -244,8 +250,8 @@ footer{
     Clique nos ícones para conhecer cada boi.
   </p>
   <small>
-    As marcações representam comunidades de origem,
-    não a posição atual dos bois.
+    As marcações representam os bairros e localidades
+    de origem dos bois, não suas posições atuais.
     Não existe rastreamento GPS nesta página.
   </small>
 </section>
@@ -254,91 +260,120 @@ footer{
   <label for="ano">Temporada:</label>
   <select id="ano"></select>
 
-  <button id="abrirAdmin" class="secundario">
-    🔐 Administrar localidades
+  <button id="abrirAdmin" type="button" class="secundario">
+    🔐 Administrar bairros / localidades
   </button>
 </div>
 
+<!-- ADMINISTRAÇÃO DO MAPA -->
+
 <section id="painelAdmin" class="painel oculto">
-  <h2>📍 Marcar localidades no mapa</h2>
+
+  <h2>📍 Marcar bairros / localidades no mapa</h2>
 
   <div id="areaLogin">
     <p>
-      Entre com a conta de administrador
+      Entre com a mesma conta de administrador
       utilizada no Reisado Digital.
     </p>
+
     <div class="formulario">
       <div class="campo">
         <label for="email">E-mail</label>
-        <input type="email" id="email" autocomplete="username">
+        <input type="email" id="email"
+               autocomplete="username">
       </div>
+
       <div class="campo">
         <label for="senha">Senha</label>
-        <input type="password" id="senha" autocomplete="current-password">
+        <input type="password" id="senha"
+               autocomplete="current-password">
       </div>
     </div>
-    <button id="entrar">Entrar</button>
+
+    <button id="entrar" type="button">Entrar</button>
   </div>
 
   <div id="areaMarcacao" class="oculto">
+
     <p>
-      Escolha uma comunidade, clique no ponto
-      correspondente do mapa e salve.
-      A marcação será utilizada por todos os
-      bois cadastrados nessa comunidade.
+      Escolha um bairro ou localidade cadastrado,
+      clique no ponto correspondente do mapa e salve.
+      Todos os bois desse mesmo bairro ou localidade
+      utilizarão a marcação.
     </p>
 
     <div class="formulario">
+
       <div class="campo">
-        <label for="localidade">Bairro ou localidade</label>
+        <label for="localidade">Bairro / Localidade</label>
         <select id="localidade"></select>
       </div>
 
       <div class="campo">
         <label for="latitude">Latitude</label>
-        <input id="latitude" readonly placeholder="Clique no mapa">
+        <input id="latitude" readonly
+               placeholder="Clique no mapa">
       </div>
 
       <div class="campo">
         <label for="longitude">Longitude</label>
-        <input id="longitude" readonly placeholder="Clique no mapa">
+        <input id="longitude" readonly
+               placeholder="Clique no mapa">
       </div>
+
     </div>
 
     <div class="acoes">
-      <button id="salvarLocalidade" class="ouro">
+      <button id="salvarLocalidade"
+              type="button" class="ouro">
         💾 Salvar localização
       </button>
-      <button id="cancelarPonto" class="secundario">
+
+      <button id="cancelarPonto"
+              type="button" class="secundario">
         Cancelar seleção
       </button>
-      <button id="sair" class="secundario">
+
+      <button id="sair"
+              type="button" class="secundario">
         Sair
       </button>
     </div>
 
-    <div id="mensagemAdmin" class="mensagem">
-      Selecione uma comunidade e clique no mapa.
+    <div id="mensagemAdmin" class="mensagem"
+         role="status">
+      Selecione um bairro ou localidade
+      e clique no ponto correto do mapa.
     </div>
+
   </div>
 </section>
 
+<!-- MAPA -->
+
 <div id="mapa"></div>
 
-<div id="status" class="status">
+<div id="status" class="status" role="status">
   Carregando os bois cadastrados...
 </div>
 
+<!-- LOCALIZAÇÕES PENDENTES -->
+
 <section class="pendentes">
-  <h2>📍 Comunidades ainda não localizadas</h2>
+
+  <h2>📍 Bairros / Localidades ainda não localizados</h2>
+
   <p>
-    Os bois abaixo possuem uma comunidade cadastrada,
-    mas ainda não foi possível confirmar sua
-    localização no mapa.
+    Os bois abaixo já estão cadastrados, mas seus
+    bairros ou localidades de origem ainda precisam
+    ser marcados no mapa.
   </p>
+
   <div id="listaPendentes" class="lista">
     Aguardando os cadastros...
   </div>
+
 </section>
 
 </main>
@@ -354,7 +389,7 @@ footer{
 
 /* CONFIGURAÇÃO FIREBASE */
 
-const firebaseConfig={
+const firebaseConfig = {
   apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
   authDomain:"rastreamento-reisado.firebaseapp.com",
   databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
@@ -366,23 +401,33 @@ const firebaseConfig={
 
 firebase.initializeApp(firebaseConfig);
 
-const db=firebase.database();
-const auth=firebase.auth();
+const db = firebase.database();
+const auth = firebase.auth();
 
-const ADMIN_UID="X21oJPBdhkeBabKD1SJtUwcMCXC2";
-const $=id=>document.getElementById(id);
+const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
 
-const CENTRO=[-4.3074,-42.0363];
+const $ = id => document.getElementById(id);
 
-let dadosBois={};
-let localidadesSalvas={};
-let administrador=false;
-let pontoTemporario=null;
-let marcadorTemporario=null;
+/*
+  Centro inicial aproximado do mapa.
+  Não representa a localização de nenhum boi.
+*/
+const CENTRO = [-4.3074,-42.0363];
 
-/* MAPA */
+let dadosBois = {};
+let localidadesSalvas = {};
+let administrador = false;
+let pontoTemporario = null;
+let marcadorTemporario = null;
 
-const mapa=L.map("mapa",{
+let boisCarregados = false;
+let localidadesCarregadas = false;
+let erroBois = false;
+let erroLocalidades = false;
+
+/* CRIAR MAPA */
+
+const mapa = L.map("mapa",{
   scrollWheelZoom:false
 }).setView(CENTRO,14);
 
@@ -394,13 +439,16 @@ L.tileLayer(
   }
 ).addTo(mapa);
 
-const agrupamento=L.markerClusterGroup({
+/* AGRUPAMENTO DE MARCADORES */
+
+const agrupamento = L.markerClusterGroup({
   showCoverageOnHover:false,
   spiderfyOnMaxZoom:true,
   zoomToBoundsOnClick:true,
   spiderfyDistanceMultiplier:2.5,
   maxClusterRadius:65,
-  iconCreateFunction:cluster=>L.divIcon({
+
+  iconCreateFunction:cluster => L.divIcon({
     html:"<div>"+cluster.getChildCount()+"</div>",
     className:"grupo-bois",
     iconSize:[56,56],
@@ -410,10 +458,10 @@ const agrupamento=L.markerClusterGroup({
 
 mapa.addLayer(agrupamento);
 
-/* FUNÇÕES */
+/* FUNÇÕES AUXILIARES */
 
-function normalizar(texto){
-  return String(texto||"")
+function normalizar(texto) {
+  return String(texto || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g,"")
     .toLowerCase()
@@ -421,16 +469,16 @@ function normalizar(texto){
     .trim();
 }
 
-function chaveLocalidade(nome){
+function chaveLocalidade(nome) {
   return normalizar(nome)
     .replace(/[^a-z0-9]+/g,"-")
     .replace(/^-|-$/g,"");
 }
 
-function escapar(texto){
-  return String(texto??"").replace(
+function escapar(texto) {
+  return String(texto ?? "").replace(
     /[&<>"']/g,
-    c=>({
+    c => ({
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
@@ -440,24 +488,38 @@ function escapar(texto){
   );
 }
 
-function comunidadesDoBoi(texto){
-  return String(texto||"")
-    .split(/[,;]|\s+e\s+/i)
-    .map(x=>x.trim())
+/*
+  O nome do campo continua sendo "comunidade"
+  no Firebase para preservar os cadastros.
+
+  A separação de vários locais usa vírgula
+  ou ponto e vírgula.
+
+  Não dividimos pelo termo " e ", pois ele
+  pode fazer parte do nome de uma localidade.
+*/
+function localidadesDoBoi(texto) {
+  return String(texto || "")
+    .split(/[,;]/)
+    .map(x => x.trim())
     .filter(Boolean);
 }
 
-function coordenadasValidas(local){
-  if(!local)return false;
-  const lat=Number(local.latitude);
-  const lng=Number(local.longitude);
-  return Number.isFinite(lat)&&
-    Number.isFinite(lng)&&
-    Math.abs(lat)<=90&&
-    Math.abs(lng)<=180;
+function coordenadasValidas(local) {
+  if (!local) return false;
+
+  const lat = local.latitude;
+  const lng = local.longitude;
+
+  return typeof lat === "number" &&
+    typeof lng === "number" &&
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180;
 }
 
-function iconeBoi(){
+function iconeBoi() {
   return L.divIcon({
     className:"marcador-boi",
     html:
@@ -470,252 +532,371 @@ function iconeBoi(){
   });
 }
 
-function obterBois(){
-  const ano=$("ano").value;
-  return Object.values(dadosBois[ano]||{})
-    .filter(boi=>boi&&boi.nome);
+/* BOIS DA TEMPORADA */
+
+function obterBois() {
+  const ano = $("ano").value;
+
+  return Object.values(dadosBois[ano] || {})
+    .filter(boi => boi && boi.nome);
 }
 
-function listarComunidades(){
-  const nomes=new Map();
+/* BAIRROS / LOCALIDADES CADASTRADOS */
 
-  obterBois().forEach(boi=>{
-    comunidadesDoBoi(boi.comunidade).forEach(nome=>{
-      const chave=chaveLocalidade(nome);
-      if(chave&&!nomes.has(chave)){
-        nomes.set(chave,nome);
-      }
-    });
+function listarLocalidades() {
+  const nomes = new Map();
+
+  obterBois().forEach(boi => {
+    localidadesDoBoi(boi.comunidade)
+      .forEach(nome => {
+        const chave = chaveLocalidade(nome);
+
+        if (chave && !nomes.has(chave)) {
+          nomes.set(chave,nome);
+        }
+      });
   });
 
   return [...nomes.entries()].sort(
-    (a,b)=>a[1].localeCompare(b[1],"pt-BR")
+    (a,b) => a[1].localeCompare(b[1],"pt-BR")
   );
 }
 
-function popupBoi(boi,comunidade){
+/* INFORMAÇÕES DO BOI NO MAPA */
+
+function popupBoi(boi,localidade) {
   return (
     '<div class="popup-titulo">🐂 '+
     escapar(boi.nome)+
     '</div>'+
+
     '<div class="popup-info">'+
-    '👤 <b>Responsável:</b> '+
-    escapar(boi.dono||"Não informado")+
-    '<br>📍 <b>Comunidade:</b> '+
-    escapar(comunidade)+
+    '👤 <b>Proprietário:</b> '+
+    escapar(boi.dono || "Não informado")+
+
+    '<br>🏘️ <b>Bairro / Localidade:</b> '+
+    escapar(localidade)+
+
     '<br>📅 <b>Temporada:</b> '+
     escapar($("ano").value)+
     '</div>'+
+
     '<div class="popup-aviso">'+
-    'Localização cultural da comunidade. '+
+    'Localização cultural do bairro ou localidade. '+
     'Não representa a posição atual do boi.'+
     '</div>'
   );
 }
 
-/* DESENHAR BOIS */
+/* ATUALIZAR MAPA */
 
-function atualizarMapa(){
+function atualizarMapa() {
+  if (!boisCarregados || !localidadesCarregadas) {
+    return;
+  }
+
+  if (erroBois || erroLocalidades) {
+    return;
+  }
+
   agrupamento.clearLayers();
 
-  const bois=obterBois();
-  const pendentes=[];
-  const marcadores=[];
+  const bois = obterBois();
+  const pendentes = [];
+  const marcadores = [];
+  const boisLocalizados = new Set();
 
-  bois.forEach(boi=>{
-    const comunidades=comunidadesDoBoi(
+  bois.forEach((boi,indice) => {
+
+    const localidades = localidadesDoBoi(
       boi.comunidade
     );
 
-    if(!comunidades.length){
+    if (!localidades.length) {
       pendentes.push({
         nome:boi.nome,
-        comunidade:"Não informada"
+        dono:boi.dono || "Não informado",
+        localidade:"Não informada"
       });
       return;
     }
 
-    comunidades.forEach(nome=>{
-      const chave=chaveLocalidade(nome);
-      const local=localidadesSalvas[chave];
+    localidades.forEach(nome => {
+      const chave = chaveLocalidade(nome);
+      const local = localidadesSalvas[chave];
 
-      if(!coordenadasValidas(local)){
+      if (!coordenadasValidas(local)) {
         pendentes.push({
           nome:boi.nome,
-          comunidade:nome
+          dono:boi.dono || "Não informado",
+          localidade:nome
         });
         return;
       }
 
-      const marcador=L.marker(
-        [Number(local.latitude),Number(local.longitude)],
+      const marcador = L.marker(
+        [local.latitude,local.longitude],
         {
           icon:iconeBoi(),
           title:boi.nome
         }
       );
 
-      marcador.bindPopup(popupBoi(boi,nome));
+      marcador.bindPopup(
+        popupBoi(boi,nome)
+      );
+
       marcador.bindTooltip(boi.nome);
 
       agrupamento.addLayer(marcador);
       marcadores.push(marcador);
+
+      boisLocalizados.add(indice);
     });
   });
 
-  if(marcadores.length){
-    const limites=agrupamento.getBounds();
-    if(limites.isValid()){
+  /* CENTRALIZAR MARCADORES */
+
+  if (marcadores.length) {
+    const limites = agrupamento.getBounds();
+
+    if (limites.isValid()) {
       mapa.fitBounds(limites,{
         padding:[40,40],
         maxZoom:15
       });
     }
-  }else{
+  } else {
     mapa.setView(CENTRO,14);
   }
 
+  /* MOSTRAR PENDÊNCIAS */
+
   mostrarPendentes(pendentes);
 
-  const localizados=new Set(
-    marcadores.map(m=>m.options.title)
-  ).size;
+  const quantidadePendentes = pendentes.length;
 
-  $("status").textContent=
-    "🐂 "+bois.length+" bois cadastrados | "+
-    "📍 "+localizados+" bois no mapa | "+
-    "⚪ "+pendentes.length+
-    " associações de comunidade pendentes.";
+  const textoPendente =
+    quantidadePendentes === 1
+      ? "1 localização pendente"
+      : quantidadePendentes+" localizações pendentes";
+
+  const textoBois =
+    bois.length === 1
+      ? "1 boi cadastrado"
+      : bois.length+" bois cadastrados";
+
+  const quantidadeLocalizados = boisLocalizados.size;
+
+  const textoLocalizados =
+    quantidadeLocalizados === 1
+      ? "1 boi no mapa"
+      : quantidadeLocalizados+" bois no mapa";
+
+  $("status").textContent =
+    "🐂 "+textoBois+
+    " | 📍 "+textoLocalizados+
+    " | ⚪ "+textoPendente+".";
 
   preencherLocalidades();
 }
 
-function mostrarPendentes(lista){
-  const area=$("listaPendentes");
+/* LISTA DE LOCALIZAÇÕES PENDENTES */
+
+function mostrarPendentes(lista) {
+  const area = $("listaPendentes");
   area.replaceChildren();
 
-  if(!lista.length){
-    area.textContent=
-      "Nenhuma comunidade pendente nesta temporada.";
+  if (!lista.length) {
+    area.textContent =
+      "Todos os bairros / localidades cadastrados "+
+      "nesta temporada já possuem localização no mapa.";
     return;
   }
 
-  lista.forEach(item=>{
-    const card=document.createElement("div");
-    card.className="cartao";
+  lista.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "cartao";
 
-    const nome=document.createElement("strong");
-    nome.textContent="🐂 "+item.nome;
+    const nome = document.createElement("strong");
+    nome.textContent = "🐂 "+item.nome;
 
-    const local=document.createElement("div");
-    local.textContent="Comunidade: "+item.comunidade;
+    const dono = document.createElement("div");
+    dono.textContent =
+      "👤 Proprietário: "+item.dono;
 
-    card.append(nome,local);
+    const local = document.createElement("div");
+    local.textContent =
+      "🏘️ Bairro / Localidade: "+item.localidade;
+
+    const aviso = document.createElement("div");
+    aviso.className = "pendente-aviso";
+
+    aviso.textContent =
+      "📍 Aguardando marcação no mapa.";
+
+    card.append(nome,dono,local,aviso);
     area.appendChild(card);
   });
 }
 
 /* TEMPORADAS */
 
-function preencherAnos(){
-  const anos=Object.keys(dadosBois)
-    .filter(ano=>/^\d{4}$/.test(ano));
+function preencherAnos() {
+  const anos = Object.keys(dadosBois)
+    .filter(ano => /^\d{4}$/.test(ano) &&
+      Number(ano) >= 2027);
 
-  if(!anos.includes("2027"))anos.push("2027");
+  if (!anos.includes("2027")) {
+    anos.push("2027");
+  }
 
-  anos.sort((a,b)=>Number(b)-Number(a));
+  anos.sort((a,b) => Number(b)-Number(a));
 
-  const select=$("ano");
-  const anterior=select.value;
+  const select = $("ano");
+  const anterior = select.value;
 
   select.replaceChildren();
 
-  anos.forEach(ano=>{
-    const option=document.createElement("option");
-    option.value=ano;
-    option.textContent=ano;
+  anos.forEach(ano => {
+    const option = document.createElement("option");
+    option.value = ano;
+    option.textContent = ano;
     select.appendChild(option);
   });
 
-  select.value=anos.includes(anterior)
-    ?anterior:"2027";
+  select.value = anos.includes(anterior)
+    ? anterior
+    : "2027";
 }
 
-/* LOCALIDADES PARA ADMINISTRADOR */
+/* LISTA DE BAIRROS PARA ADMINISTRADOR */
 
-function preencherLocalidades(){
-  const select=$("localidade");
-  const anterior=select.value;
+function preencherLocalidades() {
+  const select = $("localidade");
+  const anterior = select.value;
 
   select.replaceChildren();
 
-  listarComunidades().forEach(([chave,nome])=>{
-    const option=document.createElement("option");
-    option.value=chave;
-    option.textContent=nome+
+  const localidades = listarLocalidades();
+
+  if (!localidades.length) {
+    select.add(new Option(
+      "Nenhum bairro / localidade cadastrado",""
+    ));
+
+    select.disabled = true;
+    limparSelecaoPonto();
+    return;
+  }
+
+  select.disabled = false;
+
+  localidades.forEach(([chave,nome]) => {
+    const option = document.createElement("option");
+
+    option.value = chave;
+
+    option.textContent = nome+
       (coordenadasValidas(localidadesSalvas[chave])
-        ?" ✓":" — pendente");
+        ? " ✓"
+        : " — pendente");
+
     select.appendChild(option);
   });
 
-  if([...select.options].some(o=>o.value===anterior)){
-    select.value=anterior;
+  if ([...select.options].some(
+    option => option.value === anterior
+  )) {
+    select.value = anterior;
+  }
+
+  /*
+    Preserva um ponto que o administrador acabou
+    de marcar, evitando que uma atualização de
+    dados do Firebase apague a seleção.
+  */
+  if (
+    pontoTemporario &&
+    marcadorTemporario &&
+    select.value === anterior
+  ) {
+    return;
   }
 
   carregarPontoSalvo();
 }
 
-function carregarPontoSalvo(){
+/* CARREGAR COORDENADAS EXISTENTES */
+
+function carregarPontoSalvo() {
   limparMarcadorTemporario();
 
-  const local=localidadesSalvas[$("localidade").value];
+  const chave = $("localidade").value;
+  const local = localidadesSalvas[chave];
 
-  if(coordenadasValidas(local)){
-    $("latitude").value=local.latitude;
-    $("longitude").value=local.longitude;
-    pontoTemporario=[
-      Number(local.latitude),
-      Number(local.longitude)
+  if (coordenadasValidas(local)) {
+    $("latitude").value =
+      Number(local.latitude).toFixed(6);
+
+    $("longitude").value =
+      Number(local.longitude).toFixed(6);
+
+    pontoTemporario = [
+      local.latitude,
+      local.longitude
     ];
-  }else{
-    $("latitude").value="";
-    $("longitude").value="";
-    pontoTemporario=null;
+
+  } else {
+    $("latitude").value = "";
+    $("longitude").value = "";
+    pontoTemporario = null;
   }
 }
 
-function limparMarcadorTemporario(){
-  if(marcadorTemporario){
+/* LIMPAR PONTO TEMPORÁRIO */
+
+function limparMarcadorTemporario() {
+  if (marcadorTemporario) {
     mapa.removeLayer(marcadorTemporario);
-    marcadorTemporario=null;
+    marcadorTemporario = null;
   }
+}
+
+function limparSelecaoPonto() {
+  limparMarcadorTemporario();
+  pontoTemporario = null;
+  $("latitude").value = "";
+  $("longitude").value = "";
 }
 
 /* CLIQUE NO MAPA */
 
-mapa.on("click",evento=>{
-  if(!administrador||
-     $("painelAdmin").classList.contains("oculto")){
+mapa.on("click",evento => {
+  if (
+    !administrador ||
+    $("painelAdmin").classList.contains("oculto")
+  ) {
     return;
   }
 
-  if(!$("localidade").value){
-    $("mensagemAdmin").textContent=
-      "Selecione uma comunidade primeiro.";
+  if (!$("localidade").value) {
+    $("mensagemAdmin").textContent =
+      "Selecione um bairro ou localidade primeiro.";
     return;
   }
 
-  const lat=evento.latlng.lat;
-  const lng=evento.latlng.lng;
+  const lat = evento.latlng.lat;
+  const lng = evento.latlng.lng;
 
-  pontoTemporario=[lat,lng];
+  pontoTemporario = [lat,lng];
 
-  $("latitude").value=lat.toFixed(6);
-  $("longitude").value=lng.toFixed(6);
+  $("latitude").value = lat.toFixed(6);
+  $("longitude").value = lng.toFixed(6);
 
   limparMarcadorTemporario();
 
-  marcadorTemporario=L.circleMarker(
+  marcadorTemporario = L.circleMarker(
     [lat,lng],
     {
       radius:11,
@@ -726,16 +907,19 @@ mapa.on("click",evento=>{
     }
   ).addTo(mapa);
 
-  $("mensagemAdmin").textContent=
-    "Ponto selecionado. Confira se está "+
-    "no bairro correto e clique em Salvar localização.";
+  $("mensagemAdmin").textContent =
+    "Ponto selecionado para "+
+    $("localidade").selectedOptions[0].textContent
+      .replace(/\s*(✓|— pendente)$/,"")+
+    ". Confira se está no bairro ou localidade "+
+    "correto e clique em Salvar localização.";
 });
 
 /* AUTENTICAÇÃO */
 
-auth.onAuthStateChanged(usuario=>{
-  administrador=!!(
-    usuario&&usuario.uid===ADMIN_UID
+auth.onAuthStateChanged(usuario => {
+  administrador = !!(
+    usuario && usuario.uid === ADMIN_UID
   );
 
   $("areaLogin").classList.toggle(
@@ -746,159 +930,245 @@ auth.onAuthStateChanged(usuario=>{
     "oculto",!administrador
   );
 
-  if(!administrador){
-    limparMarcadorTemporario();
-    pontoTemporario=null;
+  if (!administrador) {
+    limparSelecaoPonto();
   }
 });
 
-$("abrirAdmin").addEventListener("click",()=>{
+/* ABRIR ADMINISTRAÇÃO */
+
+$("abrirAdmin").addEventListener("click",() => {
   $("painelAdmin").classList.toggle("oculto");
-  setTimeout(()=>mapa.invalidateSize(),150);
+
+  if ($("painelAdmin").classList.contains("oculto")) {
+    limparMarcadorTemporario();
+  }
+
+  setTimeout(() => mapa.invalidateSize(),150);
 });
 
-$("entrar").addEventListener("click",async()=>{
-  const email=$("email").value.trim();
-  const senha=$("senha").value;
+/* LOGIN */
 
-  if(!email||!senha){
+$("entrar").addEventListener("click",async () => {
+  const email = $("email").value.trim();
+  const senha = $("senha").value;
+
+  if (!email || !senha) {
     alert("Informe o e-mail e a senha.");
     return;
   }
 
-  try{
-    const credencial=
+  try {
+    const credencial =
       await auth.signInWithEmailAndPassword(
         email,senha
       );
 
-    if(credencial.user.uid!==ADMIN_UID){
+    if (credencial.user.uid !== ADMIN_UID) {
       await auth.signOut();
       alert("Esta conta não é administradora.");
       return;
     }
 
-    $("senha").value="";
-    alert("Acesso autorizado.");
+    $("senha").value = "";
 
-  }catch(erro){
+    $("mensagemAdmin").textContent =
+      "Acesso autorizado. Selecione o bairro "+
+      "ou localidade e marque o ponto no mapa.";
+
+  } catch(erro) {
     console.error(erro);
-    alert("Não foi possível entrar. Verifique os dados.");
+
+    alert(
+      "Não foi possível entrar. "+
+      "Verifique o e-mail e a senha."
+    );
   }
 });
 
-$("sair").addEventListener("click",async()=>{
-  await auth.signOut();
-  $("mensagemAdmin").textContent="Sessão encerrada.";
+/* SAIR */
+
+$("sair").addEventListener("click",async () => {
+  try {
+    await auth.signOut();
+
+    $("mensagemAdmin").textContent =
+      "Sessão encerrada.";
+
+  } catch(erro) {
+    console.error(erro);
+    alert("Erro ao sair da conta.");
+  }
 });
 
-/* SALVAR COORDENADAS */
+/* SALVAR LOCALIZAÇÃO */
 
 $("salvarLocalidade").addEventListener(
-  "click",async()=>{
+  "click",async () => {
 
-    if(!administrador){
+    if (!administrador) {
       alert("Acesso não autorizado.");
       return;
     }
 
-    const chave=$("localidade").value;
-    const selecionada=$("localidade").selectedOptions[0];
+    const chave = $("localidade").value;
 
-    if(!chave||!selecionada){
-      alert("Selecione uma comunidade.");
+    const selecionada =
+      $("localidade").selectedOptions[0];
+
+    if (!chave || !selecionada) {
+      alert("Selecione um bairro ou localidade.");
       return;
     }
 
-    if(!pontoTemporario){
-      alert("Clique no mapa para escolher o ponto.");
+    if (!pontoTemporario) {
+      alert(
+        "Clique no mapa para escolher "+
+        "o ponto do bairro ou localidade."
+      );
       return;
     }
 
-    const nome=selecionada.textContent
+    const nome = selecionada.textContent
       .replace(/\s*(✓|— pendente)$/,"");
 
-    const latitude=Number(pontoTemporario[0]);
-    const longitude=Number(pontoTemporario[1]);
+    const latitude = Number(pontoTemporario[0]);
+    const longitude = Number(pontoTemporario[1]);
 
-    const confirmar=confirm(
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      Math.abs(latitude) > 90 ||
+      Math.abs(longitude) > 180
+    ) {
+      alert("As coordenadas selecionadas são inválidas.");
+      return;
+    }
+
+    const confirmar = confirm(
       "Salvar a localização de "+nome+"?\n\n"+
       "Latitude: "+latitude.toFixed(6)+"\n"+
       "Longitude: "+longitude.toFixed(6)+"\n\n"+
-      "Todos os bois desta comunidade "+
-      "utilizarão esse ponto no mapa."
+      "Todos os bois cadastrados neste bairro "+
+      "ou localidade utilizarão esse ponto no mapa."
     );
 
-    if(!confirmar)return;
+    if (!confirmar) return;
 
-    const botao=$("salvarLocalidade");
-    botao.disabled=true;
+    const botao = $("salvarLocalidade");
+    botao.disabled = true;
 
-    try{
+    $("mensagemAdmin").textContent =
+      "Salvando localização...";
+
+    try {
       await db.ref("localidadesMapa/"+chave).set({
         nome,
         latitude,
         longitude
       });
 
-      $("mensagemAdmin").textContent=
-        "Localização salva com sucesso: "+nome;
+      $("mensagemAdmin").textContent =
+        "Localização salva com sucesso: "+nome+
+        ". Os bois associados serão exibidos no mapa.";
 
       limparMarcadorTemporario();
 
-    }catch(erro){
+      /*
+        O ouvinte do Firebase atualiza
+        automaticamente os marcadores.
+      */
+
+    } catch(erro) {
       console.error(erro);
+
+      $("mensagemAdmin").textContent =
+        "Erro ao salvar: "+erro.message;
+
       alert(
-        "Erro ao salvar. Verifique as regras "+
-        "do Firebase e sua autenticação."
+        "Não foi possível salvar a localização.\n\n"+
+        erro.message
       );
-    }finally{
-      botao.disabled=false;
+
+    } finally {
+      botao.disabled = false;
     }
   }
 );
 
-$("cancelarPonto").addEventListener("click",()=>{
+/* CANCELAR SELEÇÃO */
+
+$("cancelarPonto").addEventListener("click",() => {
   carregarPontoSalvo();
-  $("mensagemAdmin").textContent=
+
+  $("mensagemAdmin").textContent =
     "Seleção cancelada.";
 });
 
+/* TROCAR BAIRRO */
+
 $("localidade").addEventListener(
-  "change",carregarPontoSalvo
-);
+  "change",() => {
+    carregarPontoSalvo();
 
-$("ano").addEventListener(
-  "change",atualizarMapa
-);
-
-/* CARREGAMENTO DO FIREBASE */
-
-db.ref("boisPorAno").on(
-  "value",
-  snapshot=>{
-    dadosBois=snapshot.val()||{};
-    preencherAnos();
-    atualizarMapa();
-  },
-  erro=>{
-    console.error(erro);
-    $("status").textContent=
-      "Erro ao carregar os bois cadastrados.";
+    $("mensagemAdmin").textContent =
+      "Bairro / Localidade selecionado. "+
+      "Clique no mapa para definir ou alterar o ponto.";
   }
 );
 
-db.ref("localidadesMapa").on(
+/* TROCAR TEMPORADA */
+
+$("ano").addEventListener("change",() => {
+  limparSelecaoPonto();
+  atualizarMapa();
+});
+
+/* CARREGAR BOIS DO FIREBASE */
+
+db.ref("boisPorAno").on(
   "value",
-  snapshot=>{
-    localidadesSalvas=snapshot.val()||{};
+  snapshot => {
+    dadosBois = snapshot.val() || {};
+
+    boisCarregados = true;
+    erroBois = false;
+
+    preencherAnos();
     atualizarMapa();
   },
-  erro=>{
+  erro => {
     console.error(erro);
-    $("status").textContent=
-      "Erro ao carregar as localidades. "+
-      "Verifique as regras do Firebase.";
+
+    erroBois = true;
+
+    $("status").textContent =
+      "Erro ao carregar os bois cadastrados: "+
+      erro.message;
+  }
+);
+
+/* CARREGAR LOCALIZAÇÕES DO FIREBASE */
+
+db.ref("localidadesMapa").on(
+  "value",
+  snapshot => {
+    localidadesSalvas = snapshot.val() || {};
+
+    localidadesCarregadas = true;
+    erroLocalidades = false;
+
+    atualizarMapa();
+  },
+  erro => {
+    console.error(erro);
+
+    erroLocalidades = true;
+
+    $("status").textContent =
+      "Erro ao carregar os bairros / localidades. "+
+      "Verifique as regras do Firebase: "+
+      erro.message;
   }
 );
 
