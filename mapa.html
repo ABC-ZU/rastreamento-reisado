@@ -5,7 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
-<title>Mapa Cultural | Reisado Digital 2.0</title>
+
+<title>Mapa dos Bois | Reisado Digital 2.0</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
@@ -24,39 +25,47 @@
   --fundo: #f8f7f5;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  color: #30252a;
   background: var(--fundo);
+  color: #29252a;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 header {
-  text-align: center;
-  color: white;
-  padding: 26px 15px;
-  background: linear-gradient(125deg, #850c29, #50091c);
+  background: linear-gradient(
+    120deg,
+    var(--vinho),
+    var(--escuro)
+  );
   border-bottom: 5px solid var(--ouro);
+  color: white;
+  padding: 22px 15px;
+  text-align: center;
 }
 
 header h1 {
-  margin: 0 0 10px;
-  font-size: 29px;
+  font-size: 27px;
+  margin: 0 0 8px;
 }
 
-header p { margin: 8px 0; }
+header p {
+  margin: 7px 0;
+}
 
 .voltar {
   display: inline-block;
+  margin-top: 12px;
   background: var(--ouro);
   color: var(--escuro);
   text-decoration: none;
-  padding: 11px 18px;
-  border-radius: 9px;
-  margin-top: 12px;
   font-weight: bold;
+  padding: 10px 16px;
+  border-radius: 8px;
 }
 
 main {
@@ -65,12 +74,12 @@ main {
   padding: 20px 15px 35px;
 }
 
-.intro, .painel {
+.intro,
+.painel {
   background: white;
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 14px;
-  margin-bottom: 17px;
-  box-shadow: 0 3px 12px #0000000b;
+  margin-bottom: 16px;
 }
 
 .intro {
@@ -78,62 +87,73 @@ main {
   line-height: 1.7;
 }
 
-.intro h2, .painel h2 {
+.intro h2,
+.painel h2 {
   color: var(--vinho);
   margin-top: 0;
+}
+
+.aviso {
+  background: #fff6e5;
+  border-left: 4px solid var(--ouro);
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
 }
 
 .controles {
   display: flex;
   align-items: center;
-  gap: 12px;
   flex-wrap: wrap;
-  margin: 17px 0;
+  gap: 12px;
+  margin: 15px 0;
 }
 
 label {
-  color: var(--vinho);
   font-weight: bold;
+  color: var(--vinho);
 }
 
-select, button {
-  border-radius: 9px;
-  font-size: 15px;
+select,
+button {
   padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 15px;
 }
 
 select {
-  border: 1px solid #d6c9cb;
+  border: 1px solid #ccc;
   background: white;
 }
 
 button {
-  background: var(--vinho);
   border: 0;
+  background: var(--vinho);
   color: white;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
 }
 
-button:hover { filter: brightness(1.12); }
-
 button.secundario {
-  background: #f0e6e8;
+  background: #ece5e7;
   color: var(--vinho);
+}
+
+button:hover {
+  filter: brightness(1.08);
 }
 
 .mapa-container {
   position: relative;
   border: 3px solid var(--ouro);
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
-  background: #e7ece5;
-  box-shadow: 0 6px 20px #00000018;
+  background: #f1eee9;
 }
 
 #mapa {
-  height: 550px;
   width: 100%;
+  height: 550px;
   z-index: 1;
 }
 
@@ -141,16 +161,14 @@ button.secundario {
   position: absolute;
   top: 12px;
   left: 60px;
-  right: 12px;
   z-index: 500;
-  width: max-content;
-  max-width: calc(100% - 75px);
-  background: #ffffffed;
+  background: rgba(255,255,255,.95);
   border-left: 5px solid var(--ouro);
   padding: 10px 14px;
-  border-radius: 10px;
-  box-shadow: 0 2px 12px #0002;
+  border-radius: 9px;
+  box-shadow: 0 2px 10px #0002;
   pointer-events: none;
+  max-width: calc(100% - 75px);
 }
 
 .mapa-titulo strong {
@@ -160,32 +178,29 @@ button.secundario {
 }
 
 .mapa-titulo small {
-  display: block;
-  margin-top: 4px;
-  color: #65545a;
+  color: #66565a;
 }
 
 .mapa-aviso {
   position: absolute;
-  bottom: 27px;
+  bottom: 28px;
   left: 12px;
   z-index: 500;
-  max-width: 300px;
+  background: rgba(255,255,255,.95);
   padding: 9px 12px;
-  background: #ffffffef;
-  border-radius: 9px;
+  border-radius: 8px;
   font-size: 12px;
+  max-width: 280px;
   line-height: 1.5;
-  box-shadow: 0 2px 8px #0002;
   pointer-events: none;
 }
 
 .status {
-  padding: 14px 17px;
-  margin: 15px 0;
   background: white;
-  border-radius: 10px;
-  line-height: 1.7;
+  border-radius: 9px;
+  padding: 14px;
+  margin: 14px 0 16px;
+  line-height: 1.8;
 }
 
 .painel {
@@ -194,15 +209,16 @@ button.secundario {
 
 .lista {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 13px;
+  grid-template-columns:
+    repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
 }
 
 .cartao {
-  padding: 17px;
-  background: #fcf8f3;
-  border: 1px solid #eadcca;
-  border-radius: 12px;
+  background: #fbf7f2;
+  border: 1px solid #eadfcd;
+  padding: 14px;
+  border-radius: 9px;
   line-height: 1.7;
 }
 
@@ -214,7 +230,7 @@ button.secundario {
 }
 
 .cartao button {
-  margin-top: 12px;
+  margin-top: 10px;
   width: 100%;
 }
 
@@ -224,12 +240,12 @@ button.secundario {
 }
 
 .icone-boi {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border: 4px solid var(--ouro);
   background: white;
   border-radius: 50%;
-  box-shadow: 0 4px 13px #0006;
+  box-shadow: 0 3px 10px #0005;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,42 +274,58 @@ button.secundario {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
   font-size: 19px;
+  font-weight: bold;
 }
 
 .popup-titulo {
-  color: var(--vinho);
   font-size: 18px;
   font-weight: bold;
+  color: var(--vinho);
   margin-bottom: 8px;
 }
 
-.popup-info { line-height: 1.8; }
+.popup-info {
+  line-height: 1.7;
+}
 
 .popup-aviso {
-  background: #fff5df;
-  padding: 9px;
-  margin-top: 10px;
+  background: #fff6e5;
+  padding: 8px;
   border-radius: 7px;
   font-size: 12px;
+  margin-top: 10px;
 }
 
 footer {
   background: var(--escuro);
   color: white;
-  text-align: center;
-  padding: 24px;
   border-top: 4px solid var(--ouro);
+  text-align: center;
+  padding: 22px;
   line-height: 1.8;
 }
 
-@media (max-width: 600px) {
-  header h1 { font-size: 23px; }
-  main { padding: 12px 10px 25px; }
-  #mapa { height: 470px; }
-  .mapa-titulo { font-size: 12px; }
-  .mapa-aviso { max-width: 200px; }
+@media(max-width:600px) {
+  header h1 {
+    font-size: 22px;
+  }
+
+  #mapa {
+    height: 470px;
+  }
+
+  main {
+    padding: 12px 10px 25px;
+  }
+
+  .mapa-titulo {
+    padding: 8px 10px;
+  }
+
+  .mapa-aviso {
+    max-width: 190px;
+  }
 }
 
 /* MODO INCORPORADO */
@@ -349,9 +381,10 @@ if (incorporado) {
 <body>
 
 <header>
-  <h1>🐂 Mapa Cultural dos Bois</h1>
+  <h1>🐂 Mapa dos Bois de Boa Hora–PI</h1>
   <p>Reisado Digital 2.0</p>
-  <p>Boa Hora–PI — Terra do Reisado</p>
+  <p>Conheça os bois e a tradição da nossa cidade</p>
+
   <a href="./inicio.html" class="voltar">
     🏠 Voltar ao início
   </a>
@@ -360,31 +393,52 @@ if (incorporado) {
 <main>
 
 <section class="intro">
-  <h2>Conheça os Bois do Reisado</h2>
+  <h2>🗺️ Mapa Cultural dos Bois</h2>
+
   <p>
-    Explore o mapa cultural de Boa Hora–PI e
-    conheça os bois, seus proprietários e
-    suas comunidades de origem.
+    Conheça os bois do Reisado de Boa Hora–PI,
+    seus proprietários e suas comunidades.
   </p>
+
   <p>
-    Os ícones são distribuídos de forma ilustrativa.
-    Eles não indicam a localização real dos bois
-    ou das comunidades.
+    Clique nos ícones para conhecer cada boi
+    ou utilize a lista abaixo do mapa.
   </p>
+
+  <div class="aviso">
+    <strong>Mapa ilustrativo:</strong>
+    as ruas e construções pertencem ao mapa real
+    de Boa Hora, mas os ícones dos bois são
+    distribuídos ficticiamente.
+    Não representam suas localizações reais.
+  </div>
 </section>
 
 <div class="controles">
+
   <label for="ano">📅 Temporada:</label>
   <select id="ano"></select>
 
-  <button id="mapaColorido" type="button">
+  <button id="mapaTradicional" type="button">
+    🗺️ Mapa tradicional
+  </button>
+
+  <button
+    id="mapaColorido"
+    type="button"
+    class="secundario"
+  >
     🎨 Mapa colorido
   </button>
 
-  <button id="mapaTradicional"
-          class="secundario" type="button">
-    🗺️ Mapa tradicional
+  <button
+    id="centralizar"
+    type="button"
+    class="secundario"
+  >
+    📍 Centralizar Boa Hora
   </button>
+
 </div>
 
 <div class="mapa-container">
@@ -393,12 +447,12 @@ if (incorporado) {
 
   <div class="mapa-titulo">
     <strong>🐂 Boa Hora–PI</strong>
-    <small>Mapa Cultural do Reisado</small>
+    <small>Terra do Reisado</small>
   </div>
 
   <div class="mapa-aviso">
-    📍 <strong>Posições ilustrativas</strong>
-    dos bois. Não há rastreamento GPS.
+    📍 <strong>Posições ilustrativas.</strong>
+    Não existe rastreamento GPS.
   </div>
 
 </div>
@@ -409,11 +463,15 @@ if (incorporado) {
 
 <section class="painel">
   <h2>🐂 Bois da Temporada</h2>
+
   <p>
-    Selecione um boi para visualizar
+    Clique no botão de um boi para visualizar
     seu marcador no mapa.
   </p>
-  <div id="listaBois" class="lista"></div>
+
+  <div id="listaBois" class="lista">
+    Aguardando os cadastros...
+  </div>
 </section>
 
 </main>
@@ -427,7 +485,7 @@ if (incorporado) {
 <script>
 "use strict";
 
-/* FIREBASE */
+/* CONFIGURAÇÃO FIREBASE */
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
@@ -448,65 +506,83 @@ const db = firebase.database();
 const $ = id => document.getElementById(id);
 
 /*
-  CENTRO DA SEDE DE BOA HORA–PI
+  CENTRO EXATO DO MAPA ENVIADO
 
-  Coordenadas aproximadas da sede municipal.
-  Não representam a localização de um boi.
+  OpenStreetMap:
+  zoom 17
+  latitude -4.408329
+  longitude -42.122859
 */
 
-const CENTRO = [-4.41139, -42.08639];
+const CENTRO = [-4.408329, -42.122859];
+const ZOOM_INICIAL = 17;
 
 let dadosBois = {};
 let boisCarregados = false;
 let marcadoresPorBoi = new Map();
 
-/* MAPA */
+/* CRIAR MAPA */
 
 const mapa = L.map("mapa", {
   scrollWheelZoom: false,
   zoomControl: true
-}).setView(CENTRO, 15);
+}).setView(CENTRO, ZOOM_INICIAL);
 
-/* CAMADAS */
+/* CAMADAS DO MAPA */
+
+const camadaTradicional = L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }
+);
 
 const camadaColorida = L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
   {
     maxZoom: 19,
     attribution:
-      '&copy; OpenStreetMap contributors &copy; CARTO'
+      "&copy; OpenStreetMap contributors &copy; CARTO"
   }
 );
 
-const camadaTradicional = L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    maxZoom: 19,
-    attribution: "&copy; OpenStreetMap contributors"
-  }
-);
+/* PADRÃO: MAPA IGUAL AO OPENSTREETMAP */
 
-camadaColorida.addTo(mapa);
+camadaTradicional.addTo(mapa);
 
-$("mapaColorido").addEventListener("click", () => {
-  if (mapa.hasLayer(camadaTradicional)) {
-    mapa.removeLayer(camadaTradicional);
-  }
-  if (!mapa.hasLayer(camadaColorida)) {
-    camadaColorida.addTo(mapa);
-  }
-});
+/* TROCAR ESTILO */
 
 $("mapaTradicional").addEventListener("click", () => {
   if (mapa.hasLayer(camadaColorida)) {
     mapa.removeLayer(camadaColorida);
   }
+
   if (!mapa.hasLayer(camadaTradicional)) {
     camadaTradicional.addTo(mapa);
   }
 });
 
-/* AGRUPAMENTO */
+$("mapaColorido").addEventListener("click", () => {
+  if (mapa.hasLayer(camadaTradicional)) {
+    mapa.removeLayer(camadaTradicional);
+  }
+
+  if (!mapa.hasLayer(camadaColorida)) {
+    camadaColorida.addTo(mapa);
+  }
+});
+
+/* CENTRALIZAR NA CIDADE */
+
+$("centralizar").addEventListener("click", () => {
+  mapa.setView(CENTRO, ZOOM_INICIAL, {
+    animate: true
+  });
+});
+
+/* AGRUPAMENTO DE BOIS */
 
 const agrupamento = L.markerClusterGroup({
   showCoverageOnHover: false,
@@ -516,7 +592,10 @@ const agrupamento = L.markerClusterGroup({
   maxClusterRadius: 65,
 
   iconCreateFunction: cluster => L.divIcon({
-    html: "<div>" + cluster.getChildCount() + "</div>",
+    html:
+      "<div>" +
+      cluster.getChildCount() +
+      "</div>",
     className: "grupo-bois",
     iconSize: [56, 56],
     iconAnchor: [28, 28]
@@ -525,7 +604,7 @@ const agrupamento = L.markerClusterGroup({
 
 mapa.addLayer(agrupamento);
 
-/* SEGURANÇA DE TEXTO */
+/* ESCAPAR TEXTOS */
 
 function escapar(texto) {
   return String(texto ?? "").replace(
@@ -540,7 +619,7 @@ function escapar(texto) {
   );
 }
 
-/* ÍCONE CULTURAL */
+/* ÍCONE PERSONALIZADO */
 
 function iconeBoi() {
   return L.divIcon({
@@ -549,23 +628,25 @@ function iconeBoi() {
       '<div class="icone-boi">' +
       '<img src="./icone-boi-reisado.png" alt="">' +
       "</div>",
-    iconSize: [56, 56],
-    iconAnchor: [28, 28],
-    popupAnchor: [0, -28]
+    iconSize: [52, 52],
+    iconAnchor: [26, 26],
+    popupAnchor: [0, -26]
   });
 }
 
-/* BOIS DO FIREBASE */
+/* BUSCAR BOIS DA TEMPORADA */
 
 function obterBois() {
   const ano = $("ano").value;
 
   return Object.entries(dadosBois[ano] || {})
     .filter(([id, boi]) =>
-      boi && typeof boi === "object" && boi.nome
+      boi &&
+      typeof boi === "object" &&
+      boi.nome
     )
     .map(([id, boi]) => ({
-      id,
+      id: id,
       nome: String(boi.nome || ""),
       dono: String(boi.dono || ""),
       comunidade: String(boi.comunidade || "")
@@ -576,11 +657,13 @@ function obterBois() {
 }
 
 /*
-  DISTRIBUIÇÃO ILUSTRATIVA
+  POSIÇÕES ILUSTRATIVAS
 
-  Os bois são organizados ao redor do
-  centro da cidade, sem representar
-  suas posições verdadeiras.
+  Distribuição dos bois em pequenos
+  círculos ao redor do centro urbano.
+
+  Não representa a posição verdadeira
+  dos bois ou de suas comunidades.
 */
 
 function posicaoIlustrativa(indice, total) {
@@ -588,57 +671,72 @@ function posicaoIlustrativa(indice, total) {
   const anel = Math.floor(indice / porAnel);
   const posicao = indice % porAnel;
 
-  const quantidade = Math.min(
+  const quantidadeNoAnel = Math.min(
     porAnel,
     total - anel * porAnel
   );
 
   const angulo =
     (2 * Math.PI * posicao) /
-    Math.max(quantidade, 1) -
+    Math.max(quantidadeNoAnel, 1) -
     Math.PI / 2;
 
-  const raioMetros = 300 + anel * 300;
+  /*
+    Espaçamento menor para manter
+    os ícones próximos da área urbana.
+  */
 
-  const lat =
+  const raioMetros = 110 + anel * 95;
+
+  const latitude =
     CENTRO[0] +
     (raioMetros * Math.sin(angulo)) / 111320;
 
-  const lng =
+  const longitude =
     CENTRO[1] +
     (raioMetros * Math.cos(angulo)) /
-    (111320 * Math.cos(CENTRO[0] * Math.PI / 180));
+    (
+      111320 *
+      Math.cos(CENTRO[0] * Math.PI / 180)
+    );
 
-  return [lat, lng];
+  return [latitude, longitude];
 }
 
-/* INFORMAÇÕES DO BOI */
+/* POPUP DO BOI */
 
 function popupBoi(boi) {
   return (
-    '<div class="popup-titulo">🐂 ' +
-    escapar(boi.nome) +
+    '<div class="popup-titulo">' +
+    "🐂 " + escapar(boi.nome) +
     "</div>" +
 
     '<div class="popup-info">' +
+
     "👤 <b>Proprietário:</b> " +
     escapar(boi.dono || "Não informado") +
 
-    "<br>🏘️ <b>Comunidade:</b> " +
+    "<br>" +
+
+    "🏘️ <b>Comunidade:</b> " +
     escapar(boi.comunidade || "Não informada") +
 
-    "<br>📅 <b>Temporada:</b> " +
+    "<br>" +
+
+    "📅 <b>Temporada:</b> " +
     escapar($("ano").value) +
+
     "</div>" +
 
     '<div class="popup-aviso">' +
-    "📍 Posição ilustrativa. Não representa " +
-    "a localização real do boi ou da comunidade." +
+    "<strong>Posição ilustrativa.</strong> " +
+    "Não representa a localização real " +
+    "do boi ou da comunidade." +
     "</div>"
   );
 }
 
-/* ATUALIZAÇÃO DO MAPA */
+/* ATUALIZAR MARCADORES */
 
 function atualizarMapa() {
   if (!boisCarregados) return;
@@ -649,53 +747,63 @@ function atualizarMapa() {
   const bois = obterBois();
 
   bois.forEach((boi, indice) => {
-    const posicao = posicaoIlustrativa(
+    const coordenadas = posicaoIlustrativa(
       indice,
       bois.length
     );
 
-    const marcador = L.marker(posicao, {
-      icon: iconeBoi(),
-      title: boi.nome
-    });
+    const marcador = L.marker(
+      coordenadas,
+      {
+        icon: iconeBoi(),
+        title: boi.nome
+      }
+    );
 
     marcador.bindPopup(popupBoi(boi));
     marcador.bindTooltip(boi.nome);
 
     agrupamento.addLayer(marcador);
-    marcadoresPorBoi.set(boi.id, marcador);
+
+    marcadoresPorBoi.set(
+      boi.id,
+      marcador
+    );
   });
 
-  if (bois.length) {
-    const limites = agrupamento.getBounds();
+  /*
+    PRESERVAR O ENQUADRAMENTO DA CIDADE
 
-    if (limites.isValid()) {
-      mapa.fitBounds(limites, {
-        padding: [65, 65],
-        maxZoom: 15
-      });
-    }
-  } else {
-    mapa.setView(CENTRO, 15);
-  }
+    Não usamos fitBounds automaticamente,
+    porque isso afastaria o zoom do mapa.
+  */
+
+  mapa.setView(CENTRO, ZOOM_INICIAL);
+
+  const total = bois.length;
 
   $("status").textContent =
-    "🐂 " + bois.length +
-    " bois cadastrados | 📍 " +
-    bois.length +
+    "🐂 " + total +
+    (total === 1
+      ? " boi cadastrado"
+      : " bois cadastrados") +
+    " | 📍 " + total +
     " marcadores ilustrativos no mapa.";
 
   renderizarListaBois(bois);
 
   if (incorporado) {
-    requestAnimationFrame(() => mapa.invalidateSize());
+    requestAnimationFrame(
+      () => mapa.invalidateSize()
+    );
   }
 }
 
-/* LISTA DE BOIS */
+/* LISTA DOS BOIS */
 
 function renderizarListaBois(bois) {
   const lista = $("listaBois");
+
   lista.replaceChildren();
 
   if (!bois.length) {
@@ -744,17 +852,21 @@ function renderizarListaBois(bois) {
 
 function localizarBoi(id) {
   const marcador = marcadoresPorBoi.get(id);
+
   if (!marcador) return;
 
-  agrupamento.zoomToShowLayer(marcador, () => {
-    mapa.panTo(marcador.getLatLng());
-    marcador.openPopup();
+  agrupamento.zoomToShowLayer(
+    marcador,
+    () => {
+      mapa.panTo(marcador.getLatLng());
+      marcador.openPopup();
 
-    $("mapa").scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  });
+      $("mapa").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  );
 }
 
 /* TEMPORADAS */
@@ -789,12 +901,17 @@ function preencherAnos() {
     : "2027";
 }
 
-$("ano").addEventListener("change", atualizarMapa);
+/* TROCAR TEMPORADA */
 
-/* ATUALIZAÇÃO AUTOMÁTICA DO FIREBASE */
+$("ano").addEventListener("change", () => {
+  atualizarMapa();
+});
+
+/* CARREGAR BOIS DO FIREBASE */
 
 db.ref("boisPorAno").on(
   "value",
+
   snapshot => {
     dadosBois = snapshot.val() || {};
     boisCarregados = true;
@@ -802,21 +919,26 @@ db.ref("boisPorAno").on(
     preencherAnos();
     atualizarMapa();
   },
+
   erro => {
     console.error(erro);
 
     $("status").textContent =
-      "Erro ao carregar os bois: " + erro.message;
+      "Erro ao carregar os bois: " +
+      erro.message;
 
     $("listaBois").textContent =
       "Não foi possível carregar os cadastros.";
   }
 );
 
-/* AJUSTES */
+/* AJUSTAR MAPA */
 
 window.addEventListener("load", () => {
-  setTimeout(() => mapa.invalidateSize(), 250);
+  setTimeout(
+    () => mapa.invalidateSize(),
+    250
+  );
 });
 
 window.addEventListener("resize", () => {
@@ -824,5 +946,6 @@ window.addEventListener("resize", () => {
 });
 
 </script>
+
 </body>
 </html>
