@@ -3,1056 +3,2284 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Administração | Reisado Digital 2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel Administrativo | Reisado Digital 2.0</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-storage-compat.js"></script>
 
 <style>
-:root{--vinho:#850c29;--escuro:#50091c;--ouro:#e9ba4e}
-*{box-sizing:border-box}
-body{margin:0;background:#f8f7f5;color:#27252a;font-family:Arial,sans-serif}
-header{background:linear-gradient(115deg,var(--vinho),var(--escuro));color:white;text-align:center;padding:25px;border-bottom:5px solid var(--ouro)}
-header h1{margin:8px 0}
-main{max-width:1050px;margin:auto;padding:20px}
-.caixa{background:white;border:1px solid #e9e4e2;border-radius:12px;padding:22px;margin-bottom:20px}
-h2,h3{color:var(--vinho)}
-label{display:block;font-weight:bold;margin:14px 0 6px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:7px;font:inherit}
-textarea{min-height:110px;resize:vertical}
-button{background:var(--vinho);color:white;border:0;border-radius:7px;padding:12px 16px;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.6;cursor:wait}
-button:hover{filter:brightness(.93)}
-.abas,.acoes{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
-.abas button{flex:1 1 145px}
-.abas button.ativo{background:var(--escuro);box-shadow:inset 0 -4px var(--ouro)}
-.acoes button{flex:1}
-.secundario{background:#68717c}
-.perigo{background:#b32635}
-.oculto{display:none!important}
-.item{border:1px solid #e9e4e2;border-radius:9px;padding:15px;margin:12px 0;overflow-wrap:anywhere}
-.item h3{margin-top:0}
-.item img{width:180px;max-width:100%;border-radius:8px}
-.aviso{background:#fff8e8;border-left:4px solid var(--ouro);padding:13px;border-radius:6px;margin:15px 0;line-height:1.6}
-.mensagem{font-weight:bold;line-height:1.6;overflow-wrap:anywhere}
-.linha{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-footer{text-align:center;background:var(--escuro);color:white;padding:25px}
-@media(max-width:650px){main{padding:12px}.caixa{padding:16px}.linha{grid-template-columns:1fr}}
+:root {
+  --vinho: #850c29;
+  --escuro: #50091c;
+  --ouro: #e9ba4e;
+  --fundo: #f8f7f5;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: #29252a;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background: linear-gradient(120deg, var(--vinho), var(--escuro));
+  color: white;
+  text-align: center;
+  padding: 26px 15px;
+  border-bottom: 5px solid var(--ouro);
+}
+
+header h1 { margin: 0 0 8px; }
+
+main {
+  max-width: 1050px;
+  margin: auto;
+  padding: 20px;
+}
+
+.caixa {
+  background: white;
+  border: 1px solid #e6e0e0;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+h2, h3 { color: var(--vinho); }
+
+label {
+  display: block;
+  font-weight: bold;
+  margin: 14px 0 6px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font: inherit;
+}
+
+textarea {
+  min-height: 115px;
+  resize: vertical;
+}
+
+button {
+  border: none;
+  border-radius: 7px;
+  background: var(--vinho);
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover { filter: brightness(.92); }
+button:disabled { opacity: .6; cursor: wait; }
+
+.abas, .acoes {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.abas button { flex: 1 1 140px; }
+
+.abas button.ativo {
+  background: var(--escuro);
+  box-shadow: inset 0 -4px var(--ouro);
+}
+
+.secundario { background: #68717c; }
+.perigo { background: #b32635; }
+
+.oculto { display: none !important; }
+
+.item {
+  border: 1px solid #e9e4e2;
+  border-radius: 9px;
+  padding: 15px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+
+.item h3 { margin-top: 0; }
+
+.item img {
+  width: 210px;
+  max-width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: 12px 0;
+}
+
+.aviso {
+  background: #fff8e8;
+  border-left: 4px solid var(--ouro);
+  padding: 13px;
+  border-radius: 6px;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.mensagem {
+  font-weight: bold;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.progresso {
+  width: 100%;
+  height: 15px;
+  margin-top: 15px;
+}
+
+a { color: var(--vinho); }
+
+footer {
+  background: var(--escuro);
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+
+@media(max-width:650px) {
+  main { padding: 12px; }
+  .caixa { padding: 16px; }
+  .linha { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 
 <body>
+
 <header>
-<h1>🐂 REISADO DIGITAL 2.0</h1>
-<p>Painel Administrativo Cultural</p>
-<p>Boa Hora — Piauí</p>
+  <h1>🐂 REISADO DIGITAL 2.0</h1>
+  <p>Painel Administrativo Cultural</p>
+  <p>Boa Hora — Piauí</p>
 </header>
 
 <main>
 
+<!-- LOGIN -->
+
 <section id="telaLogin" class="caixa">
-<h2>🔐 Acesso do administrador</h2>
-<form id="formLogin">
-<label>E-mail</label>
-<input id="email" type="email" autocomplete="username" required>
-<label>Senha</label>
-<input id="senha" type="password" autocomplete="current-password" required>
-<button type="submit">Entrar</button>
-</form>
-<p id="mensagemLogin" class="mensagem"></p>
+  <h2>🔐 Acesso administrativo</h2>
+
+  <form id="formLogin">
+    <label>E-mail</label>
+    <input id="email" type="email" required>
+
+    <label>Senha</label>
+    <input id="senha" type="password" required>
+
+    <p></p>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <p id="mensagemLogin" class="mensagem"></p>
 </section>
+
+<!-- PAINEL -->
 
 <section id="telaPainel" class="oculto">
 
-<div class="caixa">
-<h2>Painel Administrativo</h2>
-<p id="usuarioLogado"></p>
-<div class="aviso">
-Gerencie as informações do Reisado sem precisar editar os dados diretamente no GitHub.
-</div>
-<button id="sair" class="secundario">Sair da conta</button>
-</div>
+  <div class="caixa">
+    <h2>Painel Administrativo</h2>
+    <p id="usuarioLogado"></p>
 
-<div class="abas">
-<button data-aba="bois" class="ativo">🐂 Bois</button>
-<button data-aba="agenda">📅 Apresentações</button>
-<button data-aba="homenagens">🕊️ Homenagens</button>
-<button data-aba="conteudo">📝 Textos</button>
-<button data-aba="fotos">🖼️ Fotografias</button>
-<button data-aba="videos">🎬 Vídeos</button>
-</div>
+    <div class="aviso">
+      Gerencie os conteúdos do portal cultural sem precisar
+      modificar os dados diretamente no GitHub.
+    </div>
 
-<section id="secaoBois">
-<div class="caixa">
-<h2>Temporadas do Reisado</h2>
-<label>Selecionar temporada</label>
-<select id="anoTemporada">
-<option value="2027">2027</option>
-</select>
-<p id="periodo" class="aviso"></p>
-<label>Adicionar temporada futura</label>
-<div class="linha">
-<input id="novoAno" type="number" min="2028" max="2099" placeholder="Ex.: 2028">
-<button id="adicionarAno" type="button">Adicionar temporada</button>
-</div>
-<p id="mensagemAno" class="mensagem"></p>
-</div>
+    <button id="sair" class="secundario">
+      Sair da conta
+    </button>
+  </div>
 
-<div class="caixa">
-<h2 id="tituloBoi">Cadastrar boi</h2>
-<form id="formBoi">
-<label>Nome do boi</label>
-<input id="nomeBoi" maxlength="100" required>
-<label>Nome do proprietário</label>
-<input id="donoBoi" maxlength="100" required>
-<label>Bairro / Localidade</label>
-<input id="comunidadeBoi" maxlength="150">
-<div class="acoes">
-<button id="salvarBoi" type="submit">Salvar boi</button>
-<button id="cancelarBoi" type="button" class="secundario oculto">Cancelar edição</button>
-</div>
-</form>
-<p id="mensagemBoi" class="mensagem"></p>
-</div>
+  <!-- ABAS -->
 
-<div class="caixa">
-<h2>Bois cadastrados</h2>
-<p id="quantidadeBois"></p>
-<div id="listaBois">Carregando...</div>
-</div>
+  <div class="abas">
+    <button data-aba="bois" class="ativo">🐂 Bois</button>
+    <button data-aba="agenda">📅 Apresentações</button>
+    <button data-aba="homenagens">🕊️ Homenagens</button>
+    <button data-aba="conteudo">📝 Textos</button>
+    <button data-aba="fotos">🖼️ Fotografias</button>
+    <button data-aba="videos">🎬 Vídeos</button>
+  </div>
+
+  <!-- BOIS -->
+
+  <section id="secaoBois">
+
+    <div class="caixa">
+      <h2>Temporadas do Reisado</h2>
+
+      <label>Selecionar temporada</label>
+      <select id="anoTemporada"></select>
+
+      <p id="periodo" class="aviso"></p>
+
+      <label>Adicionar temporada</label>
+
+      <div class="linha">
+        <input
+          id="novoAno"
+          type="number"
+          min="2027"
+          max="2099"
+          placeholder="Ex.: 2028"
+        >
+
+        <button id="adicionarAno" type="button">
+          Adicionar temporada
+        </button>
+      </div>
+
+      <p id="mensagemAno" class="mensagem"></p>
+    </div>
+
+    <div class="caixa">
+      <h2 id="tituloBoi">Cadastrar boi</h2>
+
+      <form id="formBoi">
+
+        <label>Nome do boi</label>
+        <input id="nomeBoi" maxlength="100" required>
+
+        <label>Nome do proprietário</label>
+        <input id="donoBoi" maxlength="100" required>
+
+        <label>Bairro / Localidade</label>
+        <input id="comunidadeBoi" maxlength="150">
+
+        <div class="acoes">
+          <button id="salvarBoi" type="submit">
+            Salvar boi
+          </button>
+
+          <button
+            id="cancelarBoi"
+            type="button"
+            class="secundario oculto"
+          >
+            Cancelar edição
+          </button>
+        </div>
+      </form>
+
+      <p id="mensagemBoi" class="mensagem"></p>
+    </div>
+
+    <div class="caixa">
+      <h2>Bois cadastrados</h2>
+      <p id="quantidadeBois"></p>
+      <div id="listaBois">Carregando...</div>
+    </div>
+
+  </section>
+
+  <!-- AGENDA -->
+
+  <section id="secaoAgenda" class="oculto">
+
+    <div class="caixa">
+      <h2 id="tituloAgenda">Cadastrar apresentação</h2>
+
+      <p id="avisoAgenda" class="aviso"></p>
+
+      <form id="formAgenda">
+
+        <label>Selecione o boi</label>
+        <select id="boiApresentacao" required></select>
+
+        <div class="linha">
+          <div>
+            <label>Data</label>
+            <input
+              id="dataApresentacao"
+              type="date"
+              required
+            >
+          </div>
+
+          <div>
+            <label>Horário</label>
+            <input
+              id="horaApresentacao"
+              type="time"
+              required
+            >
+          </div>
+        </div>
+
+        <label>Bairro / Local da apresentação</label>
+        <input
+          id="comunidadeApresentacao"
+          maxlength="150"
+          required
+        >
+
+        <div class="acoes">
+          <button id="salvarAgenda" type="submit">
+            Salvar apresentação
+          </button>
+
+          <button
+            id="cancelarAgenda"
+            type="button"
+            class="secundario oculto"
+          >
+            Cancelar edição
+          </button>
+        </div>
+      </form>
+
+      <p id="mensagemAgenda" class="mensagem"></p>
+    </div>
+
+    <div class="caixa">
+      <h2>Apresentações cadastradas</h2>
+      <div id="listaAgenda">Carregando...</div>
+    </div>
+
+  </section>
+
+  <!-- HOMENAGENS -->
+
+  <section id="secaoHomenagens" class="oculto">
+
+    <div class="caixa">
+      <h2>🕊️ Memória Viva do Reisado</h2>
+
+      <h3 id="tituloHomenagem">
+        Cadastrar homenageado
+      </h3>
+
+      <form id="formHomenagem">
+
+        <label>Nome da pessoa homenageada</label>
+        <input
+          id="nomeHomenagem"
+          maxlength="120"
+          required
+        >
+
+        <label>Participação no Reisado</label>
+        <input
+          id="papelHomenagem"
+          maxlength="150"
+          required
+        >
+
+        <label>Mensagem de homenagem</label>
+        <textarea
+          id="textoHomenagem"
+          maxlength="1500"
+        ></textarea>
+
+        <div class="acoes">
+          <button id="salvarHomenagem" type="submit">
+            Salvar homenagem
+          </button>
+
+          <button
+            id="cancelarHomenagem"
+            type="button"
+            class="secundario oculto"
+          >
+            Cancelar edição
+          </button>
+        </div>
+
+      </form>
+
+      <p id="mensagemHomenagem" class="mensagem"></p>
+    </div>
+
+    <div class="caixa">
+      <h2>Pessoas homenageadas</h2>
+      <p id="quantidadeHomenagens"></p>
+      <div id="listaHomenagens">Carregando...</div>
+    </div>
+
+  </section>
+
+  <!-- TEXTOS -->
+
+  <section id="secaoConteudo" class="oculto">
+
+    <div class="caixa">
+      <h2>📝 Textos da página inicial</h2>
+
+      <form id="formConteudo">
+
+        <label>Título de boas-vindas</label>
+        <input
+          id="boasTitulo"
+          maxlength="150"
+          required
+        >
+
+        <label>Descrição de boas-vindas</label>
+        <textarea
+          id="boasTexto"
+          maxlength="2000"
+          required
+        ></textarea>
+
+        <label>Título da história</label>
+        <input
+          id="historiaTitulo"
+          maxlength="150"
+          required
+        >
+
+        <label>História do Reisado</label>
+        <textarea
+          id="historiaTexto"
+          maxlength="10000"
+          style="min-height:220px"
+          required
+        ></textarea>
+
+        <h3>Primeiro card cultural</h3>
+
+        <label>Título</label>
+        <input
+          id="cultura1Titulo"
+          maxlength="120"
+          required
+        >
+
+        <label>Descrição</label>
+        <textarea
+          id="cultura1Texto"
+          maxlength="1500"
+          required
+        ></textarea>
+
+        <label>URL da imagem</label>
+        <input
+          id="cultura1Imagem"
+          placeholder="https://..."
+        >
+
+        <h3>Segundo card cultural</h3>
+
+        <label>Título</label>
+        <input
+          id="cultura2Titulo"
+          maxlength="120"
+          required
+        >
+
+        <label>Descrição</label>
+        <textarea
+          id="cultura2Texto"
+          maxlength="1500"
+          required
+        ></textarea>
+
+        <label>URL da imagem</label>
+        <input
+          id="cultura2Imagem"
+          placeholder="https://..."
+        >
+
+        <p></p>
+
+        <button id="salvarConteudo" type="submit">
+          Salvar textos e cultura
+        </button>
+
+      </form>
+
+      <p id="mensagemConteudo" class="mensagem"></p>
+    </div>
+
+  </section>
+
+  <!-- FOTOGRAFIAS CLOUDINARY -->
+
+  <section id="secaoFotos" class="oculto">
+
+    <div class="caixa">
+
+      <h2>🖼️ Fotografias do Reisado</h2>
+
+      <div class="aviso">
+        As fotografias serão enviadas ao Cloudinary
+        e aparecerão automaticamente na página inicial.
+      </div>
+
+      <form id="formFoto">
+
+        <label>Selecionar fotografia</label>
+
+        <input
+          id="arquivoFoto"
+          type="file"
+          accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+          required
+        >
+
+        <label>Legenda da fotografia</label>
+
+        <input
+          id="legendaFoto"
+          maxlength="150"
+          placeholder="Ex.: Apresentação do Boi Estrela"
+          required
+        >
+
+        <p>
+          Formatos aceitos: JPG, PNG e WebP.
+          Tamanho máximo: 8 MB.
+        </p>
+
+        <button id="enviarFoto" type="submit">
+          ☁️ Enviar fotografia
+        </button>
+
+      </form>
+
+      <progress
+        id="progressoFoto"
+        class="progresso oculto"
+        max="100"
+        value="0"
+      ></progress>
+
+      <p id="mensagemFoto" class="mensagem"></p>
+
+    </div>
+
+    <div class="caixa">
+
+      <h2>Fotografias cadastradas</h2>
+
+      <p id="quantidadeFotos"></p>
+
+      <div id="listaFotos">
+        Carregando fotografias...
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- VÍDEOS -->
+
+  <section id="secaoVideos" class="oculto">
+
+    <div class="caixa">
+      <h2>🎬 Vídeos do Reisado</h2>
+
+      <p>
+        Cadastre vídeos publicados no YouTube.
+      </p>
+
+      <form id="formVideo">
+
+        <label>Título do vídeo</label>
+        <input
+          id="tituloVideo"
+          maxlength="150"
+          required
+        >
+
+        <label>Link do YouTube</label>
+        <input
+          id="urlVideo"
+          type="url"
+          placeholder="https://www.youtube.com/watch?v=..."
+          required
+        >
+
+        <div class="acoes">
+
+          <button id="salvarVideo" type="submit">
+            Salvar vídeo
+          </button>
+
+          <button
+            id="cancelarVideo"
+            type="button"
+            class="secundario oculto"
+          >
+            Cancelar edição
+          </button>
+
+        </div>
+
+      </form>
+
+      <p id="mensagemVideo" class="mensagem"></p>
+
+    </div>
+
+    <div class="caixa">
+      <h2>Vídeos cadastrados</h2>
+      <div id="listaVideos">Carregando...</div>
+    </div>
+
+  </section>
+
 </section>
 
-<section id="secaoAgenda" class="oculto">
 <div class="caixa">
-<h2 id="tituloAgenda">Cadastrar apresentação</h2>
-<p id="avisoAgenda" class="aviso"></p>
-<form id="formAgenda">
-<label>Selecione o boi</label>
-<select id="boiApresentacao" required></select>
-<div class="linha">
-<div>
-<label>Data</label>
-<input id="dataApresentacao" type="date" required>
-</div>
-<div>
-<label>Horário</label>
-<input id="horaApresentacao" type="time" required>
-</div>
-</div>
-<label>Bairro / Local da apresentação</label>
-<input id="comunidadeApresentacao" maxlength="150" required>
-<div class="acoes">
-<button id="salvarAgenda" type="submit">Salvar apresentação</button>
-<button id="cancelarAgenda" type="button" class="secundario oculto">Cancelar edição</button>
-</div>
-</form>
-<p id="mensagemAgenda" class="mensagem"></p>
-</div>
-<div class="caixa">
-<h2>Apresentações cadastradas</h2>
-<div id="listaAgenda">Carregando...</div>
-</div>
-</section>
-
-<section id="secaoHomenagens" class="oculto">
-<div class="caixa">
-<h2>🕊️ Memória Viva do Reisado</h2>
-<p>Memorial permanente das pessoas que contribuíram para o Reisado de Boa Hora.</p>
-<h3 id="tituloHomenagem">Cadastrar homenageado</h3>
-<form id="formHomenagem">
-<label>Nome da pessoa homenageada</label>
-<input id="nomeHomenagem" maxlength="120" required>
-<label>Participação no Reisado</label>
-<input id="papelHomenagem" maxlength="150" required>
-<label>Mensagem de homenagem</label>
-<textarea id="textoHomenagem" maxlength="1500"></textarea>
-<div class="acoes">
-<button id="salvarHomenagem" type="submit">Salvar homenagem</button>
-<button id="cancelarHomenagem" type="button" class="secundario oculto">Cancelar edição</button>
-</div>
-</form>
-<p id="mensagemHomenagem" class="mensagem"></p>
-</div>
-<div class="caixa">
-<h2>Pessoas homenageadas</h2>
-<p id="quantidadeHomenagens"></p>
-<div id="listaHomenagens">Carregando...</div>
-</div>
-</section>
-
-<section id="secaoConteudo" class="oculto">
-<div class="caixa">
-<h2>📝 Textos da página inicial</h2>
-<p>Altere os textos do portal diretamente pelo painel.</p>
-<form id="formConteudo">
-<label>Título de boas-vindas</label>
-<input id="boasTitulo" maxlength="150" required>
-<label>Descrição de boas-vindas</label>
-<textarea id="boasTexto" maxlength="2000" required></textarea>
-<label>Título da história</label>
-<input id="historiaTitulo" maxlength="150" required>
-<label>História do Reisado</label>
-<textarea id="historiaTexto" maxlength="10000" style="min-height:220px" required></textarea>
-<label>Card 1 — título</label>
-<input id="cultura1Titulo" maxlength="120" required>
-<label>Card 1 — descrição</label>
-<textarea id="cultura1Texto" maxlength="1500" required></textarea>
-<label>Card 1 — URL da imagem (opcional)</label>
-<input id="cultura1Imagem" placeholder="https://...">
-<label>Card 2 — título</label>
-<input id="cultura2Titulo" maxlength="120" required>
-<label>Card 2 — descrição</label>
-<textarea id="cultura2Texto" maxlength="1500" required></textarea>
-<label>Card 2 — URL da imagem (opcional)</label>
-<input id="cultura2Imagem" placeholder="https://...">
-<button id="salvarConteudo" type="submit">Salvar textos e cultura</button>
-</form>
-<p id="mensagemConteudo" class="mensagem"></p>
-</div>
-</section>
-
-<section id="secaoFotos" class="oculto">
-<div class="caixa">
-<h2>🖼️ Fotografias do carrossel</h2>
-<div class="aviso">
-As fotografias serão enviadas ao Firebase Storage. É necessário configurar o armazenamento e suas permissões.
-</div>
-<form id="formFoto">
-<label>Selecionar fotografia (JPG, PNG ou WebP, até 8 MB)</label>
-<input id="arquivoFoto" type="file" accept="image/jpeg,image/png,image/webp" required>
-<label>Legenda da fotografia</label>
-<input id="legendaFoto" maxlength="150" required>
-<button id="enviarFoto" type="submit">Enviar fotografia</button>
-</form>
-<p id="mensagemFoto" class="mensagem"></p>
-<div id="listaFotos"></div>
-</div>
-</section>
-
-<section id="secaoVideos" class="oculto">
-<div class="caixa">
-<h2>🎬 Vídeos do Reisado</h2>
-<p>Cadastre vídeos publicados no YouTube.</p>
-<form id="formVideo">
-<label>Título do vídeo</label>
-<input id="tituloVideo" maxlength="150" required>
-<label>Link do YouTube</label>
-<input id="urlVideo" type="url" placeholder="https://www.youtube.com/watch?v=..." required>
-<div class="acoes">
-<button id="salvarVideo" type="submit">Salvar vídeo</button>
-<button id="cancelarVideo" type="button" class="secundario oculto">Cancelar edição</button>
-</div>
-</form>
-<p id="mensagemVideo" class="mensagem"></p>
-<div id="listaVideos"></div>
-</div>
-</section>
-
-</section>
-
-<div class="caixa">
-<a href="inicio.html">🏠 Início</a> |
-<a href="bois.html">🐂 Bois</a> |
-<a href="agenda.html">📅 Agenda</a> |
-<a href="mapa.html">🗺️ Mapa</a> |
-<a href="memoria.html">🕊️ Memorial</a>
+  <a href="inicio.html">🏠 Início</a> |
+  <a href="bois.html">🐂 Bois</a> |
+  <a href="agenda.html">📅 Agenda</a> |
+  <a href="mapa.html">🗺️ Mapa</a> |
+  <a href="memoria.html">🕊️ Memorial</a>
 </div>
 
 </main>
 
-<footer>Reisado Digital 2.0 — Boa Hora, Piauí</footer>
+<footer>
+  Reisado Digital 2.0 — Boa Hora, Piauí
+</footer>
 
 <script>
 "use strict";
 
-const firebaseConfig={
-apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
-authDomain:"rastreamento-reisado.firebaseapp.com",
-databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
-projectId:"rastreamento-reisado",
-storageBucket:"rastreamento-reisado.firebasestorage.app",
-messagingSenderId:"796420970266",
-appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
+/* =========================================
+   FIREBASE
+========================================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+  authDomain: "rastreamento-reisado.firebaseapp.com",
+  databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+  projectId: "rastreamento-reisado",
+  storageBucket: "rastreamento-reisado.firebasestorage.app",
+  messagingSenderId: "796420970266",
+  appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.database();
-const storage=firebase.storage();
-const ADMIN_UID="X21oJPBdhkeBabKD1SJtUwcMCXC2";
+const auth = firebase.auth();
+const db = firebase.database();
 
-const boisRef=db.ref("boisPorAno");
-const agendasRef=db.ref("agendas");
-const homenagensRef=db.ref("homenagens");
-const conteudoRef=db.ref("portalConteudo/inicio");
-const fotosRef=db.ref("portalFotos");
-const videosRef=db.ref("portalVideos");
+const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
 
-const $=id=>document.getElementById(id);
+/* =========================================
+   CLOUDINARY
+========================================= */
 
-let usuarioAtual=null;
-let temporada="2027";
-let bois=[];
-let apresentacoes=[];
-let homenagens=[];
-let fotos=[];
-let videos=[];
-let boiEmEdicao=null;
-let agendaEmEdicao=null;
-let homenagemEmEdicao=null;
-let videoEmEdicao=null;
-let consultas=[];
-let conteudoAlterado=false;
+const CLOUD_NAME = "iegrjgl6";
+const UPLOAD_PRESET = "reisado_digital";
 
-const temporadas=new Set(["2027"]);
+const CLOUDINARY_URL =
+  "https://api.cloudinary.com/v1_1/" +
+  CLOUD_NAME +
+  "/image/upload";
 
-function mensagem(id,texto){
-$(id).textContent=texto;
+/* =========================================
+   REFERÊNCIAS DO BANCO
+========================================= */
+
+const boisRef = db.ref("boisPorAno");
+const agendasRef = db.ref("agendas");
+const homenagensRef = db.ref("homenagens");
+const conteudoRef = db.ref("portalConteudo/inicio");
+const fotosRef = db.ref("portalFotos");
+const videosRef = db.ref("portalVideos");
+
+const $ = id => document.getElementById(id);
+
+let usuarioAtual = null;
+let temporada = "2027";
+
+let bois = [];
+let apresentacoes = [];
+let homenagens = [];
+let fotos = [];
+let videos = [];
+
+let boiEmEdicao = null;
+let agendaEmEdicao = null;
+let homenagemEmEdicao = null;
+let videoEmEdicao = null;
+
+let consultas = [];
+let refBoisAtiva = null;
+let conteudoAlterado = false;
+
+const temporadas = new Set(["2027"]);
+
+/* =========================================
+   FUNÇÕES AUXILIARES
+========================================= */
+
+function mensagem(id, texto) {
+  $(id).textContent = texto;
 }
 
-function normalizar(texto){
-return String(texto||"").trim().normalize("NFD")
-.replace(/[\u0300-\u036f]/g,"").toLowerCase();
+function normalizar(texto) {
+  return String(texto || "")
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
 }
 
-function periodoTemporada(ano){
-return {
-inicio:(Number(ano)-1)+"-12-31",
-fim:ano+"-01-06"
-};
+function formatarData(data) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data))) {
+    return "Data não informada";
+  }
+
+  const [ano, mes, dia] = data.split("-");
+  return dia + "/" + mes + "/" + ano;
 }
 
-function formatarData(data){
-if(!/^\d{4}-\d{2}-\d{2}$/.test(String(data)))return "Data não informada";
-const [ano,mes,dia]=data.split("-");
-return dia+"/"+mes+"/"+ano;
+function periodoTemporada(ano) {
+  return {
+    inicio: (Number(ano) - 1) + "-12-31",
+    fim: ano + "-01-06"
+  };
 }
 
-function dentroDaTemporada(data,ano){
-const p=periodoTemporada(ano);
-return data>=p.inicio&&data<=p.fim;
+function dentroDaTemporada(data, ano) {
+  const p = periodoTemporada(ano);
+  return data >= p.inicio && data <= p.fim;
 }
 
-function criarElemento(tag,texto){
-const el=document.createElement(tag);
-if(texto!==undefined)el.textContent=texto;
-return el;
+function elemento(tag, texto) {
+  const el = document.createElement(tag);
+
+  if (texto !== undefined) {
+    el.textContent = texto;
+  }
+
+  return el;
 }
 
-function botao(texto,acao,classe=""){
-const b=criarElemento("button",texto);
-b.type="button";
-if(classe)b.className=classe;
-b.onclick=acao;
-return b;
+function botao(texto, acao, classe = "") {
+  const b = elemento("button", texto);
+
+  b.type = "button";
+  b.className = classe;
+  b.onclick = acao;
+
+  return b;
 }
 
-function criarItem(titulo,detalhes,acoes=[]){
-const card=criarElemento("div");
-card.className="item";
-card.appendChild(criarElemento("h3",titulo));
-detalhes.forEach(d=>card.appendChild(criarElemento("p",d)));
-if(acoes.length){
-const linha=criarElemento("div");
-linha.className="acoes";
-acoes.forEach(a=>linha.appendChild(a));
-card.appendChild(linha);
-}
-return card;
-}
+function criarItem(titulo, detalhes, acoes = []) {
+  const card = elemento("div");
+  card.className = "item";
 
-function mostrarAba(nome){
-["bois","agenda","homenagens","conteudo","fotos","videos"].forEach(n=>{
-const sufixo=n[0].toUpperCase()+n.slice(1);
-$("secao"+sufixo).classList.toggle("oculto",n!==nome);
-});
-document.querySelectorAll("[data-aba]").forEach(b=>{
-b.classList.toggle("ativo",b.dataset.aba===nome);
-});
+  card.appendChild(elemento("h3", titulo));
+
+  detalhes.forEach(d => {
+    card.appendChild(elemento("p", d));
+  });
+
+  if (acoes.length) {
+    const linha = elemento("div");
+    linha.className = "acoes";
+
+    acoes.forEach(a => linha.appendChild(a));
+    card.appendChild(linha);
+  }
+
+  return card;
 }
 
-document.querySelectorAll("[data-aba]").forEach(b=>{
-b.onclick=()=>mostrarAba(b.dataset.aba);
-});
+function mostrarAba(nome) {
+  [
+    "bois",
+    "agenda",
+    "homenagens",
+    "conteudo",
+    "fotos",
+    "videos"
+  ].forEach(n => {
+    const sufixo = n[0].toUpperCase() + n.slice(1);
 
-function ouvir(ref,callback,erro){
-ref.on("value",callback,erro);
-consultas.push(ref);
+    $("secao" + sufixo)
+      .classList.toggle("oculto", n !== nome);
+  });
+
+  document.querySelectorAll("[data-aba]")
+    .forEach(b => {
+      b.classList.toggle(
+        "ativo",
+        b.dataset.aba === nome
+      );
+    });
 }
 
-function pararConsultas(){
-consultas.forEach(ref=>ref.off());
-consultas=[];
+document.querySelectorAll("[data-aba]")
+  .forEach(b => {
+    b.onclick = () => mostrarAba(b.dataset.aba);
+  });
+
+function ouvir(ref, callback, erro) {
+  ref.on("value", callback, erro);
+  consultas.push(ref);
 }
 
-$("formLogin").onsubmit=async e=>{
-e.preventDefault();
-mensagem("mensagemLogin","Entrando...");
-try{
-const cred=await auth.signInWithEmailAndPassword(
-$("email").value.trim(),$("senha").value
-);
-if(cred.user.uid!==ADMIN_UID){
-await auth.signOut();
-throw Error("Usuário não autorizado");
-}
-$("senha").value="";
-mensagem("mensagemLogin","");
-}catch(err){
-console.error(err);
-mensagem("mensagemLogin","Acesso não autorizado. Confira seus dados.");
-}
-};
-
-$("sair").onclick=()=>auth.signOut();
-
-auth.onAuthStateChanged(async usuario=>{
-pararConsultas();
-usuarioAtual=usuario&&usuario.uid===ADMIN_UID?usuario:null;
-
-$("telaLogin").classList.toggle("oculto",!!usuarioAtual);
-$("telaPainel").classList.toggle("oculto",!usuarioAtual);
-
-if(!usuarioAtual){
-if(usuario)await auth.signOut();
-return;
+function pararConsultas() {
+  consultas.forEach(ref => ref.off());
+  consultas = [];
+  refBoisAtiva = null;
 }
 
-$("usuarioLogado").textContent="Conta: "+usuario.email;
-await carregarTemporadas();
-if(auth.currentUser?.uid!==ADMIN_UID)return;
-iniciarConsultas();
-});
+/* =========================================
+   LOGIN
+========================================= */
 
-async function carregarTemporadas(){
-try{
-const s=await boisRef.once("value");
-s.forEach(item=>{
-if(/^\d{4}$/.test(item.key)&&Number(item.key)>=2027)
-temporadas.add(item.key);
-});
-}catch(err){console.error(err)}
-atualizarTemporadas();
-}
+$("formLogin").onsubmit = async e => {
+  e.preventDefault();
 
-function atualizarTemporadas(){
-const select=$("anoTemporada");
-select.replaceChildren();
-[...temporadas].sort((a,b)=>Number(b)-Number(a)).forEach(ano=>{
-select.add(new Option(ano,ano));
-});
-select.value=temporada;
-const p=periodoTemporada(temporada);
-$("periodo").textContent=
-"Temporada "+temporada+": "+formatarData(p.inicio)+
-" a "+formatarData(p.fim);
-$("dataApresentacao").min=p.inicio;
-$("dataApresentacao").max=p.fim;
-$("avisoAgenda").textContent=
-"Cadastre apresentações entre "+formatarData(p.inicio)+
-" e "+formatarData(p.fim)+".";
-$("tituloBoi").textContent="Cadastrar boi — "+temporada;
-}
+  mensagem("mensagemLogin", "Entrando...");
 
-$("adicionarAno").onclick=()=>{
-const ano=Number($("novoAno").value);
-if(!Number.isInteger(ano)||ano<2028||ano>2099){
-mensagem("mensagemAno","Informe um ano entre 2028 e 2099.");
-return;
-}
-temporadas.add(String(ano));
-$("novoAno").value="";
-mensagem("mensagemAno","Temporada preparada. Será registrada quando um boi for salvo.");
-mudarTemporada(String(ano));
-};
+  try {
+    const cred = await auth.signInWithEmailAndPassword(
+      $("email").value.trim(),
+      $("senha").value
+    );
 
-$("anoTemporada").onchange=e=>mudarTemporada(e.target.value);
+    if (cred.user.uid !== ADMIN_UID) {
+      await auth.signOut();
+      throw Error("Usuário não autorizado");
+    }
 
-function mudarTemporada(ano){
-temporada=ano;
-cancelarBoi();
-cancelarAgenda();
-atualizarTemporadas();
-carregarBois();
-renderizarAgenda();
-}
+    $("senha").value = "";
+    mensagem("mensagemLogin", "");
 
-function iniciarConsultas(){
-carregarBois();
+  } catch (err) {
+    console.error(err);
 
-ouvir(agendasRef,s=>{
-apresentacoes=[];
-s.forEach(item=>{
-const d=item.val();
-if(!d||!d.boi)return;
-apresentacoes.push({
-id:item.key,
-boi:String(d.boi),
-data:String(d.data||""),
-horario:String(d.horario||""),
-comunidade:String(d.comunidade||"")
-});
-});
-apresentacoes.sort((a,b)=>
-(a.data+a.horario).localeCompare(b.data+b.horario));
-renderizarAgenda();
-},err=>mensagem("mensagemAgenda",err.message));
-
-ouvir(homenagensRef,s=>{
-homenagens=[];
-s.forEach(item=>{
-const d=item.val();
-if(!d||!d.nome)return;
-homenagens.push({
-id:item.key,nome:String(d.nome),
-papel:String(d.papel||""),
-mensagem:String(d.mensagem||"")
-});
-});
-homenagens.sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
-renderizarHomenagens();
-},err=>mensagem("mensagemHomenagem",err.message));
-
-iniciarConteudo();
-iniciarFotos();
-iniciarVideos();
-}
-
-let refBoisAtiva=null;
-function carregarBois(){
-if(refBoisAtiva){
-refBoisAtiva.off();
-consultas=consultas.filter(r=>r!==refBoisAtiva);
-}
-refBoisAtiva=boisRef.child(temporada);
-const anoConsulta=temporada;
-
-ouvir(refBoisAtiva,s=>{
-if(anoConsulta!==temporada)return;
-bois=[];
-s.forEach(item=>{
-const d=item.val();
-if(!d||!d.nome)return;
-bois.push({
-id:item.key,
-nome:String(d.nome),
-dono:String(d.dono||""),
-comunidade:String(d.comunidade||"")
-});
-});
-bois.sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"));
-renderizarBois();
-atualizarSelectBois();
-},err=>mensagem("mensagemBoi",err.message));
-}
-
-function renderizarBois(){
-const lista=$("listaBois");
-lista.replaceChildren();
-$("quantidadeBois").textContent=
-bois.length+" bois cadastrados na temporada "+temporada;
-if(!bois.length){
-lista.textContent="Nenhum boi cadastrado nesta temporada.";
-return;
-}
-bois.forEach(b=>{
-lista.appendChild(criarItem("🐂 "+b.nome,[
-"👤 Proprietário: "+b.dono,
-"🏘️ Bairro / Localidade: "+(b.comunidade||"Não informada")
-],[
-botao("✏️ Editar",()=>editarBoi(b)),
-botao("🗑️ Excluir",()=>excluirBoi(b),"perigo")
-]));
-});
-}
-
-function editarBoi(b){
-boiEmEdicao=b.id;
-$("nomeBoi").value=b.nome;
-$("donoBoi").value=b.dono;
-$("comunidadeBoi").value=b.comunidade;
-$("tituloBoi").textContent="Editar boi — "+temporada;
-$("salvarBoi").textContent="Salvar alterações";
-$("cancelarBoi").classList.remove("oculto");
-mostrarAba("bois");
-window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function cancelarBoi(){
-boiEmEdicao=null;
-$("formBoi").reset();
-$("tituloBoi").textContent="Cadastrar boi — "+temporada;
-$("salvarBoi").textContent="Salvar boi";
-$("cancelarBoi").classList.add("oculto");
-}
-$("cancelarBoi").onclick=cancelarBoi;
-
-$("formBoi").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const ano=temporada;
-const dados={
-nome:$("nomeBoi").value.trim(),
-dono:$("donoBoi").value.trim(),
-comunidade:$("comunidadeBoi").value.trim()
-};
-if(!dados.nome||!dados.dono)return;
-if(bois.some(b=>normalizar(b.nome)===normalizar(dados.nome)&&b.id!==boiEmEdicao)){
-mensagem("mensagemBoi","Já existe um boi com esse nome.");
-return;
-}
-$("salvarBoi").disabled=true;
-try{
-const antigo=bois.find(b=>b.id===boiEmEdicao);
-if(boiEmEdicao)
-await boisRef.child(ano).child(boiEmEdicao).update(dados);
-else
-await boisRef.child(ano).push(dados);
-
-if(antigo&&antigo.nome!==dados.nome){
-const updates={};
-apresentacoes.forEach(a=>{
-if(normalizar(a.boi)===normalizar(antigo.nome)&&dentroDaTemporada(a.data,ano))
-updates[a.id+"/boi"]=dados.nome;
-});
-if(Object.keys(updates).length)await agendasRef.update(updates);
-}
-cancelarBoi();
-mensagem("mensagemBoi","Boi salvo com sucesso!");
-await carregarTemporadas();
-}catch(err){
-console.error(err);
-mensagem("mensagemBoi","Erro ao salvar: "+err.message);
-}finally{$("salvarBoi").disabled=false}
+    mensagem(
+      "mensagemLogin",
+      "Acesso não autorizado. Confira seus dados."
+    );
+  }
 };
 
-async function excluirBoi(b){
-const vinculadas=apresentacoes.filter(a=>
-normalizar(a.boi)===normalizar(b.nome)&&
-dentroDaTemporada(a.data,temporada));
-if(vinculadas.length){
-alert("Este boi possui apresentações. Exclua primeiro as apresentações.");
-return;
-}
-if(!confirm("Excluir "+b.nome+" da temporada "+temporada+"?"))return;
-try{
-await boisRef.child(temporada).child(b.id).remove();
-if(boiEmEdicao===b.id)cancelarBoi();
-mensagem("mensagemBoi","Boi excluído.");
-}catch(err){mensagem("mensagemBoi",err.message)}
-}
+$("sair").onclick = () => auth.signOut();
 
-function atualizarSelectBois(){
-const select=$("boiApresentacao");
-const anterior=select.value;
-select.replaceChildren(new Option("Escolha um boi",""));
-bois.forEach(b=>select.add(new Option(b.nome,b.nome)));
-select.value=anterior;
-}
+auth.onAuthStateChanged(async usuario => {
+  pararConsultas();
 
-function renderizarAgenda(){
-const lista=$("listaAgenda");
-lista.replaceChildren();
-const filtradas=apresentacoes.filter(a=>
-dentroDaTemporada(a.data,temporada));
-if(!filtradas.length){
-lista.textContent="Nenhuma apresentação nesta temporada.";
-return;
-}
-filtradas.forEach(a=>{
-lista.appendChild(criarItem("🐂 "+a.boi,[
-"📅 "+formatarData(a.data)+" | 🕒 "+a.horario+
-" | 📍 "+a.comunidade
-],[
-botao("✏️ Editar",()=>editarAgenda(a)),
-botao("🗑️ Excluir",()=>excluirAgenda(a),"perigo")
-]));
+  usuarioAtual =
+    usuario && usuario.uid === ADMIN_UID
+      ? usuario
+      : null;
+
+  $("telaLogin").classList.toggle(
+    "oculto",
+    !!usuarioAtual
+  );
+
+  $("telaPainel").classList.toggle(
+    "oculto",
+    !usuarioAtual
+  );
+
+  if (!usuarioAtual) {
+    if (usuario) await auth.signOut();
+    return;
+  }
+
+  $("usuarioLogado").textContent =
+    "Conta: " + usuario.email;
+
+  await carregarTemporadas();
+
+  if (auth.currentUser?.uid !== ADMIN_UID) return;
+
+  iniciarConsultas();
 });
+
+/* =========================================
+   TEMPORADAS
+========================================= */
+
+async function carregarTemporadas() {
+  try {
+    const s = await boisRef.once("value");
+
+    s.forEach(item => {
+      if (
+        /^\d{4}$/.test(item.key) &&
+        Number(item.key) >= 2027
+      ) {
+        temporadas.add(item.key);
+      }
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+
+  atualizarTemporadas();
 }
 
-function editarAgenda(a){
-agendaEmEdicao=a.id;
-$("boiApresentacao").value=a.boi;
-$("dataApresentacao").value=a.data;
-$("horaApresentacao").value=a.horario;
-$("comunidadeApresentacao").value=a.comunidade;
-$("tituloAgenda").textContent="Editar apresentação";
-$("salvarAgenda").textContent="Salvar alterações";
-$("cancelarAgenda").classList.remove("oculto");
-mostrarAba("agenda");
-window.scrollTo({top:0,behavior:"smooth"});
+function atualizarTemporadas() {
+  const select = $("anoTemporada");
+
+  select.replaceChildren();
+
+  [...temporadas]
+    .sort((a, b) => Number(b) - Number(a))
+    .forEach(ano => {
+      select.add(new Option(ano, ano));
+    });
+
+  select.value = temporada;
+
+  const p = periodoTemporada(temporada);
+
+  $("periodo").textContent =
+    "Temporada " + temporada +
+    ": " + formatarData(p.inicio) +
+    " a " + formatarData(p.fim);
+
+  $("dataApresentacao").min = p.inicio;
+  $("dataApresentacao").max = p.fim;
+
+  $("avisoAgenda").textContent =
+    "Cadastre apresentações entre " +
+    formatarData(p.inicio) +
+    " e " + formatarData(p.fim) + ".";
+
+  $("tituloBoi").textContent =
+    "Cadastrar boi — " + temporada;
 }
 
-function cancelarAgenda(){
-agendaEmEdicao=null;
-$("formAgenda").reset();
-$("tituloAgenda").textContent="Cadastrar apresentação";
-$("salvarAgenda").textContent="Salvar apresentação";
-$("cancelarAgenda").classList.add("oculto");
-}
-$("cancelarAgenda").onclick=cancelarAgenda;
+$("adicionarAno").onclick = () => {
+  const ano = Number($("novoAno").value);
 
-$("formAgenda").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const dados={
-boi:$("boiApresentacao").value,
-data:$("dataApresentacao").value,
-horario:$("horaApresentacao").value,
-comunidade:$("comunidadeApresentacao").value.trim()
-};
-if(Object.values(dados).some(v=>!v)){
-mensagem("mensagemAgenda","Preencha todos os campos.");
-return;
-}
-if(!dentroDaTemporada(dados.data,temporada)){
-mensagem("mensagemAgenda","Data fora da temporada.");
-return;
-}
-if(!bois.some(b=>b.nome===dados.boi)){
-mensagem("mensagemAgenda","Selecione um boi cadastrado.");
-return;
-}
-$("salvarAgenda").disabled=true;
-try{
-if(agendaEmEdicao)
-await agendasRef.child(agendaEmEdicao).update(dados);
-else
-await agendasRef.push(dados);
-cancelarAgenda();
-mensagem("mensagemAgenda","Apresentação salva com sucesso!");
-}catch(err){mensagem("mensagemAgenda",err.message)}
-finally{$("salvarAgenda").disabled=false}
-};
+  if (
+    !Number.isInteger(ano) ||
+    ano < 2027 ||
+    ano > 2099
+  ) {
+    mensagem(
+      "mensagemAno",
+      "Informe um ano entre 2027 e 2099."
+    );
+    return;
+  }
 
-async function excluirAgenda(a){
-if(!confirm("Excluir apresentação de "+a.boi+"?"))return;
-try{
-await agendasRef.child(a.id).remove();
-if(agendaEmEdicao===a.id)cancelarAgenda();
-mensagem("mensagemAgenda","Apresentação excluída.");
-}catch(err){mensagem("mensagemAgenda",err.message)}
-}
+  temporadas.add(String(ano));
+  $("novoAno").value = "";
 
-function renderizarHomenagens(){
-const lista=$("listaHomenagens");
-lista.replaceChildren();
-$("quantidadeHomenagens").textContent=
-homenagens.length+" pessoa(s) homenageada(s).";
-if(!homenagens.length){
-lista.textContent="Ainda não há homenageados.";
-return;
-}
-homenagens.forEach(p=>{
-lista.appendChild(criarItem("🕊️ "+p.nome,[
-"Participação: "+p.papel,p.mensagem
-],[
-botao("✏️ Editar",()=>editarHomenagem(p)),
-botao("🗑️ Excluir",()=>excluirHomenagem(p),"perigo")
-]));
-});
-}
+  mensagem(
+    "mensagemAno",
+    "Temporada preparada. Será registrada quando um boi for salvo."
+  );
 
-function editarHomenagem(p){
-homenagemEmEdicao=p.id;
-$("nomeHomenagem").value=p.nome;
-$("papelHomenagem").value=p.papel;
-$("textoHomenagem").value=p.mensagem;
-$("tituloHomenagem").textContent="Editar homenagem";
-$("salvarHomenagem").textContent="Salvar alterações";
-$("cancelarHomenagem").classList.remove("oculto");
-mostrarAba("homenagens");
-window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function cancelarHomenagem(){
-homenagemEmEdicao=null;
-$("formHomenagem").reset();
-$("tituloHomenagem").textContent="Cadastrar homenageado";
-$("salvarHomenagem").textContent="Salvar homenagem";
-$("cancelarHomenagem").classList.add("oculto");
-}
-$("cancelarHomenagem").onclick=cancelarHomenagem;
-
-$("formHomenagem").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const dados={
-nome:$("nomeHomenagem").value.trim(),
-papel:$("papelHomenagem").value.trim(),
-mensagem:$("textoHomenagem").value.trim()
-};
-if(!dados.nome||!dados.papel)return;
-if(homenagens.some(p=>
-normalizar(p.nome)===normalizar(dados.nome)&&
-p.id!==homenagemEmEdicao)){
-mensagem("mensagemHomenagem","Já existe homenagem com esse nome.");
-return;
-}
-$("salvarHomenagem").disabled=true;
-try{
-if(homenagemEmEdicao)
-await homenagensRef.child(homenagemEmEdicao).update(dados);
-else
-await homenagensRef.push(dados);
-cancelarHomenagem();
-mensagem("mensagemHomenagem","Homenagem salva com sucesso!");
-}catch(err){mensagem("mensagemHomenagem",err.message)}
-finally{$("salvarHomenagem").disabled=false}
+  mudarTemporada(String(ano));
 };
 
-async function excluirHomenagem(p){
-if(!confirm("Excluir homenagem a "+p.nome+"?"))return;
-try{
-await homenagensRef.child(p.id).remove();
-if(homenagemEmEdicao===p.id)cancelarHomenagem();
-mensagem("mensagemHomenagem","Homenagem excluída.");
-}catch(err){mensagem("mensagemHomenagem",err.message)}
+$("anoTemporada").onchange = e => {
+  mudarTemporada(e.target.value);
+};
+
+function mudarTemporada(ano) {
+  temporada = ano;
+
+  cancelarBoi();
+  cancelarAgenda();
+
+  atualizarTemporadas();
+  carregarBois();
+  renderizarAgenda();
 }
 
-/* TEXTOS EDITÁVEIS */
+/* =========================================
+   BOIS
+========================================= */
 
-const camposConteudo=[
-"boasTitulo","boasTexto","historiaTitulo","historiaTexto",
-"cultura1Titulo","cultura1Texto","cultura1Imagem",
-"cultura2Titulo","cultura2Texto","cultura2Imagem"
+function iniciarConsultas() {
+  carregarBois();
+
+  ouvir(
+    agendasRef,
+    snapshot => {
+      apresentacoes = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.boi) return;
+
+        apresentacoes.push({
+          id: item.key,
+          boi: String(d.boi),
+          data: String(d.data || ""),
+          horario: String(d.horario || ""),
+          comunidade: String(d.comunidade || "")
+        });
+      });
+
+      apresentacoes.sort((a, b) =>
+        (a.data + a.horario)
+          .localeCompare(b.data + b.horario)
+      );
+
+      renderizarAgenda();
+    },
+    err => mensagem("mensagemAgenda", err.message)
+  );
+
+  iniciarHomenagens();
+  iniciarConteudo();
+  iniciarFotos();
+  iniciarVideos();
+}
+
+function carregarBois() {
+  if (refBoisAtiva) {
+    refBoisAtiva.off();
+
+    consultas = consultas.filter(
+      r => r !== refBoisAtiva
+    );
+  }
+
+  refBoisAtiva = boisRef.child(temporada);
+
+  const anoConsulta = temporada;
+
+  ouvir(
+    refBoisAtiva,
+    snapshot => {
+      if (anoConsulta !== temporada) return;
+
+      bois = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.nome) return;
+
+        bois.push({
+          id: item.key,
+          nome: String(d.nome),
+          dono: String(d.dono || ""),
+          comunidade: String(d.comunidade || "")
+        });
+      });
+
+      bois.sort((a, b) =>
+        a.nome.localeCompare(b.nome, "pt-BR")
+      );
+
+      renderizarBois();
+      atualizarSelectBois();
+    },
+    err => mensagem("mensagemBoi", err.message)
+  );
+}
+
+function renderizarBois() {
+  const lista = $("listaBois");
+  lista.replaceChildren();
+
+  $("quantidadeBois").textContent =
+    bois.length +
+    " bois cadastrados na temporada " +
+    temporada;
+
+  if (!bois.length) {
+    lista.textContent =
+      "Nenhum boi cadastrado nesta temporada.";
+    return;
+  }
+
+  bois.forEach(b => {
+    lista.appendChild(
+      criarItem(
+        "🐂 " + b.nome,
+        [
+          "👤 Proprietário: " + b.dono,
+          "🏘️ Localidade: " +
+          (b.comunidade || "Não informada")
+        ],
+        [
+          botao("✏️ Editar", () => editarBoi(b)),
+          botao(
+            "🗑️ Excluir",
+            () => excluirBoi(b),
+            "perigo"
+          )
+        ]
+      )
+    );
+  });
+}
+
+function editarBoi(b) {
+  boiEmEdicao = b.id;
+
+  $("nomeBoi").value = b.nome;
+  $("donoBoi").value = b.dono;
+  $("comunidadeBoi").value = b.comunidade;
+
+  $("tituloBoi").textContent =
+    "Editar boi — " + temporada;
+
+  $("salvarBoi").textContent = "Salvar alterações";
+  $("cancelarBoi").classList.remove("oculto");
+
+  mostrarAba("bois");
+}
+
+function cancelarBoi() {
+  boiEmEdicao = null;
+
+  $("formBoi").reset();
+
+  $("tituloBoi").textContent =
+    "Cadastrar boi — " + temporada;
+
+  $("salvarBoi").textContent = "Salvar boi";
+  $("cancelarBoi").classList.add("oculto");
+}
+
+$("cancelarBoi").onclick = cancelarBoi;
+
+$("formBoi").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const ano = temporada;
+
+  const dados = {
+    nome: $("nomeBoi").value.trim(),
+    dono: $("donoBoi").value.trim(),
+    comunidade: $("comunidadeBoi").value.trim()
+  };
+
+  if (!dados.nome || !dados.dono) return;
+
+  if (
+    bois.some(b =>
+      normalizar(b.nome) === normalizar(dados.nome) &&
+      b.id !== boiEmEdicao
+    )
+  ) {
+    mensagem(
+      "mensagemBoi",
+      "Já existe um boi com esse nome."
+    );
+    return;
+  }
+
+  $("salvarBoi").disabled = true;
+
+  try {
+    const antigo = bois.find(
+      b => b.id === boiEmEdicao
+    );
+
+    if (boiEmEdicao) {
+      await boisRef
+        .child(ano)
+        .child(boiEmEdicao)
+        .update(dados);
+    } else {
+      await boisRef.child(ano).push(dados);
+    }
+
+    if (antigo && antigo.nome !== dados.nome) {
+      const updates = {};
+
+      apresentacoes.forEach(a => {
+        if (
+          normalizar(a.boi) === normalizar(antigo.nome) &&
+          dentroDaTemporada(a.data, ano)
+        ) {
+          updates[a.id + "/boi"] = dados.nome;
+        }
+      });
+
+      if (Object.keys(updates).length) {
+        await agendasRef.update(updates);
+      }
+    }
+
+    cancelarBoi();
+
+    mensagem(
+      "mensagemBoi",
+      "Boi salvo com sucesso!"
+    );
+
+    await carregarTemporadas();
+
+  } catch (err) {
+    mensagem("mensagemBoi", err.message);
+  } finally {
+    $("salvarBoi").disabled = false;
+  }
+};
+
+async function excluirBoi(b) {
+  const vinculadas = apresentacoes.filter(a =>
+    normalizar(a.boi) === normalizar(b.nome) &&
+    dentroDaTemporada(a.data, temporada)
+  );
+
+  if (vinculadas.length) {
+    alert(
+      "Este boi possui apresentações. " +
+      "Exclua primeiro as apresentações."
+    );
+    return;
+  }
+
+  if (!confirm("Excluir " + b.nome + "?")) return;
+
+  try {
+    await boisRef
+      .child(temporada)
+      .child(b.id)
+      .remove();
+
+    if (boiEmEdicao === b.id) cancelarBoi();
+
+    mensagem("mensagemBoi", "Boi excluído.");
+  } catch (err) {
+    mensagem("mensagemBoi", err.message);
+  }
+}
+
+/* =========================================
+   AGENDA
+========================================= */
+
+function atualizarSelectBois() {
+  const select = $("boiApresentacao");
+  const anterior = select.value;
+
+  select.replaceChildren(
+    new Option("Escolha um boi", "")
+  );
+
+  bois.forEach(b => {
+    select.add(new Option(b.nome, b.nome));
+  });
+
+  select.value = anterior;
+}
+
+function renderizarAgenda() {
+  const lista = $("listaAgenda");
+  lista.replaceChildren();
+
+  const filtradas = apresentacoes.filter(a =>
+    dentroDaTemporada(a.data, temporada)
+  );
+
+  if (!filtradas.length) {
+    lista.textContent =
+      "Nenhuma apresentação nesta temporada.";
+    return;
+  }
+
+  filtradas.forEach(a => {
+    lista.appendChild(
+      criarItem(
+        "🐂 " + a.boi,
+        [
+          "📅 " + formatarData(a.data) +
+          " | 🕒 " + a.horario +
+          " | 📍 " + a.comunidade
+        ],
+        [
+          botao(
+            "✏️ Editar",
+            () => editarAgenda(a)
+          ),
+          botao(
+            "🗑️ Excluir",
+            () => excluirAgenda(a),
+            "perigo"
+          )
+        ]
+      )
+    );
+  });
+}
+
+function editarAgenda(a) {
+  agendaEmEdicao = a.id;
+
+  $("boiApresentacao").value = a.boi;
+  $("dataApresentacao").value = a.data;
+  $("horaApresentacao").value = a.horario;
+  $("comunidadeApresentacao").value = a.comunidade;
+
+  $("tituloAgenda").textContent =
+    "Editar apresentação";
+
+  $("salvarAgenda").textContent =
+    "Salvar alterações";
+
+  $("cancelarAgenda").classList.remove("oculto");
+
+  mostrarAba("agenda");
+}
+
+function cancelarAgenda() {
+  agendaEmEdicao = null;
+
+  $("formAgenda").reset();
+
+  $("tituloAgenda").textContent =
+    "Cadastrar apresentação";
+
+  $("salvarAgenda").textContent =
+    "Salvar apresentação";
+
+  $("cancelarAgenda").classList.add("oculto");
+}
+
+$("cancelarAgenda").onclick = cancelarAgenda;
+
+$("formAgenda").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const dados = {
+    boi: $("boiApresentacao").value,
+    data: $("dataApresentacao").value,
+    horario: $("horaApresentacao").value,
+    comunidade:
+      $("comunidadeApresentacao").value.trim()
+  };
+
+  if (Object.values(dados).some(v => !v)) {
+    mensagem(
+      "mensagemAgenda",
+      "Preencha todos os campos."
+    );
+    return;
+  }
+
+  if (!dentroDaTemporada(dados.data, temporada)) {
+    mensagem(
+      "mensagemAgenda",
+      "Data fora da temporada."
+    );
+    return;
+  }
+
+  if (!bois.some(b => b.nome === dados.boi)) {
+    mensagem(
+      "mensagemAgenda",
+      "Selecione um boi cadastrado."
+    );
+    return;
+  }
+
+  $("salvarAgenda").disabled = true;
+
+  try {
+    if (agendaEmEdicao) {
+      await agendasRef
+        .child(agendaEmEdicao)
+        .update(dados);
+    } else {
+      await agendasRef.push(dados);
+    }
+
+    cancelarAgenda();
+
+    mensagem(
+      "mensagemAgenda",
+      "Apresentação salva com sucesso!"
+    );
+
+  } catch (err) {
+    mensagem("mensagemAgenda", err.message);
+  } finally {
+    $("salvarAgenda").disabled = false;
+  }
+};
+
+async function excluirAgenda(a) {
+  if (
+    !confirm(
+      "Excluir apresentação de " + a.boi + "?"
+    )
+  ) return;
+
+  try {
+    await agendasRef.child(a.id).remove();
+
+    if (agendaEmEdicao === a.id) {
+      cancelarAgenda();
+    }
+
+    mensagem(
+      "mensagemAgenda",
+      "Apresentação excluída."
+    );
+  } catch (err) {
+    mensagem("mensagemAgenda", err.message);
+  }
+}
+
+/* =========================================
+   HOMENAGENS
+========================================= */
+
+function iniciarHomenagens() {
+  ouvir(
+    homenagensRef,
+    snapshot => {
+      homenagens = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.nome) return;
+
+        homenagens.push({
+          id: item.key,
+          nome: String(d.nome),
+          papel: String(d.papel || ""),
+          mensagem: String(d.mensagem || "")
+        });
+      });
+
+      homenagens.sort((a, b) =>
+        a.nome.localeCompare(b.nome, "pt-BR")
+      );
+
+      renderizarHomenagens();
+    },
+    err => mensagem(
+      "mensagemHomenagem",
+      err.message
+    )
+  );
+}
+
+function renderizarHomenagens() {
+  const lista = $("listaHomenagens");
+  lista.replaceChildren();
+
+  $("quantidadeHomenagens").textContent =
+    homenagens.length +
+    " pessoa(s) homenageada(s).";
+
+  if (!homenagens.length) {
+    lista.textContent =
+      "Ainda não há homenageados.";
+    return;
+  }
+
+  homenagens.forEach(p => {
+    lista.appendChild(
+      criarItem(
+        "🕊️ " + p.nome,
+        [
+          "Participação: " + p.papel,
+          p.mensagem
+        ],
+        [
+          botao(
+            "✏️ Editar",
+            () => editarHomenagem(p)
+          ),
+          botao(
+            "🗑️ Excluir",
+            () => excluirHomenagem(p),
+            "perigo"
+          )
+        ]
+      )
+    );
+  });
+}
+
+function editarHomenagem(p) {
+  homenagemEmEdicao = p.id;
+
+  $("nomeHomenagem").value = p.nome;
+  $("papelHomenagem").value = p.papel;
+  $("textoHomenagem").value = p.mensagem;
+
+  $("tituloHomenagem").textContent =
+    "Editar homenagem";
+
+  $("salvarHomenagem").textContent =
+    "Salvar alterações";
+
+  $("cancelarHomenagem")
+    .classList.remove("oculto");
+
+  mostrarAba("homenagens");
+}
+
+function cancelarHomenagem() {
+  homenagemEmEdicao = null;
+
+  $("formHomenagem").reset();
+
+  $("tituloHomenagem").textContent =
+    "Cadastrar homenageado";
+
+  $("salvarHomenagem").textContent =
+    "Salvar homenagem";
+
+  $("cancelarHomenagem")
+    .classList.add("oculto");
+}
+
+$("cancelarHomenagem").onclick =
+  cancelarHomenagem;
+
+$("formHomenagem").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const dados = {
+    nome: $("nomeHomenagem").value.trim(),
+    papel: $("papelHomenagem").value.trim(),
+    mensagem: $("textoHomenagem").value.trim()
+  };
+
+  if (!dados.nome || !dados.papel) return;
+
+  $("salvarHomenagem").disabled = true;
+
+  try {
+    if (homenagemEmEdicao) {
+      await homenagensRef
+        .child(homenagemEmEdicao)
+        .update(dados);
+    } else {
+      await homenagensRef.push(dados);
+    }
+
+    cancelarHomenagem();
+
+    mensagem(
+      "mensagemHomenagem",
+      "Homenagem salva com sucesso!"
+    );
+
+  } catch (err) {
+    mensagem("mensagemHomenagem", err.message);
+  } finally {
+    $("salvarHomenagem").disabled = false;
+  }
+};
+
+async function excluirHomenagem(p) {
+  if (
+    !confirm(
+      "Excluir homenagem a " + p.nome + "?"
+    )
+  ) return;
+
+  try {
+    await homenagensRef.child(p.id).remove();
+
+    if (homenagemEmEdicao === p.id) {
+      cancelarHomenagem();
+    }
+
+    mensagem(
+      "mensagemHomenagem",
+      "Homenagem excluída."
+    );
+  } catch (err) {
+    mensagem("mensagemHomenagem", err.message);
+  }
+}
+
+/* =========================================
+   TEXTOS DO PORTAL
+========================================= */
+
+const camposConteudo = [
+  "boasTitulo",
+  "boasTexto",
+  "historiaTitulo",
+  "historiaTexto",
+  "cultura1Titulo",
+  "cultura1Texto",
+  "cultura1Imagem",
+  "cultura2Titulo",
+  "cultura2Texto",
+  "cultura2Imagem"
 ];
 
-const conteudoInicial={
-boasTitulo:"Bem-vindo ao Reisado Digital 2.0",
-boasTexto:"Conheça a tradição dos bois do Reisado de Boa Hora, no Piauí. Explore nossa cultura, acompanhe a agenda das apresentações e descubra a história dessa manifestação cultural.",
-historiaTitulo:"História do Reisado de Boa Hora",
-historiaTexto:"O Reisado é uma manifestação cultural tradicional que reúne música, dança, personagens, celebrações e a participação das comunidades.\n\nEm Boa Hora, no Piauí, a tradição dos bois integra a identidade cultural do município e é transmitida entre gerações.\n\nO Reisado Digital 2.0 busca contribuir para a valorização dessa memória, organizando informações sobre os bois, seus proprietários, as localidades e a programação das apresentações.",
-cultura1Titulo:"Os Bois do Reisado",
-cultura1Texto:"Conheça os bois que fazem parte da tradição cultural de Boa Hora, seus nomes, proprietários e localidades de origem.",
-cultura1Imagem:"",
-cultura2Titulo:"Festival do Reisado",
-cultura2Texto:"Descubra a programação cultural e acompanhe as apresentações dos bois durante o período das festividades.",
-cultura2Imagem:""
+const conteudoInicial = {
+  boasTitulo:
+    "Bem-vindo ao Reisado Digital 2.0",
+
+  boasTexto:
+    "Conheça a tradição dos bois do Reisado de Boa Hora, no Piauí.",
+
+  historiaTitulo:
+    "História do Reisado de Boa Hora",
+
+  historiaTexto:
+    "O Reisado é uma manifestação cultural tradicional que reúne música, dança, personagens e celebrações.\n\nEm Boa Hora, no Piauí, a tradição dos bois integra a identidade cultural do município e é transmitida entre gerações.",
+
+  cultura1Titulo:
+    "Os Bois do Reisado",
+
+  cultura1Texto:
+    "Conheça os bois, seus proprietários e suas localidades.",
+
+  cultura1Imagem: "",
+
+  cultura2Titulo:
+    "Festival do Reisado",
+
+  cultura2Texto:
+    "Acompanhe a programação das apresentações.",
+
+  cultura2Imagem: ""
 };
 
-camposConteudo.forEach(id=>{
-$(id).addEventListener("input",()=>conteudoAlterado=true);
+camposConteudo.forEach(id => {
+  $(id).addEventListener("input", () => {
+    conteudoAlterado = true;
+  });
 });
 
-function iniciarConteudo(){
-ouvir(conteudoRef,s=>{
-if(conteudoAlterado)return;
-const dados={...conteudoInicial,...(s.val()||{})};
-camposConteudo.forEach(id=>{
-$(id).value=dados[id]||"";
-});
-},err=>mensagem("mensagemConteudo",err.message));
+function iniciarConteudo() {
+  ouvir(
+    conteudoRef,
+    snapshot => {
+      if (conteudoAlterado) return;
+
+      const dados = {
+        ...conteudoInicial,
+        ...(snapshot.val() || {})
+      };
+
+      camposConteudo.forEach(id => {
+        $(id).value = dados[id] || "";
+      });
+    },
+    err => mensagem(
+      "mensagemConteudo",
+      err.message
+    )
+  );
 }
 
-$("formConteudo").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const dados={};
-camposConteudo.forEach(id=>dados[id]=$(id).value.trim());
-for(const id of ["cultura1Imagem","cultura2Imagem"]){
-if(dados[id]&&!/^https:\/\//i.test(dados[id])){
-mensagem("mensagemConteudo","Use URL HTTPS para as imagens.");
-return;
-}
-}
-$("salvarConteudo").disabled=true;
-try{
-await conteudoRef.set(dados);
-conteudoAlterado=false;
-mensagem("mensagemConteudo","Textos salvos com sucesso!");
-}catch(err){mensagem("mensagemConteudo",err.message)}
-finally{$("salvarConteudo").disabled=false}
+$("formConteudo").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const dados = {};
+
+  camposConteudo.forEach(id => {
+    dados[id] = $(id).value.trim();
+  });
+
+  for (const id of [
+    "cultura1Imagem",
+    "cultura2Imagem"
+  ]) {
+    if (
+      dados[id] &&
+      !/^https:\/\//i.test(dados[id])
+    ) {
+      mensagem(
+        "mensagemConteudo",
+        "Use links HTTPS para as imagens."
+      );
+      return;
+    }
+  }
+
+  $("salvarConteudo").disabled = true;
+
+  try {
+    await conteudoRef.set(dados);
+
+    conteudoAlterado = false;
+
+    mensagem(
+      "mensagemConteudo",
+      "Textos salvos com sucesso!"
+    );
+
+  } catch (err) {
+    mensagem("mensagemConteudo", err.message);
+  } finally {
+    $("salvarConteudo").disabled = false;
+  }
 };
 
-/* FOTOGRAFIAS */
+/* =========================================
+   FOTOGRAFIAS - CLOUDINARY
+========================================= */
 
-function iniciarFotos(){
-ouvir(fotosRef,s=>{
-fotos=[];
-s.forEach(item=>{
-const d=item.val();
-if(d&&d.url)fotos.push({id:item.key,...d});
-});
-renderizarFotos();
-},err=>mensagem("mensagemFoto",err.message));
+function iniciarFotos() {
+  ouvir(
+    fotosRef,
+    snapshot => {
+      fotos = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.url) return;
+
+        fotos.push({
+          id: item.key,
+          url: String(d.url),
+          legenda: String(d.legenda || ""),
+          publicId: String(d.publicId || ""),
+          criadoEm: Number(d.criadoEm || 0)
+        });
+      });
+
+      fotos.sort((a, b) =>
+        a.criadoEm - b.criadoEm
+      );
+
+      renderizarFotos();
+    },
+    err => mensagem("mensagemFoto", err.message)
+  );
 }
 
-function renderizarFotos(){
-const lista=$("listaFotos");
-lista.replaceChildren();
-if(!fotos.length){
-lista.textContent="Nenhuma fotografia enviada pelo painel.";
-return;
-}
-fotos.forEach(f=>{
-const card=criarItem(f.legenda||"Fotografia",[],[
-botao("🗑️ Excluir",()=>excluirFoto(f),"perigo")
-]);
-const img=criarElemento("img");
-img.src=f.url;
-img.alt=f.legenda||"Fotografia do Reisado";
-card.insertBefore(img,card.children[1]||null);
-lista.appendChild(card);
-});
+function renderizarFotos() {
+  const lista = $("listaFotos");
+
+  lista.replaceChildren();
+
+  $("quantidadeFotos").textContent =
+    fotos.length +
+    " fotografia(s) cadastrada(s).";
+
+  if (!fotos.length) {
+    lista.textContent =
+      "Nenhuma fotografia cadastrada.";
+    return;
+  }
+
+  fotos.forEach(f => {
+    const card = criarItem(
+      f.legenda || "Fotografia",
+      [],
+      [
+        botao(
+          "✏️ Editar legenda",
+          () => editarLegendaFoto(f)
+        ),
+        botao(
+          "🗑️ Remover da galeria",
+          () => excluirFoto(f),
+          "perigo"
+        )
+      ]
+    );
+
+    const img = elemento("img");
+
+    img.src = f.url;
+    img.alt = f.legenda || "Fotografia do Reisado";
+    img.loading = "lazy";
+
+    card.insertBefore(
+      img,
+      card.children[1] || null
+    );
+
+    lista.appendChild(card);
+  });
 }
 
-$("formFoto").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const arquivo=$("arquivoFoto").files[0];
-const legenda=$("legendaFoto").value.trim();
-if(!arquivo||!legenda)return;
-const tipos={
-"image/jpeg":"jpg",
-"image/png":"png",
-"image/webp":"webp"
+/* VALIDAR ARQUIVO */
+
+function validarArquivoFoto(arquivo) {
+  if (!arquivo) {
+    throw Error("Selecione uma fotografia.");
+  }
+
+  const tipos = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if (!tipos.includes(arquivo.type)) {
+    throw Error(
+      "Formato inválido. Use JPG, PNG ou WebP."
+    );
+  }
+
+  const limite = 8 * 1024 * 1024;
+
+  if (arquivo.size > limite) {
+    throw Error(
+      "A fotografia deve ter no máximo 8 MB."
+    );
+  }
+}
+
+/* ENVIAR PARA CLOUDINARY */
+
+function enviarParaCloudinary(arquivo, progresso) {
+  return new Promise((resolve, reject) => {
+    const dados = new FormData();
+
+    dados.append("file", arquivo);
+    dados.append("upload_preset", UPLOAD_PRESET);
+
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", CLOUDINARY_URL, true);
+
+    xhr.upload.onprogress = evento => {
+      if (evento.lengthComputable) {
+        const porcentagem = Math.round(
+          evento.loaded / evento.total * 100
+        );
+
+        progresso(porcentagem);
+      }
+    };
+
+    xhr.onload = () => {
+      let resposta;
+
+      try {
+        resposta = JSON.parse(xhr.responseText);
+      } catch {
+        reject(
+          Error("Resposta inválida do Cloudinary.")
+        );
+        return;
+      }
+
+      if (
+        xhr.status >= 200 &&
+        xhr.status < 300 &&
+        resposta.secure_url
+      ) {
+        resolve(resposta);
+      } else {
+        reject(
+          Error(
+            resposta.error?.message ||
+            "Não foi possível enviar a fotografia."
+          )
+        );
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(
+        Error(
+          "Erro de conexão com o Cloudinary."
+        )
+      );
+    };
+
+    xhr.send(dados);
+  });
+}
+
+/* FORMULÁRIO DE ENVIO */
+
+$("formFoto").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const arquivo = $("arquivoFoto").files[0];
+  const legenda = $("legendaFoto").value.trim();
+
+  try {
+    validarArquivoFoto(arquivo);
+  } catch (err) {
+    mensagem("mensagemFoto", err.message);
+    return;
+  }
+
+  if (!legenda) {
+    mensagem(
+      "mensagemFoto",
+      "Informe uma legenda."
+    );
+    return;
+  }
+
+  $("enviarFoto").disabled = true;
+
+  const barra = $("progressoFoto");
+  barra.value = 0;
+  barra.classList.remove("oculto");
+
+  mensagem(
+    "mensagemFoto",
+    "Enviando fotografia ao Cloudinary..."
+  );
+
+  try {
+    const resultado = await enviarParaCloudinary(
+      arquivo,
+      porcentagem => {
+        barra.value = porcentagem;
+
+        mensagem(
+          "mensagemFoto",
+          "Enviando fotografia: " +
+          porcentagem + "%"
+        );
+      }
+    );
+
+    /* SALVAR LINK NO FIREBASE */
+
+    const dadosFoto = {
+      url: resultado.secure_url,
+      legenda: legenda,
+      publicId: resultado.public_id,
+      criadoEm:
+        firebase.database.ServerValue.TIMESTAMP
+    };
+
+    await fotosRef.push(dadosFoto);
+
+    $("formFoto").reset();
+
+    barra.value = 100;
+
+    mensagem(
+      "mensagemFoto",
+      "Fotografia enviada com sucesso! " +
+      "Ela já está cadastrada para aparecer no portal."
+    );
+
+  } catch (err) {
+    console.error(err);
+
+    mensagem(
+      "mensagemFoto",
+      "Erro: " + err.message +
+      ". Se o upload foi concluído mas o Firebase falhou, " +
+      "a imagem pode ter permanecido no Cloudinary."
+    );
+  } finally {
+    $("enviarFoto").disabled = false;
+
+    setTimeout(() => {
+      barra.classList.add("oculto");
+    }, 1500);
+  }
 };
-if(!tipos[arquivo.type]||arquivo.size>8*1024*1024){
-mensagem("mensagemFoto","Use JPG, PNG ou WebP de até 8 MB.");
-return;
-}
-const caminho="portal-fotos/"+usuarioAtual.uid+"/"+
-Date.now()+"-"+Math.random().toString(36).slice(2)+"."+
-tipos[arquivo.type];
 
-$("enviarFoto").disabled=true;
-mensagem("mensagemFoto","Enviando fotografia...");
-try{
-const ref=storage.ref(caminho);
-await ref.put(arquivo,{contentType:arquivo.type});
-const url=await ref.getDownloadURL();
-try{
-await fotosRef.push({
-url,legenda,caminho,
-criadoEm:firebase.database.ServerValue.TIMESTAMP
-});
-}catch(err){
-await ref.delete().catch(()=>{});
-throw err;
+/* EDITAR LEGENDA */
+
+async function editarLegendaFoto(f) {
+  const novaLegenda = prompt(
+    "Nova legenda da fotografia:",
+    f.legenda
+  );
+
+  if (novaLegenda === null) return;
+
+  const texto = novaLegenda.trim();
+
+  if (!texto || texto.length > 150) {
+    alert(
+      "Informe uma legenda de até 150 caracteres."
+    );
+    return;
+  }
+
+  try {
+    await fotosRef
+      .child(f.id)
+      .update({ legenda: texto });
+
+    mensagem(
+      "mensagemFoto",
+      "Legenda atualizada com sucesso!"
+    );
+
+  } catch (err) {
+    mensagem("mensagemFoto", err.message);
+  }
 }
-$("formFoto").reset();
-mensagem("mensagemFoto","Fotografia enviada com sucesso!");
-}catch(err){
-console.error(err);
-mensagem("mensagemFoto","Erro ao enviar: "+err.message);
-}finally{$("enviarFoto").disabled=false}
+
+/* REMOVER FOTOGRAFIA DA GALERIA */
+
+async function excluirFoto(f) {
+  const confirmado = confirm(
+    "Remover esta fotografia da galeria?\n\n" +
+    "Ela deixará de aparecer no portal, " +
+    "mas o arquivo continuará armazenado no Cloudinary."
+  );
+
+  if (!confirmado) return;
+
+  try {
+    await fotosRef.child(f.id).remove();
+
+    mensagem(
+      "mensagemFoto",
+      "Fotografia removida da galeria. " +
+      "O arquivo original continua no Cloudinary."
+    );
+
+  } catch (err) {
+    mensagem("mensagemFoto", err.message);
+  }
+}
+
+/* =========================================
+   VÍDEOS
+========================================= */
+
+function youtubeId(url) {
+  try {
+    const u = new URL(url);
+
+    let id = null;
+
+    if (
+      ["youtu.be", "www.youtu.be"]
+        .includes(u.hostname)
+    ) {
+      id = u.pathname.split("/")[1];
+
+    } else if (
+      [
+        "youtube.com",
+        "www.youtube.com",
+        "m.youtube.com"
+      ].includes(u.hostname)
+    ) {
+      id = u.pathname === "/watch"
+        ? u.searchParams.get("v")
+        : u.pathname.match(
+            /^\/(shorts|embed)\/([^/]+)/
+          )?.[2];
+    }
+
+    return /^[A-Za-z0-9_-]{11}$/.test(id || "")
+      ? id
+      : null;
+
+  } catch {
+    return null;
+  }
+}
+
+function iniciarVideos() {
+  ouvir(
+    videosRef,
+    snapshot => {
+      videos = [];
+
+      snapshot.forEach(item => {
+        const d = item.val();
+
+        if (!d || !d.titulo) return;
+
+        videos.push({
+          id: item.key,
+          titulo: String(d.titulo),
+          url: String(d.url || "")
+        });
+      });
+
+      renderizarVideos();
+    },
+    err => mensagem("mensagemVideo", err.message)
+  );
+}
+
+function renderizarVideos() {
+  const lista = $("listaVideos");
+  lista.replaceChildren();
+
+  if (!videos.length) {
+    lista.textContent =
+      "Nenhum vídeo cadastrado.";
+    return;
+  }
+
+  videos.forEach(v => {
+    const card = criarItem(
+      "🎬 " + v.titulo,
+      [],
+      [
+        botao(
+          "✏️ Editar",
+          () => editarVideo(v)
+        ),
+        botao(
+          "🗑️ Excluir",
+          () => excluirVideo(v),
+          "perigo"
+        )
+      ]
+    );
+
+    const id = youtubeId(v.url);
+
+    if (id) {
+      const link = elemento(
+        "a",
+        "▶ Assistir no YouTube"
+      );
+
+      link.href =
+        "https://www.youtube.com/watch?v=" + id;
+
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+
+      card.appendChild(link);
+    }
+
+    lista.appendChild(card);
+  });
+}
+
+function editarVideo(v) {
+  videoEmEdicao = v.id;
+
+  $("tituloVideo").value = v.titulo;
+  $("urlVideo").value = v.url;
+
+  $("salvarVideo").textContent =
+    "Salvar alterações";
+
+  $("cancelarVideo")
+    .classList.remove("oculto");
+
+  mostrarAba("videos");
+}
+
+function cancelarVideo() {
+  videoEmEdicao = null;
+
+  $("formVideo").reset();
+
+  $("salvarVideo").textContent =
+    "Salvar vídeo";
+
+  $("cancelarVideo")
+    .classList.add("oculto");
+}
+
+$("cancelarVideo").onclick = cancelarVideo;
+
+$("formVideo").onsubmit = async e => {
+  e.preventDefault();
+
+  if (!usuarioAtual) return;
+
+  const dados = {
+    titulo: $("tituloVideo").value.trim(),
+    url: $("urlVideo").value.trim()
+  };
+
+  if (!dados.titulo || !youtubeId(dados.url)) {
+    mensagem(
+      "mensagemVideo",
+      "Informe um título e um link válido do YouTube."
+    );
+    return;
+  }
+
+  $("salvarVideo").disabled = true;
+
+  try {
+    if (videoEmEdicao) {
+      await videosRef
+        .child(videoEmEdicao)
+        .set(dados);
+    } else {
+      await videosRef.push(dados);
+    }
+
+    cancelarVideo();
+
+    mensagem(
+      "mensagemVideo",
+      "Vídeo salvo com sucesso!"
+    );
+
+  } catch (err) {
+    mensagem("mensagemVideo", err.message);
+  } finally {
+    $("salvarVideo").disabled = false;
+  }
 };
 
-async function excluirFoto(f){
-if(!confirm("Excluir esta fotografia?"))return;
-try{
-if(f.caminho)await storage.ref(f.caminho).delete();
-await fotosRef.child(f.id).remove();
-mensagem("mensagemFoto","Fotografia excluída.");
-}catch(err){mensagem("mensagemFoto",err.message)}
+async function excluirVideo(v) {
+  if (
+    !confirm(
+      "Excluir o vídeo " + v.titulo + "?"
+    )
+  ) return;
+
+  try {
+    await videosRef.child(v.id).remove();
+
+    if (videoEmEdicao === v.id) {
+      cancelarVideo();
+    }
+
+    mensagem(
+      "mensagemVideo",
+      "Vídeo excluído."
+    );
+
+  } catch (err) {
+    mensagem("mensagemVideo", err.message);
+  }
 }
 
-/* VÍDEOS */
-
-function youtubeId(url){
-try{
-const u=new URL(url);
-let id=null;
-if(["youtu.be","www.youtu.be"].includes(u.hostname))
-id=u.pathname.split("/")[1];
-else if(["youtube.com","www.youtube.com","m.youtube.com"].includes(u.hostname)){
-id=u.pathname==="/watch"
-?u.searchParams.get("v")
-:u.pathname.match(/^\/(shorts|embed)\/([^/]+)/)?.[2];
-}
-return /^[A-Za-z0-9_-]{11}$/.test(id||"")?id:null;
-}catch{return null}
-}
-
-function iniciarVideos(){
-ouvir(videosRef,s=>{
-videos=[];
-s.forEach(item=>{
-const d=item.val();
-if(d&&d.titulo)videos.push({id:item.key,...d});
-});
-renderizarVideos();
-},err=>mensagem("mensagemVideo",err.message));
-}
-
-function renderizarVideos(){
-const lista=$("listaVideos");
-lista.replaceChildren();
-if(!videos.length){
-lista.textContent="Nenhum vídeo cadastrado.";
-return;
-}
-videos.forEach(v=>{
-const card=criarItem("🎬 "+v.titulo,[],[
-botao("✏️ Editar",()=>editarVideo(v)),
-botao("🗑️ Excluir",()=>excluirVideo(v),"perigo")
-]);
-const link=criarElemento("a","Assistir no YouTube");
-link.href=v.url;
-link.target="_blank";
-link.rel="noopener noreferrer";
-card.appendChild(link);
-lista.appendChild(card);
-});
-}
-
-function editarVideo(v){
-videoEmEdicao=v.id;
-$("tituloVideo").value=v.titulo;
-$("urlVideo").value=v.url;
-$("salvarVideo").textContent="Salvar alterações";
-$("cancelarVideo").classList.remove("oculto");
-mostrarAba("videos");
-}
-
-function cancelarVideo(){
-videoEmEdicao=null;
-$("formVideo").reset();
-$("salvarVideo").textContent="Salvar vídeo";
-$("cancelarVideo").classList.add("oculto");
-}
-$("cancelarVideo").onclick=cancelarVideo;
-
-$("formVideo").onsubmit=async e=>{
-e.preventDefault();
-if(!usuarioAtual)return;
-const dados={
-titulo:$("tituloVideo").value.trim(),
-url:$("urlVideo").value.trim()
-};
-if(!dados.titulo||!youtubeId(dados.url)){
-mensagem("mensagemVideo","Informe título e link válido do YouTube.");
-return;
-}
-$("salvarVideo").disabled=true;
-try{
-if(videoEmEdicao)
-await videosRef.child(videoEmEdicao).set(dados);
-else
-await videosRef.push(dados);
-cancelarVideo();
-mensagem("mensagemVideo","Vídeo salvo com sucesso!");
-}catch(err){mensagem("mensagemVideo",err.message)}
-finally{$("salvarVideo").disabled=false}
-};
-
-async function excluirVideo(v){
-if(!confirm("Excluir o vídeo "+v.titulo+"?"))return;
-try{
-await videosRef.child(v.id).remove();
-if(videoEmEdicao===v.id)cancelarVideo();
-mensagem("mensagemVideo","Vídeo excluído.");
-}catch(err){mensagem("mensagemVideo",err.message)}
-}
+/* =========================================
+   INICIALIZAÇÃO
+========================================= */
 
 atualizarTemporadas();
 
-window.addEventListener("beforeunload",pararConsultas);
+window.addEventListener(
+  "beforeunload",
+  pararConsultas
+);
+
 </script>
+
 </body>
 </html>
