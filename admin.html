@@ -1,77 +1,2931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- =========================================
-     MAPA ADMINISTRATIVO DOS BOIS
-========================================= -->
+<title>Administração | Reisado Digital 2.0</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
 
+:root {
+    --vinho: #850c29;
+    --escuro: #50091c;
+    --ouro: #e9ba4e;
+    --fundo: #f8f7f5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--fundo);
+    color: #27252a;
+}
+
+header {
+    background: linear-gradient(
+        115deg,
+        var(--vinho),
+        var(--escuro)
+    );
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+    border-bottom: 5px solid var(--ouro);
+}
+
+header h1 {
+    margin: 8px 0;
+}
+
+header img {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    background: white;
+    border: 3px solid var(--ouro);
+    border-radius: 50%;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.caixa {
+    background: white;
+    border: 1px solid #e9e4e2;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px #00000008;
+}
+
+h2, h3 {
+    color: var(--vinho);
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 14px 0 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+button {
+    background: var(--vinho);
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(.93);
+}
+
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+form > button {
+    margin-top: 16px;
+}
+
+.abas, .acoes {
+    display: flex;
+    gap: 9px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.abas button {
+    flex: 1 1 140px;
+}
+
+.abas button.ativo {
+    background: var(--escuro);
+    box-shadow: inset 0 -4px var(--ouro);
+}
+
+.acoes button {
+    flex: 1;
+}
+
+.secundario {
+    background: #68717c;
+}
+
+.perigo {
+    background: #b32635;
+}
+
+.oculto {
+    display: none !important;
+}
+
+.item {
+    border: 1px solid #e9e4e2;
+    border-radius: 9px;
+    padding: 15px;
+    margin: 12px 0;
+    overflow-wrap: anywhere;
+}
+
+.item h3 {
+    margin-top: 0;
+}
+
+.item img {
+    width: 220px;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.aviso {
+    background: #fff8e8;
+    border-left: 4px solid var(--ouro);
+    padding: 13px;
+    border-radius: 6px;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+.mensagem {
+    font-weight: bold;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.linha {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+#telaLogin {
+    max-width: 480px;
+    margin: 25px auto;
+}
+
+#formLogin button {
+    width: 100%;
+}
+
 #mapaAdministrativo {
-  width: 100%;
-  height: 550px;
-  border: 3px solid #e9ba4e;
-  border-radius: 12px;
-  z-index: 1;
-  margin-top: 15px;
+    width: 100%;
+    height: 550px;
+    border: 3px solid var(--ouro);
+    border-radius: 12px;
+    z-index: 1;
 }
 
 .icone-admin-boi {
-  background: transparent;
-  border: none;
+    background: transparent;
+    border: none;
 }
 
 .icone-admin-boi img {
-  width: 52px;
-  height: 52px;
-  border: 4px solid #e9ba4e;
-  border-radius: 50%;
-  background: white;
-  object-fit: contain;
-  box-shadow: 0 3px 10px #0005;
+    width: 52px;
+    height: 52px;
+    border: 4px solid var(--ouro);
+    border-radius: 50%;
+    background: white;
+    object-fit: contain;
+    box-shadow: 0 3px 10px #0005;
 }
 
 .rotulo-admin-boi {
-  background: white;
-  color: #850c29;
-  font-weight: bold;
-  text-align: center;
-  border: 1px solid #e9ba4e;
-  border-radius: 5px;
-  padding: 5px;
+    background: white;
+    color: var(--vinho);
+    font-weight: bold;
+    text-align: center;
+    border: 1px solid var(--ouro);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.links a {
+    color: var(--vinho);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    background: var(--escuro);
+    color: white;
+    padding: 25px;
 }
 
 @media(max-width:650px) {
 
-  #mapaAdministrativo {
-    height: 470px;
-  }
+    main {
+        padding: 12px;
+    }
+
+    .caixa {
+        padding: 16px;
+    }
+
+    .linha {
+        grid-template-columns: 1fr;
+    }
+
+    #mapaAdministrativo {
+        height: 470px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
 
 }
 
 </style>
+</head>
+
+<body>
+
+<header>
+
+    <img src="icone-boi-reisado.png" alt="Reisado">
+
+    <h1>REISADO DIGITAL 2.0</h1>
+
+    <p>Painel Administrativo Cultural</p>
+
+    <p>Boa Hora — Piauí</p>
+
+</header>
+
+<main>
+
+<noscript>
+    <div class="aviso">
+        Ative o JavaScript para utilizar o painel.
+    </div>
+</noscript>
+
+<!-- LOGIN -->
+
+<section id="telaLogin" class="caixa">
+
+    <h2>🔐 Acesso do administrador</h2>
+
+    <form id="formLogin">
+
+        <label>E-mail</label>
+
+        <input
+            id="email"
+            type="email"
+            autocomplete="username"
+            required
+        >
+
+        <label>Senha</label>
+
+        <input
+            id="senha"
+            type="password"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit" id="entrar">
+            Entrar
+        </button>
+
+    </form>
+
+    <p id="mensagemLogin" class="mensagem"></p>
+
+</section>
+
+<!-- PAINEL ADMINISTRATIVO -->
+
+<section id="telaPainel" class="oculto">
+
+    <div class="caixa">
+
+        <h2>Painel Administrativo</h2>
+
+        <p id="usuarioLogado"></p>
+
+        <div class="aviso">
+
+            Gerencie todas as informações culturais
+            do Reisado Digital 2.0.
+
+        </div>
+
+        <button id="sair" class="secundario">
+            Sair da conta
+        </button>
+
+    </div>
+
+    <!-- ABAS -->
+
+    <div class="abas">
+
+        <button data-aba="bois" class="ativo">
+            🐂 Bois
+        </button>
+
+        <button data-aba="agenda">
+            📅 Apresentações
+        </button>
+
+        <button data-aba="homenagens">
+            🕊️ Homenagens
+        </button>
+
+        <button data-aba="conteudo">
+            📝 Textos
+        </button>
+
+        <button data-aba="fotos">
+            🖼️ Fotografias
+        </button>
+
+        <button data-aba="videos">
+            🎬 Vídeos
+        </button>
+
+        <button data-aba="mapa">
+            🗺️ Mapa dos Bois
+        </button>
+
+    </div>
+
+    <!-- CADASTRO DOS BOIS -->
+
+    <section id="secaoBois">
+
+        <div class="caixa">
+
+            <h2>Temporadas do Reisado</h2>
+
+            <label>Selecionar temporada</label>
+
+            <select id="anoTemporada">
+                <option value="2027">2027</option>
+            </select>
+
+            <p id="periodo" class="aviso"></p>
+
+            <label>Adicionar temporada futura</label>
+
+            <div class="linha">
+
+                <input
+                    id="novoAno"
+                    type="number"
+                    min="2028"
+                    max="2099"
+                    placeholder="Ex.: 2028"
+                >
+
+                <button id="adicionarAno" type="button">
+                    Adicionar temporada
+                </button>
+
+            </div>
+
+            <p id="mensagemAno" class="mensagem"></p>
+
+        </div>
+
+        <div class="caixa">
+
+            <h2 id="tituloBoi">Cadastrar boi</h2>
+
+            <form id="formBoi">
+
+                <label>Nome do boi</label>
+
+                <input
+                    id="nomeBoi"
+                    maxlength="100"
+                    required
+                >
+
+                <label>Nome do proprietário</label>
+
+                <input
+                    id="donoBoi"
+                    maxlength="100"
+                    required
+                >
+
+                <label>Bairro / Localidade</label>
+
+                <input
+                    id="comunidadeBoi"
+                    maxlength="150"
+                >
+
+                <div class="acoes">
+
+                    <button id="salvarBoi" type="submit">
+                        Salvar boi
+                    </button>
+
+                    <button
+                        id="cancelarBoi"
+                        type="button"
+                        class="secundario oculto"
+                    >
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+            <p id="mensagemBoi" class="mensagem"></p>
+
+        </div>
+
+        <div class="caixa">
+
+            <h2>Bois cadastrados</h2>
+
+            <p id="quantidadeBois"></p>
+
+            <div id="listaBois"></div>
+
+        </div>
+
+    </section>
+
+    <!-- AGENDA -->
+
+    <section id="secaoAgenda" class="oculto">
+
+        <div class="caixa">
+
+            <h2 id="tituloAgenda">
+                Cadastrar apresentação
+            </h2>
+
+            <p id="avisoAgenda" class="aviso"></p>
+
+            <form id="formAgenda">
+
+                <label>Selecione o boi</label>
+
+                <select
+                    id="boiApresentacao"
+                    required
+                ></select>
+
+                <div class="linha">
+
+                    <div>
+
+                        <label>Data</label>
+
+                        <input
+                            id="dataApresentacao"
+                            type="date"
+                            required
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label>Horário</label>
+
+                        <input
+                            id="horaApresentacao"
+                            type="time"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <label>Local da apresentação</label>
+
+                <input
+                    id="comunidadeApresentacao"
+                    maxlength="150"
+                    required
+                >
+
+                <div class="acoes">
+
+                    <button id="salvarAgenda" type="submit">
+                        Salvar apresentação
+                    </button>
+
+                    <button
+                        id="cancelarAgenda"
+                        type="button"
+                        class="secundario oculto"
+                    >
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+            <p id="mensagemAgenda" class="mensagem"></p>
+
+        </div>
+
+        <div class="caixa">
+
+            <h2>Apresentações cadastradas</h2>
+
+            <div id="listaAgenda"></div>
+
+        </div>
+
+    </section>
+
+    <!-- HOMENAGENS -->
+
+    <section id="secaoHomenagens" class="oculto">
+
+        <div class="caixa">
+
+            <h2>🕊️ Memória Viva do Reisado</h2>
+
+            <p>
+                Memorial das pessoas que contribuíram
+                para o Reisado de Boa Hora.
+            </p>
+
+            <h3 id="tituloHomenagem">
+                Cadastrar homenageado
+            </h3>
+
+            <form id="formHomenagem">
+
+                <label>Nome da pessoa homenageada</label>
+
+                <input
+                    id="nomeHomenagem"
+                    maxlength="120"
+                    required
+                >
+
+                <label>Participação no Reisado</label>
+
+                <input
+                    id="papelHomenagem"
+                    maxlength="150"
+                    required
+                >
+
+                <label>Mensagem de homenagem</label>
+
+                <textarea
+                    id="textoHomenagem"
+                    maxlength="1500"
+                ></textarea>
+
+                <div class="acoes">
+
+                    <button id="salvarHomenagem" type="submit">
+                        Salvar homenagem
+                    </button>
+
+                    <button
+                        id="cancelarHomenagem"
+                        type="button"
+                        class="secundario oculto"
+                    >
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+            <p id="mensagemHomenagem" class="mensagem"></p>
+
+        </div>
+
+        <div class="caixa">
+
+            <h2>Pessoas homenageadas</h2>
+
+            <p id="quantidadeHomenagens"></p>
+
+            <div id="listaHomenagens"></div>
+
+        </div>
+
+    </section>
+
+    <!-- TEXTOS DO PORTAL -->
+
+    <section id="secaoConteudo" class="oculto">
+
+        <div class="caixa">
+
+            <h2>📝 Textos da página inicial</h2>
+
+            <form id="formConteudo">
+
+                <label>Título de boas-vindas</label>
+
+                <input id="boasTitulo" maxlength="150" required>
+
+                <label>Descrição de boas-vindas</label>
+
+                <textarea
+                    id="boasTexto"
+                    maxlength="2000"
+                    required
+                ></textarea>
+
+                <label>Título da história</label>
+
+                <input id="historiaTitulo" maxlength="150" required>
+
+                <label>História do Reisado</label>
+
+                <textarea
+                    id="historiaTexto"
+                    maxlength="10000"
+                    style="min-height:220px"
+                    required
+                ></textarea>
+
+                <label>Card 1 — Título</label>
+
+                <input id="cultura1Titulo" maxlength="120" required>
+
+                <label>Card 1 — Descrição</label>
+
+                <textarea
+                    id="cultura1Texto"
+                    maxlength="1500"
+                    required
+                ></textarea>
+
+                <label>Card 1 — URL da imagem</label>
+
+                <input id="cultura1Imagem" placeholder="https://">
+
+                <label>Card 2 — Título</label>
+
+                <input id="cultura2Titulo" maxlength="120" required>
+
+                <label>Card 2 — Descrição</label>
+
+                <textarea
+                    id="cultura2Texto"
+                    maxlength="1500"
+                    required
+                ></textarea>
+
+                <label>Card 2 — URL da imagem</label>
+
+                <input id="cultura2Imagem" placeholder="https://">
+
+                <button id="salvarConteudo" type="submit">
+                    Salvar textos e cultura
+                </button>
+
+            </form>
+
+            <p id="mensagemConteudo" class="mensagem"></p>
+
+        </div>
+
+    </section>
+
+    <!-- FOTOGRAFIAS -->
+
+    <section id="secaoFotos" class="oculto">
+
+        <div class="caixa">
+
+            <h2>🖼️ Fotografias do carrossel</h2>
+
+            <div class="aviso">
+
+                As fotografias serão enviadas pelo
+                Cloudinary e exibidas na página inicial.
+
+            </div>
+
+            <form id="formFoto">
+
+                <label>Selecionar fotografia — até 8 MB</label>
+
+                <input
+                    id="arquivoFoto"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    required
+                >
+
+                <label>Legenda da fotografia</label>
+
+                <input
+                    id="legendaFoto"
+                    maxlength="150"
+                    required
+                >
+
+                <button id="enviarFoto" type="submit">
+                    Enviar fotografia
+                </button>
+
+            </form>
+
+            <p id="mensagemFoto" class="mensagem"></p>
+
+            <div id="listaFotos"></div>
+
+        </div>
+
+    </section>
+
+    <!-- VÍDEOS -->
+
+    <section id="secaoVideos" class="oculto">
+
+        <div class="caixa">
+
+            <h2>🎬 Vídeos do Reisado</h2>
+
+            <p>Cadastre vídeos publicados no YouTube.</p>
+
+            <form id="formVideo">
+
+                <label>Título do vídeo</label>
+
+                <input
+                    id="tituloVideo"
+                    maxlength="150"
+                    required
+                >
+
+                <label>Link do YouTube</label>
+
+                <input
+                    id="urlVideo"
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    required
+                >
+
+                <div class="acoes">
+
+                    <button id="salvarVideo" type="submit">
+                        Salvar vídeo
+                    </button>
+
+                    <button
+                        id="cancelarVideo"
+                        type="button"
+                        class="secundario oculto"
+                    >
+                        Cancelar edição
+                    </button>
+
+                </div>
+
+            </form>
+
+            <p id="mensagemVideo" class="mensagem"></p>
+
+            <div id="listaVideos"></div>
+
+        </div>
+
+    </section>
+
+    <!-- MAPA ADMINISTRATIVO -->
+
+    <section id="secaoMapa" class="oculto">
+
+        <div class="caixa">
+
+            <h2>🗺️ Posicionar Bois no Mapa</h2>
+
+            <div class="aviso">
+
+                Arraste os ícones dos bois até os
+                pontos culturais desejados.
+
+                <br><br>
+
+                Depois clique em
+                <strong>Salvar posições</strong>.
+
+                <br><br>
+
+                As posições serão exibidas no mapa
+                público. Não existe rastreamento GPS.
+
+            </div>
+
+            <label>Selecionar temporada</label>
+
+            <select id="anoMapaAdmin"></select>
+
+            <div class="acoes">
+
+                <button id="centralizarMapaAdmin">
+                    📍 Centralizar Boa Hora
+                </button>
+
+                <button
+                    id="recarregarMapaAdmin"
+                    class="secundario"
+                >
+                    🔄 Recarregar posições
+                </button>
+
+            </div>
+
+            <div id="mapaAdministrativo"></div>
+
+            <p id="quantidadeMapaAdmin"></p>
+
+            <div class="acoes">
+
+                <button id="salvarMapaAdmin" disabled>
+                    💾 Salvar posições
+                </button>
+
+                <button
+                    id="cancelarMapaAdmin"
+                    class="secundario"
+                >
+                    Cancelar alterações
+                </button>
+
+            </div>
+
+            <p id="mensagemMapaAdmin" class="mensagem"></p>
+
+        </div>
+
+        <div class="caixa">
+
+            <h2>🐂 Bois disponíveis no mapa</h2>
+
+            <div id="listaMapaAdmin"></div>
+
+        </div>
+
+    </section>
+
+</section>
+
+<div class="caixa links">
+
+    <a href="inicio.html">🏠 Início</a>
+
+    <a href="bois.html">🐂 Bois</a>
+
+    <a href="agenda.html">📅 Agenda</a>
+
+    <a href="mapa.html">🗺️ Mapa</a>
+
+    <a href="memoria.html">🕊️ Memorial</a>
+
+</div>
+
+</main>
+
+<footer>
+
+    Reisado Digital 2.0 — Boa Hora, Piauí
+
+</footer>
 
 <script>
 
-(function () {
-
 "use strict";
 
-/* =========================================
-   CONFIGURAÇÕES
-========================================= */
+/* =====================================
+   CONFIGURAÇÃO DO FIREBASE
+===================================== */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+    authDomain: "rastreamento-reisado.firebaseapp.com",
+
+    databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
+    projectId: "rastreamento-reisado",
+
+    storageBucket: "rastreamento-reisado.firebasestorage.app",
+
+    messagingSenderId: "796420970266",
+
+    appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
+};
+
+const ADMIN_UID = "X21oJPBdhkeBabKD1SJtUwcMCXC2";
+
+const CLOUD_NAME = "iegrjgl6";
+
+const UPLOAD_PRESET = "reisado_digital";
+
+const $ = id => document.getElementById(id);
+
+function mensagem(id, texto) {
+
+    $(id).textContent = texto;
+
+}
+
+try {
+
+    firebase.initializeApp(firebaseConfig);
+
+} catch (erro) {
+
+    mensagem(
+        "mensagemLogin",
+        "Erro ao iniciar Firebase: " + erro.message
+    );
+
+    throw erro;
+
+}
+
+const auth = firebase.auth();
+
+const db = firebase.database();
+
+const boisRef = db.ref("boisPorAno");
+
+const agendasRef = db.ref("agendas");
+
+const homenagensRef = db.ref("homenagens");
+
+const conteudoRef = db.ref("portalConteudo/inicio");
+
+const fotosRef = db.ref("portalFotos");
+
+const videosRef = db.ref("portalVideos");
+
+const posicoesRef = db.ref("posicoesBois");
+
+/* =====================================
+   VARIÁVEIS
+===================================== */
+
+let usuarioAtual = null;
+
+let temporada = "2027";
+
+let bois = [];
+
+let apresentacoes = [];
+
+let homenagens = [];
+
+let fotos = [];
+
+let videos = [];
+
+let boiEmEdicao = null;
+
+let agendaEmEdicao = null;
+
+let homenagemEmEdicao = null;
+
+let videoEmEdicao = null;
+
+let consultas = [];
+
+let refBoisAtiva = null;
+
+let conteudoAlterado = false;
+
+const temporadas = new Set(["2027"]);
+
+/* =====================================
+   FUNÇÕES AUXILIARES
+===================================== */
+
+function autorizado() {
+
+    return auth.currentUser?.uid === ADMIN_UID;
+
+}
+
+function normalizar(texto) {
+
+    return String(texto || "")
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+
+}
+
+function periodoTemporada(ano) {
+
+    return {
+
+        inicio: (Number(ano) - 1) + "-12-31",
+
+        fim: ano + "-01-06"
+
+    };
+
+}
+
+function formatarData(data) {
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(data))) {
+
+        return "Data não informada";
+
+    }
+
+    const [ano, mes, dia] = data.split("-");
+
+    return dia + "/" + mes + "/" + ano;
+
+}
+
+function dentroDaTemporada(data, ano) {
+
+    const p = periodoTemporada(ano);
+
+    return data >= p.inicio && data <= p.fim;
+
+}
+
+function criarElemento(tag, texto) {
+
+    const el = document.createElement(tag);
+
+    if (texto !== undefined) {
+
+        el.textContent = texto;
+
+    }
+
+    return el;
+
+}
+
+function botao(texto, acao, classe = "") {
+
+    const b = criarElemento("button", texto);
+
+    b.type = "button";
+
+    b.className = classe;
+
+    b.onclick = acao;
+
+    return b;
+
+}
+
+function criarItem(titulo, detalhes, acoes = []) {
+
+    const card = criarElemento("div");
+
+    card.className = "item";
+
+    card.appendChild(criarElemento("h3", titulo));
+
+    detalhes.forEach(d => {
+
+        card.appendChild(criarElemento("p", d));
+
+    });
+
+    if (acoes.length) {
+
+        const linha = criarElemento("div");
+
+        linha.className = "acoes";
+
+        acoes.forEach(a => linha.appendChild(a));
+
+        card.appendChild(linha);
+
+    }
+
+    return card;
+
+}
+
+function ouvir(ref, callback, erro) {
+
+    ref.on("value", callback, erro);
+
+    consultas.push(ref);
+
+}
+
+function pararConsultas() {
+
+    consultas.forEach(ref => ref.off());
+
+    consultas = [];
+
+    refBoisAtiva = null;
+
+}
+
+/* =====================================
+   CONTROLE DAS ABAS
+===================================== */
+
+function mostrarAba(nome) {
+
+    const abas = [
+
+        "bois",
+
+        "agenda",
+
+        "homenagens",
+
+        "conteudo",
+
+        "fotos",
+
+        "videos",
+
+        "mapa"
+
+    ];
+
+    abas.forEach(n => {
+
+        const sufixo = n[0].toUpperCase() + n.slice(1);
+
+        $("secao" + sufixo)
+            .classList.toggle("oculto", n !== nome);
+
+    });
+
+    document.querySelectorAll("[data-aba]")
+        .forEach(b => {
+
+            b.classList.toggle(
+                "ativo",
+                b.dataset.aba === nome
+            );
+
+        });
+
+    if (nome === "mapa" && autorizado()) {
+
+        abrirMapaAdmin();
+
+    }
+
+}
+
+document.querySelectorAll("[data-aba]")
+    .forEach(b => {
+
+        b.onclick = () => mostrarAba(b.dataset.aba);
+
+    });
+
+/* =====================================
+   LOGIN
+===================================== */
+
+$("formLogin").onsubmit = async e => {
+
+    e.preventDefault();
+
+    $("entrar").disabled = true;
+
+    mensagem("mensagemLogin", "Entrando...");
+
+    try {
+
+        const cred = await auth.signInWithEmailAndPassword(
+
+            $("email").value.trim(),
+
+            $("senha").value
+
+        );
+
+        if (cred.user.uid !== ADMIN_UID) {
+
+            await auth.signOut();
+
+            throw new Error("Usuário não autorizado.");
+
+        }
+
+        $("senha").value = "";
+
+        mensagem("mensagemLogin", "");
+
+    } catch (erro) {
+
+        mensagem(
+            "mensagemLogin",
+            "Não foi possível entrar: " + erro.message
+        );
+
+    } finally {
+
+        $("entrar").disabled = false;
+
+    }
+
+};
+
+$("sair").onclick = async () => {
+
+    if (salvandoMapa) {
+
+        alert("Aguarde o salvamento das posições.");
+
+        return;
+
+    }
+
+    if (
+        alteracoesMapa &&
+        !confirm("Sair sem salvar as posições?")
+    ) {
+
+        return;
+
+    }
+
+    await auth.signOut();
+
+};
+
+/* =====================================
+   TEMPORADAS
+===================================== */
+
+async function carregarTemporadas() {
+
+    try {
+
+        const s = await boisRef.once("value");
+
+        s.forEach(item => {
+
+            if (
+                /^\d{4}$/.test(item.key) &&
+                Number(item.key) >= 2027
+            ) {
+
+                temporadas.add(item.key);
+
+            }
+
+        });
+
+    } catch (erro) {
+
+        mensagem("mensagemAno", erro.message);
+
+    }
+
+    atualizarTemporadas();
+
+}
+
+function atualizarTemporadas() {
+
+    const select = $("anoTemporada");
+
+    select.replaceChildren();
+
+    [...temporadas]
+        .sort((a, b) => Number(b) - Number(a))
+        .forEach(ano => {
+
+            select.add(new Option(ano, ano));
+
+        });
+
+    select.value = temporada;
+
+    const p = periodoTemporada(temporada);
+
+    $("periodo").textContent =
+
+        "Temporada " + temporada + ": " +
+
+        formatarData(p.inicio) + " a " +
+
+        formatarData(p.fim);
+
+    $("dataApresentacao").min = p.inicio;
+
+    $("dataApresentacao").max = p.fim;
+
+    $("avisoAgenda").textContent =
+
+        "Cadastre apresentações entre " +
+
+        formatarData(p.inicio) + " e " +
+
+        formatarData(p.fim) + ".";
+
+    $("tituloBoi").textContent =
+
+        "Cadastrar boi — " + temporada;
+
+}
+
+$("adicionarAno").onclick = () => {
+
+    const ano = Number($("novoAno").value);
+
+    if (
+        !Number.isInteger(ano) ||
+        ano < 2028 ||
+        ano > 2099
+    ) {
+
+        mensagem(
+            "mensagemAno",
+            "Informe um ano entre 2028 e 2099."
+        );
+
+        return;
+
+    }
+
+    temporadas.add(String(ano));
+
+    $("novoAno").value = "";
+
+    mudarTemporada(String(ano));
+
+    mensagem(
+        "mensagemAno",
+        "Temporada preparada. Cadastre um boi para registrá-la."
+    );
+
+};
+
+$("anoTemporada").onchange = e => {
+
+    mudarTemporada(e.target.value);
+
+};
+
+function mudarTemporada(ano) {
+
+    temporada = ano;
+
+    cancelarBoi();
+
+    cancelarAgenda();
+
+    atualizarTemporadas();
+
+    carregarBois();
+
+    renderizarAgenda();
+
+}
+
+/* =====================================
+   CADASTRO DOS BOIS
+===================================== */
+
+function carregarBois() {
+
+    if (!autorizado()) return;
+
+    if (refBoisAtiva) {
+
+        refBoisAtiva.off();
+
+        consultas = consultas.filter(
+            r => r !== refBoisAtiva
+        );
+
+    }
+
+    refBoisAtiva = boisRef.child(temporada);
+
+    const anoConsulta = temporada;
+
+    ouvir(refBoisAtiva, s => {
+
+        if (anoConsulta !== temporada) return;
+
+        bois = [];
+
+        s.forEach(item => {
+
+            const d = item.val();
+
+            if (!d || !d.nome) return;
+
+            bois.push({
+
+                id: item.key,
+
+                nome: String(d.nome),
+
+                dono: String(d.dono || ""),
+
+                comunidade: String(d.comunidade || "")
+
+            });
+
+        });
+
+        bois.sort((a, b) =>
+
+            a.nome.localeCompare(b.nome, "pt-BR")
+
+        );
+
+        renderizarBois();
+
+        atualizarSelectBois();
+
+    }, erro => {
+
+        mensagem("mensagemBoi", erro.message);
+
+    });
+
+}
+
+function renderizarBois() {
+
+    const lista = $("listaBois");
+
+    lista.replaceChildren();
+
+    $("quantidadeBois").textContent =
+
+        bois.length + " bois cadastrados em " + temporada;
+
+    if (!bois.length) {
+
+        lista.textContent =
+
+            "Nenhum boi cadastrado nesta temporada.";
+
+        return;
+
+    }
+
+    bois.forEach(b => {
+
+        lista.appendChild(criarItem(
+
+            "🐂 " + b.nome,
+
+            [
+
+                "👤 Proprietário: " + b.dono,
+
+                "🏘️ Localidade: " +
+
+                (b.comunidade || "Não informada")
+
+            ],
+
+            [
+
+                botao("✏️ Editar", () => editarBoi(b)),
+
+                botao(
+                    "🗑️ Excluir",
+                    () => excluirBoi(b),
+                    "perigo"
+                )
+
+            ]
+
+        ));
+
+    });
+
+}
+
+function editarBoi(b) {
+
+    boiEmEdicao = b.id;
+
+    $("nomeBoi").value = b.nome;
+
+    $("donoBoi").value = b.dono;
+
+    $("comunidadeBoi").value = b.comunidade;
+
+    $("tituloBoi").textContent = "Editar boi";
+
+    $("salvarBoi").textContent = "Salvar alterações";
+
+    $("cancelarBoi").classList.remove("oculto");
+
+    mostrarAba("bois");
+
+    window.scrollTo({top: 0, behavior: "smooth"});
+
+}
+
+function cancelarBoi() {
+
+    boiEmEdicao = null;
+
+    $("formBoi").reset();
+
+    $("tituloBoi").textContent =
+
+        "Cadastrar boi — " + temporada;
+
+    $("salvarBoi").textContent = "Salvar boi";
+
+    $("cancelarBoi").classList.add("oculto");
+
+}
+
+$("cancelarBoi").onclick = cancelarBoi;
+
+$("formBoi").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const ano = temporada;
+
+    const id = boiEmEdicao;
+
+    const dados = {
+
+        nome: $("nomeBoi").value.trim(),
+
+        dono: $("donoBoi").value.trim(),
+
+        comunidade: $("comunidadeBoi").value.trim()
+
+    };
+
+    if (!dados.nome || !dados.dono) return;
+
+    if (bois.some(b =>
+
+        normalizar(b.nome) === normalizar(dados.nome) &&
+
+        b.id !== id
+
+    )) {
+
+        mensagem(
+            "mensagemBoi",
+            "Já existe um boi com esse nome."
+        );
+
+        return;
+
+    }
+
+    $("salvarBoi").disabled = true;
+
+    try {
+
+        const antigo = bois.find(b => b.id === id);
+
+        if (id) {
+
+            await boisRef.child(ano).child(id).update(dados);
+
+        } else {
+
+            await boisRef.child(ano).push(dados);
+
+        }
+
+        if (antigo && antigo.nome !== dados.nome) {
+
+            const updates = {};
+
+            apresentacoes.forEach(a => {
+
+                if (
+
+                    normalizar(a.boi) ===
+                    normalizar(antigo.nome) &&
+
+                    dentroDaTemporada(a.data, ano)
+
+                ) {
+
+                    updates[a.id + "/boi"] = dados.nome;
+
+                }
+
+            });
+
+            if (Object.keys(updates).length) {
+
+                await agendasRef.update(updates);
+
+            }
+
+        }
+
+        cancelarBoi();
+
+        mensagem("mensagemBoi", "Boi salvo com sucesso!");
+
+        await carregarTemporadas();
+
+    } catch (erro) {
+
+        mensagem(
+            "mensagemBoi",
+            "Erro ao salvar: " + erro.message
+        );
+
+    } finally {
+
+        $("salvarBoi").disabled = false;
+
+    }
+
+};
+
+async function excluirBoi(b) {
+
+    if (!autorizado()) return;
+
+    const ano = temporada;
+
+    const vinculadas = apresentacoes.filter(a =>
+
+        normalizar(a.boi) === normalizar(b.nome) &&
+
+        dentroDaTemporada(a.data, ano)
+
+    );
+
+    if (vinculadas.length) {
+
+        alert(
+            "Este boi possui apresentações. " +
+            "Exclua primeiro as apresentações."
+        );
+
+        return;
+
+    }
+
+    if (!confirm("Excluir " + b.nome + "?")) return;
+
+    try {
+
+        await db.ref().update({
+
+            ["boisPorAno/" + ano + "/" + b.id]: null,
+
+            ["posicoesBois/" + ano + "/" + b.id]: null
+
+        });
+
+        if (boiEmEdicao === b.id) cancelarBoi();
+
+        mensagem("mensagemBoi", "Boi excluído.");
+
+    } catch (erro) {
+
+        mensagem("mensagemBoi", erro.message);
+
+    }
+
+}
+
+/* =====================================
+   AGENDA
+===================================== */
+
+function atualizarSelectBois() {
+
+    const select = $("boiApresentacao");
+
+    const anterior = select.value;
+
+    select.replaceChildren(
+
+        new Option("Escolha um boi", "")
+
+    );
+
+    bois.forEach(b => {
+
+        select.add(new Option(b.nome, b.nome));
+
+    });
+
+    select.value = anterior;
+
+}
+
+function iniciarAgenda() {
+
+    ouvir(agendasRef, s => {
+
+        apresentacoes = [];
+
+        s.forEach(item => {
+
+            const d = item.val();
+
+            if (!d || !d.boi) return;
+
+            apresentacoes.push({
+
+                id: item.key,
+
+                boi: String(d.boi),
+
+                data: String(d.data || ""),
+
+                horario: String(d.horario || ""),
+
+                comunidade: String(d.comunidade || "")
+
+            });
+
+        });
+
+        apresentacoes.sort((a, b) =>
+
+            (a.data + a.horario)
+                .localeCompare(b.data + b.horario)
+
+        );
+
+        renderizarAgenda();
+
+    }, erro => {
+
+        mensagem("mensagemAgenda", erro.message);
+
+    });
+
+}
+
+function renderizarAgenda() {
+
+    const lista = $("listaAgenda");
+
+    lista.replaceChildren();
+
+    const filtradas = apresentacoes.filter(a =>
+
+        dentroDaTemporada(a.data, temporada)
+
+    );
+
+    if (!filtradas.length) {
+
+        lista.textContent =
+
+            "Nenhuma apresentação nesta temporada.";
+
+        return;
+
+    }
+
+    filtradas.forEach(a => {
+
+        lista.appendChild(criarItem(
+
+            "🐂 " + a.boi,
+
+            [
+
+                "📅 Data: " + formatarData(a.data),
+
+                "🕒 Horário: " + a.horario,
+
+                "📍 Local: " + a.comunidade
+
+            ],
+
+            [
+
+                botao("✏️ Editar", () => editarAgenda(a)),
+
+                botao(
+                    "🗑️ Excluir",
+                    () => excluirAgenda(a),
+                    "perigo"
+                )
+
+            ]
+
+        ));
+
+    });
+
+}
+
+function editarAgenda(a) {
+
+    agendaEmEdicao = a.id;
+
+    $("boiApresentacao").value = a.boi;
+
+    $("dataApresentacao").value = a.data;
+
+    $("horaApresentacao").value = a.horario;
+
+    $("comunidadeApresentacao").value = a.comunidade;
+
+    $("tituloAgenda").textContent = "Editar apresentação";
+
+    $("salvarAgenda").textContent = "Salvar alterações";
+
+    $("cancelarAgenda").classList.remove("oculto");
+
+    mostrarAba("agenda");
+
+    window.scrollTo({top: 0, behavior: "smooth"});
+
+}
+
+function cancelarAgenda() {
+
+    agendaEmEdicao = null;
+
+    $("formAgenda").reset();
+
+    $("tituloAgenda").textContent = "Cadastrar apresentação";
+
+    $("salvarAgenda").textContent = "Salvar apresentação";
+
+    $("cancelarAgenda").classList.add("oculto");
+
+}
+
+$("cancelarAgenda").onclick = cancelarAgenda;
+
+$("formAgenda").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const dados = {
+
+        boi: $("boiApresentacao").value,
+
+        data: $("dataApresentacao").value,
+
+        horario: $("horaApresentacao").value,
+
+        comunidade: $("comunidadeApresentacao").value.trim()
+
+    };
+
+    if (Object.values(dados).some(v => !v)) {
+
+        mensagem("mensagemAgenda", "Preencha todos os campos.");
+
+        return;
+
+    }
+
+    if (!dentroDaTemporada(dados.data, temporada)) {
+
+        mensagem("mensagemAgenda", "Data fora da temporada.");
+
+        return;
+
+    }
+
+    if (!bois.some(b => b.nome === dados.boi)) {
+
+        mensagem("mensagemAgenda", "Selecione um boi cadastrado.");
+
+        return;
+
+    }
+
+    $("salvarAgenda").disabled = true;
+
+    try {
+
+        if (agendaEmEdicao) {
+
+            await agendasRef.child(agendaEmEdicao).update(dados);
+
+        } else {
+
+            await agendasRef.push(dados);
+
+        }
+
+        cancelarAgenda();
+
+        mensagem(
+            "mensagemAgenda",
+            "Apresentação salva com sucesso!"
+        );
+
+    } catch (erro) {
+
+        mensagem("mensagemAgenda", erro.message);
+
+    } finally {
+
+        $("salvarAgenda").disabled = false;
+
+    }
+
+};
+
+async function excluirAgenda(a) {
+
+    if (!autorizado()) return;
+
+    if (!confirm("Excluir apresentação de " + a.boi + "?")) {
+
+        return;
+
+    }
+
+    try {
+
+        await agendasRef.child(a.id).remove();
+
+        if (agendaEmEdicao === a.id) cancelarAgenda();
+
+        mensagem("mensagemAgenda", "Apresentação excluída.");
+
+    } catch (erro) {
+
+        mensagem("mensagemAgenda", erro.message);
+
+    }
+
+}
+
+/* =====================================
+   HOMENAGENS
+===================================== */
+
+function iniciarHomenagens() {
+
+    ouvir(homenagensRef, s => {
+
+        homenagens = [];
+
+        s.forEach(item => {
+
+            const d = item.val();
+
+            if (!d || !d.nome) return;
+
+            homenagens.push({
+
+                id: item.key,
+
+                nome: String(d.nome),
+
+                papel: String(d.papel || ""),
+
+                mensagem: String(d.mensagem || "")
+
+            });
+
+        });
+
+        homenagens.sort((a, b) =>
+
+            a.nome.localeCompare(b.nome, "pt-BR")
+
+        );
+
+        renderizarHomenagens();
+
+    }, erro => {
+
+        mensagem("mensagemHomenagem", erro.message);
+
+    });
+
+}
+
+function renderizarHomenagens() {
+
+    const lista = $("listaHomenagens");
+
+    lista.replaceChildren();
+
+    $("quantidadeHomenagens").textContent =
+
+        homenagens.length + " pessoa(s) homenageada(s).";
+
+    if (!homenagens.length) {
+
+        lista.textContent = "Ainda não há homenageados.";
+
+        return;
+
+    }
+
+    homenagens.forEach(p => {
+
+        lista.appendChild(criarItem(
+
+            "🕊️ " + p.nome,
+
+            [
+
+                "Participação: " + p.papel,
+
+                p.mensagem
+
+            ],
+
+            [
+
+                botao("✏️ Editar", () => editarHomenagem(p)),
+
+                botao(
+                    "🗑️ Excluir",
+                    () => excluirHomenagem(p),
+                    "perigo"
+                )
+
+            ]
+
+        ));
+
+    });
+
+}
+
+function editarHomenagem(p) {
+
+    homenagemEmEdicao = p.id;
+
+    $("nomeHomenagem").value = p.nome;
+
+    $("papelHomenagem").value = p.papel;
+
+    $("textoHomenagem").value = p.mensagem;
+
+    $("tituloHomenagem").textContent = "Editar homenagem";
+
+    $("salvarHomenagem").textContent = "Salvar alterações";
+
+    $("cancelarHomenagem").classList.remove("oculto");
+
+    mostrarAba("homenagens");
+
+    window.scrollTo({top: 0, behavior: "smooth"});
+
+}
+
+function cancelarHomenagem() {
+
+    homenagemEmEdicao = null;
+
+    $("formHomenagem").reset();
+
+    $("tituloHomenagem").textContent = "Cadastrar homenageado";
+
+    $("salvarHomenagem").textContent = "Salvar homenagem";
+
+    $("cancelarHomenagem").classList.add("oculto");
+
+}
+
+$("cancelarHomenagem").onclick = cancelarHomenagem;
+
+$("formHomenagem").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const dados = {
+
+        nome: $("nomeHomenagem").value.trim(),
+
+        papel: $("papelHomenagem").value.trim(),
+
+        mensagem: $("textoHomenagem").value.trim()
+
+    };
+
+    if (!dados.nome || !dados.papel) return;
+
+    if (homenagens.some(p =>
+
+        normalizar(p.nome) === normalizar(dados.nome) &&
+
+        p.id !== homenagemEmEdicao
+
+    )) {
+
+        mensagem(
+            "mensagemHomenagem",
+            "Já existe homenagem com esse nome."
+        );
+
+        return;
+
+    }
+
+    $("salvarHomenagem").disabled = true;
+
+    try {
+
+        if (homenagemEmEdicao) {
+
+            await homenagensRef
+                .child(homenagemEmEdicao)
+                .update(dados);
+
+        } else {
+
+            await homenagensRef.push(dados);
+
+        }
+
+        cancelarHomenagem();
+
+        mensagem(
+            "mensagemHomenagem",
+            "Homenagem salva com sucesso!"
+        );
+
+    } catch (erro) {
+
+        mensagem("mensagemHomenagem", erro.message);
+
+    } finally {
+
+        $("salvarHomenagem").disabled = false;
+
+    }
+
+};
+
+async function excluirHomenagem(p) {
+
+    if (!autorizado()) return;
+
+    if (!confirm("Excluir homenagem a " + p.nome + "?")) {
+
+        return;
+
+    }
+
+    try {
+
+        await homenagensRef.child(p.id).remove();
+
+        if (homenagemEmEdicao === p.id) cancelarHomenagem();
+
+        mensagem("mensagemHomenagem", "Homenagem excluída.");
+
+    } catch (erro) {
+
+        mensagem("mensagemHomenagem", erro.message);
+
+    }
+
+}
+
+/* =====================================
+   TEXTOS EDITÁVEIS
+===================================== */
+
+const camposConteudo = [
+
+    "boasTitulo",
+
+    "boasTexto",
+
+    "historiaTitulo",
+
+    "historiaTexto",
+
+    "cultura1Titulo",
+
+    "cultura1Texto",
+
+    "cultura1Imagem",
+
+    "cultura2Titulo",
+
+    "cultura2Texto",
+
+    "cultura2Imagem"
+
+];
+
+const conteudoInicial = {
+
+    boasTitulo: "Bem-vindo ao Reisado Digital 2.0",
+
+    boasTexto:
+        "Conheça a tradição dos bois do Reisado " +
+        "de Boa Hora, no Piauí.",
+
+    historiaTitulo: "História do Reisado de Boa Hora",
+
+    historiaTexto:
+        "O Reisado é uma manifestação cultural " +
+        "tradicional que reúne música, dança, " +
+        "personagens e a participação das comunidades.",
+
+    cultura1Titulo: "Os Bois do Reisado",
+
+    cultura1Texto:
+        "Conheça os bois e seus proprietários.",
+
+    cultura1Imagem: "",
+
+    cultura2Titulo: "Festival do Reisado",
+
+    cultura2Texto:
+        "Acompanhe a programação cultural e " +
+        "as apresentações dos bois.",
+
+    cultura2Imagem: ""
+
+};
+
+camposConteudo.forEach(id => {
+
+    $(id).addEventListener("input", () => {
+
+        conteudoAlterado = true;
+
+    });
+
+});
+
+function iniciarConteudo() {
+
+    ouvir(conteudoRef, s => {
+
+        if (conteudoAlterado) return;
+
+        const dados = {
+
+            ...conteudoInicial,
+
+            ...(s.val() || {})
+
+        };
+
+        camposConteudo.forEach(id => {
+
+            $(id).value = dados[id] || "";
+
+        });
+
+    }, erro => {
+
+        mensagem("mensagemConteudo", erro.message);
+
+    });
+
+}
+
+$("formConteudo").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const dados = {};
+
+    camposConteudo.forEach(id => {
+
+        dados[id] = $(id).value.trim();
+
+    });
+
+    for (const id of ["cultura1Imagem", "cultura2Imagem"]) {
+
+        if (
+            dados[id] &&
+            !/^https:\/\//i.test(dados[id])
+        ) {
+
+            mensagem(
+                "mensagemConteudo",
+                "Use URLs HTTPS para as imagens."
+            );
+
+            return;
+
+        }
+
+    }
+
+    $("salvarConteudo").disabled = true;
+
+    try {
+
+        await conteudoRef.update(dados);
+
+        conteudoAlterado = false;
+
+        mensagem(
+            "mensagemConteudo",
+            "Textos salvos com sucesso!"
+        );
+
+    } catch (erro) {
+
+        mensagem("mensagemConteudo", erro.message);
+
+    } finally {
+
+        $("salvarConteudo").disabled = false;
+
+    }
+
+};
+
+/* =====================================
+   FOTOGRAFIAS — CLOUDINARY
+===================================== */
+
+function iniciarFotos() {
+
+    ouvir(fotosRef, s => {
+
+        fotos = [];
+
+        s.forEach(item => {
+
+            const d = item.val();
+
+            if (d && d.url) {
+
+                fotos.push({...d, id: item.key});
+
+            }
+
+        });
+
+        fotos.sort((a, b) =>
+
+            Number(b.criadoEm || 0) -
+
+            Number(a.criadoEm || 0)
+
+        );
+
+        renderizarFotos();
+
+    }, erro => {
+
+        mensagem("mensagemFoto", erro.message);
+
+    });
+
+}
+
+function renderizarFotos() {
+
+    const lista = $("listaFotos");
+
+    lista.replaceChildren();
+
+    if (!fotos.length) {
+
+        lista.textContent = "Nenhuma fotografia cadastrada.";
+
+        return;
+
+    }
+
+    fotos.forEach(f => {
+
+        const card = criarItem(
+
+            f.legenda || "Fotografia",
+
+            [],
+
+            [
+
+                botao(
+                    "🗑️ Excluir",
+                    () => excluirFoto(f),
+                    "perigo"
+                )
+
+            ]
+
+        );
+
+        const img = criarElemento("img");
+
+        img.src = f.url;
+
+        img.alt = f.legenda || "Fotografia do Reisado";
+
+        img.loading = "lazy";
+
+        card.insertBefore(img, card.children[1] || null);
+
+        lista.appendChild(card);
+
+    });
+
+}
+
+$("formFoto").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const arquivo = $("arquivoFoto").files[0];
+
+    const legenda = $("legendaFoto").value.trim();
+
+    if (!arquivo || !legenda) return;
+
+    const tipos = [
+
+        "image/jpeg",
+
+        "image/png",
+
+        "image/webp"
+
+    ];
+
+    if (
+
+        !tipos.includes(arquivo.type) ||
+
+        arquivo.size > 8 * 1024 * 1024
+
+    ) {
+
+        mensagem(
+            "mensagemFoto",
+            "Use JPG, PNG ou WebP de até 8 MB."
+        );
+
+        return;
+
+    }
+
+    $("enviarFoto").disabled = true;
+
+    mensagem("mensagemFoto", "Enviando fotografia...");
+
+    try {
+
+        const formData = new FormData();
+
+        formData.append("file", arquivo);
+
+        formData.append("upload_preset", UPLOAD_PRESET);
+
+        const resposta = await fetch(
+
+            "https://api.cloudinary.com/v1_1/" +
+
+            CLOUD_NAME + "/image/upload",
+
+            {
+
+                method: "POST",
+
+                body: formData
+
+            }
+
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok || !dados.secure_url) {
+
+            throw new Error(
+
+                dados.error?.message ||
+
+                "Falha no envio da fotografia."
+
+            );
+
+        }
+
+        if (!autorizado()) {
+
+            throw new Error("Sessão encerrada.");
+
+        }
+
+        await fotosRef.push({
+
+            url: dados.secure_url,
+
+            legenda: legenda,
+
+            publicId: dados.public_id,
+
+            criadoEm: firebase.database.ServerValue.TIMESTAMP
+
+        });
+
+        $("formFoto").reset();
+
+        mensagem(
+            "mensagemFoto",
+            "Fotografia enviada com sucesso!"
+        );
+
+    } catch (erro) {
+
+        mensagem(
+            "mensagemFoto",
+            "Erro ao enviar: " + erro.message
+        );
+
+    } finally {
+
+        $("enviarFoto").disabled = false;
+
+    }
+
+};
+
+async function excluirFoto(f) {
+
+    if (!autorizado()) return;
+
+    if (!confirm("Remover esta fotografia do portal?")) {
+
+        return;
+
+    }
+
+    try {
+
+        await fotosRef.child(f.id).remove();
+
+        mensagem(
+            "mensagemFoto",
+            "Fotografia removida do portal."
+        );
+
+    } catch (erro) {
+
+        mensagem("mensagemFoto", erro.message);
+
+    }
+
+}
+
+/* =====================================
+   VÍDEOS DO YOUTUBE
+===================================== */
+
+function youtubeId(url) {
+
+    try {
+
+        const u = new URL(url);
+
+        if (!["http:", "https:"].includes(u.protocol)) {
+
+            return null;
+
+        }
+
+        let id = null;
+
+        if (["youtu.be", "www.youtu.be"].includes(u.hostname)) {
+
+            id = u.pathname.split("/")[1];
+
+        } else if (
+
+            ["youtube.com", "www.youtube.com", "m.youtube.com"]
+
+                .includes(u.hostname)
+
+        ) {
+
+            id = u.pathname === "/watch"
+
+                ? u.searchParams.get("v")
+
+                : u.pathname.match(
+                    /^\/(shorts|embed|live)\/([^/]+)/
+                )?.[2];
+
+        }
+
+        return /^[A-Za-z0-9_-]{11}$/.test(id || "")
+
+            ? id
+
+            : null;
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+function iniciarVideos() {
+
+    ouvir(videosRef, s => {
+
+        videos = [];
+
+        s.forEach(item => {
+
+            const d = item.val();
+
+            if (d && d.titulo) {
+
+                videos.push({...d, id: item.key});
+
+            }
+
+        });
+
+        renderizarVideos();
+
+    }, erro => {
+
+        mensagem("mensagemVideo", erro.message);
+
+    });
+
+}
+
+function renderizarVideos() {
+
+    const lista = $("listaVideos");
+
+    lista.replaceChildren();
+
+    if (!videos.length) {
+
+        lista.textContent = "Nenhum vídeo cadastrado.";
+
+        return;
+
+    }
+
+    videos.forEach(v => {
+
+        const card = criarItem(
+
+            "🎬 " + v.titulo,
+
+            [],
+
+            [
+
+                botao("✏️ Editar", () => editarVideo(v)),
+
+                botao(
+                    "🗑️ Excluir",
+                    () => excluirVideo(v),
+                    "perigo"
+                )
+
+            ]
+
+        );
+
+        const id = youtubeId(v.url);
+
+        if (id) {
+
+            const img = criarElemento("img");
+
+            img.src =
+
+                "https://img.youtube.com/vi/" +
+
+                id + "/hqdefault.jpg";
+
+            img.alt = v.titulo;
+
+            img.loading = "lazy";
+
+            card.insertBefore(img, card.children[1] || null);
+
+            const link = criarElemento("a", "Assistir no YouTube");
+
+            link.href =
+
+                "https://www.youtube.com/watch?v=" + id;
+
+            link.target = "_blank";
+
+            link.rel = "noopener noreferrer";
+
+            card.appendChild(link);
+
+        }
+
+        lista.appendChild(card);
+
+    });
+
+}
+
+function editarVideo(v) {
+
+    videoEmEdicao = v.id;
+
+    $("tituloVideo").value = v.titulo;
+
+    $("urlVideo").value = v.url;
+
+    $("salvarVideo").textContent = "Salvar alterações";
+
+    $("cancelarVideo").classList.remove("oculto");
+
+    mostrarAba("videos");
+
+}
+
+function cancelarVideo() {
+
+    videoEmEdicao = null;
+
+    $("formVideo").reset();
+
+    $("salvarVideo").textContent = "Salvar vídeo";
+
+    $("cancelarVideo").classList.add("oculto");
+
+}
+
+$("cancelarVideo").onclick = cancelarVideo;
+
+$("formVideo").onsubmit = async e => {
+
+    e.preventDefault();
+
+    if (!autorizado()) return;
+
+    const dados = {
+
+        titulo: $("tituloVideo").value.trim(),
+
+        url: $("urlVideo").value.trim()
+
+    };
+
+    if (!dados.titulo || !youtubeId(dados.url)) {
+
+        mensagem(
+            "mensagemVideo",
+            "Informe título e link válido do YouTube."
+        );
+
+        return;
+
+    }
+
+    $("salvarVideo").disabled = true;
+
+    try {
+
+        if (videoEmEdicao) {
+
+            await videosRef.child(videoEmEdicao).set(dados);
+
+        } else {
+
+            await videosRef.push(dados);
+
+        }
+
+        cancelarVideo();
+
+        mensagem("mensagemVideo", "Vídeo salvo com sucesso!");
+
+    } catch (erro) {
+
+        mensagem("mensagemVideo", erro.message);
+
+    } finally {
+
+        $("salvarVideo").disabled = false;
+
+    }
+
+};
+
+async function excluirVideo(v) {
+
+    if (!autorizado()) return;
+
+    if (!confirm("Excluir o vídeo " + v.titulo + "?")) {
+
+        return;
+
+    }
+
+    try {
+
+        await videosRef.child(v.id).remove();
+
+        if (videoEmEdicao === v.id) cancelarVideo();
+
+        mensagem("mensagemVideo", "Vídeo excluído.");
+
+    } catch (erro) {
+
+        mensagem("mensagemVideo", erro.message);
+
+    }
+
+}
+
+/* =====================================
+   MAPA ADMINISTRATIVO DOS BOIS
+===================================== */
 
 const CENTRO_ADMIN = [
-  -4.408329,
-  -42.122859
+
+    -4.408329,
+
+    -42.122859
+
 ];
 
 const ZOOM_ADMIN = 17;
-
-const posicoesRef = db.ref("posicoesBois");
 
 let mapaAdmin = null;
 
@@ -85,1100 +2939,896 @@ let salvandoMapa = false;
 
 let carregandoMapa = false;
 
+let abrindoMapa = false;
+
+let mapaCarregado = false;
+
 let anoCarregado = null;
 
 let numeroConsulta = 0;
 
-let mapaCarregado = false;
-
-const obter = id =>
-  document.getElementById(id);
-
-/* =========================================
-   CRIAR NOVA ABA
-========================================= */
-
-const abaMapa = document.createElement("button");
-
-abaMapa.type = "button";
-
-abaMapa.textContent = "🗺️ Mapa dos Bois";
-
-abaMapa.dataset.aba = "mapa";
-
-document.querySelector(".abas")
-  .appendChild(abaMapa);
-
-/* =========================================
-   CRIAR SEÇÃO ADMINISTRATIVA
-========================================= */
-
-const secaoMapa = document.createElement("section");
-
-secaoMapa.id = "secaoMapa";
-
-secaoMapa.className = "oculto";
-
-secaoMapa.innerHTML = `
-
-<div class="caixa">
-
-  <h2>🗺️ Posicionar Bois no Mapa</h2>
-
-  <div class="aviso">
-
-    Arraste os ícones dos bois até os pontos
-    culturais desejados em Boa Hora.
-
-    <br><br>
-
-    Depois clique em
-    <strong>Salvar posições</strong>.
-
-    <br><br>
-
-    As posições serão exibidas no mapa
-    público do Reisado Digital 2.0.
-
-    Não existe rastreamento GPS.
-
-  </div>
-
-  <label for="anoMapaAdmin">
-    Selecionar temporada
-  </label>
-
-  <select id="anoMapaAdmin"></select>
-
-  <div class="acoes">
-
-    <button
-      id="centralizarMapaAdmin"
-      type="button">
-
-      📍 Centralizar Boa Hora
-
-    </button>
-
-    <button
-      id="recarregarMapaAdmin"
-      type="button"
-      class="secundario">
-
-      🔄 Recarregar posições
-
-    </button>
-
-  </div>
-
-  <div id="mapaAdministrativo"></div>
-
-  <p id="quantidadeMapaAdmin"></p>
-
-  <div class="acoes">
-
-    <button
-      id="salvarMapaAdmin"
-      type="button"
-      disabled>
-
-      💾 Salvar posições
-
-    </button>
-
-    <button
-      id="cancelarMapaAdmin"
-      type="button"
-      class="secundario">
-
-      Cancelar alterações
-
-    </button>
-
-  </div>
-
-  <p
-    id="mensagemMapaAdmin"
-    class="mensagem"
-    role="status">
-  </p>
-
-</div>
-
-<div class="caixa">
-
-  <h2>🐂 Bois disponíveis no mapa</h2>
-
-  <div id="listaMapaAdmin"></div>
-
-</div>
-
-`;
-
-obter("telaPainel").appendChild(secaoMapa);
-
-/* =========================================
-   MENSAGENS
-========================================= */
-
 function mensagemMapa(texto) {
 
-  obter("mensagemMapaAdmin").textContent =
-    texto;
+    mensagem("mensagemMapaAdmin", texto);
 
 }
-
-/* =========================================
-   CONTROLE DOS BOTÕES
-========================================= */
 
 function atualizarBotoesMapa() {
 
-  obter("salvarMapaAdmin").disabled =
-    salvandoMapa ||
-    carregandoMapa ||
-    !mapaCarregado ||
-    !alteracoesMapa ||
-    !marcadoresAdmin.size;
+    $("salvarMapaAdmin").disabled =
 
-  obter("anoMapaAdmin").disabled =
-    salvandoMapa || carregandoMapa;
+        salvandoMapa ||
 
-  obter("cancelarMapaAdmin").disabled =
-    salvandoMapa || carregandoMapa;
+        carregandoMapa ||
 
-  obter("recarregarMapaAdmin").disabled =
-    salvandoMapa || carregandoMapa;
+        !mapaCarregado ||
+
+        !alteracoesMapa;
+
+    $("anoMapaAdmin").disabled =
+
+        salvandoMapa || carregandoMapa || abrindoMapa;
+
+    $("cancelarMapaAdmin").disabled =
+
+        salvandoMapa || carregandoMapa || abrindoMapa;
+
+    $("recarregarMapaAdmin").disabled =
+
+        salvandoMapa || carregandoMapa || abrindoMapa;
 
 }
-
-/* =========================================
-   CRIAR MAPA
-========================================= */
 
 function iniciarMapaAdmin() {
 
-  if (mapaAdmin) {
+    if (mapaAdmin) {
 
-    mapaAdmin.invalidateSize();
+        mapaAdmin.invalidateSize();
 
-    return;
+        return;
 
-  }
-
-  mapaAdmin = L.map(
-    "mapaAdministrativo",
-    {
-      scrollWheelZoom: true
-    }
-  ).setView(
-    CENTRO_ADMIN,
-    ZOOM_ADMIN
-  );
-
-  const tradicional = L.tileLayer(
-
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-
-    {
-      maxZoom: 19,
-
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }
 
-  ).addTo(mapaAdmin);
+    if (typeof L === "undefined") {
 
-  const colorido = L.tileLayer(
+        throw new Error("Não foi possível carregar o Leaflet.");
 
-    "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
-
-    {
-      maxZoom: 19,
-
-      attribution:
-        "&copy; OpenStreetMap contributors &copy; CARTO"
     }
 
-  );
+    mapaAdmin = L.map(
 
-  L.control.layers({
+        "mapaAdministrativo",
 
-    "Mapa tradicional": tradicional,
+        {
 
-    "Mapa colorido": colorido
+            scrollWheelZoom: true
 
-  }).addTo(mapaAdmin);
+        }
 
-  grupoAdmin = L.layerGroup()
-    .addTo(mapaAdmin);
+    ).setView(CENTRO_ADMIN, ZOOM_ADMIN);
+
+    const tradicional = L.tileLayer(
+
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+        {
+
+            maxZoom: 19,
+
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+        }
+
+    ).addTo(mapaAdmin);
+
+    const colorido = L.tileLayer(
+
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+
+        {
+
+            maxZoom: 19,
+
+            attribution: "&copy; OpenStreetMap contributors &copy; CARTO"
+
+        }
+
+    );
+
+    L.control.layers({
+
+        "Mapa tradicional": tradicional,
+
+        "Mapa colorido": colorido
+
+    }).addTo(mapaAdmin);
+
+    grupoAdmin = L.layerGroup().addTo(mapaAdmin);
 
 }
-
-/* =========================================
-   ÍCONE PERSONALIZADO DO REISADO
-========================================= */
 
 function criarIconeAdmin() {
 
-  return L.divIcon({
+    return L.divIcon({
 
-    className: "icone-admin-boi",
+        className: "icone-admin-boi",
 
-    html:
-      '<img src="icone-boi-reisado.png" alt="">',
+        html: '<img src="icone-boi-reisado.png" alt="Boi">',
 
-    iconSize: [52, 52],
+        iconSize: [52, 52],
 
-    iconAnchor: [26, 26],
+        iconAnchor: [26, 26],
 
-    popupAnchor: [0, -26],
+        popupAnchor: [0, -26],
 
-    tooltipAnchor: [0, 30]
+        tooltipAnchor: [0, 30]
 
-  });
+    });
 
 }
-
-/* =========================================
-   POSIÇÕES INICIAIS ILUSTRATIVAS
-========================================= */
 
 function posicaoInicial(indice, total) {
 
-  const anel = Math.floor(indice / 8);
+    const anel = Math.floor(indice / 8);
 
-  const quantidade = Math.min(
-    8,
-    total - anel * 8
-  );
+    const quantidade = Math.min(
 
-  const angulo =
+        8,
 
-    2 * Math.PI * (indice % 8) /
+        total - anel * 8
 
-    Math.max(quantidade, 1) -
+    );
 
-    Math.PI / 2;
+    const angulo =
 
-  const raio = 110 + anel * 95;
+        2 * Math.PI * (indice % 8) /
 
-  return [
+        Math.max(quantidade, 1) -
 
-    CENTRO_ADMIN[0] +
+        Math.PI / 2;
 
-    raio * Math.sin(angulo) / 111320,
+    const raio = 110 + anel * 95;
 
-    CENTRO_ADMIN[1] +
+    return [
 
-    raio * Math.cos(angulo) /
+        CENTRO_ADMIN[0] +
 
-    (
-      111320 *
-      Math.cos(
-        CENTRO_ADMIN[0] * Math.PI / 180
-      )
-    )
+        raio * Math.sin(angulo) / 111320,
 
-  ];
+        CENTRO_ADMIN[1] +
 
-}
+        raio * Math.cos(angulo) /
 
-/* =========================================
-   VALIDAR COORDENADAS
-========================================= */
+        (
 
-function posicaoValida(posicao) {
+            111320 *
 
-  return (
+            Math.cos(CENTRO_ADMIN[0] * Math.PI / 180)
 
-    posicao &&
+        )
 
-    Number.isFinite(posicao.latitude) &&
-
-    Number.isFinite(posicao.longitude) &&
-
-    Math.abs(posicao.latitude) <= 90 &&
-
-    Math.abs(posicao.longitude) <= 180
-
-  );
+    ];
 
 }
 
-/* =========================================
-   CARREGAR TEMPORADAS
-========================================= */
+function posicaoValida(p) {
+
+    return Boolean(
+
+        p &&
+
+        Number.isFinite(p.latitude) &&
+
+        Number.isFinite(p.longitude) &&
+
+        Math.abs(p.latitude) <= 90 &&
+
+        Math.abs(p.longitude) <= 180
+
+    );
+
+}
 
 async function carregarAnosMapa() {
 
-  const snapshot = await boisRef.once("value");
+    const s = await boisRef.once("value");
 
-  const anos = new Set(["2027"]);
+    const anos = new Set(temporadas);
 
-  snapshot.forEach(item => {
+    s.forEach(item => {
 
-    if (
+        if (
 
-      /^20[2-9][0-9]$/.test(item.key) &&
+            /^\d{4}$/.test(item.key) &&
 
-      Number(item.key) >= 2027
+            Number(item.key) >= 2027
 
-    ) {
+        ) {
 
-      anos.add(item.key);
+            anos.add(item.key);
 
-    }
-
-  });
-
-  const select = obter("anoMapaAdmin");
-
-  const anterior = select.value || temporada;
-
-  select.replaceChildren();
-
-  [...anos]
-
-    .sort((a, b) => Number(b) - Number(a))
-
-    .forEach(ano => {
-
-      select.add(new Option(ano, ano));
+        }
 
     });
 
-  select.value = anos.has(anterior)
+    const select = $("anoMapaAdmin");
 
-    ? anterior
+    const anterior = select.value || temporada;
 
-    : "2027";
+    select.replaceChildren();
+
+    [...anos]
+        .sort((a, b) => Number(b) - Number(a))
+        .forEach(ano => {
+
+            select.add(new Option(ano, ano));
+
+        });
+
+    select.value = anos.has(anterior)
+
+        ? anterior
+
+        : "2027";
 
 }
 
-/* =========================================
-   CARREGAR BOIS E POSIÇÕES
-========================================= */
+async function abrirMapaAdmin() {
+
+    if (!autorizado()) return;
+
+    try {
+
+        iniciarMapaAdmin();
+
+        setTimeout(() => {
+
+            mapaAdmin?.invalidateSize();
+
+        }, 200);
+
+        if (
+
+            alteracoesMapa ||
+
+            salvandoMapa ||
+
+            carregandoMapa ||
+
+            abrindoMapa
+
+        ) {
+
+            return;
+
+        }
+
+        abrindoMapa = true;
+
+        atualizarBotoesMapa();
+
+        await carregarAnosMapa();
+
+        await carregarMapaBois();
+
+    } catch (erro) {
+
+        mensagemMapa("Erro no mapa: " + erro.message);
+
+    } finally {
+
+        abrindoMapa = false;
+
+        atualizarBotoesMapa();
+
+    }
+
+}
 
 async function carregarMapaBois() {
 
-  if (salvandoMapa) return;
+    if (!autorizado() || salvandoMapa || carregandoMapa) {
 
-  if (auth.currentUser?.uid !== ADMIN_UID) {
-
-    mensagemMapa("Acesso não autorizado.");
-
-    return;
-
-  }
-
-  const consulta = ++numeroConsulta;
-
-  const ano = obter("anoMapaAdmin").value;
-
-  carregandoMapa = true;
-
-  mapaCarregado = false;
-
-  atualizarBotoesMapa();
-
-  mensagemMapa("Carregando bois e posições...");
-
-  try {
-
-    const [snapshotBois, snapshotPosicoes] =
-
-      await Promise.all([
-
-        boisRef.child(ano).once("value"),
-
-        posicoesRef.child(ano).once("value")
-
-      ]);
-
-    if (
-
-      consulta !== numeroConsulta ||
-
-      auth.currentUser?.uid !== ADMIN_UID
-
-    ) return;
-
-    const dadosPosicoes =
-
-      snapshotPosicoes.val() || {};
-
-    const lista = [];
-
-    snapshotBois.forEach(item => {
-
-      const b = item.val();
-
-      if (!b || !b.nome) return;
-
-      lista.push({
-
-        id: item.key,
-
-        nome: String(b.nome),
-
-        dono: String(b.dono || ""),
-
-        comunidade: String(b.comunidade || "")
-
-      });
-
-    });
-
-    lista.sort((a, b) =>
-
-      a.nome.localeCompare(b.nome, "pt-BR")
-
-    );
-
-    grupoAdmin.clearLayers();
-
-    marcadoresAdmin.clear();
-
-    obter("listaMapaAdmin").replaceChildren();
-
-    lista.forEach((boi, indice) => {
-
-      const posicao = dadosPosicoes[boi.id];
-
-      const cadastrada = posicaoValida(posicao);
-
-      const coordenadas = cadastrada
-
-        ? [
-
-            posicao.latitude,
-
-            posicao.longitude
-
-          ]
-
-        : posicaoInicial(
-            indice,
-            lista.length
-          );
-
-      criarMarcadorAdmin(
-
-        boi,
-
-        coordenadas,
-
-        cadastrada
-
-      );
-
-    });
-
-    anoCarregado = ano;
-
-    alteracoesMapa = false;
-
-    mapaCarregado = true;
-
-    obter("quantidadeMapaAdmin").textContent =
-
-      lista.length +
-
-      " bois cadastrados na temporada " +
-
-      ano;
-
-    mapaAdmin.setView(
-
-      CENTRO_ADMIN,
-
-      ZOOM_ADMIN
-
-    );
-
-    mapaAdmin.invalidateSize();
-
-    mensagemMapa(
-
-      lista.length
-
-        ? "Arraste os bois para alterar suas posições."
-
-        : "Nenhum boi cadastrado nesta temporada."
-
-    );
-
-  } catch (erro) {
-
-    if (consulta !== numeroConsulta) return;
-
-    mensagemMapa(
-
-      "Erro ao carregar o mapa: " +
-
-      erro.message
-
-    );
-
-  } finally {
-
-    if (consulta === numeroConsulta) {
-
-      carregandoMapa = false;
-
-      atualizarBotoesMapa();
+        return;
 
     }
 
-  }
+    const consulta = ++numeroConsulta;
+
+    const ano = $("anoMapaAdmin").value;
+
+    carregandoMapa = true;
+
+    mapaCarregado = false;
+
+    atualizarBotoesMapa();
+
+    mensagemMapa("Carregando bois e posições...");
+
+    try {
+
+        const [snapshotBois, snapshotPosicoes] =
+
+            await Promise.all([
+
+                boisRef.child(ano).once("value"),
+
+                posicoesRef.child(ano).once("value")
+
+            ]);
+
+        if (
+
+            consulta !== numeroConsulta ||
+
+            !autorizado()
+
+        ) {
+
+            return;
+
+        }
+
+        const posicoes = snapshotPosicoes.val() || {};
+
+        const lista = [];
+
+        snapshotBois.forEach(item => {
+
+            const b = item.val();
+
+            if (!b || !b.nome) return;
+
+            lista.push({
+
+                id: item.key,
+
+                nome: String(b.nome),
+
+                dono: String(b.dono || ""),
+
+                comunidade: String(b.comunidade || "")
+
+            });
+
+        });
+
+        lista.sort((a, b) =>
+
+            a.nome.localeCompare(b.nome, "pt-BR")
+
+        );
+
+        grupoAdmin.clearLayers();
+
+        marcadoresAdmin.clear();
+
+        $("listaMapaAdmin").replaceChildren();
+
+        lista.forEach((boi, indice) => {
+
+            const p = posicoes[boi.id];
+
+            const cadastrada = posicaoValida(p);
+
+            const coordenadas = cadastrada
+
+                ? [p.latitude, p.longitude]
+
+                : posicaoInicial(indice, lista.length);
+
+            criarMarcadorAdmin(
+
+                boi,
+
+                coordenadas,
+
+                cadastrada
+
+            );
+
+        });
+
+        anoCarregado = ano;
+
+        alteracoesMapa = false;
+
+        mapaCarregado = true;
+
+        $("quantidadeMapaAdmin").textContent =
+
+            lista.length + " bois cadastrados em " + ano;
+
+        mapaAdmin.setView(CENTRO_ADMIN, ZOOM_ADMIN);
+
+        mapaAdmin.invalidateSize();
+
+        mensagemMapa(
+
+            lista.length
+
+                ? "Arraste os ícones para posicionar os bois."
+
+                : "Nenhum boi cadastrado nesta temporada."
+
+        );
+
+    } catch (erro) {
+
+        if (consulta === numeroConsulta) {
+
+            mensagemMapa(
+                "Erro ao carregar: " + erro.message
+            );
+
+        }
+
+    } finally {
+
+        if (consulta === numeroConsulta) {
+
+            carregandoMapa = false;
+
+            atualizarBotoesMapa();
+
+        }
+
+    }
 
 }
 
-/* =========================================
-   CRIAR MARCADOR ARRASTÁVEL
-========================================= */
+/* =====================================
+   MARCADORES ARRASTÁVEIS
+===================================== */
 
 function criarMarcadorAdmin(
 
-  boi,
-
-  coordenadas,
-
-  cadastrada
-
-) {
-
-  const marcador = L.marker(
+    boi,
 
     coordenadas,
 
-    {
+    cadastrada
 
-      icon: criarIconeAdmin(),
+) {
 
-      draggable: true,
+    const marcador = L.marker(
 
-      autoPan: true,
+        coordenadas,
 
-      title: boi.nome
+        {
 
-    }
+            icon: criarIconeAdmin(),
 
-  ).addTo(grupoAdmin);
+            draggable: true,
 
-  /* NOME E PROPRIETÁRIO */
+            autoPan: true,
 
-  const rotulo = document.createElement("div");
+            title: boi.nome
 
-  const nome = document.createElement("strong");
+        }
 
-  nome.textContent = boi.nome;
+    ).addTo(grupoAdmin);
 
-  const dono = document.createElement("div");
+    const rotulo = criarElemento("div");
 
-  dono.textContent = boi.dono;
+    rotulo.append(
 
-  rotulo.append(nome, dono);
+        criarElemento("strong", boi.nome),
 
-  marcador.bindTooltip(rotulo, {
-
-    permanent: true,
-
-    direction: "bottom",
-
-    className: "rotulo-admin-boi",
-
-    opacity: 1
-
-  });
-
-  /* INFORMAÇÕES DO BOI */
-
-  const popup = document.createElement("div");
-
-  [
-
-    boi.nome,
-
-    "Proprietário: " + boi.dono,
-
-    "Localidade: " + boi.comunidade,
-
-    "Arraste o ícone para posicionar."
-
-  ].forEach(texto => {
-
-    const linha = document.createElement("p");
-
-    linha.textContent = texto;
-
-    popup.appendChild(linha);
-
-  });
-
-  marcador.bindPopup(popup);
-
-  /* GUARDAR MARCADOR */
-
-  const registro = {
-
-    boi: boi,
-
-    marcador: marcador,
-
-    alterado: false
-
-  };
-
-  marcadoresAdmin.set(boi.id, registro);
-
-  /* LISTA DOS BOIS */
-
-  const card = document.createElement("div");
-
-  card.className = "item";
-
-  const titulo = document.createElement("h3");
-
-  titulo.textContent = "🐂 " + boi.nome;
-
-  const proprietario = document.createElement("p");
-
-  proprietario.textContent =
-
-    "Proprietário: " + boi.dono;
-
-  const situacao = document.createElement("p");
-
-  situacao.textContent = cadastrada
-
-    ? "📍 Posição cadastrada"
-
-    : "⚠️ Posição ilustrativa";
-
-  const botaoLocalizar =
-
-    document.createElement("button");
-
-  botaoLocalizar.type = "button";
-
-  botaoLocalizar.textContent = "Ver no mapa";
-
-  botaoLocalizar.onclick = () => {
-
-    mapaAdmin.setView(
-
-      marcador.getLatLng(),
-
-      18
+        criarElemento("div", boi.dono)
 
     );
 
-    marcador.openPopup();
+    marcador.bindTooltip(rotulo, {
 
-    obter("mapaAdministrativo").scrollIntoView({
+        permanent: true,
 
-      behavior: "smooth"
+        direction: "bottom",
+
+        className: "rotulo-admin-boi",
+
+        opacity: 1
 
     });
 
-  };
+    const popup = criarElemento("div");
 
-  card.append(
+    [
 
-    titulo,
+        boi.nome,
 
-    proprietario,
+        "Proprietário: " + boi.dono,
 
-    situacao,
+        "Localidade: " + boi.comunidade,
 
-    botaoLocalizar
+        "Arraste o ícone para alterar a posição."
 
-  );
+    ].forEach(texto => {
 
-  obter("listaMapaAdmin").appendChild(card);
+        popup.appendChild(criarElemento("p", texto));
 
-  registro.situacao = situacao;
+    });
 
-  /* QUANDO O BOI FOR ARRASTADO */
+    marcador.bindPopup(popup);
 
-  marcador.on("dragstart", () => {
+    const situacao = criarElemento(
 
-    marcador.closePopup();
+        "p",
 
-  });
+        cadastrada
 
-  marcador.on("dragend", () => {
+            ? "📍 Posição cadastrada"
 
-    if (salvandoMapa) return;
-
-    registro.alterado = true;
-
-    alteracoesMapa = true;
-
-    const p = marcador.getLatLng();
-
-    situacao.textContent =
-
-      "🟡 Posição alterada. Aguardando salvar.";
-
-    mensagemMapa(
-
-      boi.nome +
-
-      " foi reposicionado. " +
-
-      "Clique em Salvar posições."
+            : "⚠️ Posição ilustrativa"
 
     );
 
-    atualizarBotoesMapa();
+    const card = criarItem(
 
-  });
+        "🐂 " + boi.nome,
 
-}
+        ["Proprietário: " + boi.dono]
 
-/* =========================================
-   SALVAR POSIÇÕES NO FIREBASE
-========================================= */
+    );
 
-async function salvarPosicoesMapa() {
+    card.appendChild(situacao);
 
-  if (
+    card.appendChild(botao("Ver no mapa", () => {
 
-    salvandoMapa ||
+        mapaAdmin.setView(marcador.getLatLng(), 18);
 
-    carregandoMapa ||
+        marcador.openPopup();
 
-    !mapaCarregado ||
+        $("mapaAdministrativo").scrollIntoView({
 
-    !alteracoesMapa
+            behavior: "smooth"
 
-  ) return;
+        });
 
-  if (auth.currentUser?.uid !== ADMIN_UID) {
+    }));
 
-    mensagemMapa("Acesso não autorizado.");
+    $("listaMapaAdmin").appendChild(card);
 
-    return;
+    const registro = {
 
-  }
+        boi,
 
-  const ano = anoCarregado;
+        marcador,
 
-  const atualizacoes = {};
+        situacao,
 
-  marcadoresAdmin.forEach((registro, id) => {
-
-    if (!registro.alterado) return;
-
-    const p = registro.marcador.getLatLng();
-
-    atualizacoes[id] = {
-
-      latitude: Number(p.lat.toFixed(7)),
-
-      longitude: Number(p.lng.toFixed(7))
+        alterado: false
 
     };
 
-  });
+    marcadoresAdmin.set(boi.id, registro);
 
-  if (!Object.keys(atualizacoes).length) return;
+    marcador.on("dragstart", () => {
 
-  salvandoMapa = true;
-
-  atualizarBotoesMapa();
-
-  marcadoresAdmin.forEach(registro => {
-
-    registro.marcador.dragging.disable();
-
-  });
-
-  mensagemMapa("Salvando posições...");
-
-  try {
-
-    await posicoesRef
-
-      .child(ano)
-
-      .update(atualizacoes);
-
-    marcadoresAdmin.forEach(registro => {
-
-      if (registro.alterado) {
-
-        registro.situacao.textContent =
-
-          "📍 Posição cadastrada";
-
-      }
-
-      registro.alterado = false;
+        marcador.closePopup();
 
     });
 
-    alteracoesMapa = false;
+    marcador.on("dragend", () => {
 
-    mensagemMapa(
+        if (salvandoMapa) return;
 
-      "✅ Posições salvas com sucesso! " +
+        registro.alterado = true;
 
-      "O mapa público foi atualizado."
+        alteracoesMapa = true;
 
-    );
+        situacao.textContent =
 
-  } catch (erro) {
+            "🟡 Posição alterada. Aguardando salvar.";
 
-    mensagemMapa(
+        mensagemMapa(
 
-      "Erro ao salvar: " +
+            boi.nome +
 
-      erro.message
+            " foi reposicionado. Clique em Salvar posições."
 
-    );
+        );
 
-  } finally {
-
-    salvandoMapa = false;
-
-    marcadoresAdmin.forEach(registro => {
-
-      registro.marcador.dragging.enable();
+        atualizarBotoesMapa();
 
     });
-
-    atualizarBotoesMapa();
-
-  }
 
 }
 
-/* =========================================
-   ABRIR A NOVA ABA
-========================================= */
+/* =====================================
+   SALVAR POSIÇÕES
+===================================== */
 
-abaMapa.onclick = async () => {
-
-  if (auth.currentUser?.uid !== ADMIN_UID) return;
-
-  document
-
-    .querySelectorAll("#telaPainel > section")
-
-    .forEach(secao => {
-
-      secao.classList.add("oculto");
-
-    });
-
-  document
-
-    .querySelectorAll("[data-aba]")
-
-    .forEach(botao => {
-
-      botao.classList.remove("ativo");
-
-    });
-
-  abaMapa.classList.add("ativo");
-
-  secaoMapa.classList.remove("oculto");
-
-  try {
-
-    iniciarMapaAdmin();
+async function salvarPosicoesMapa() {
 
     if (
 
-      alteracoesMapa ||
+        !autorizado() ||
 
-      salvandoMapa ||
+        salvandoMapa ||
 
-      carregandoMapa
+        carregandoMapa ||
+
+        !mapaCarregado ||
+
+        !alteracoesMapa
 
     ) {
 
-      mapaAdmin.invalidateSize();
-
-      return;
+        return;
 
     }
 
-    await carregarAnosMapa();
+    const atualizacoes = {};
 
-    await carregarMapaBois();
+    const ano = anoCarregado;
 
-  } catch (erro) {
+    marcadoresAdmin.forEach((registro, id) => {
 
-    mensagemMapa(erro.message);
+        if (!registro.alterado) return;
 
-  }
+        const p = registro.marcador.getLatLng();
 
-  setTimeout(() => {
+        atualizacoes[id] = {
 
-    mapaAdmin?.invalidateSize();
+            latitude: Number(p.lat.toFixed(7)),
 
-  }, 200);
+            longitude: Number(p.lng.toFixed(7))
 
-};
-
-/* =========================================
-   INTEGRAÇÃO COM AS ABAS EXISTENTES
-========================================= */
-
-document.querySelectorAll("[data-aba]")
-
-  .forEach(botao => {
-
-    if (botao === abaMapa) return;
-
-    botao.addEventListener("click", () => {
-
-      secaoMapa.classList.add("oculto");
-
-      abaMapa.classList.remove("ativo");
+        };
 
     });
 
-  });
+    if (!Object.keys(atualizacoes).length) return;
 
-/* =========================================
-   TROCAR TEMPORADA
-========================================= */
+    salvandoMapa = true;
 
-obter("anoMapaAdmin").onchange = () => {
+    atualizarBotoesMapa();
 
-  if (
+    marcadoresAdmin.forEach(registro => {
 
-    alteracoesMapa &&
+        registro.marcador.dragging.disable();
 
-    !confirm(
+    });
 
-      "Existem posições não salvas. " +
+    mensagemMapa("Salvando posições...");
 
-      "Deseja descartar as alterações?"
+    try {
 
-    )
+        await posicoesRef.child(ano).update(atualizacoes);
 
-  ) {
+        marcadoresAdmin.forEach(registro => {
 
-    obter("anoMapaAdmin").value = anoCarregado;
+            if (registro.alterado) {
 
-    return;
+                registro.situacao.textContent =
 
-  }
+                    "📍 Posição cadastrada";
 
-  carregarMapaBois();
+            }
 
-};
+            registro.alterado = false;
 
-/* =========================================
-   CENTRALIZAR MAPA
-========================================= */
+        });
 
-obter("centralizarMapaAdmin").onclick = () => {
+        alteracoesMapa = false;
 
-  mapaAdmin?.setView(
+        mensagemMapa("✅ Posições salvas com sucesso!");
 
-    CENTRO_ADMIN,
+    } catch (erro) {
 
-    ZOOM_ADMIN
+        mensagemMapa("Erro ao salvar: " + erro.message);
 
-  );
+    } finally {
 
-};
+        salvandoMapa = false;
 
-/* =========================================
-   BOTÃO SALVAR
-========================================= */
+        marcadoresAdmin.forEach(registro => {
 
-obter("salvarMapaAdmin").onclick =
+            registro.marcador.dragging.enable();
 
-  salvarPosicoesMapa;
+        });
 
-/* =========================================
-   CANCELAR ALTERAÇÕES
-========================================= */
+        atualizarBotoesMapa();
 
-function recarregarPosicoes() {
-
-  if (salvandoMapa || carregandoMapa) return;
-
-  if (
-
-    alteracoesMapa &&
-
-    !confirm("Descartar as posições não salvas?")
-
-  ) return;
-
-  carregarMapaBois();
+    }
 
 }
 
-obter("cancelarMapaAdmin").onclick =
+$("salvarMapaAdmin").onclick = salvarPosicoesMapa;
 
-  recarregarPosicoes;
+$("centralizarMapaAdmin").onclick = () => {
 
-obter("recarregarMapaAdmin").onclick =
+    mapaAdmin?.setView(CENTRO_ADMIN, ZOOM_ADMIN);
 
-  recarregarPosicoes;
+};
 
-/* =========================================
-   LIMPAR MAPA AO SAIR DA CONTA
-========================================= */
+$("anoMapaAdmin").onchange = () => {
 
-auth.onAuthStateChanged(usuario => {
+    if (
 
-  if (usuario?.uid === ADMIN_UID) return;
+        alteracoesMapa &&
 
-  numeroConsulta++;
+        !confirm("Descartar as posições não salvas?")
 
-  alteracoesMapa = false;
+    ) {
 
-  mapaCarregado = false;
+        $("anoMapaAdmin").value = anoCarregado;
 
-  carregandoMapa = false;
+        return;
 
-  anoCarregado = null;
+    }
 
-  grupoAdmin?.clearLayers();
+    carregarMapaBois();
 
-  marcadoresAdmin.clear();
+};
 
-  obter("listaMapaAdmin").replaceChildren();
+function recarregarPosicoes() {
 
-  secaoMapa.classList.add("oculto");
+    if (salvandoMapa || carregandoMapa) return;
 
-  mostrarAba("bois");
+    if (
 
-  atualizarBotoesMapa();
+        alteracoesMapa &&
+
+        !confirm("Descartar as posições não salvas?")
+
+    ) {
+
+        return;
+
+    }
+
+    carregarMapaBois();
+
+}
+
+$("cancelarMapaAdmin").onclick = recarregarPosicoes;
+
+$("recarregarMapaAdmin").onclick = recarregarPosicoes;
+
+/* =====================================
+   INICIAR CONSULTAS
+===================================== */
+
+function iniciarConsultas() {
+
+    carregarBois();
+
+    iniciarAgenda();
+
+    iniciarHomenagens();
+
+    iniciarConteudo();
+
+    iniciarFotos();
+
+    iniciarVideos();
+
+}
+
+/* =====================================
+   CONTROLE DE AUTENTICAÇÃO
+===================================== */
+
+auth.onAuthStateChanged(async usuario => {
+
+    pararConsultas();
+
+    usuarioAtual =
+
+        usuario && usuario.uid === ADMIN_UID
+
+            ? usuario
+
+            : null;
+
+    $("telaLogin").classList.toggle(
+
+        "oculto",
+
+        Boolean(usuarioAtual)
+
+    );
+
+    $("telaPainel").classList.toggle(
+
+        "oculto",
+
+        !usuarioAtual
+
+    );
+
+    if (!usuarioAtual) {
+
+        numeroConsulta++;
+
+        alteracoesMapa = false;
+
+        carregandoMapa = false;
+
+        mapaCarregado = false;
+
+        anoCarregado = null;
+
+        conteudoAlterado = false;
+
+        grupoAdmin?.clearLayers();
+
+        marcadoresAdmin.clear();
+
+        $("listaMapaAdmin").replaceChildren();
+
+        atualizarBotoesMapa();
+
+        mostrarAba("bois");
+
+        if (usuario) {
+
+            await auth.signOut();
+
+        }
+
+        return;
+
+    }
+
+    $("usuarioLogado").textContent =
+
+        "Conta: " + usuario.email;
+
+    mostrarAba("bois");
+
+    await carregarTemporadas();
+
+    if (!autorizado()) return;
+
+    iniciarConsultas();
+
+}, erro => {
+
+    $("telaLogin").classList.remove("oculto");
+
+    $("telaPainel").classList.add("oculto");
+
+    mensagem("mensagemLogin", erro.message);
 
 });
 
-/* =========================================
-   EVITAR PERDA DE ALTERAÇÕES
-========================================= */
+/* =====================================
+   PROTEÇÃO CONTRA PERDA DE ALTERAÇÕES
+===================================== */
 
 window.addEventListener("beforeunload", e => {
 
-  if (alteracoesMapa || salvandoMapa) {
+    if (
 
-    e.preventDefault();
+        alteracoesMapa ||
 
-    e.returnValue = "";
+        salvandoMapa ||
 
-  }
+        conteudoAlterado
+
+    ) {
+
+        e.preventDefault();
+
+        e.returnValue = "";
+
+    }
 
 });
 
-})();
+window.addEventListener("resize", () => {
+
+    mapaAdmin?.invalidateSize();
+
+});
+
+atualizarTemporadas();
 
 </script>
 
-<!-- FIM DO MAPA ADMINISTRATIVO -->
+</body>
+</html>
