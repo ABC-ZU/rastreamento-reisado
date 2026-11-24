@@ -15,6 +15,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
+
 :root {
   --vinho:#850c29;
   --escuro:#50091c;
@@ -25,7 +26,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   --borda:#e9e4e2;
 }
 
-* { box-sizing:border-box; }
+* {
+  box-sizing:border-box;
+}
 
 body {
   margin:0;
@@ -39,8 +42,13 @@ a {
   text-decoration:none;
 }
 
-button,input,select { font:inherit; }
-button { cursor:pointer; }
+button,input,select {
+  font:inherit;
+}
+
+button {
+  cursor:pointer;
+}
 
 .barra {
   background:var(--escuro);
@@ -87,7 +95,9 @@ header {
   font-size:32px;
 }
 
-.topo h1 span { color:#ffdb70; }
+.topo h1 span {
+  color:#ffdb70;
+}
 
 .topo p {
   font-size:13px;
@@ -133,7 +143,9 @@ header {
   color:var(--cinza);
 }
 
-nav { padding:8px; }
+nav {
+  padding:8px;
+}
 
 nav a {
   display:flex;
@@ -144,7 +156,9 @@ nav a {
   font-size:13px;
 }
 
-nav a:hover { background:#f9edf0; }
+nav a:hover {
+  background:#f9edf0;
+}
 
 nav a.ativo {
   background:var(--vinho);
@@ -178,7 +192,9 @@ nav i {
   font-weight:bold;
 }
 
-main { min-width:0; }
+main {
+  min-width:0;
+}
 
 .introducao {
   background:white;
@@ -224,13 +240,53 @@ main { min-width:0; }
   font-size:14px;
 }
 
-.filtros {
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
+/* RESUMO DA TEMPORADA */
+
+.resumo {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:15px;
-  flex-wrap:wrap;
-  margin:30px 0 22px;
+  margin:22px 0;
+}
+
+.resumo-card {
+  background:white;
+  border:1px solid var(--borda);
+  border-bottom:4px solid var(--ouro);
+  border-radius:10px;
+  padding:20px 10px;
+  text-align:center;
+}
+
+.resumo-card i {
+  color:var(--vinho);
+  font-size:23px;
+  margin-bottom:10px;
+}
+
+.resumo-card strong {
+  display:block;
+  color:var(--vinho);
+  font-size:29px;
+  margin-bottom:5px;
+}
+
+.resumo-card span {
+  color:var(--cinza);
+  font-size:12px;
+}
+
+/* FILTROS */
+
+.filtros {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+  background:white;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  padding:22px;
+  margin:25px 0 18px;
 }
 
 .filtros label {
@@ -246,27 +302,53 @@ main { min-width:0; }
   background:white;
   border:1px solid var(--borda);
   border-radius:8px;
-  padding:13px;
+  padding:12px;
+  min-height:46px;
+  width:100%;
+  min-width:0;
+  color:var(--texto);
+}
+
+.filtros input:focus,
+.filtros select:focus {
+  outline:2px solid var(--ouro);
+}
+
+.limpar {
+  background:#f7edef;
+  color:var(--vinho);
+  border:1px solid #ead5db;
+  border-radius:8px;
+  padding:12px;
+  font-weight:bold;
+  width:100%;
   min-height:46px;
 }
 
-.filtros input {
-  width:290px;
-  max-width:100%;
+.limpar:hover {
+  background:#f1dce2;
 }
-
-.filtros select { min-width:130px; }
 
 #contador {
   font-size:13px;
   color:var(--cinza);
-  margin:0 0 18px;
+  margin:18px 0;
 }
+
+/* AGENDA */
 
 .lista {
   display:flex;
   flex-direction:column;
   gap:18px;
+}
+
+.titulo-grupo {
+  color:var(--vinho);
+  font-size:20px;
+  margin:15px 0 0;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--ouro);
 }
 
 .card {
@@ -276,6 +358,45 @@ main { min-width:0; }
   border-radius:12px;
   padding:22px;
   box-shadow:0 8px 25px #2d141e12;
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+}
+
+.calendario {
+  background:var(--vinho);
+  color:white;
+  border-radius:10px;
+  text-align:center;
+  min-width:85px;
+  padding:15px 8px;
+  flex-shrink:0;
+}
+
+.calendario strong {
+  display:block;
+  font-size:34px;
+  line-height:1.1;
+}
+
+.calendario span {
+  display:block;
+  color:var(--ouro);
+  font-size:14px;
+  font-weight:bold;
+  margin-top:5px;
+}
+
+.calendario small {
+  display:block;
+  color:white;
+  font-size:11px;
+  margin-top:5px;
+}
+
+.detalhes {
+  flex:1;
+  min-width:0;
 }
 
 .card-topo {
@@ -286,20 +407,15 @@ main { min-width:0; }
   flex-wrap:wrap;
 }
 
-.card small {
-  color:var(--vinho);
-  font-weight:bold;
-  letter-spacing:.5px;
-}
-
 .card h3 {
   color:var(--vinho);
   font-size:22px;
-  margin:10px 0 12px;
+  margin:0 0 12px;
+  overflow-wrap:anywhere;
 }
 
 .card p {
-  font-size:13px;
+  font-size:14px;
   color:#555;
   line-height:1.7;
   margin:8px 0;
@@ -309,6 +425,7 @@ main { min-width:0; }
 .card p i {
   color:var(--vinho);
   margin-right:7px;
+  width:17px;
 }
 
 .etiqueta {
@@ -316,24 +433,52 @@ main { min-width:0; }
   background:#fdf3dc;
   color:#855b0c;
   border-radius:20px;
-  padding:8px 12px;
-  font-size:12px;
+  padding:7px 12px;
+  font-size:11px;
   font-weight:bold;
 }
 
-.evento {
-  border-top:1px solid var(--borda);
-  margin-top:16px;
-  padding-top:15px;
+.etiqueta.realizada {
+  background:#ececec;
+  color:#555;
 }
 
-.evento:first-child {
-  margin-top:8px;
+.etiqueta.hoje {
+  background:#e5f3e9;
+  color:#21643a;
 }
 
-.data {
-  font-weight:bold;
-  color:var(--vinho)!important;
+.card.passada {
+  border-left-color:#bcb5b5;
+}
+
+.card.passada .calendario {
+  background:#777;
+}
+
+.card.passada .calendario span {
+  color:white;
+}
+
+.sem-agenda {
+  background:white;
+  border:1px solid var(--borda);
+  border-left:4px solid var(--ouro);
+  border-radius:10px;
+  padding:20px;
+}
+
+.sem-agenda h3 {
+  margin:0 0 10px;
+  color:var(--vinho);
+  font-size:18px;
+}
+
+.sem-agenda p {
+  color:var(--cinza);
+  font-size:13px;
+  line-height:1.7;
+  margin:5px 0;
 }
 
 .estado {
@@ -361,12 +506,21 @@ main { min-width:0; }
   margin-top:35px;
 }
 
-.informacao h3 { color:var(--vinho); }
+.informacao h3 {
+  color:var(--vinho);
+}
 
 .informacao p {
   color:var(--cinza);
   font-size:14px;
   line-height:1.8;
+}
+
+.botoes {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:20px;
 }
 
 .botao {
@@ -375,9 +529,12 @@ main { min-width:0; }
   color:white;
   padding:13px 20px;
   border-radius:8px;
-  margin-top:20px;
   font-size:13px;
   font-weight:bold;
+}
+
+.botao:hover {
+  background:var(--escuro);
 }
 
 footer {
@@ -389,7 +546,9 @@ footer {
   margin-top:55px;
 }
 
-footer h3 { color:var(--ouro); }
+footer h3 {
+  color:var(--ouro);
+}
 
 footer p {
   font-size:13px;
@@ -397,29 +556,108 @@ footer p {
 }
 
 @media(max-width:800px) {
-  .estrutura { grid-template-columns:1fr; }
-  .menu-mobile { display:block; }
-  .lateral { display:none; }
-  .lateral.aberta { display:block; }
-  .logo-area { display:none; }
+
+  .estrutura {
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  .menu-mobile {
+    display:block;
+  }
+
+  .lateral {
+    display:none;
+    margin-top:8px;
+  }
+
+  .lateral.aberta {
+    display:block;
+  }
+
+  .logo-area {
+    display:none;
+  }
+
 }
 
 @media(max-width:520px) {
-  .topo { padding:20px 15px; }
-  .topo h1 { font-size:22px; }
-  .topo img { width:55px;height:55px; }
+
+  .topo {
+    padding:20px 15px;
+  }
+
+  .topo h1 {
+    font-size:22px;
+  }
+
+  .topo img {
+    width:55px;
+    height:55px;
+  }
 
   .estrutura {
     width:calc(100% - 24px);
+    margin:18px auto;
   }
 
-  .introducao { padding:20px; }
-  .introducao h2 { font-size:25px; }
-  .card { padding:17px; }
+  .introducao {
+    padding:20px;
+  }
 
-  .filtros { align-items:stretch; }
-  .filtros input { width:100%; }
+  .introducao h2 {
+    font-size:25px;
+  }
+
+  .temporada {
+    padding:20px;
+  }
+
+  .resumo {
+    gap:7px;
+  }
+
+  .resumo-card {
+    padding:15px 5px;
+  }
+
+  .resumo-card strong {
+    font-size:23px;
+  }
+
+  .resumo-card span {
+    font-size:10px;
+  }
+
+  .filtros {
+    grid-template-columns:1fr;
+    padding:17px;
+  }
+
+  .card {
+    padding:15px;
+    gap:12px;
+  }
+
+  .calendario {
+    min-width:65px;
+    padding:12px 6px;
+  }
+
+  .calendario strong {
+    font-size:28px;
+  }
+
+  .card h3 {
+    font-size:18px;
+  }
+
+  .card p {
+    font-size:12px;
+  }
+
 }
+
 </style>
 </head>
 
@@ -433,17 +671,22 @@ footer p {
 </div>
 
 <header>
+
   <div class="topo">
 
     <img src="ícone-boi-reisado-logo.png"
          alt="Símbolo do Reisado">
 
     <div>
+
       <h1>REISADO DIGITAL <span>2.0</span></h1>
+
       <p>Portal Cultural do Reisado de Boa Hora – PI</p>
+
     </div>
 
   </div>
+
 </header>
 
 <div class="estrutura">
@@ -455,20 +698,27 @@ footer p {
             type="button"
             aria-expanded="false"
             aria-controls="menuLateral">
+
       <i class="fa-solid fa-bars"></i>
       Explorar o site
+
     </button>
 
     <aside class="lateral" id="menuLateral">
 
       <div class="logo-area">
+
         <img src="ícone-boi-reisado-logo.png"
              alt="Reisado de Boa Hora">
+
         <h3>Reisado de Boa Hora</h3>
+
         <p>Uma tradição que atravessa gerações</p>
+
       </div>
 
       <nav>
+
         <a href="inicio.html">
           <i class="fa-solid fa-house"></i>
           Início
@@ -477,13 +727,20 @@ footer p {
         <a href="agenda.html"
            class="ativo"
            aria-current="page">
+
           <i class="fa-solid fa-calendar-days"></i>
           Agenda dos Bois
+
         </a>
 
         <a href="bois.html">
           <i class="fa-solid fa-users"></i>
           Conheça os Bois
+        </a>
+
+        <a href="mapa.html">
+          <i class="fa-solid fa-map-location-dot"></i>
+          Mapa dos Bois
         </a>
 
         <a href="memoria.html">
@@ -495,6 +752,7 @@ footer p {
           <i class="fa-solid fa-robot"></i>
           Guia Cultural (IA)
         </a>
+
       </nav>
 
       <div class="menu-titulo">
@@ -502,18 +760,22 @@ footer p {
       </div>
 
       <nav>
+
         <a href="admin.html">
           <i class="fa-solid fa-user-shield"></i>
           Painel Administrativo
         </a>
+
       </nav>
 
     </aside>
+
   </div>
 
   <main>
 
     <section class="introducao">
+
       <small>TRADIÇÃO CULTURAL DE BOA HORA</small>
 
       <h2>Agenda de Apresentações</h2>
@@ -529,15 +791,19 @@ footer p {
         e conheça os grupos que mantêm viva
         essa tradição cultural.
       </p>
+
     </section>
 
     <section class="temporada">
 
       <h3>
+
         <i class="fa-solid fa-calendar-days"></i>
+
         <span id="tituloTemporada">
           Temporada 2027
         </span>
+
       </h3>
 
       <p id="periodoTemporada">
@@ -548,26 +814,146 @@ footer p {
       <p>
         Fé, cultura, alegria e tradição em Boa Hora–PI.
       </p>
+
     </section>
+
+    <!-- RESUMO -->
+
+    <section class="resumo">
+
+      <div class="resumo-card">
+
+        <i class="fa-solid fa-users"></i>
+
+        <strong id="totalBois">0</strong>
+
+        <span>Bois cadastrados</span>
+
+      </div>
+
+      <div class="resumo-card">
+
+        <i class="fa-solid fa-calendar-check"></i>
+
+        <strong id="totalApresentacoes">0</strong>
+
+        <span>Apresentações</span>
+
+      </div>
+
+      <div class="resumo-card">
+
+        <i class="fa-solid fa-clock"></i>
+
+        <strong id="totalProximas">0</strong>
+
+        <span>Próximas apresentações</span>
+
+      </div>
+
+    </section>
+
+    <!-- FILTROS -->
 
     <section class="filtros">
 
       <div>
+
         <label for="ano">
           Selecionar temporada
         </label>
+
         <select id="ano">
+
           <option value="2027">2027</option>
+
         </select>
+
       </div>
 
       <div>
-        <label for="pesquisa">
-          Pesquisar boi ou proprietário
+
+        <label for="filtroBoi">
+          Selecionar boi
         </label>
+
+        <select id="filtroBoi">
+
+          <option value="">Todos os bois</option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label for="filtroData">
+          Data da apresentação
+        </label>
+
+        <input id="filtroData" type="date">
+
+      </div>
+
+      <div>
+
+        <label for="filtroSituacao">
+          Situação da programação
+        </label>
+
+        <select id="filtroSituacao">
+
+          <option value="todas">
+            Todas as apresentações
+          </option>
+
+          <option value="proximas">
+            Próximas apresentações
+          </option>
+
+          <option value="hoje">
+            Apresentações de hoje
+          </option>
+
+          <option value="passadas">
+            Apresentações com horário passado
+          </option>
+
+          <option value="sem-agenda">
+            Bois sem programação
+          </option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label for="pesquisa">
+          Pesquisar boi, proprietário ou comunidade
+        </label>
+
         <input id="pesquisa"
                type="search"
                placeholder="Digite o nome...">
+
+      </div>
+
+      <div>
+
+        <label for="limparFiltros">
+          Limpar pesquisa
+        </label>
+
+        <button id="limparFiltros"
+                class="limpar"
+                type="button">
+
+          <i class="fa-solid fa-filter-circle-xmark"></i>
+          Limpar filtros
+
+        </button>
+
       </div>
 
     </section>
@@ -577,46 +963,74 @@ footer p {
     </p>
 
     <section class="lista" id="listaAgenda">
+
       <div class="estado">
+
         <i class="fa-solid fa-spinner fa-spin"></i>
+
         Consultando apresentações...
+
       </div>
+
     </section>
 
     <section class="informacao">
 
       <h3>
+
         <i class="fa-solid fa-book-open"></i>
+
         Tradição e memória cultural
+
       </h3>
 
       <p>
-        A agenda do Reisado Digital 2.0
-        organiza as apresentações por temporada.
-        Assim, visitantes e moradores poderão
-        acompanhar a programação cultural
-        de Boa Hora.
+        A agenda do Reisado Digital 2.0 organiza
+        as apresentações por temporada. Assim,
+        visitantes e moradores poderão acompanhar
+        a programação cultural de Boa Hora.
       </p>
 
       <p>
         Os registros das temporadas anteriores
         permanecerão disponíveis para consulta,
-        contribuindo para a preservação
-        da memória do Reisado.
+        contribuindo para a preservação da memória
+        do Reisado.
+      </p>
+
+      <p>
+        A programação é atualizada pela administração
+        do portal e poderá sofrer alterações.
       </p>
 
     </section>
 
-    <a class="botao" href="bois.html">
-      <i class="fa-solid fa-users"></i>
-      Conheça os Bois
-    </a>
+    <div class="botoes">
+
+      <a class="botao" href="bois.html">
+
+        <i class="fa-solid fa-users"></i>
+
+        Conheça os Bois
+
+      </a>
+
+      <a class="botao" href="mapa.html">
+
+        <i class="fa-solid fa-map-location-dot"></i>
+
+        Mapa dos Bois
+
+      </a>
+
+    </div>
 
   </main>
 
 </div>
 
 <footer>
+
   <h3>Reisado Digital 2.0</h3>
 
   <p>
@@ -631,9 +1045,11 @@ footer p {
     © <span id="anoRodape"></span>
     Reisado Digital 2.0
   </p>
+
 </footer>
 
 <script>
+
 "use strict";
 
 /* CONFIGURAÇÃO FIREBASE */
@@ -648,111 +1064,322 @@ const firebaseConfig = {
   appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
 };
 
-firebase.initializeApp(firebaseConfig);
+const $ = id => document.getElementById(id);
 
-const db = firebase.database();
-
-const boisRef = db.ref("boisPorAno");
-const agendasRef = db.ref("agendas");
-
-const seletorAno = document.getElementById("ano");
-const pesquisa = document.getElementById("pesquisa");
-const lista = document.getElementById("listaAgenda");
-const contador = document.getElementById("contador");
+const seletorAno = $("ano");
+const filtroBoi = $("filtroBoi");
+const filtroData = $("filtroData");
+const filtroSituacao = $("filtroSituacao");
+const pesquisa = $("pesquisa");
+const lista = $("listaAgenda");
+const contador = $("contador");
 
 let temporadaAtual = "2027";
-let bois = [];
+
+let dadosBois = {};
 let todasApresentacoes = [];
 
 let boisCarregados = false;
 let agendaCarregada = false;
+
 let erroBois = false;
 let erroAgenda = false;
 
-let referenciaBoisAtiva = null;
+let boisRef = null;
+let agendasRef = null;
 
 /* MENU MOBILE */
 
-document.getElementById("botaoMenu")
-  .addEventListener("click",function() {
+$("botaoMenu").addEventListener("click",function() {
 
-    const menu = document.getElementById("menuLateral");
-    const aberto = menu.classList.toggle("aberta");
+  const aberto =
+    $("menuLateral").classList.toggle("aberta");
 
-    this.setAttribute(
-      "aria-expanded",
-      String(aberto)
-    );
-  });
+  this.setAttribute(
+    "aria-expanded",
+    String(aberto)
+  );
 
-document.getElementById("anoRodape").textContent =
+});
+
+$("anoRodape").textContent =
   new Date().getFullYear();
 
-/* AUXILIARES */
+/* FUNÇÕES AUXILIARES */
 
 function texto(valor) {
-  if (typeof valor === "string") {
-    return valor.trim();
-  }
 
-  return "";
+  return typeof valor === "string"
+    ? valor.trim()
+    : "";
+
 }
 
 function normalizar(valor) {
+
   return String(valor || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g,"")
     .toLowerCase()
     .trim();
+
 }
 
-function formatarData(data) {
+function dataValida(data) {
+
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) {
-    return "A definir";
+    return false;
   }
 
-  const partes = data.split("-");
+  const partes = data.split("-").map(Number);
 
-  return partes[2] + "/" +
-         partes[1] + "/" +
-         partes[0];
+  const d = new Date(Date.UTC(
+    partes[0],
+    partes[1]-1,
+    partes[2]
+  ));
+
+  return d.getUTCFullYear() === partes[0] &&
+         d.getUTCMonth()+1 === partes[1] &&
+         d.getUTCDate() === partes[2];
+
+}
+
+function horaValida(hora) {
+
+  return /^([01]\d|2[0-3]):[0-5]\d$/.test(hora);
+
 }
 
 function formatarHora(hora) {
-  return /^\d{2}:\d{2}$/.test(hora)
+
+  return horaValida(hora)
     ? hora.replace(":","h")
     : "A definir";
+
 }
 
+/* DATA E HORÁRIO DO PIAUÍ */
+
+function agoraLocal() {
+
+  const partes = new Intl.DateTimeFormat(
+    "pt-BR",
+    {
+      timeZone:"America/Fortaleza",
+      year:"numeric",
+      month:"2-digit",
+      day:"2-digit",
+      hour:"2-digit",
+      minute:"2-digit",
+      hourCycle:"h23"
+    }
+  ).formatToParts(new Date());
+
+  const valores = {};
+
+  partes.forEach(p => {
+    valores[p.type] = p.value;
+  });
+
+  return {
+    data:
+      valores.year+"-"+
+      valores.month+"-"+
+      valores.day,
+
+    hora:
+      valores.hour+":"+
+      valores.minute
+  };
+
+}
+
+function horarioPassado(evento,agora) {
+
+  if (evento.data < agora.data) {
+    return true;
+  }
+
+  if (evento.data > agora.data) {
+    return false;
+  }
+
+  return horaValida(evento.horario) &&
+         evento.horario < agora.hora;
+
+}
+
+/* TEMPORADAS */
+
 function periodoTemporada(ano) {
+
   return {
     inicio:(Number(ano)-1)+"-12-31",
     fim:ano+"-01-06"
   };
+
 }
 
 function dataNaTemporada(data,ano) {
+
   const periodo = periodoTemporada(ano);
 
   return data >= periodo.inicio &&
          data <= periodo.fim;
+
+}
+
+function anoDaApresentacao(data) {
+
+  if (!dataValida(data)) {
+    return null;
+  }
+
+  const ano = Number(data.slice(0,4));
+
+  if (data.slice(5) === "12-31") {
+    return String(ano+1);
+  }
+
+  if (dataNaTemporada(data,String(ano))) {
+    return String(ano);
+  }
+
+  return null;
+
 }
 
 function atualizarPeriodo() {
-  document.getElementById("tituloTemporada")
-    .textContent =
-      "Temporada " + temporadaAtual;
 
-  document.getElementById("periodoTemporada")
-    .textContent =
-      "De 31 de dezembro de " +
-      (Number(temporadaAtual)-1) +
-      " a 6 de janeiro de " +
-      temporadaAtual;
+  $("tituloTemporada").textContent =
+    "Temporada "+temporadaAtual;
+
+  $("periodoTemporada").textContent =
+    "De 31 de dezembro de "+
+    (Number(temporadaAtual)-1)+
+    " a 6 de janeiro de "+
+    temporadaAtual;
+
+  const periodo =
+    periodoTemporada(temporadaAtual);
+
+  filtroData.min = periodo.inicio;
+  filtroData.max = periodo.fim;
+
 }
 
+function atualizarTemporadas() {
+
+  const anos = new Set(["2027"]);
+
+  Object.keys(dadosBois).forEach(ano => {
+
+    if (/^20[2-9][0-9]$/.test(ano)) {
+      anos.add(ano);
+    }
+
+  });
+
+  todasApresentacoes.forEach(evento => {
+
+    const ano = anoDaApresentacao(evento.data);
+
+    if (ano && /^20[2-9][0-9]$/.test(ano)) {
+      anos.add(ano);
+    }
+
+  });
+
+  if (!anos.has(temporadaAtual)) {
+    temporadaAtual = "2027";
+  }
+
+  seletorAno.replaceChildren();
+
+  [...anos]
+    .sort((a,b) => Number(b)-Number(a))
+    .forEach(ano => {
+
+      seletorAno.add(
+        new Option(ano,ano)
+      );
+
+    });
+
+  seletorAno.value = temporadaAtual;
+
+  atualizarPeriodo();
+
+}
+
+/* BOIS CADASTRADOS */
+
+function obterBois() {
+
+  return Object.entries(
+    dadosBois[temporadaAtual] || {}
+  )
+
+  .filter(([id,d]) =>
+    d && texto(d.nome)
+  )
+
+  .map(([id,d]) => ({
+
+    id:id,
+
+    nome:texto(d.nome),
+
+    dono:texto(d.dono) || "Não informado",
+
+    comunidade:texto(d.comunidade)
+
+  }))
+
+  .sort((a,b) =>
+    a.nome.localeCompare(b.nome,"pt-BR")
+  );
+
+}
+
+function atualizarFiltroBois() {
+
+  const selecionado = filtroBoi.value;
+
+  filtroBoi.replaceChildren();
+
+  filtroBoi.add(
+    new Option("Todos os bois","")
+  );
+
+  obterBois().forEach(boi => {
+
+    filtroBoi.add(
+
+      new Option(
+        boi.nome+" ("+boi.dono+")",
+        boi.id
+      )
+
+    );
+
+  });
+
+  const existe = [...filtroBoi.options]
+    .some(o => o.value === selecionado);
+
+  filtroBoi.value =
+    existe ? selecionado : "";
+
+}
+
+/* ELEMENTOS VISUAIS */
+
 function criarElemento(tag,conteudo,classe) {
-  const elemento = document.createElement(tag);
+
+  const elemento =
+    document.createElement(tag);
 
   elemento.textContent = conteudo;
 
@@ -761,13 +1388,16 @@ function criarElemento(tag,conteudo,classe) {
   }
 
   return elemento;
+
 }
 
 function criarInformacao(icone,conteudo) {
+
   const p = document.createElement("p");
 
   const i = document.createElement("i");
-  i.className = "fa-solid " + icone;
+
+  i.className = "fa-solid "+icone;
 
   p.append(
     i,
@@ -775,250 +1405,227 @@ function criarInformacao(icone,conteudo) {
   );
 
   return p;
+
 }
 
 function mostrarMensagem(mensagem,icone) {
+
   lista.replaceChildren();
 
   const caixa = document.createElement("div");
+
   caixa.className = "estado";
 
   const simbolo = document.createElement("i");
-  simbolo.className =
-    "fa-solid " + (icone || "fa-circle-info");
 
-  const paragrafo = document.createElement("p");
-  paragrafo.textContent = mensagem;
+  simbolo.className =
+    "fa-solid "+(icone || "fa-circle-info");
+
+  const paragrafo =
+    criarElemento("p",mensagem);
 
   caixa.append(simbolo,paragrafo);
+
   lista.appendChild(caixa);
+
 }
 
-/* CARREGAR TEMPORADAS */
+/* CRIAR CARD DA APRESENTAÇÃO */
 
-async function carregarTemporadas() {
-  try {
-    const snapshot = await boisRef.once("value");
-    const anos = new Set(["2027"]);
+function criarCard(evento,agora) {
 
-    snapshot.forEach(item => {
-      if (
-        /^\d{4}$/.test(item.key) &&
-        Number(item.key) >= 2027
-      ) {
-        anos.add(item.key);
-      }
-    });
+  const meses = [
+    "JAN","FEV","MAR","ABR",
+    "MAI","JUN","JUL","AGO",
+    "SET","OUT","NOV","DEZ"
+  ];
 
-    seletorAno.replaceChildren();
+  const partes = evento.data.split("-");
 
-    [...anos]
-      .sort((a,b) => Number(b)-Number(a))
-      .forEach(ano => {
-        seletorAno.add(new Option(ano,ano));
-      });
+  const passada = horarioPassado(evento,agora);
 
-    seletorAno.value = temporadaAtual;
-
-  } catch(erro) {
-    console.error(
-      "Erro ao carregar temporadas:",
-      erro
-    );
-  }
-}
-
-/* CARREGAR BOIS DA TEMPORADA */
-
-function carregarBois() {
-  if (referenciaBoisAtiva) {
-    referenciaBoisAtiva.off();
-  }
-
-  bois = [];
-  boisCarregados = false;
-  erroBois = false;
-
-  const anoConsultado = temporadaAtual;
-
-  referenciaBoisAtiva =
-    boisRef.child(anoConsultado);
-
-  referenciaBoisAtiva.on(
-    "value",
-    snapshot => {
-      if (anoConsultado !== temporadaAtual) {
-        return;
-      }
-
-      bois = [];
-
-      snapshot.forEach(item => {
-        const d = item.val();
-
-        if (!d || !d.nome) return;
-
-        bois.push({
-          id:item.key,
-          nome:texto(d.nome),
-          dono:texto(d.dono) || "Não informado",
-          comunidade:texto(d.comunidade)
-        });
-      });
-
-      bois.sort((a,b) =>
-        a.nome.localeCompare(b.nome,"pt-BR")
-      );
-
-      boisCarregados = true;
-      erroBois = false;
-
-      renderizar();
-    },
-    erro => {
-      console.error(erro);
-
-      boisCarregados = true;
-      erroBois = true;
-
-      renderizar();
-    }
-  );
-}
-
-/* CARREGAR APRESENTAÇÕES */
-
-function carregarAgenda() {
-  agendasRef.on(
-    "value",
-    snapshot => {
-      todasApresentacoes = [];
-
-      snapshot.forEach(item => {
-        const d = item.val();
-
-        if (
-          !d ||
-          typeof d.boi !== "string" ||
-          typeof d.data !== "string"
-        ) return;
-
-        if (
-          !/^\d{4}-\d{2}-\d{2}$/.test(d.data)
-        ) return;
-
-        todasApresentacoes.push({
-          id:item.key,
-          boi:texto(d.boi),
-          data:d.data,
-          horario:texto(d.horario),
-          comunidade:texto(d.comunidade)
-        });
-      });
-
-      todasApresentacoes.sort((a,b) =>
-        (a.data+" "+a.horario)
-          .localeCompare(b.data+" "+b.horario)
-      );
-
-      agendaCarregada = true;
-      erroAgenda = false;
-
-      renderizar();
-    },
-    erro => {
-      console.error(erro);
-
-      agendaCarregada = true;
-      erroAgenda = true;
-
-      renderizar();
-    }
-  );
-}
-
-/* CRIAR CARD DE APRESENTAÇÕES */
-
-function criarCard(boi,eventos) {
   const card = document.createElement("article");
-  card.className = "card";
 
-  const topo = document.createElement("div");
+  card.className =
+    passada ? "card passada" : "card";
+
+  const calendario =
+    document.createElement("div");
+
+  calendario.className = "calendario";
+
+  calendario.append(
+
+    criarElemento("strong",partes[2]),
+
+    criarElemento(
+      "span",
+      meses[Number(partes[1])-1]
+    ),
+
+    criarElemento("small",partes[0])
+
+  );
+
+  const detalhes =
+    document.createElement("div");
+
+  detalhes.className = "detalhes";
+
+  const topo =
+    document.createElement("div");
+
   topo.className = "card-topo";
 
-  const tituloArea = document.createElement("div");
+  const titulo =
+    criarElemento("h3",evento.boi);
 
-  const categoria = criarElemento(
-    "small",
-    "REISADO " + temporadaAtual
-  );
+  let situacao = "Programada";
+  let classe = "etiqueta";
 
-  const titulo = criarElemento(
-    "h3",
-    boi.nome
-  );
+  if (passada) {
 
-  const dono = criarInformacao(
-    "fa-user",
-    "Proprietário: " + boi.dono
-  );
+    situacao = "Horário passado";
+    classe += " realizada";
 
-  tituloArea.append(categoria,titulo,dono);
+  } else if (evento.data === agora.data) {
 
-  const etiqueta = criarElemento(
-    "span",
-    eventos.length === 0
-      ? "Agenda a definir"
-      : eventos.length === 1
-        ? "1 apresentação"
-        : eventos.length+" apresentações",
-    "etiqueta"
-  );
+    situacao = "Hoje";
+    classe += " hoje";
 
-  topo.append(tituloArea,etiqueta);
-  card.appendChild(topo);
-
-  if (eventos.length === 0) {
-    card.appendChild(
-      criarInformacao(
-        "fa-calendar",
-        "Nenhuma apresentação cadastrada nesta temporada."
-      )
-    );
-  } else {
-    eventos.forEach(evento => {
-      const bloco = document.createElement("div");
-      bloco.className = "evento";
-
-      const data = criarInformacao(
-        "fa-calendar-days",
-        "Data: " + formatarData(evento.data)
-      );
-      data.classList.add("data");
-
-      const horario = criarInformacao(
-        "fa-clock",
-        "Horário: " + formatarHora(evento.horario)
-      );
-
-      const comunidade = criarInformacao(
-        "fa-location-dot",
-        "Comunidade: " +
-        (evento.comunidade || "A definir")
-      );
-
-      bloco.append(data,horario,comunidade);
-      card.appendChild(bloco);
-    });
   }
 
+  const etiqueta =
+    criarElemento("span",situacao,classe);
+
+  topo.append(titulo,etiqueta);
+
+  detalhes.append(
+
+    topo,
+
+    criarInformacao(
+      "fa-user",
+      "Proprietário: "+evento.dono
+    ),
+
+    criarInformacao(
+      "fa-clock",
+      "Horário: "+formatarHora(evento.horario)
+    ),
+
+    criarInformacao(
+      "fa-location-dot",
+      "Local: "+(evento.comunidade || "A definir")
+    )
+
+  );
+
+  card.append(calendario,detalhes);
+
   return card;
+
 }
 
-/* EXIBIR AGENDA */
+/* BOIS SEM PROGRAMAÇÃO */
+
+function criarCardSemAgenda(boi) {
+
+  const card = document.createElement("article");
+
+  card.className = "sem-agenda";
+
+  card.append(
+
+    criarElemento("h3",boi.nome),
+
+    criarInformacao(
+      "fa-user",
+      "Proprietário: "+boi.dono
+    ),
+
+    criarInformacao(
+      "fa-calendar",
+      "Programação ainda não cadastrada."
+    )
+
+  );
+
+  return card;
+
+}
+
+/* RELACIONAR BOIS E APRESENTAÇÕES */
+
+function obterApresentacoes(bois) {
+
+  return todasApresentacoes
+
+    .filter(evento =>
+      dataNaTemporada(
+        evento.data,
+        temporadaAtual
+      )
+    )
+
+    .map(evento => {
+
+      const encontrados = bois.filter(boi =>
+
+        normalizar(boi.nome) ===
+        normalizar(evento.boi)
+
+      );
+
+      const boi =
+        encontrados.length === 1
+          ? encontrados[0]
+          : null;
+
+      return {
+
+        ...evento,
+
+        boiId:boi ? boi.id : "",
+
+        dono:boi
+          ? boi.dono
+          : "Não informado",
+
+        comunidadeBoi:boi
+          ? boi.comunidade
+          : ""
+
+      };
+
+    })
+
+    .sort((a,b) => {
+
+      const horaA = horaValida(a.horario)
+        ? a.horario
+        : "99:99";
+
+      const horaB = horaValida(b.horario)
+        ? b.horario
+        : "99:99";
+
+      return (
+        a.data+" "+horaA
+      ).localeCompare(
+        b.data+" "+horaB
+      ) || a.boi.localeCompare(b.boi,"pt-BR");
+
+    });
+
+}
+
+/* EXIBIR PROGRAMAÇÃO */
 
 function renderizar() {
+
   if (!boisCarregados || !agendaCarregada) {
+
     contador.textContent =
       "Carregando agenda...";
 
@@ -1026,123 +1633,510 @@ function renderizar() {
       "Consultando apresentações...",
       "fa-spinner fa-spin"
     );
+
     return;
+
   }
 
   if (erroBois || erroAgenda) {
+
     contador.textContent =
       "Consulta indisponível";
 
     mostrarMensagem(
-      "Não foi possível carregar os dados. " +
-      "Verifique as regras do Firebase.",
+      "Não foi possível carregar a programação. "+
+      "Tente novamente mais tarde.",
       "fa-triangle-exclamation"
     );
+
+    $("totalBois").textContent = "—";
+    $("totalApresentacoes").textContent = "—";
+    $("totalProximas").textContent = "—";
+
     return;
+
   }
+
+  const agora = agoraLocal();
+
+  const bois = obterBois();
+
+  const eventos = obterApresentacoes(bois);
 
   const termo = normalizar(pesquisa.value);
 
-  const filtrados = bois.filter(boi =>
-    normalizar(
-      boi.nome+" "+boi.dono+" "+boi.comunidade
-    ).includes(termo)
-  );
+  const boiSelecionado = filtroBoi.value;
 
-  const grupos = filtrados.map(boi => {
-    const eventos = todasApresentacoes.filter(a =>
-      dataNaTemporada(a.data,temporadaAtual) &&
-      normalizar(a.boi) === normalizar(boi.nome)
+  const dataSelecionada = filtroData.value;
+
+  const situacao = filtroSituacao.value;
+
+  /* CONTADORES DA TEMPORADA */
+
+  $("totalBois").textContent =
+    bois.length;
+
+  $("totalApresentacoes").textContent =
+    eventos.length;
+
+  $("totalProximas").textContent =
+    eventos.filter(e =>
+      !horarioPassado(e,agora)
+    ).length;
+
+  /* FILTRAR APRESENTAÇÕES */
+
+  const filtrados = eventos.filter(evento => {
+
+    if (situacao === "sem-agenda") {
+      return false;
+    }
+
+    if (
+      boiSelecionado &&
+      evento.boiId !== boiSelecionado
+    ) {
+      return false;
+    }
+
+    if (
+      dataSelecionada &&
+      evento.data !== dataSelecionada
+    ) {
+      return false;
+    }
+
+    const conteudo = normalizar(
+
+      evento.boi+" "+
+      evento.dono+" "+
+      evento.comunidade+" "+
+      evento.comunidadeBoi
+
     );
 
-    return {boi,eventos};
+    if (!conteudo.includes(termo)) {
+      return false;
+    }
+
+    const passada =
+      horarioPassado(evento,agora);
+
+    if (situacao === "proximas" && passada) {
+      return false;
+    }
+
+    if (situacao === "passadas" && !passada) {
+      return false;
+    }
+
+    if (
+      situacao === "hoje" &&
+      evento.data !== agora.data
+    ) {
+      return false;
+    }
+
+    return true;
+
   });
 
-  grupos.sort((a,b) => {
-    if (!a.eventos.length && b.eventos.length) {
-      return 1;
+  /* SEPARAR PRÓXIMAS E PASSADAS */
+
+  const proximas = filtrados.filter(evento =>
+    !horarioPassado(evento,agora)
+  );
+
+  const passadas = filtrados.filter(evento =>
+    horarioPassado(evento,agora)
+  );
+
+  /* BOIS SEM AGENDA */
+
+  const semAgenda = bois.filter(boi => {
+
+    if (
+      situacao !== "todas" &&
+      situacao !== "sem-agenda"
+    ) {
+      return false;
     }
 
-    if (a.eventos.length && !b.eventos.length) {
-      return -1;
+    if (dataSelecionada) {
+      return false;
     }
 
-    if (a.eventos.length && b.eventos.length) {
-      const dataA =
-        a.eventos[0].data+" "+a.eventos[0].horario;
-
-      const dataB =
-        b.eventos[0].data+" "+b.eventos[0].horario;
-
-      return dataA.localeCompare(dataB);
+    if (
+      boiSelecionado &&
+      boi.id !== boiSelecionado
+    ) {
+      return false;
     }
 
-    return a.boi.nome.localeCompare(
-      b.boi.nome,"pt-BR"
+    const possuiAgenda = eventos.some(evento =>
+
+      normalizar(evento.boi) ===
+      normalizar(boi.nome)
+
     );
+
+    if (possuiAgenda) {
+      return false;
+    }
+
+    return normalizar(
+
+      boi.nome+" "+
+      boi.dono+" "+
+      boi.comunidade
+
+    ).includes(termo);
+
   });
 
   contador.textContent =
-    grupos.length+" de "+bois.length+
-    " bois da temporada "+temporadaAtual;
+
+    filtrados.length+
+    " apresentação(ões) encontrada(s)"+
+    " • "+
+    semAgenda.length+
+    " boi(s) sem programação";
 
   lista.replaceChildren();
 
-  if (!grupos.length) {
-    mostrarMensagem(
-      termo
-        ? "Nenhum boi encontrado nesta pesquisa."
-        : "Ainda não há bois cadastrados nesta temporada.",
-      "fa-magnifying-glass"
+  if (proximas.length) {
+
+    lista.appendChild(
+
+      criarElemento(
+        "h3",
+        "Próximas apresentações",
+        "titulo-grupo"
+      )
+
     );
-    return;
+
+    proximas.forEach(evento => {
+
+      lista.appendChild(
+        criarCard(evento,agora)
+      );
+
+    });
+
   }
 
-  grupos.forEach(grupo => {
+  if (passadas.length) {
+
     lista.appendChild(
-      criarCard(grupo.boi,grupo.eventos)
+
+      criarElemento(
+        "h3",
+        "Apresentações com horário passado",
+        "titulo-grupo"
+      )
+
     );
-  });
+
+    passadas.forEach(evento => {
+
+      lista.appendChild(
+        criarCard(evento,agora)
+      );
+
+    });
+
+  }
+
+  if (semAgenda.length) {
+
+    lista.appendChild(
+
+      criarElemento(
+        "h3",
+        "Bois com programação a definir",
+        "titulo-grupo"
+      )
+
+    );
+
+    semAgenda.forEach(boi => {
+
+      lista.appendChild(
+        criarCardSemAgenda(boi)
+      );
+
+    });
+
+  }
+
+  if (
+    !proximas.length &&
+    !passadas.length &&
+    !semAgenda.length
+  ) {
+
+    mostrarMensagem(
+
+      "Nenhuma apresentação encontrada "+
+      "para os filtros selecionados.",
+
+      "fa-calendar-xmark"
+
+    );
+
+  }
+
 }
 
-/* EVENTOS */
+/* CARREGAR FIREBASE */
+
+function iniciarFirebase() {
+
+  try {
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.database();
+
+    boisRef = db.ref("boisPorAno");
+
+    agendasRef = db.ref("agendas");
+
+    /* BOIS EM TEMPO REAL */
+
+    boisRef.on(
+
+      "value",
+
+      snapshot => {
+
+        dadosBois = snapshot.val() || {};
+
+        boisCarregados = true;
+
+        erroBois = false;
+
+        atualizarTemporadas();
+
+        atualizarFiltroBois();
+
+        renderizar();
+
+      },
+
+      erro => {
+
+        console.error(
+          "Erro ao carregar bois:",
+          erro
+        );
+
+        boisCarregados = true;
+
+        erroBois = true;
+
+        renderizar();
+
+      }
+
+    );
+
+    /* AGENDA EM TEMPO REAL */
+
+    agendasRef.on(
+
+      "value",
+
+      snapshot => {
+
+        todasApresentacoes = [];
+
+        snapshot.forEach(item => {
+
+          const d = item.val();
+
+          if (!d) {
+            return;
+          }
+
+          if (!texto(d.boi)) {
+            return;
+          }
+
+          if (!dataValida(d.data)) {
+            return;
+          }
+
+          todasApresentacoes.push({
+
+            id:item.key,
+
+            boi:texto(d.boi),
+
+            data:d.data,
+
+            horario:texto(d.horario),
+
+            comunidade:texto(d.comunidade)
+
+          });
+
+        });
+
+        agendaCarregada = true;
+
+        erroAgenda = false;
+
+        atualizarTemporadas();
+
+        atualizarFiltroBois();
+
+        renderizar();
+
+      },
+
+      erro => {
+
+        console.error(
+          "Erro ao carregar agenda:",
+          erro
+        );
+
+        agendaCarregada = true;
+
+        erroAgenda = true;
+
+        renderizar();
+
+      }
+
+    );
+
+  } catch(erro) {
+
+    console.error(erro);
+
+    contador.textContent =
+      "Falha na conexão";
+
+    mostrarMensagem(
+      "Não foi possível conectar ao Firebase.",
+      "fa-triangle-exclamation"
+    );
+
+  }
+
+}
+
+/* EVENTOS DOS FILTROS */
 
 pesquisa.addEventListener(
   "input",
   renderizar
 );
 
-seletorAno.addEventListener(
+filtroBoi.addEventListener(
+  "change",
+  renderizar
+);
+
+filtroData.addEventListener(
+  "change",
+  renderizar
+);
+
+filtroSituacao.addEventListener(
   "change",
   function() {
-    temporadaAtual = this.value;
-    pesquisa.value = "";
 
-    atualizarPeriodo();
-    carregarBois();
+    if (this.value === "sem-agenda") {
+      filtroData.value = "";
+    }
+
+    renderizar();
+
   }
 );
 
-/* INICIAR */
+seletorAno.addEventListener(
+  "change",
+  function() {
 
-async function iniciar() {
-  atualizarPeriodo();
+    temporadaAtual = this.value;
 
-  await carregarTemporadas();
+    pesquisa.value = "";
 
-  carregarAgenda();
-  carregarBois();
-}
+    filtroData.value = "";
 
-iniciar();
+    filtroBoi.value = "";
 
-window.addEventListener("beforeunload",() => {
-  if (referenciaBoisAtiva) {
-    referenciaBoisAtiva.off();
+    filtroSituacao.value = "todas";
+
+    atualizarPeriodo();
+
+    atualizarFiltroBois();
+
+    renderizar();
+
+  }
+);
+
+$("limparFiltros").addEventListener(
+  "click",
+  function() {
+
+    pesquisa.value = "";
+
+    filtroBoi.value = "";
+
+    filtroData.value = "";
+
+    filtroSituacao.value = "todas";
+
+    renderizar();
+
+  }
+);
+
+/* INICIAR SISTEMA */
+
+atualizarPeriodo();
+
+iniciarFirebase();
+
+/* ATUALIZAR SITUAÇÃO DOS HORÁRIOS */
+
+const relogio = setInterval(() => {
+
+  if (
+    boisCarregados &&
+    agendaCarregada
+  ) {
+    renderizar();
   }
 
-  agendasRef.off();
-});
+},60000);
+
+/* ENCERRAR CONSULTAS */
+
+window.addEventListener(
+  "beforeunload",
+  function() {
+
+    clearInterval(relogio);
+
+    if (boisRef) {
+      boisRef.off();
+    }
+
+    if (agendasRef) {
+      agendasRef.off();
+    }
+
+  }
+);
+
 </script>
 
 </body>
