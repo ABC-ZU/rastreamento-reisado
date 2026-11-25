@@ -5,13 +5,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
+<meta name="description" content="Conheça as pessoas homenageadas por sua contribuição à história do Reisado de Boa Hora, Piauí.">
 
-<title>Memória Viva | Reisado Digital 2.0</title>
+<title>Memorial | Reisado Digital</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <style>
+
 :root {
   --vinho:#850c29;
   --escuro:#50091c;
@@ -35,6 +37,22 @@ body {
 
 a {
   text-decoration:none;
+}
+
+/* EMOJI PERSONALIZADO */
+
+.emoji-reisado {
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  vertical-align:middle;
+  flex-shrink:0;
+}
+
+.sidebar .emoji-reisado {
+  width:24px;
+  height:24px;
+  margin-right:5px;
 }
 
 /* MENU LATERAL */
@@ -100,7 +118,7 @@ a {
   display:none;
 }
 
-/* CONTEÚDO */
+/* CONTEÚDO PRINCIPAL */
 
 .principal {
   margin-left:250px;
@@ -124,6 +142,10 @@ header {
 header h1 {
   margin:0 0 8px;
   font-size:27px;
+}
+
+header h1 span {
+  color:var(--ouro);
 }
 
 header p {
@@ -329,6 +351,11 @@ footer {
   line-height:1.8;
 }
 
+footer strong {
+  color:var(--ouro);
+  font-size:17px;
+}
+
 footer p {
   margin:5px;
 }
@@ -336,6 +363,7 @@ footer p {
 /* RESPONSIVIDADE */
 
 @media(max-width:850px) {
+
   .sidebar {
     transform:translateX(-100%);
     transition:transform .25s;
@@ -361,9 +389,11 @@ footer p {
     background:#0008;
     z-index:90;
   }
+
 }
 
 @media(max-width:600px) {
+
   header h1 {
     font-size:23px;
   }
@@ -398,7 +428,9 @@ footer p {
     justify-self:center;
     padding:22px 17px;
   }
+
 }
+
 </style>
 </head>
 
@@ -406,36 +438,54 @@ footer p {
 
 <!-- MENU LATERAL -->
 
-<div id="fundoMenu"
-     class="fundo-menu"
-     onclick="fecharMenu()"></div>
+<div
+  id="fundoMenu"
+  class="fundo-menu"
+  onclick="fecharMenu()">
+</div>
 
-<nav id="menuLateral"
-     class="sidebar"
-     aria-label="Menu principal">
+<nav
+  id="menuLateral"
+  class="sidebar"
+  aria-label="Menu principal">
 
-  <h2>REISADO DIGITAL 2.0</h2>
+  <h2>REISADO DIGITAL</h2>
 
   <p class="subtitulo">
     Cultura e tradição de Boa Hora–PI
   </p>
 
   <a href="./inicio.html">
-    🏠 Início
+    🏠 Página inicial
   </a>
 
   <a href="./bois.html">
-    🐂 Conheça os Bois
+
+    <img
+      src="./emoji-reisado.png"
+      class="emoji-reisado"
+      alt=""
+    >
+
+    Conheça os Bois
+
+  </a>
+
+  <a href="./mapa.html">
+    📍 Mapa dos Bois
   </a>
 
   <a href="./agenda.html">
-    📅 Agenda de Apresentações
+    📅 Agenda Cultural
   </a>
 
-  <a href="./memoria.html"
-     class="ativo"
-     aria-current="page">
-    🕊️ Memória do Reisado
+  <a
+    href="./memoria.html"
+    class="ativo"
+    aria-current="page">
+
+    🕊️ Memorial
+
   </a>
 
   <a href="./guia.html">
@@ -443,7 +493,7 @@ footer p {
   </a>
 
   <a href="./admin.html">
-    🔐 Administração
+    🔐 Painel Administrativo
   </a>
 
 </nav>
@@ -454,15 +504,25 @@ footer p {
 
   <header>
 
-    <button class="menu-botao"
-            type="button"
-            onclick="alternarMenu()">
+    <button
+      id="botaoMenu"
+      class="menu-botao"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuLateral"
+      onclick="alternarMenu()">
+
       ☰ Menu
+
     </button>
 
-    <h1>REISADO DIGITAL 2.0</h1>
-    <p>Memória Viva do Reisado</p>
-    <p>Boa Hora – Piauí</p>
+    <h1>REISADO <span>DIGITAL</span></h1>
+
+    <p>Memorial do Reisado</p>
+
+    <p>
+      Portal de Divulgação do Reisado de Boa Hora – PI
+    </p>
 
   </header>
 
@@ -477,10 +537,12 @@ footer p {
       <h2>Memória Viva do Reisado</h2>
 
       <p>
+
         Uma homenagem àqueles que fizeram
         parte da história do Reisado de
         Boa Hora–PI e permanecem vivos
         em nossas lembranças.
+
       </p>
 
     </section>
@@ -494,38 +556,56 @@ footer p {
       <div class="linha-ouro"></div>
 
       <p>
+
         O Reisado de Boa Hora é uma tradição
         construída por muitas mãos, vozes,
         talentos e histórias.
+
       </p>
 
       <p>
+
         Este espaço é dedicado aos mestres,
         brincantes, músicos, proprietários
         de bois, devotos de Santos Reis
         e a todas as pessoas que dedicaram
-        suas vidas à preservação dessa
-        manifestação cultural.
+        suas vidas a essa manifestação cultural.
+
       </p>
 
       <p>
+
         Aos que já partiram, deixamos
         nossa gratidão por cada ensinamento,
         cada apresentação e cada gesto
         de fé que ajudou a manter viva
         a cultura do nosso povo.
+
+      </p>
+
+      <p>
+
+        Por meio do Reisado Digital, moradores
+        e visitantes poderão conhecer e valorizar
+        as histórias daqueles que contribuíram
+        para a tradição do Reisado de Boa Hora.
+
       </p>
 
       <div class="linha-ouro"></div>
 
       <p class="frase">
+
         “A vida passa, mas a tradição
         e as boas lembranças permanecem.”
+
       </p>
 
       <p>
+
         Nossa eterna gratidão,
         respeito e saudade. 🕊️
+
       </p>
 
     </section>
@@ -539,37 +619,67 @@ footer p {
         <h2>🕊️ Nossos Homenageados</h2>
 
         <p>
+
           Pessoas que deixaram sua contribuição
           para a história e a tradição
           do Reisado de Boa Hora–PI.
+
         </p>
 
       </div>
 
-      <p id="contador" class="contador"></p>
+      <p
+        id="contador"
+        class="contador"
+        aria-live="polite">
+      </p>
 
       <div id="estado" class="estado">
+
         Carregando homenagens...
+
       </div>
 
-      <div id="listaHomenagens"
-           class="lista"
-           aria-live="polite">
+      <div
+        id="listaHomenagens"
+        class="lista"
+        aria-live="polite">
       </div>
 
     </section>
 
   </main>
 
+  <!-- RODAPÉ -->
+
   <footer>
 
-    <strong>Reisado Digital 2.0</strong>
-
-    <p>Boa Hora – Piauí</p>
+    <strong>Reisado Digital</strong>
 
     <p>
-      Preservando a memória daqueles
-      que fizeram parte da nossa tradição.
+
+      Portal de Divulgação do Reisado de Boa Hora – PI
+
+    </p>
+
+    <p>
+
+      Cultura • Turismo • Tradição
+
+    </p>
+
+    <p>
+
+      Homenageando aqueles que fizeram
+      parte da nossa história.
+
+    </p>
+
+    <p>
+
+      © <span id="anoRodape"></span>
+      Reisado Digital
+
     </p>
 
   </footer>
@@ -577,18 +687,27 @@ footer p {
 </div>
 
 <script>
+
 "use strict";
 
-/* CONFIGURAÇÃO FIREBASE */
+/* CONFIGURAÇÃO ORIGINAL DO FIREBASE */
 
 const firebaseConfig = {
+
   apiKey:"AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
   authDomain:"rastreamento-reisado.firebaseapp.com",
+
   databaseURL:"https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
   projectId:"rastreamento-reisado",
+
   storageBucket:"rastreamento-reisado.firebasestorage.app",
+
   messagingSenderId:"796420970266",
+
   appId:"1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -599,66 +718,115 @@ const homenagensRef = db.ref("homenagens");
 
 const $ = id => document.getElementById(id);
 
+/* ANO DO RODAPÉ */
+
+$("anoRodape").textContent =
+  new Date().getFullYear();
+
 /* MENU RESPONSIVO */
 
 function alternarMenu() {
-  $("menuLateral").classList.toggle("aberta");
-  $("fundoMenu").classList.toggle("aberto");
+
+  const aberto =
+    $("menuLateral").classList.toggle("aberta");
+
+  $("fundoMenu").classList.toggle(
+    "aberto",
+    aberto
+  );
+
+  $("botaoMenu").setAttribute(
+    "aria-expanded",
+    String(aberto)
+  );
+
 }
 
 function fecharMenu() {
+
   $("menuLateral").classList.remove("aberta");
+
   $("fundoMenu").classList.remove("aberto");
+
+  $("botaoMenu").setAttribute(
+    "aria-expanded",
+    "false"
+  );
+
 }
 
 document.addEventListener("keydown",evento => {
+
   if (evento.key === "Escape") {
+
     fecharMenu();
+
   }
+
 });
 
 /* CONSULTAR HOMENAGENS */
 
 homenagensRef.on(
+
   "value",
+
   snapshot => {
 
     const homenagens = [];
 
     snapshot.forEach(item => {
+
       const dados = item.val();
 
       if (!dados || !dados.nome) return;
 
       homenagens.push({
+
         nome:String(dados.nome || ""),
+
         papel:String(dados.papel || ""),
+
         mensagem:String(dados.mensagem || "")
+
       });
+
     });
 
     homenagens.sort((a,b) =>
+
       a.nome.localeCompare(b.nome,"pt-BR")
+
     );
 
     mostrarHomenagens(homenagens);
 
   },
+
   erro => {
+
     console.error(
+
       "Erro ao carregar homenagens:",
+
       erro
+
     );
 
     $("estado").classList.remove("oculto");
 
     $("estado").textContent =
+
       "Não foi possível carregar as homenagens. "+
+
       "Verifique a conexão ou as permissões do Firebase.";
 
     $("contador").textContent = "";
+
     $("listaHomenagens").replaceChildren();
+
   }
+
 );
 
 /* EXIBIR HOMENAGENS */
@@ -666,24 +834,33 @@ homenagensRef.on(
 function mostrarHomenagens(homenagens) {
 
   const lista = $("listaHomenagens");
+
   const estado = $("estado");
 
   lista.replaceChildren();
 
   $("contador").textContent =
+
     homenagens.length === 1
+
       ? "1 pessoa homenageada"
+
       : homenagens.length+" pessoas homenageadas";
 
   if (!homenagens.length) {
+
     estado.classList.remove("oculto");
 
     estado.textContent =
+
       "O memorial está sendo construído. "+
+
       "Em breve, os nomes dos homenageados "+
+
       "serão apresentados neste espaço.";
 
     return;
+
   }
 
   estado.classList.add("oculto");
@@ -691,40 +868,55 @@ function mostrarHomenagens(homenagens) {
   homenagens.forEach(pessoa => {
 
     const cartao = document.createElement("article");
+
     cartao.className = "cartao";
 
     const icone = document.createElement("div");
+
     icone.className = "icone";
+
     icone.textContent = "🕊️";
 
     const nome = document.createElement("h3");
+
     nome.textContent = pessoa.nome;
 
     const papel = document.createElement("p");
+
     papel.className = "papel";
+
     papel.textContent = pessoa.papel;
 
     cartao.append(icone,nome,papel);
 
     if (pessoa.mensagem.trim()) {
+
       const mensagem = document.createElement("p");
+
       mensagem.className = "mensagem";
 
       mensagem.textContent = pessoa.mensagem
+
         .replace(/\*\*(.*?)\*\*/g,"$1");
 
       cartao.appendChild(mensagem);
+
     }
 
     const saudade = document.createElement("p");
+
     saudade.className = "saudade";
+
     saudade.textContent =
+
       "Nossa eterna gratidão e saudade.";
 
     cartao.appendChild(saudade);
 
     lista.appendChild(cartao);
+
   });
+
 }
 
 </script>
