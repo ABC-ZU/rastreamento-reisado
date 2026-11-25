@@ -2,10 +2,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#850c29">
 
-<title>Mapa dos Bois | Reisado Digital 2.0</title>
+<meta name="description" content="Conheça os bois do Reisado de Boa Hora, seus proprietários e suas localidades no mapa cultural do Reisado Digital.">
+
+<title>Mapa dos Bois | Reisado Digital</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
@@ -27,6 +31,44 @@ body {
   color: #29252a;
 }
 
+/* EMOJI PERSONALIZADO */
+
+.emoji-reisado {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  vertical-align: middle;
+  flex-shrink: 0;
+  margin-right: 5px;
+}
+
+header .emoji-reisado {
+  width: 45px;
+  height: 45px;
+}
+
+.intro .emoji-reisado {
+  width: 32px;
+  height: 32px;
+}
+
+.mapa-titulo .emoji-reisado {
+  width: 28px;
+  height: 28px;
+}
+
+.cartao .emoji-reisado {
+  width: 32px;
+  height: 32px;
+}
+
+.leaflet-popup-content .emoji-reisado {
+  width: 28px;
+  height: 28px;
+}
+
+/* CABEÇALHO E RODAPÉ */
+
 header, footer {
   background: #50091c;
   color: white;
@@ -35,15 +77,50 @@ header, footer {
   border-bottom: 4px solid #e9ba4e;
 }
 
+header h1 {
+  margin: 10px 0;
+}
+
+header p {
+  line-height: 1.6;
+}
+
 header a {
   color: #e9ba4e;
 }
+
+footer {
+  border-bottom: 0;
+  border-top: 4px solid #e9ba4e;
+  line-height: 1.8;
+}
+
+footer strong {
+  color: #e9ba4e;
+}
+
+footer p {
+  margin: 5px 0;
+  font-size: 13px;
+}
+
+/* CONTEÚDO PRINCIPAL */
 
 main {
   max-width: 1250px;
   margin: auto;
   padding: 15px;
 }
+
+.intro h2 {
+  color: #850c29;
+}
+
+.intro p {
+  line-height: 1.7;
+}
+
+/* CONTROLES */
 
 .controles {
   display: flex;
@@ -57,6 +134,8 @@ button, select {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
+  font: inherit;
+  font-size: 13px;
 }
 
 button {
@@ -64,6 +143,12 @@ button {
   color: white;
   cursor: pointer;
 }
+
+button:hover {
+  background: #50091c;
+}
+
+/* MAPA */
 
 .mapa-container {
   position: relative;
@@ -101,6 +186,8 @@ button {
   max-width: 270px;
 }
 
+/* MARCADORES CULTURAIS */
+
 .marcador-cultural img {
   width: 52px;
   height: 52px;
@@ -111,6 +198,8 @@ button {
   object-fit: contain;
 }
 
+/* LISTA DOS BOIS */
+
 .lista {
   display: grid;
   grid-template-columns:
@@ -118,11 +207,16 @@ button {
   gap: 12px;
 }
 
+.painel h2 {
+  color: #850c29;
+}
+
 .cartao {
   padding: 15px;
   background: white;
   border-radius: 9px;
   border: 1px solid #eadfcd;
+  line-height: 1.7;
 }
 
 .cartao strong {
@@ -133,6 +227,23 @@ button {
   display: block;
   margin-top: 10px;
 }
+
+.nome-boi {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+  color: #850c29;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+#status {
+  font-size: 14px;
+  color: #6e6870;
+}
+
+/* MODO INCORPORADO NA PÁGINA INICIAL */
 
 html.incorporado,
 html.incorporado body,
@@ -157,23 +268,49 @@ html.incorporado #status {
   display: none;
 }
 
+/* RESPONSIVIDADE */
+
 @media(max-width:600px) {
+
   #mapa {
     height: 470px;
   }
+
+  header h1 {
+    font-size: 23px;
+  }
+
+  header .emoji-reisado {
+    width: 35px;
+    height: 35px;
+  }
+
+  .mapa-titulo {
+    font-size: 13px;
+  }
+
+  .mapa-aviso {
+    font-size: 10px;
+    max-width: 210px;
+  }
+
 }
 
 </style>
 
 <script>
 
+/* IDENTIFICAR MAPA INCORPORADO */
+
 if (
   new URLSearchParams(location.search)
     .get("incorporado") === "1"
 ) {
+
   document.documentElement.classList.add(
     "incorporado"
   );
+
 }
 
 </script>
@@ -182,79 +319,170 @@ if (
 
 <body>
 
+<!-- CABEÇALHO -->
+
 <header>
 
-  <h1>🐂 Mapa dos Bois de Boa Hora–PI</h1>
+  <h1>
 
-  <p>Reisado Digital 2.0</p>
+    <img
+      src="./emoji-reisado.png"
+      class="emoji-reisado"
+      alt=""
+    >
+
+    Mapa dos Bois de Boa Hora–PI
+
+  </h1>
+
+  <p>
+
+    <strong>Reisado Digital</strong>
+
+  </p>
+
+  <p>
+
+    Portal de Divulgação do Reisado de Boa Hora – PI
+
+  </p>
 
   <a href="inicio.html">
-    Voltar ao início
+
+    ← Voltar ao início
+
   </a>
 
 </header>
 
 <main>
 
+<!-- APRESENTAÇÃO -->
+
 <section class="intro">
 
-  <h2>Mapa Cultural dos Bois</h2>
+  <h2>
+
+    <img
+      src="./emoji-reisado.png"
+      class="emoji-reisado"
+      alt=""
+    >
+
+    Mapa Cultural dos Bois
+
+  </h2>
 
   <p>
-    Conheça os bois, proprietários e comunidades.
-    Os pontos são referências culturais,
-    não rastreamento GPS.
+
+    Conheça os bois do Reisado de Boa Hora,
+    seus proprietários e comunidades.
+
+    Explore o mapa cultural e descubra
+    as referências culturais dos grupos
+    participantes de cada temporada.
+
+  </p>
+
+  <p>
+
+    Os pontos apresentados são referências culturais.
+    O mapa não realiza rastreamento GPS em tempo real.
+
   </p>
 
 </section>
 
+<!-- CONTROLES DO MAPA -->
+
 <div class="controles">
 
   <label for="ano">
+
     Temporada:
+
   </label>
 
   <select id="ano"></select>
 
-  <button id="tradicional">
+  <button id="tradicional" type="button">
+
     Mapa tradicional
+
   </button>
 
-  <button id="colorido">
+  <button id="colorido" type="button">
+
     Mapa colorido
+
   </button>
 
-  <button id="centro">
+  <button id="centro" type="button">
+
     Centralizar Boa Hora
+
   </button>
 
 </div>
+
+<!-- MAPA CULTURAL -->
 
 <div class="mapa-container">
 
   <div id="mapa"></div>
 
   <div class="mapa-titulo">
-    <b>🐂 Boa Hora–PI</b>
+
+    <b>
+
+      <img
+        src="./emoji-reisado.png"
+        class="emoji-reisado"
+        alt=""
+      >
+
+      Boa Hora–PI
+
+    </b>
+
     <br>
+
     Terra do Reisado
+
   </div>
 
   <div class="mapa-aviso">
+
     📍 Pontos culturais definidos pela
     administração ou ilustrativos.
+
     Não existe rastreamento GPS.
+
   </div>
 
 </div>
 
 <p id="status" role="status">
+
   Carregando...
+
 </p>
+
+<!-- LISTA DOS BOIS -->
 
 <section class="painel">
 
-  <h2>Bois da temporada</h2>
+  <h2>
+
+    <img
+      src="./emoji-reisado.png"
+      class="emoji-reisado"
+      alt=""
+    >
+
+    Bois da temporada
+
+  </h2>
 
   <div id="lista" class="lista"></div>
 
@@ -262,24 +490,60 @@ if (
 
 </main>
 
+<!-- RODAPÉ -->
+
 <footer>
-  Reisado Digital 2.0 — Boa Hora, Piauí
+
+  <strong>
+
+    Reisado Digital — Boa Hora, Piauí
+
+  </strong>
+
+  <p>
+
+    Portal de Divulgação do Reisado de Boa Hora – PI
+
+  </p>
+
+  <p>
+
+    Cultura • Turismo • Tradição
+
+  </p>
+
+  <p>
+
+    Divulgando nossa cultura e nossas tradições.
+
+  </p>
+
 </footer>
 
 <script>
+
+"use strict";
 
 /* =====================================
    CONFIGURAÇÃO FIREBASE
 ===================================== */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+  apiKey: "AIzaSyCXNTSiw5RVRBh9hTKR_bLWzYU72XlpEWQ",
+
   authDomain: "rastreamento-reisado.firebaseapp.com",
+
   databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
   projectId: "rastreamento-reisado",
+
   storageBucket: "rastreamento-reisado.firebasestorage.app",
+
   messagingSenderId: "796420970266",
+
   appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -315,6 +579,7 @@ function posicaoIlustrativa(i, total) {
   const r = 110 + anel * 95;
 
   return [
+
     CENTRO[0] +
     r * Math.sin(a) / 111320,
 
@@ -324,7 +589,31 @@ function posicaoIlustrativa(i, total) {
       111320 *
       Math.cos(CENTRO[0] * Math.PI / 180)
     )
+
   ];
+
+}
+
+/* =====================================
+   VALIDAR POSIÇÃO CADASTRADA
+===================================== */
+
+function posicaoValida(p) {
+
+  return Boolean(
+
+    p &&
+
+    Number.isFinite(p.latitude) &&
+
+    Number.isFinite(p.longitude) &&
+
+    Math.abs(p.latitude) <= 90 &&
+
+    Math.abs(p.longitude) <= 180
+
+  );
+
 }
 
 /* =====================================
@@ -333,26 +622,24 @@ function posicaoIlustrativa(i, total) {
 
 function coordenadas(p, i, n) {
 
-  if (
-    p &&
-    Number.isFinite(p.latitude) &&
-    Number.isFinite(p.longitude) &&
-    Math.abs(p.latitude) <= 90 &&
-    Math.abs(p.longitude) <= 180
-  ) {
+  if (posicaoValida(p)) {
 
     return [
+
       p.latitude,
+
       p.longitude
+
     ];
 
   }
 
   return posicaoIlustrativa(i, n);
+
 }
 
 /* =====================================
-   ÍCONE PERSONALIZADO
+   NOVO ÍCONE PERSONALIZADO DO MAPA
 ===================================== */
 
 function iconeBoi() {
@@ -362,7 +649,7 @@ function iconeBoi() {
     className: "marcador-cultural",
 
     html:
-      '<img src="icone-boi-reisado.png" alt="">',
+      '<img src="./emoji-reisado.png" alt="">',
 
     iconSize: [52, 52],
 
@@ -371,6 +658,24 @@ function iconeBoi() {
     popupAnchor: [0, -26]
 
   });
+
+}
+
+/* =====================================
+   CRIAR EMOJI PARA OS CARTÕES
+===================================== */
+
+function criarEmojiReisado() {
+
+  const img = document.createElement("img");
+
+  img.src = "./emoji-reisado.png";
+
+  img.className = "emoji-reisado";
+
+  img.alt = "";
+
+  return img;
 
 }
 
@@ -385,15 +690,21 @@ function camadaOSM(m) {
     "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
 
     {
+
       maxZoom: 19,
 
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
     }
 
   ).addTo(m);
 
 }
+
+/* =====================================
+   RÓTULO DOS BOIS
+===================================== */
 
 function rotulo(b) {
 
@@ -423,10 +734,12 @@ const color = L.tileLayer(
   "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
 
   {
+
     maxZoom: 19,
 
     attribution:
       "&copy; OpenStreetMap contributors &copy; CARTO"
+
   }
 
 );
@@ -486,18 +799,27 @@ function render() {
   const ano = $("ano").value;
 
   const lista = Object.entries(
+
     bois[ano] || {}
+
   )
 
   .filter(([id, b]) =>
-    b && b.nome
+
+    b && typeof b.nome === "string" && b.nome
+
   )
 
   .sort((a, b) =>
+
     a[1].nome.localeCompare(
+
       b[1].nome,
+
       "pt-BR"
+
     )
+
   );
 
   lista.forEach(([id, b], i) => {
@@ -511,14 +833,21 @@ function render() {
     const m = L.marker(
 
       coordenadas(
+
         p,
+
         i,
+
         lista.length
+
       ),
 
       {
+
         icon: iconeBoi(),
+
         draggable: false
+
       }
 
     ).addTo(grupo);
@@ -527,8 +856,29 @@ function render() {
 
     const info = document.createElement("div");
 
+    /* NOME COM EMOJI PERSONALIZADO */
+
+    const titulo = document.createElement("div");
+
+    titulo.className = "nome-boi";
+
+    const nome = document.createElement("strong");
+
+    nome.textContent = b.nome;
+
+    titulo.append(
+
+      criarEmojiReisado(),
+
+      nome
+
+    );
+
+    info.append(titulo);
+
+    /* PROPRIETÁRIO E LOCALIDADE */
+
     [
-      b.nome,
 
       "Proprietário: " +
       (b.dono || "Não informado"),
@@ -536,8 +886,10 @@ function render() {
       "Localidade: " +
       (b.comunidade || "Não informada"),
 
-      p
+      posicaoValida(p)
+
         ? "Ponto cultural cadastrado"
+
         : "Posição ilustrativa"
 
     ].forEach(t => {
@@ -549,6 +901,8 @@ function render() {
       info.append(d);
 
     });
+
+    /* INFORMAÇÕES NO MAPA */
 
     m.bindPopup(info);
 
@@ -564,19 +918,26 @@ function render() {
 
     const btn = document.createElement("button");
 
-    btn.textContent = "Ver no mapa";
+    btn.type = "button";
+
+    btn.textContent = "📍 Ver no mapa";
 
     btn.onclick = () => {
 
       mapa.setView(
+
         m.getLatLng(),
+
         17
+
       );
 
       m.openPopup();
 
       $("mapa").scrollIntoView({
+
         behavior: "smooth"
+
       });
 
     };
@@ -588,6 +949,7 @@ function render() {
   });
 
   $("status").textContent =
+
     lista.length + " bois cadastrados.";
 
 }
@@ -629,6 +991,7 @@ db.ref("boisPorAno").on(
         ...Object.keys(bois).filter(a =>
 
           /^20[2-9][0-9]$/.test(a) &&
+
           +a >= 2027
 
         )
@@ -640,7 +1003,9 @@ db.ref("boisPorAno").on(
     $("ano").replaceChildren(
 
       ...anos.map(a =>
+
         new Option(a, a)
+
       )
 
     );
@@ -657,7 +1022,9 @@ db.ref("boisPorAno").on(
 
   e => {
 
-    $("status").textContent = e.message;
+    $("status").textContent =
+
+      "Erro ao carregar bois: " + e.message;
 
   }
 
@@ -684,7 +1051,9 @@ db.ref("posicoesBois").on(
   e => {
 
     $("status").textContent =
+
       "Erro ao carregar posições: " +
+
       e.message;
 
   }
