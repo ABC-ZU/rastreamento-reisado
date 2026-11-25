@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Administração | Reisado Digital 2.0</title>
+<title>Administração | Reisado Digital</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
@@ -276,6 +276,17 @@ footer {
 
 }
 
+    .emoji-reisado,
+.item img.emoji-reisado {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-right: 6px;
+    border-radius: 0;
+    flex-shrink: 0;
+}
+
 </style>
 </head>
 
@@ -285,7 +296,7 @@ footer {
 
     <img src="icone-boi-reisado.png" alt="Reisado">
 
-    <h1>REISADO DIGITAL 2.0</h1>
+    <h1>REISADO DIGITAL</h1>
 
     <p>Painel Administrativo Cultural</p>
 
@@ -350,7 +361,7 @@ footer {
         <div class="aviso">
 
             Gerencie todas as informações culturais
-            do Reisado Digital 2.0.
+            do Reisado Digital.
 
         </div>
 
@@ -365,7 +376,8 @@ footer {
     <div class="abas">
 
         <button data-aba="bois" class="ativo">
-            🐂 Bois
+    <img src="./emoji-reisado.png" class="emoji-reisado" alt="">
+    Bois
         </button>
 
         <button data-aba="agenda">
@@ -911,7 +923,10 @@ footer {
 
         <div class="caixa">
 
-            <h2>🐂 Bois disponíveis no mapa</h2>
+           <h2>
+    <img src="./emoji-reisado.png" class="emoji-reisado" alt="">
+    Bois disponíveis no mapa
+           </h2>
 
             <div id="listaMapaAdmin"></div>
 
@@ -925,7 +940,10 @@ footer {
 
     <a href="inicio.html">🏠 Início</a>
 
-    <a href="bois.html">🐂 Bois</a>
+    <a href="bois.html">
+    <img src="./emoji-reisado.png" class="emoji-reisado" alt="">
+    Bois
+    </a>
 
     <a href="agenda.html">📅 Agenda</a>
 
@@ -939,7 +957,7 @@ footer {
 
 <footer>
 
-    Reisado Digital 2.0 — Boa Hora, Piauí
+    Reisado Digital — Boa Hora, Piauí
 
 </footer>
 
@@ -1138,7 +1156,25 @@ function criarItem(titulo, detalhes, acoes = []) {
 
     card.className = "item";
 
-    card.appendChild(criarElemento("h3", titulo));
+  const cabecalho = criarElemento("h3");
+
+if (titulo.startsWith("🐂 ")) {
+    const img = criarElemento("img");
+
+    img.src = "./emoji-reisado.png";
+    img.className = "emoji-reisado";
+    img.alt = "";
+
+    cabecalho.appendChild(img);
+
+    cabecalho.appendChild(
+        document.createTextNode(titulo.slice(3))
+    );
+} else {
+    cabecalho.textContent = titulo;
+}
+
+card.appendChild(cabecalho);
 
     detalhes.forEach(d => {
 
@@ -2283,11 +2319,12 @@ const camposConteudo = [
 
 const conteudoInicial = {
 
-    boasTitulo: "Bem-vindo ao Reisado Digital 2.0",
+   boasTitulo: "Bem-vindo ao Reisado Digital",
 
-    boasTexto:
-        "Conheça a tradição dos bois do Reisado " +
-        "de Boa Hora, no Piauí.",
+   boasTexto:
+    "Conheça a riqueza cultural do Reisado de Boa Hora, no Piauí. " +
+    "Explore os bois, seus proprietários, a programação das apresentações " +
+    "e as tradições culturais que encantam moradores e turistas.",
 
     historiaTitulo: "História do Reisado de Boa Hora",
 
@@ -3054,7 +3091,7 @@ function criarIconeAdmin() {
 
         className: "icone-admin-boi",
 
-        html: '<img src="icone-boi-reisado.png" alt="Boi">',
+       html: '<img src="./emoji-reisado.png" alt="Boi">',
 
         iconSize: [52, 52],
 
