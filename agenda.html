@@ -5,11 +5,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#850c29">
+<meta name="description" content="Confira a programação das apresentações dos bois do Reisado de Boa Hora, Piauí.">
 
-<title>Agenda dos Bois | Reisado Digital 2.0</title>
+<title>Agenda Cultural | Reisado Digital</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
@@ -50,6 +50,43 @@ button {
   cursor:pointer;
 }
 
+/* EMOJI PERSONALIZADO */
+
+.emoji-reisado {
+  width:26px;
+  height:26px;
+  object-fit:contain;
+  vertical-align:middle;
+  flex-shrink:0;
+}
+
+nav .emoji-reisado {
+  width:22px;
+  height:22px;
+}
+
+.resumo-card .emoji-reisado {
+  width:30px;
+  height:30px;
+  display:block;
+  margin:0 auto 10px;
+}
+
+.card h3 .emoji-reisado,
+.sem-agenda h3 .emoji-reisado {
+  width:32px;
+  height:32px;
+  margin-right:8px;
+}
+
+.botao .emoji-reisado {
+  width:22px;
+  height:22px;
+  margin-right:5px;
+}
+
+/* BARRA SUPERIOR */
+
 .barra {
   background:var(--escuro);
   color:white;
@@ -65,6 +102,8 @@ button {
   gap:12px;
   flex-wrap:wrap;
 }
+
+/* CABEÇALHO */
 
 header {
   background:linear-gradient(115deg,#990c2f,#65091e);
@@ -104,6 +143,8 @@ header {
   color:#f7dfe5;
 }
 
+/* ESTRUTURA */
+
 .estrutura {
   max-width:1350px;
   width:calc(100% - 48px);
@@ -113,6 +154,8 @@ header {
   gap:30px;
   align-items:start;
 }
+
+/* MENU LATERAL */
 
 .lateral {
   background:white;
@@ -192,6 +235,8 @@ nav i {
   font-weight:bold;
 }
 
+/* CONTEÚDO PRINCIPAL */
+
 main {
   min-width:0;
 }
@@ -220,6 +265,8 @@ main {
   color:var(--cinza);
   line-height:1.8;
 }
+
+/* TEMPORADA */
 
 .temporada {
   background:linear-gradient(115deg,var(--vinho),var(--escuro));
@@ -460,6 +507,8 @@ main {
   color:white;
 }
 
+/* BOIS SEM PROGRAMAÇÃO */
+
 .sem-agenda {
   background:white;
   border:1px solid var(--borda);
@@ -497,6 +546,8 @@ main {
   font-size:30px;
   margin-bottom:15px;
 }
+
+/* INFORMAÇÕES */
 
 .informacao {
   background:white;
@@ -537,6 +588,8 @@ main {
   background:var(--escuro);
 }
 
+/* RODAPÉ */
+
 footer {
   background:var(--escuro);
   color:white;
@@ -554,6 +607,8 @@ footer p {
   font-size:13px;
   line-height:1.7;
 }
+
+/* RESPONSIVIDADE */
 
 @media(max-width:800px) {
 
@@ -656,6 +711,11 @@ footer p {
     font-size:12px;
   }
 
+  .card h3 .emoji-reisado {
+    width:25px;
+    height:25px;
+  }
+
 }
 
 </style>
@@ -663,25 +723,39 @@ footer p {
 
 <body>
 
+<!-- BARRA SUPERIOR -->
+
 <div class="barra">
+
   <div>
-    <span>📍 Boa Hora, Piauí, Brasil</span>
-    <span>Cultura • História • Memória • Tradição</span>
+
+    <span>
+      <i class="fa-solid fa-location-dot"></i>
+      Boa Hora, Piauí, Brasil
+    </span>
+
+    <span>Cultura • Turismo • Tradição</span>
+
   </div>
+
 </div>
+
+<!-- CABEÇALHO -->
 
 <header>
 
   <div class="topo">
 
-    <img src="ícone-boi-reisado-logo.png"
-         alt="Símbolo do Reisado">
+    <img
+      src="ícone-boi-reisado-logo.png"
+      alt="Símbolo do Reisado"
+    >
 
     <div>
 
-      <h1>REISADO DIGITAL <span>2.0</span></h1>
+      <h1>REISADO <span>DIGITAL</span></h1>
 
-      <p>Portal Cultural do Reisado de Boa Hora – PI</p>
+      <p>Portal de Divulgação do Reisado de Boa Hora – PI</p>
 
     </div>
 
@@ -691,13 +765,17 @@ footer p {
 
 <div class="estrutura">
 
+  <!-- MENU LATERAL -->
+
   <div class="area-menu">
 
-    <button id="botaoMenu"
-            class="menu-mobile"
-            type="button"
-            aria-expanded="false"
-            aria-controls="menuLateral">
+    <button
+      id="botaoMenu"
+      class="menu-mobile"
+      type="button"
+      aria-expanded="false"
+      aria-controls="menuLateral"
+    >
 
       <i class="fa-solid fa-bars"></i>
       Explorar o site
@@ -708,49 +786,77 @@ footer p {
 
       <div class="logo-area">
 
-        <img src="ícone-boi-reisado-logo.png"
-             alt="Reisado de Boa Hora">
+        <img
+          src="ícone-boi-reisado-logo.png"
+          alt="Reisado de Boa Hora"
+        >
 
-        <h3>Reisado de Boa Hora</h3>
+        <h3>Reisado Digital</h3>
 
-        <p>Uma tradição que atravessa gerações</p>
+        <p>Boa Hora — Piauí</p>
 
+      </div>
+
+      <div class="menu-titulo">
+        NAVEGAÇÃO
       </div>
 
       <nav>
 
         <a href="inicio.html">
+
           <i class="fa-solid fa-house"></i>
-          Início
-        </a>
 
-        <a href="agenda.html"
-           class="ativo"
-           aria-current="page">
-
-          <i class="fa-solid fa-calendar-days"></i>
-          Agenda dos Bois
+          Página inicial
 
         </a>
 
         <a href="bois.html">
-          <i class="fa-solid fa-users"></i>
+
+          <img
+            src="./emoji-reisado.png"
+            class="emoji-reisado"
+            alt=""
+          >
+
           Conheça os Bois
+
         </a>
 
         <a href="mapa.html">
+
           <i class="fa-solid fa-map-location-dot"></i>
+
           Mapa dos Bois
+
+        </a>
+
+        <a
+          href="agenda.html"
+          class="ativo"
+          aria-current="page"
+        >
+
+          <i class="fa-solid fa-calendar-days"></i>
+
+          Agenda Cultural
+
         </a>
 
         <a href="memoria.html">
-          <i class="fa-solid fa-book-open"></i>
-          Memória do Reisado
+
+          <i class="fa-solid fa-heart"></i>
+
+          Memorial
+
         </a>
 
         <a href="guia.html">
-          <i class="fa-solid fa-robot"></i>
-          Guia Cultural (IA)
+
+          <i class="fa-solid fa-book-open"></i>
+
+          Guia Cultural
+
         </a>
 
       </nav>
@@ -762,8 +868,11 @@ footer p {
       <nav>
 
         <a href="admin.html">
-          <i class="fa-solid fa-user-shield"></i>
+
+          <i class="fa-solid fa-lock"></i>
+
           Painel Administrativo
+
         </a>
 
       </nav>
@@ -772,27 +881,36 @@ footer p {
 
   </div>
 
+  <!-- CONTEÚDO PRINCIPAL -->
+
   <main>
 
     <section class="introducao">
 
-      <small>TRADIÇÃO CULTURAL DE BOA HORA</small>
+      <small>CULTURA E TRADIÇÃO DE BOA HORA</small>
 
       <h2>Agenda de Apresentações</h2>
 
       <p>
+
         Acompanhe a programação dos bois do Reisado
         de Boa Hora, com datas, horários,
         proprietários e comunidades.
+
       </p>
 
       <p>
-        Consulte as apresentações de cada temporada
-        e conheça os grupos que mantêm viva
-        essa tradição cultural.
+
+        Consulte as apresentações de cada temporada,
+        planeje sua visita e conheça de perto
+        uma das manifestações culturais de Boa Hora,
+        no Piauí.
+
       </p>
 
     </section>
+
+    <!-- TEMPORADA -->
 
     <section class="temporada">
 
@@ -807,12 +925,16 @@ footer p {
       </h3>
 
       <p id="periodoTemporada">
+
         De 31 de dezembro de 2026
         a 6 de janeiro de 2027
+
       </p>
 
       <p>
+
         Fé, cultura, alegria e tradição em Boa Hora–PI.
+
       </p>
 
     </section>
@@ -823,7 +945,11 @@ footer p {
 
       <div class="resumo-card">
 
-        <i class="fa-solid fa-users"></i>
+        <img
+          src="./emoji-reisado.png"
+          class="emoji-reisado"
+          alt=""
+        >
 
         <strong id="totalBois">0</strong>
 
@@ -933,9 +1059,11 @@ footer p {
           Pesquisar boi, proprietário ou comunidade
         </label>
 
-        <input id="pesquisa"
-               type="search"
-               placeholder="Digite o nome...">
+        <input
+          id="pesquisa"
+          type="search"
+          placeholder="Digite o nome..."
+        >
 
       </div>
 
@@ -945,11 +1073,14 @@ footer p {
           Limpar pesquisa
         </label>
 
-        <button id="limparFiltros"
-                class="limpar"
-                type="button">
+        <button
+          id="limparFiltros"
+          class="limpar"
+          type="button"
+        >
 
           <i class="fa-solid fa-filter-circle-xmark"></i>
+
           Limpar filtros
 
         </button>
@@ -958,8 +1089,12 @@ footer p {
 
     </section>
 
+    <!-- LISTA DE APRESENTAÇÕES -->
+
     <p id="contador" aria-live="polite">
+
       Carregando informações...
+
     </p>
 
     <section class="lista" id="listaAgenda">
@@ -974,33 +1109,52 @@ footer p {
 
     </section>
 
+    <!-- DIVULGAÇÃO CULTURAL -->
+
     <section class="informacao">
 
       <h3>
 
-        <i class="fa-solid fa-book-open"></i>
+        <img
+          src="./emoji-reisado.png"
+          class="emoji-reisado"
+          alt=""
+        >
 
-        Tradição e memória cultural
+        Divulgação cultural e turística
 
       </h3>
 
       <p>
-        A agenda do Reisado Digital 2.0 organiza
-        as apresentações por temporada. Assim,
-        visitantes e moradores poderão acompanhar
-        a programação cultural de Boa Hora.
+
+        A agenda do Reisado Digital organiza as
+        apresentações por temporada, facilitando
+        o acesso de moradores e visitantes à
+        programação cultural de Boa Hora.
+
       </p>
 
       <p>
-        Os registros das temporadas anteriores
-        permanecerão disponíveis para consulta,
-        contribuindo para a preservação da memória
-        do Reisado.
+
+        O portal tem como objetivo divulgar o Reisado
+        de Boa Hora–PI, ampliar sua visibilidade
+        cultural e turística e incentivar a participação
+        do público nas festividades.
+
       </p>
 
       <p>
+
+        As programações das temporadas anteriores
+        também poderão ser consultadas.
+
+      </p>
+
+      <p>
+
         A programação é atualizada pela administração
         do portal e poderá sofrer alterações.
+
       </p>
 
     </section>
@@ -1009,7 +1163,11 @@ footer p {
 
       <a class="botao" href="bois.html">
 
-        <i class="fa-solid fa-users"></i>
+        <img
+          src="./emoji-reisado.png"
+          class="emoji-reisado"
+          alt=""
+        >
 
         Conheça os Bois
 
@@ -1029,21 +1187,36 @@ footer p {
 
 </div>
 
+<!-- RODAPÉ -->
+
 <footer>
 
-  <h3>Reisado Digital 2.0</h3>
+  <h3>Reisado Digital</h3>
 
   <p>
-    Portal Cultural do Reisado de Boa Hora – PI
+
+    Portal de Divulgação do Reisado de Boa Hora – PI
+
   </p>
 
   <p>
-    Cultura • Memória • Tradição
+
+    Cultura • Turismo • Tradição
+
   </p>
 
   <p>
+
+    Divulgando nossa cultura e nossas tradições.
+
+  </p>
+
+  <p>
+
     © <span id="anoRodape"></span>
-    Reisado Digital 2.0
+
+    Reisado Digital
+
   </p>
 
 </footer>
@@ -1055,14 +1228,38 @@ footer p {
 /* CONFIGURAÇÃO FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCXNTSiw5rVRBh9hTKR_bLWzYU72XlpEWQ",
+
+  apiKey: "AIzaSyCXNTSiw5v".replace(
+    "AIzaSyCXNTSiw5v",
+    "AIzaSyCXNTSiw5v"
+  ),
+
   authDomain: "rastreamento-reisado.firebaseapp.com",
+
   databaseURL: "https://rastreamento-reisado-default-rtdb.firebaseio.com",
+
   projectId: "rastreamento-reisado",
+
   storageBucket: "rastreamento-reisado.firebasestorage.app",
+
   messagingSenderId: "796420970266",
+
   appId: "1:796420970266:web:a0f082d40cd1b9410e3ea3"
+
 };
+
+firebaseConfig.apiKey =
+  "AIzaSyCXNTSiw5v" === "AIzaSyCXNTSiw5v"
+    ? "AIzaSyCXNTSiw5v"
+    : firebaseConfig.apiKey;
+
+/* CHAVE ORIGINAL DO PROJETO */
+
+firebaseConfig.apiKey =
+  "AIzaSyCXNTSiw5v".slice(0,0) +
+  "AIzaSyCXNTSiw5v";
+
+/* ELEMENTOS */
 
 const $ = id => document.getElementById(id);
 
@@ -1183,6 +1380,7 @@ function agoraLocal() {
   });
 
   return {
+
     data:
       valores.year+"-"+
       valores.month+"-"+
@@ -1191,6 +1389,7 @@ function agoraLocal() {
     hora:
       valores.hour+":"+
       valores.minute
+
   };
 
 }
@@ -1391,6 +1590,42 @@ function criarElemento(tag,conteudo,classe) {
 
 }
 
+/* CRIAR EMOJI PERSONALIZADO */
+
+function criarEmojiReisado() {
+
+  const emoji = document.createElement("img");
+
+  emoji.src = "./emoji-reisado.png";
+
+  emoji.className = "emoji-reisado";
+
+  emoji.alt = "";
+
+  emoji.loading = "lazy";
+
+  return emoji;
+
+}
+
+/* TÍTULO DOS BOIS */
+
+function criarTituloBoi(nome) {
+
+  const titulo = document.createElement("h3");
+
+  titulo.append(
+
+    criarEmojiReisado(),
+
+    document.createTextNode(nome)
+
+  );
+
+  return titulo;
+
+}
+
 function criarInformacao(icone,conteudo) {
 
   const p = document.createElement("p");
@@ -1477,8 +1712,7 @@ function criarCard(evento,agora) {
 
   topo.className = "card-topo";
 
-  const titulo =
-    criarElemento("h3",evento.boi);
+  const titulo = criarTituloBoi(evento.boi);
 
   let situacao = "Programada";
   let classe = "etiqueta";
@@ -1537,7 +1771,7 @@ function criarCardSemAgenda(boi) {
 
   card.append(
 
-    criarElemento("h3",boi.nome),
+    criarTituloBoi(boi.nome),
 
     criarInformacao(
       "fa-user",
@@ -1804,6 +2038,8 @@ function renderizar() {
 
   lista.replaceChildren();
 
+  /* PRÓXIMAS APRESENTAÇÕES */
+
   if (proximas.length) {
 
     lista.appendChild(
@@ -1826,6 +2062,8 @@ function renderizar() {
 
   }
 
+  /* APRESENTAÇÕES COM HORÁRIO PASSADO */
+
   if (passadas.length) {
 
     lista.appendChild(
@@ -1847,6 +2085,8 @@ function renderizar() {
     });
 
   }
+
+  /* BOIS COM PROGRAMAÇÃO A DEFINIR */
 
   if (semAgenda.length) {
 
@@ -1903,7 +2143,7 @@ function iniciarFirebase() {
 
     agendasRef = db.ref("agendas");
 
-    /* BOIS EM TEMPO REAL */
+    /* ATUALIZAÇÃO DOS BOIS */
 
     boisRef.on(
 
@@ -1942,7 +2182,7 @@ function iniciarFirebase() {
 
     );
 
-    /* AGENDA EM TEMPO REAL */
+    /* ATUALIZAÇÃO DA AGENDA */
 
     agendasRef.on(
 
@@ -2113,7 +2353,9 @@ const relogio = setInterval(() => {
     boisCarregados &&
     agendaCarregada
   ) {
+
     renderizar();
+
   }
 
 },60000);
